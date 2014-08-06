@@ -1,0 +1,18 @@
+program TEstGVTurtles;
+
+uses
+  Vcl.Forms,
+  MainForm in 'MainForm.pas' {MainFormGVTurtles} ,
+  Vcl.Themes,
+  Vcl.Styles;
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  TStyleManager.TrySetStyle('Aqua Graphite');
+  Application.CreateForm(TMainFormGVTurtles, MainFormGVTurtles);
+  Application.Run;
+
+end.

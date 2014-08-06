@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="4">
+      <Unit0>
+        <Filename Value="TestGVPropLists.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestGVPropLists"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="15" Y="10"/>
+        <UsageCount Value="21"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="mainform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MainFormGVPropLists"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="MainForm"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="196"/>
+        <CursorPos X="27" Y="203"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="GVPropLists.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVPropLists"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="381"/>
+        <CursorPos X="43" Y="400"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="GVWords.pas"/>
+        <UnitName Value="GVWords"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="169"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+      </Unit3>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="10" HistoryIndex="9">
+      <Position1>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="23" Column="62" TopLine="1"/>
+      </Position1>
+      <Position2>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="291" Column="22" TopLine="286"/>
+      </Position2>
+      <Position3>
+        <Filename Value="GVPropLists.pas"/>
+        <Caret Line="637" Column="24" TopLine="625"/>
+      </Position3>
+      <Position4>
+        <Filename Value="GVPropLists.pas"/>
+        <Caret Line="626" Column="26" TopLine="606"/>
+      </Position4>
+      <Position5>
+        <Filename Value="GVPropLists.pas"/>
+        <Caret Line="585" Column="32" TopLine="567"/>
+      </Position5>
+      <Position6>
+        <Filename Value="GVPropLists.pas"/>
+        <Caret Line="633" Column="45" TopLine="621"/>
+      </Position6>
+      <Position7>
+        <Filename Value="GVPropLists.pas"/>
+        <Caret Line="585" Column="43" TopLine="566"/>
+      </Position7>
+      <Position8>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="291" Column="22" TopLine="286"/>
+      </Position8>
+      <Position9>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="203" Column="27" TopLine="196"/>
+      </Position9>
+      <Position10>
+        <Filename Value="GVPropLists.pas"/>
+        <Caret Line="381" Column="43" TopLine="362"/>
+      </Position10>
+    </JumpHistory>
+  </ProjectSession>
+  <EditorMacros Count="0"/>
+</CONFIG>

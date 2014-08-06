@@ -12,7 +12,7 @@
   |                                                                        |
   |========================================================================| }
 
- {$DEFINE Delphi}
+ {.$DEFINE Delphi}
 unit GVLists;
 
 // Unité pour le traitement des listes
@@ -531,7 +531,7 @@ var
 begin
   Result := CBeginList; // crochet ouvrant
   try
-    if (N > (Count)) or (N < 1) then // les éléments existent-ils ?
+    if (N > Count) or (N < 1) then // les éléments existent-ils ?
       raise EGVListException.CreateFmt(ME_DelItem, [N]); // erreur
     for I := 1 to Count do // on reconstruit la liste
       if (I <> N) then // sans l'élément N
@@ -568,9 +568,9 @@ begin
   Result := CBeginList; // crochet ouvrant
   try
     fUtil.TestValue(St); // liste ou mot valides ?
-    if (N > (Count + 1)) or (N < 1) then // les éléments existent-ils ?
+    if (N > (Count + 1 )) or (N < 1) then // les éléments existent-ils ?
       raise EGVListException.CreateFmt(ME_InsItem, [N]); // erreur
-    for I := 1 to Count do // on reconstruit la liste
+    for I := 1 to Count + 1 do // on reconstruit la liste
     begin
       if (I <= Count) then
         S1 := Get(I-1)
@@ -939,13 +939,13 @@ var
 begin
   Result := CBeginList; // début de la liste
   try
-    if (N > (Count - 1)) or (N < 0) then // les éléments existent-ils ?
+    if (N > (Count - 1)) or (N < 1) then // les éléments existent-ils ?
       raise EGVListException.CreateFmt(ME_TwoDelete, [N]) // erreur
     else
     begin
-      for I := 0 to Count - 1 do // on reconstruit la liste
-        if (I <> (N-1)) and (I <> N) then // sans les deux éléments
-          Result := Result + Get(I) + CBlank;// ajout
+      for I := 1 to Count do // on reconstruit la liste
+        if (I <> N) and (I <> N + 1) then // sans les deux éléments
+          Result := Result + Get(I - 1) + CBlank; // ajout
     end;
   finally
     Result := TrimRight(Result) + CEndList;
