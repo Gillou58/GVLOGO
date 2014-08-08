@@ -60,9 +60,23 @@ Copyright (C) 2014 Gilles VASSEUR — Tous droits réservés.
 
 Répertoire 0- Licence GNU GPL : contient la licence GNU GPL sous plusieurs formats, en anglais et en français.
 
-Répertoire 1- TestGVWords : contient le travail concernant l'unité TGVWords de traitement de mots
+Répertoire 0b- Images : contient les images nécessaires pour les programmes, mais aussi pour la documentation.
+
+Répertoire 1- TestGVWords : contient le travail concernant l'unité TGVWords de traitement de mots.
+
+Répertoire 2- TestGVLists : contient tout ce qui concerne le traitement des listes simples.
+
+Répertoire 3- TestGVPropLists : traite des listes de propriétés.
+
+Répertoire 4- TestGVTurtle : la tortue graphique dans sa version sans bibliothèques extérieures.
+
+Répertoire 4b- TestGVTurtle2 : version plus efficace de la tortue graphique.
 
 Répertoire 5- Easy Turtle : contient les sources et les exécutables du logiciel EasyTurtle qui permet une utilisation simple de la tortue GVLOGO.
+
+Répertoire 6- TestGVStacks : test des piles (entiers, réels et chaînes)
+
+GVLOGO.docx et GVLOGO.pdf : documentation du logiciel
 
 4. Contact
 
@@ -72,6 +86,6 @@ Vous pouvez aussi vous rendre sur mon site pour les éventuelles mises à jour :
 
 Les suggestions, modifications, propositions et questions sont les bienvenues.
 
-Gilles VASSEUR, le 28 juillet 2014
+Gilles VASSEUR, le 9 août 2014
 
  
