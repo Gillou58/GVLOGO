@@ -3,6 +3,7 @@ object MainForm: TMainForm
   Height = 700
   Top = 122
   Width = 1200
+  ActiveControl = btnMove
   Caption = 'Test de GVTurtles - V1.0.0 - GVLOGO - Gilles VASSEUR 2014'
   ClientHeight = 700
   ClientWidth = 1200
@@ -545,11 +546,11 @@ object MainForm: TMainForm
   end
   object GroupBox1: TGroupBox
     Left = 672
-    Height = 520
+    Height = 536
     Top = 128
     Width = 236
     Caption = 'Commandes '
-    ClientHeight = 502
+    ClientHeight = 518
     ClientWidth = 232
     TabOrder = 3
     object btnSetPos: TButton
@@ -790,7 +791,7 @@ object MainForm: TMainForm
       Height = 25
       Hint = '// réinitialisation de la tortue'#13#10'    procedure Reinit;'
       Top = 264
-      Width = 87
+      Width = 99
       Caption = 'ReInit'
       OnClick = btnReInitClick
       ParentShowHint = False
@@ -799,11 +800,11 @@ object MainForm: TMainForm
     end
     object btnWipe: TButton
       Cursor = crHandPoint
-      Left = 96
+      Left = 120
       Height = 25
       Hint = '// nettoyage de l''écran'#13#10'    procedure Wipe;'
-      Top = 264
-      Width = 104
+      Top = 266
+      Width = 99
       Caption = 'Wipe'
       OnClick = btnWipeClick
       ParentShowHint = False
@@ -816,7 +817,7 @@ object MainForm: TMainForm
       Height = 25
       Hint = '// tortue à l''origine'#13#10'    procedure Home;'
       Top = 296
-      Width = 87
+      Width = 99
       Caption = 'Home'
       OnClick = btnHomeClick
       ParentShowHint = False
@@ -825,11 +826,11 @@ object MainForm: TMainForm
     end
     object btnTurtleVisible: TButton
       Cursor = crHandPoint
-      Left = 96
+      Left = 120
       Height = 25
       Hint = '// visibilité de la tortue'#13#10'    property TurtleVisible: Boolean read fTurtleVisible write SetTurtleVisible'#13#10'      default True;'
       Top = 296
-      Width = 104
+      Width = 99
       Caption = 'TurtleVisible'
       OnClick = btnTurtleVisibleClick
       ParentShowHint = False
@@ -842,7 +843,7 @@ object MainForm: TMainForm
       Height = 25
       Hint = '// drapeau d''écriture'#13#10'    property PenDown: Boolean read fPenDown write SetPenDown default True;'
       Top = 328
-      Width = 87
+      Width = 99
       Caption = 'PenDown'
       OnClick = btnPenDownClick
       ParentShowHint = False
@@ -851,7 +852,7 @@ object MainForm: TMainForm
     end
     object Kind: TButton
       Cursor = crHandPoint
-      Left = 96
+      Left = 120
       Height = 25
       Hint = '// type de tortue'#13#10'    property Kind: TTurtleKind read fTurtleKind write SetTurtleKind'#13#10'      default tkTriangle;'
       Top = 328
@@ -868,7 +869,7 @@ object MainForm: TMainForm
       Height = 25
       Hint = '// couleur du fond d''écran'#13#10'    property ScreenColor: TColor read fScreenColor write SetScreenColor;'
       Top = 360
-      Width = 87
+      Width = 99
       Caption = 'ScreenColor'
       OnClick = btnScreenColorClick
       ParentShowHint = False
@@ -877,7 +878,7 @@ object MainForm: TMainForm
     end
     object cbScreenColor: TColorBox
       Cursor = crHandPoint
-      Left = 96
+      Left = 120
       Height = 22
       Hint = '// couleur du fond d''écran'#13#10'    property ScreenColor: TColor read fScreenColor write SetScreenColor;'
       Top = 360
@@ -893,7 +894,7 @@ object MainForm: TMainForm
       Height = 25
       Hint = '// couleur du crayon'#13#10'    property PenColor: TColor read fPenColor write SetPenColor default clRed;'
       Top = 392
-      Width = 87
+      Width = 99
       Caption = 'PenColor'
       OnClick = btnPenColorClick
       ParentShowHint = False
@@ -902,10 +903,10 @@ object MainForm: TMainForm
     end
     object cbPenColor: TColorBox
       Cursor = crHandPoint
-      Left = 96
+      Left = 120
       Height = 22
       Hint = '// couleur du crayon'#13#10'    property PenColor: TColor read fPenColor write SetPenColor default clRed;'
-      Top = 393
+      Top = 392
       Width = 99
       Selected = clRed
       ItemHeight = 16
@@ -913,57 +914,70 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 27
     end
-    object btnPenInverse: TButton
-      Cursor = crHandPoint
-      Left = 8
-      Height = 25
-      Hint = ' // état de l''inversion d''écriture'#13#10'    property PenReverse: Boolean read fPenReverse write SetPenReverse'#13#10'      default False;'
-      Top = 424
-      Width = 87
-      Caption = 'PenReverse'
-      OnClick = btnPenInverseClick
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 28
-    end
-    object btnRubber: TButton
-      Cursor = crHandPoint
-      Left = 96
-      Height = 25
-      Hint = '// état de la gomme'#13#10'    property PenRubber: Boolean read fPenRubber write SetRubberPen'#13#10'      default False;'
-      Top = 424
-      Width = 99
-      Caption = 'Rubber'
-      OnClick = btnRubberClick
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 29
-    end
     object btnSaveTurtle: TButton
       Cursor = crHandPoint
       Left = 8
       Height = 25
       Hint = '// sauvegarde la tortue'#13#10'    procedure SaveTurtle;'
-      Top = 464
-      Width = 87
+      Top = 488
+      Width = 99
       Caption = 'SaveTurtle'
       OnClick = btnSaveTurtleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 30
+      TabOrder = 31
     end
     object btnReloadTurtle: TButton
       Cursor = crHandPoint
-      Left = 96
+      Left = 120
       Height = 25
       Hint = '// récupère une tortue sauvée'#13#10'    procedure ReloadTurtle(const Clean: Boolean);'
-      Top = 464
+      Top = 488
       Width = 99
       Caption = 'ReloadTurtle'
       OnClick = btnReloadTurtleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 31
+      TabOrder = 32
+    end
+    object btnText: TButton
+      Cursor = crHandPoint
+      Left = 8
+      Height = 25
+      Hint = '// texte affiché sur l''écran de la tortue'#13#10'      procedure Text(const St: string; X,Y, Angle: Integer); overload;'
+      Top = 424
+      Width = 99
+      Caption = 'Text'
+      OnClick = btnTextClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 28
+    end
+    object btnText2: TButton
+      Cursor = crHandPoint
+      Left = 120
+      Height = 25
+      Hint = '// texte affiché à l''emplacement de la tortue'#13#10'      procedure Text(const St: string); overload;'
+      Top = 424
+      Width = 99
+      Caption = 'Text2'
+      OnClick = btnText2Click
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 29
+    end
+    object btnTextEx: TButton
+      Cursor = crHandPoint
+      Left = 8
+      Height = 25
+      Hint = 'Exemple de dessin de texte.'
+      Top = 456
+      Width = 99
+      Caption = 'Texte (ex.)'
+      OnClick = btnTextExClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 30
     end
   end
   object gbShapes: TGroupBox

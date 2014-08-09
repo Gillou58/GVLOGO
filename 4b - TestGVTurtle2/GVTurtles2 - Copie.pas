@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    09-08-2014 15:14:48                          |
+  |                  Date:    08-08-2014 23:34:48                          |
   |                  Version : 1.1.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -187,10 +187,10 @@ type
       procedure Pie(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer); overload;
       // dessine une section d'ellipse à l'emplacement de la tortue
       procedure Pie(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;
-      // texte affiché sur l'écran de la tortue
-      procedure Text(const St: string; X,Y, Angle: Integer); overload;
-      // texte affiché à l'emplacement de la tortue
-      procedure Text(const St: string); overload;
+      // dessine un polygone
+      procedure Polygon(Points: array of TPoint);
+      // dessine un polygone non couvrant
+      procedure PolyLine(Points: array of TPoint);
     published
       // abscisse de la tortue
       property CoordX: Double read GetCoordX write SetCoordX;
@@ -693,10 +693,8 @@ procedure TGVTurtle.Rectangle(const X1, Y1, X2, Y2: Integer);
 // *** rectangle absolu ***
 begin
   if Filled then
-    DrwImg.FillRectAntialias(X1, cY(Y1), X2, cY(Y2), ColorToBGRA(ColorToRGB(PenColor)))
-  else
-    DrwImg.RectangleAntialias(X1, cY(Y1), X2, cY(Y2),
-      ColorToBGRA(ColorToRGB(PenColor)), 1);
+    DrwImg.Canvas.Brush.Color := PenColor; // couleur de la brosse
+  DrwImg.Canvas.Rectangle(X1, cY(Y1), X2, cY(Y2));
   Change; // on notifie le changement
 end;
 
@@ -722,11 +720,8 @@ procedure TGVTurtle.RoundRect(const X1, Y1, X2, Y2: Integer);
 // *** dessine un rectangle arrondi ***
 begin
   if Filled then
-    DrwImg.FillRoundRectAntialias(X1, cY(Y1), X2, cY(Y2), 15, 15,
-      ColorToBGRA(ColorToRGB(PenColor)))
-  else
-    DrwImg.RoundRectAntialias(X1, cY(Y1), X2, cY(Y2), 15, 15,
-      ColorToBGRA(ColorToRGB(PenColor)), 1);
+    DrwImg.Canvas.Brush.Color := PenColor; // couleur de la brosse
+  DrwImg.Canvas.RoundRect(X1, cY(Y1), X2, cY(Y2), 15, 15);
   Change; // on notifie le changement
 end;
 
@@ -740,7 +735,7 @@ procedure TGVTurtle.Ellipse(const X1, Y1, X2, Y2: Integer);
 // *** dessine une ellipse ***
 begin
   if Filled then
-    DrwImg.Canvas.Brush.Color := PenColor;
+    DrwImg.Canvas.Brush.Color := PenColor; // couleur de la brosse
   DrwImg.Canvas.Ellipse(X1, cY(Y1), X2, cY(Y2));
   Change; // on notifie le changement
 end;
@@ -775,8 +770,7 @@ end;
 procedure TGVTurtle.Arc(const X2, Y2, X3, Y3, X4, Y4: Integer);
 // *** dessine un arc d'ellipse à l'emplacement de la tortue ***
 begin
-  Arc(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2, X3,
-    Y3, X4, Y4);
+  Arc(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2, X3, Y3, X4, Y4);
 end;
 
 procedure TGVTurtle.Chord(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer);
@@ -791,8 +785,7 @@ end;
 procedure TGVTurtle.Chord(const X2, Y2, X3, Y3, X4, Y4: Integer);
 // *** dessine une corde à l'emplacement de la tortue ***
 begin
-  Chord(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2,
-    X3, Y3, X4, Y4);
+  Chord(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2, X3, Y3, X4, Y4);
 end;
 
 procedure TGVTurtle.Pie(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer);
@@ -807,23 +800,31 @@ end;
 procedure TGVTurtle.Pie(const X2, Y2, X3, Y3, X4, Y4: Integer);
 // *** dessine une section d'ellipse à l'emplacement de la tortue ***
 begin
-  Pie(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2,
-    X3, Y3, X4, Y4);
+  Pie(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2, X3, Y3, X4, Y4);
 end;
 
-procedure TGVTurtle.Text(const St: string; X, Y, Angle: Integer);
-// *** affiche un texte sur l'écran de la tortue ***
+procedure TGVTurtle.Polygon(Points: array of TPoint);
+// *** dessine un polygone ***
+var
+  I: Integer;
 begin
-  DrwImg.CanvasBGRA.Font.Color := PenColor; // couleur d'écriture comme la tortue
-  DrwImg.TextOutAngle(X, cY(Y), Angle * 10, St, ColorToBGRA(ColorToRGB(PenColor)),
-    taLeftJustify);
-  Change; // on signifie le changement
+  for I := Low(Points) to High(Points) do // inverse les ordonnées
+    Points[I].Y := cY(Points[I].Y);
+  if Filled then
+    DrwImg.Canvas.Brush.Color := PenColor; // couleur de la brosse
+  DrwImg.Canvas.Polygon(Points); // dessine
+  Change; // on notifie le changement
 end;
 
-procedure TGVTurtle.Text(const St: string);
-// *** affiche un texte à l'emplacement de la tortue ***
+procedure TGVTurtle.PolyLine(Points: array of TPoint);
+// *** dessine un polygone non couvrant ***
+var
+  I: Integer;
 begin
-  Text(St, Round(CoordX), Round(CoordY), Round(Heading));
+  for I := Low(Points) to High(Points) do // inverse les ordonnées
+    Points[I].Y := cY(Points[I].Y);
+  DrwImg.Canvas.PolyLine(Points); // dessine
+  Change; // on notifie le changement
 end;
 
 end.

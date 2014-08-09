@@ -36,6 +36,9 @@ uses
   Classes, SysUtils, FileUtil, SynMemo, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, ComCtrls, StdCtrls, Spin, ColorBox, GVConsts, GVTurtles2;
 
+const
+  Txt = 'GVTurtle'; // texte d'exemple
+
 type
 
   { TMainForm }
@@ -56,8 +59,6 @@ type
     btnPenDown: TButton;
     btnScreenColor: TButton;
     btnPenColor: TButton;
-    btnPenInverse: TButton;
-    btnRubber: TButton;
     btnSaveTurtle: TButton;
     btnReloadTurtle: TButton;
     btnRectangle: TButton;
@@ -78,6 +79,9 @@ type
     btnEllipse: TButton;
     btnEllipse2: TButton;
     btnCircle: TButton;
+    btnText: TButton;
+    btnText2: TButton;
+    btnTextEx: TButton;
     cbScreenColor: TColorBox;
     cbPenColor: TColorBox;
     gbShapes: TGroupBox;
@@ -115,17 +119,18 @@ type
     procedure btnMoveClick(Sender: TObject);
     procedure btnPenColorClick(Sender: TObject);
     procedure btnPenDownClick(Sender: TObject);
-    procedure btnPenInverseClick(Sender: TObject);
     procedure btnRectangleClick(Sender: TObject);
     procedure btnReInitClick(Sender: TObject);
     procedure btnReloadTurtleClick(Sender: TObject);
-    procedure btnRubberClick(Sender: TObject);
     procedure btnSaveTurtleClick(Sender: TObject);
     procedure btnScaleXClick(Sender: TObject);
     procedure btnScaleYClick(Sender: TObject);
     procedure btnScreenColorClick(Sender: TObject);
     procedure btnSetPosClick(Sender: TObject);
     procedure btnSizeClick(Sender: TObject);
+    procedure btnText2Click(Sender: TObject);
+    procedure btnTextClick(Sender: TObject);
+    procedure btnTextExClick(Sender: TObject);
     procedure btnTowardsClick(Sender: TObject);
     procedure btnTurnClick(Sender: TObject);
     procedure btnTurtleVisibleClick(Sender: TObject);
@@ -167,8 +172,6 @@ begin
   // mise à jur des boutons
   seSetPosX.Value := imgTurtle.Width shr 1; // position au centre
   seSetPosY.Value := imgTurtle.Height shr 1;
-  cbPenColor.Selected := GVTurtle.PenColor; // couleur du crayon
-  cbScreenColor.Selected := GVTurtle.ScreenColor; // couleur du fond
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -216,6 +219,42 @@ procedure TMainForm.btnSizeClick(Sender: TObject);
 begin
   GVTurtle.Size := seSize.Value;
   mmoTurtle.Lines.Add(Format('SIZE %d', [seSize.Value]));
+end;
+
+procedure TMainForm.btnText2Click(Sender: TObject);
+// test de TEXT2
+begin
+  GVTurtle.Text(Txt);
+  mmoTurtle.Lines.Add('TEXT - texte ajouté: ' + Txt);
+end;
+
+procedure TMainForm.btnTextClick(Sender: TObject);
+// test de TEXT
+begin
+  GVTurtle.Text(Txt, seX1.Value, seY1.Value, Round(GVTurtle.Heading));
+  mmoTurtle.Lines.Add('TEXT - texte ajouté: ' + Txt);
+end;
+
+procedure TMainForm.btnTextExClick(Sender: TObject);
+// exemple de dessin de texte
+var
+  I: Integer;
+
+  procedure Wait;
+  // permet le dessin pas à pas
+  begin
+    Application.ProcessMessages;
+  end;
+
+begin
+  with GVTurtle do
+    for I := 1 to 36 do
+    begin
+      PenColor := RGBToColor(random(255),random(255),random(255));
+      Text(Txt);
+      Wait;
+      Turn(10);
+    end;
 end;
 
 procedure TMainForm.btnTowardsClick(Sender: TObject);
@@ -276,15 +315,6 @@ begin
   mmoTurtle.Lines.Add('PENDOWN - ' + IfThen(GVTurtle.PenDown, P_True, P_False));
 end;
 
-procedure TMainForm.btnPenInverseClick(Sender: TObject);
-// test de PENINVERSE
-begin
-  with GVTurtle do
-    PenReverse := not PenReverse;
-  mmoTurtle.Lines.Add('PENREVERSE - ' + IfThen(GVTurtle.PenReverse, P_True,
-    P_False));
-end;
-
 procedure TMainForm.btnRectangleClick(Sender: TObject);
 // dessin de formes
 begin
@@ -321,15 +351,6 @@ procedure TMainForm.btnReloadTurtleClick(Sender: TObject);
 begin
   GVTurtle.ReloadTurtle(False);
   mmoTurtle.Lines.Add('RELOADTURTLE');
-end;
-
-procedure TMainForm.btnRubberClick(Sender: TObject);
-// test de PENRUBBER
-begin
-  with GVTurtle do
-    PenRubber := not PenRubber;
-  mmoTurtle.Lines.Add('PENRUBBER - ' + IfThen(GVTurtle.PenRubber, P_True,
-    P_False));
 end;
 
 procedure TMainForm.btnSaveTurtleClick(Sender: TObject);
@@ -428,10 +449,12 @@ begin
   imgTurtle.Invalidate;
   // données de la tortue
   with GVTurtle do
-    statusbar.Panels[1].Text := 'X: ' + IntToStr(Round(CoordX)) + ' Y: ' +
-    IntToStr(Round(CoordY)) + ' Cap: ' + IntToStr(Round(Heading)) +
-    ' Visible: ' + IfThen(TurtleVisible, P_True,
-    P_False) + ' Baissé: ' + IfThen(PenDown, P_True, P_False);
+    statusbar.Panels[1].Text := Format('X: %.3d Y: %.3d Cap: %.3d',
+      [Round(CoordX), Round(CoordY), Round(Heading)]) +
+      ' Visible: ' + IfThen(TurtleVisible, P_True, P_False) +
+      ' Baissé: ' + IfThen(PenDown, P_True, P_False);
+  cbPenColor.Selected := GVTurtle.PenColor; // couleur du crayon
+  cbScreenColor.Selected := GVTurtle.ScreenColor; // couleur du fond
 end;
 
 procedure TMainForm.TurtleBeforePaint(Sender: TObject; cHeading: Integer);
