@@ -58,25 +58,16 @@ Copyright (C) 2014 Gilles VASSEUR — Tous droits réservés.
 
 3. Contenu des répertoires
 
-Répertoire 0- Licence GNU GPL : contient la licence GNU GPL sous plusieurs formats, en anglais et en français.
+Répertoire GNU GPL : contient la licence GNU GPL sous plusieurs formats, en anglais et en français.
 
-Répertoire 0b- Images : contient les images nécessaires pour les programmes, mais aussi pour la documentation.
+Répertoire medias : contient les images nécessaires pour les programmes, mais aussi pour la documentation.
 
-Répertoire 1- TestGVWords : contient le travail concernant l'unité TGVWords de traitement de mots.
+Répertoire docs : contient la documentation de GVLOGO (programmation et mode d'emploi.
 
-Répertoire 2- TestGVLists : contient tout ce qui concerne le traitement des listes simples.
+Répertoire tests : contient tous les logiciels de tests des unités de GVLOGO.
 
-Répertoire 3- TestGVPropLists : traite des listes de propriétés.
+Répertoire units : contient toutes les unités nécessaires  GVLOGO.
 
-Répertoire 4- TestGVTurtle : la tortue graphique dans sa version sans bibliothèques extérieures.
-
-Répertoire 4b- TestGVTurtle2 : version plus efficace de la tortue graphique.
-
-Répertoire 5- Easy Turtle : contient les sources et les exécutables du logiciel EasyTurtle qui permet une utilisation simple de la tortue GVLOGO.
-
-Répertoire 6- TestGVStacks : test des piles (entiers, réels et chaînes)
-
-GVLOGO.docx et GVLOGO.pdf : documentation du logiciel
 
 4. Contact
 

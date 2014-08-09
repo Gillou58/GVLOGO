@@ -1,0 +1,582 @@
+object GVMainForm: TGVMainForm
+  Left = 338
+  Height = 622
+  Top = 150
+  Width = 579
+  ActiveControl = LabEdtFirst
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Test de GVWords - Gilles Vasseur 2014 - V1.0.0 - Projet : GVLOGO'
+  ClientHeight = 622
+  ClientWidth = 579
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  Position = poScreenCenter
+  LCLVersion = '1.2.4.0'
+  object GBEdit: TGroupBox
+    Left = 18
+    Height = 105
+    Top = 8
+    Width = 535
+    Caption = 'Saisie '
+    ClientHeight = 87
+    ClientWidth = 531
+    ParentFont = False
+    TabOrder = 0
+    object LabEdtFirst: TLabeledEdit
+      Cursor = crHandPoint
+      Left = 88
+      Height = 23
+      Hint = 'Premier ou seul mot à traiter'
+      Top = 8
+      Width = 200
+      EditLabel.AnchorSideTop.Control = LabEdtFirst
+      EditLabel.AnchorSideTop.Side = asrCenter
+      EditLabel.AnchorSideRight.Control = LabEdtFirst
+      EditLabel.AnchorSideBottom.Control = LabEdtFirst
+      EditLabel.AnchorSideBottom.Side = asrBottom
+      EditLabel.Left = 10
+      EditLabel.Height = 15
+      EditLabel.Top = 12
+      EditLabel.Width = 72
+      EditLabel.Caption = 'Premier mot :'
+      EditLabel.ParentColor = False
+      LabelPosition = lpLeft
+      LabelSpacing = 6
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      Text = 'Éléphant'
+    end
+    object LabEdtSecond: TLabeledEdit
+      Cursor = crHandPoint
+      Left = 88
+      Height = 23
+      Hint = 'Second mot à traiter si nécessaire'
+      Top = 48
+      Width = 200
+      EditLabel.AnchorSideTop.Control = LabEdtSecond
+      EditLabel.AnchorSideTop.Side = asrCenter
+      EditLabel.AnchorSideRight.Control = LabEdtSecond
+      EditLabel.AnchorSideBottom.Control = LabEdtSecond
+      EditLabel.AnchorSideBottom.Side = asrBottom
+      EditLabel.Left = 12
+      EditLabel.Height = 15
+      EditLabel.Top = 52
+      EditLabel.Width = 70
+      EditLabel.Caption = 'Second mot :'
+      EditLabel.ParentColor = False
+      LabelPosition = lpLeft
+      LabelSpacing = 6
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      Text = 'Libellule'
+    end
+    object lblResult: TLabel
+      Cursor = crHourGlass
+      Left = 320
+      Height = 25
+      Hint = 'Résultat de la fonction en cours'
+      Top = 48
+      Width = 200
+      AutoSize = False
+      Caption = '< résultat >'
+      Font.Color = clBlue
+      Font.Height = -19
+      Font.Quality = fqCleartype
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+    end
+  end
+  object GBOneWord: TGroupBox
+    Left = 16
+    Height = 233
+    Top = 128
+    Width = 536
+    Caption = 'Un mot '
+    ClientHeight = 215
+    ClientWidth = 532
+    TabOrder = 1
+    object btnFirst: TButton
+      Cursor = crHandPoint
+      Left = 16
+      Height = 25
+      Hint = '// premier caractère d''un mot'#13#10'    function First(const St: string): string;'
+      Top = 16
+      Width = 105
+      Caption = 'First'
+      OnClick = btnFirstClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object btnLast: TButton
+      Cursor = crHandPoint
+      Left = 152
+      Height = 25
+      Hint = '// dernier caractère d''un mot'#13#10'    function Last(const St: string): string;'
+      Top = 16
+      Width = 105
+      Caption = 'Last'
+      OnClick = btnLastClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object btnButFirst: TButton
+      Cursor = crHandPoint
+      Left = 288
+      Height = 25
+      Hint = '// sauf le premier caractère d''un mot'#13#10'    function ButFirst(const St: string): string;'
+      Top = 16
+      Width = 105
+      Caption = 'ButFirst'
+      OnClick = btnButFirstClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object btnButLast: TButton
+      Cursor = crHandPoint
+      Left = 424
+      Height = 25
+      Hint = '// sauf le dernier caractère d''un mot'#13#10'    function ButLast(const St: string): string;'
+      Top = 16
+      Width = 105
+      Caption = 'ButLast'
+      OnClick = btnButLastClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object btnLowerCase: TButton
+      Cursor = crHandPoint
+      Left = 16
+      Height = 25
+      Hint = '// mot en minuscules'#13#10'    function Lowercase(const St: string): string;'
+      Top = 56
+      Width = 105
+      Caption = 'LowerCase'
+      OnClick = btnLowerCaseClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+    end
+    object btnUpperCase: TButton
+      Cursor = crHandPoint
+      Left = 152
+      Height = 25
+      Hint = '// mot en majuscules'#13#10'    function Uppercase(const St: string): string;'
+      Top = 56
+      Width = 105
+      Caption = 'UpperCase'
+      OnClick = btnUpperCaseClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+    end
+    object btnEmptyWordP: TButton
+      Cursor = crHandPoint
+      Left = 288
+      Height = 25
+      Hint = '// le mot est-il vide ?'#13#10'    function EmptyWordP(const St: string): Boolean;'
+      Top = 56
+      Width = 105
+      Caption = 'EmptyWordP'
+      OnClick = btnEmptyWordPClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 6
+    end
+    object btnWithoutEsc: TButton
+      Cursor = crHandPoint
+      Left = 424
+      Height = 25
+      Hint = '// chaîne brute'#13#10'    function WithoutEsc(const St: string): string;'
+      Top = 56
+      Width = 105
+      Caption = 'WithoutEsc'
+      OnClick = btnWithoutEscClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 7
+    end
+    object btnWithoutQuote: TButton
+      Cursor = crHandPoint
+      Left = 16
+      Height = 25
+      Hint = '// supprime si nécessaire le " initial d''un mot'#13#10'    function WithoutQuote(const St: string): string;'
+      Top = 96
+      Width = 105
+      Caption = 'WithoutQuote'
+      OnClick = btnWithoutQuoteClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 8
+    end
+    object btnWithoutColon: TButton
+      Cursor = crHandPoint
+      Left = 152
+      Height = 25
+      Hint = '// supprime si nécessaire le : initial d''un mot'#13#10'    function WithoutColon(const St: string): string;'
+      Top = 96
+      Width = 105
+      Caption = 'WithoutColon'
+      OnClick = btnWithoutColonClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 9
+    end
+    object btnWithEsc: TButton
+      Cursor = crHandPoint
+      Left = 288
+      Height = 25
+      Hint = '// chaîne formatée'#13#10'    function WithEsc(const St: string): string;'
+      Top = 96
+      Width = 105
+      Caption = 'WithEsc'
+      OnClick = btnWithEscClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 10
+    end
+    object btnCount: TButton
+      Cursor = crHandPoint
+      Left = 424
+      Height = 25
+      Hint = '// longueur du mot'#13#10'    function Count(const St: string): Integer;'
+      Top = 96
+      Width = 105
+      Caption = 'Count'
+      OnClick = btnCountClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 11
+    end
+    object btnReverse: TButton
+      Cursor = crHandPoint
+      Left = 16
+      Height = 25
+      Hint = '// mot inversé'#13#10'   function Reverse(const St: string): string;'
+      Top = 136
+      Width = 105
+      Caption = 'Reverse'
+      OnClick = btnReverseClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 12
+    end
+    object btnAtRandom: TButton
+      Cursor = crHandPoint
+      Left = 152
+      Height = 25
+      Hint = '// lettre au hasard'#13#10'    function AtRandom(const St: string): string;'
+      Top = 136
+      Width = 105
+      Caption = 'AtRandom'
+      OnClick = btnAtRandomClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 13
+    end
+    object btnShuffle: TButton
+      Cursor = crHandPoint
+      Left = 288
+      Height = 25
+      Hint = '// mot mélangé'#13#10'    function Shuffle(const St: string): string;'
+      Top = 136
+      Width = 105
+      Caption = 'Shuffle'
+      OnClick = btnShuffleClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 14
+    end
+    object btnSort: TButton
+      Cursor = crHandPoint
+      Left = 424
+      Height = 25
+      Hint = '// tri des lettres du mot'#13#10'    function Sort(const St: string): string;'
+      Top = 136
+      Width = 105
+      Caption = 'Sort'
+      OnClick = btnSortClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 15
+    end
+    object btnNumberP: TButton
+      Cursor = crHandPoint
+      Left = 16
+      Height = 25
+      Hint = '// est-ce un nombre ?'#13#10'    function NumberP(const St: string): Boolean;'
+      Top = 176
+      Width = 105
+      Caption = 'NumberP'
+      OnClick = btnNumberPClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 16
+    end
+    object btnItem: TButton
+      Cursor = crHandPoint
+      Left = 288
+      Height = 25
+      Hint = '// élément N d''un mot'#13#10'    function Item(const St: string; N: Integer): string;'
+      Top = 174
+      Width = 105
+      Caption = 'Item'
+      OnClick = btnItemClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 18
+    end
+    object sedtItem: TSpinEdit
+      Cursor = crHandPoint
+      Left = 424
+      Height = 23
+      Hint = '// élément N d''un mot'#13#10'    function Item(const St: string; N: Integer): string;'
+      Top = 176
+      Width = 105
+      MinValue = 1
+      OnChange = btnItemClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 19
+      Value = 1
+    end
+    object btnRotate: TButton
+      Cursor = crHandPoint
+      Left = 152
+      Height = 25
+      Hint = '// rotation des caractères d''un mot'#13#10'    function Rotate(const St: string): string;'
+      Top = 176
+      Width = 105
+      Caption = 'Rotate'
+      OnClick = btnRotateClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 17
+    end
+  end
+  object GBTwoWords: TGroupBox
+    Left = 18
+    Height = 152
+    Top = 368
+    Width = 537
+    Caption = 'Deux mots '
+    ClientHeight = 134
+    ClientWidth = 533
+    TabOrder = 2
+    object btnEqualP: TButton
+      Cursor = crHandPoint
+      Left = 16
+      Height = 25
+      Hint = '// les deux mots sont-ils égaux ?'#13#10'    function EqualP(const StFirst, StTwo: string): Boolean;'
+      Top = 16
+      Width = 105
+      Caption = 'EqualP'
+      OnClick = btnEqualPClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object btnGreaterP: TButton
+      Cursor = crHandPoint
+      Left = 152
+      Height = 25
+      Hint = '// le premier mot est-il à placer après le second par ordre alphabétique ?'#13#10'    function GreaterP(const StFirst, StTwo: string): Boolean;'
+      Top = 16
+      Width = 105
+      Caption = 'GreaterP'
+      OnClick = btnGreaterPClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object btnLowerP: TButton
+      Cursor = crHandPoint
+      Left = 291
+      Height = 25
+      Hint = '// le premier mot est-il à placer avant le second par ordre alphabétique ?'#13#10'    function LowerP(const StFirst, StTwo: string): Boolean;'
+      Top = 16
+      Width = 105
+      Caption = 'LowerP'
+      OnClick = btnLowerPClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object btnMemberP: TButton
+      Cursor = crHandPoint
+      Left = 424
+      Height = 25
+      Hint = '// le mot est-il compris dans un autre ?'#13#10'    function MemberP(const St, SubSt: string): Boolean;'
+      Top = 16
+      Width = 105
+      Caption = 'MemberP'
+      OnClick = btnMemberPClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object btnGreatest: TButton
+      Cursor = crHandPoint
+      Left = 16
+      Height = 25
+      Hint = '// renvoie le mot qui vient après par ordre alphabétique'#13#10'    function Greatest(const StFirst, StTwo: string): string;'
+      Top = 56
+      Width = 105
+      Caption = 'Greatest'
+      OnClick = btnGreatestClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+    end
+    object btnLowest: TButton
+      Cursor = crHandPoint
+      Left = 152
+      Height = 25
+      Hint = '// renvoie le mot qui vient avant par ordre alphabétique'#13#10'    function Lowest(const StFirst, StTwo: string): string;'
+      Top = 56
+      Width = 105
+      Caption = 'Lowest'
+      OnClick = btnLowestClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+    end
+    object btnPutFirst: TButton
+      Cursor = crHandPoint
+      Left = 291
+      Height = 25
+      Hint = '// concatène les deux mots, le second en premier'#13#10'    function PutFirst(const StOne, StTwo: string): string;'
+      Top = 56
+      Width = 105
+      Caption = 'PutFirst'
+      OnClick = btnPutFirstClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 6
+    end
+    object btnPutLast: TButton
+      Cursor = crHandPoint
+      Left = 424
+      Height = 25
+      Hint = '// concatène les deux mots, le premier d''abord'#13#10'    function PutLast(const StOne, StTwo: string): string;'
+      Top = 56
+      Width = 105
+      Caption = 'PutLast'
+      OnClick = btnPutLastClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 7
+    end
+    object btnReplace: TButton
+      Cursor = crHandPoint
+      Left = 16
+      Height = 25
+      Hint = '// remplacement de l''élément N d''un mot'#13#10'    function Replace(const St, SubSt: string; N: Integer): string;'
+      Top = 96
+      Width = 105
+      Caption = 'Replace'
+      OnClick = btnReplaceClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 8
+    end
+    object sedtReplace: TSpinEdit
+      Cursor = crHandPoint
+      Left = 152
+      Height = 23
+      Hint = '// remplacement de l''élément N d''un mot'#13#10'    function Replace(const St, SubSt: string; N: Integer): string;'
+      Top = 98
+      Width = 105
+      MinValue = 1
+      OnChange = btnReplaceClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 9
+      Value = 1
+    end
+    object btnInsert: TButton
+      Cursor = crHandPoint
+      Left = 291
+      Height = 25
+      Hint = '// insertion en position N'#13#10'    function Insert(const St, SubSt: string; N: Integer): string;'
+      Top = 96
+      Width = 105
+      Caption = 'Insert'
+      OnClick = btnInsertClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 10
+    end
+    object sedtInsert: TSpinEdit
+      Cursor = crHandPoint
+      Left = 424
+      Height = 23
+      Hint = '// insertion en position N'#13#10'    function Insert(const St, SubSt: string; N: Integer): string;'
+      Top = 96
+      Width = 105
+      MinValue = 1
+      OnChange = btnInsertClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 11
+      Value = 1
+    end
+  end
+  object GBMisc: TGroupBox
+    Left = 18
+    Height = 73
+    Top = 536
+    Width = 537
+    Caption = 'Divers '
+    ClientHeight = 55
+    ClientWidth = 533
+    TabOrder = 3
+    object btnIsValid: TButton
+      Cursor = crHandPoint
+      Left = 16
+      Height = 25
+      Hint = '// le mot est-il valide sans traitement ?'#13#10'    function IsValid(const St: string): Boolean;'
+      Top = 15
+      Width = 105
+      Caption = 'IsValid'
+      OnClick = btnIsValidClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object btnIsValidIdent: TButton
+      Cursor = crHandPoint
+      Left = 152
+      Height = 25
+      Hint = '// est-ce un identificateur valide ?'#13#10'    function IsValidIdent(const St: string): Boolean;'
+      Top = 15
+      Width = 105
+      Caption = 'IsValidIdent'
+      OnClick = btnIsValidIdentClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object btnExit: TBitBtn
+      Cursor = crHandPoint
+      Left = 424
+      Height = 30
+      Hint = 'Quitter le logiciel'
+      Top = 10
+      Width = 103
+      DefaultCaption = True
+      Kind = bkClose
+      ModalResult = 11
+      TabOrder = 2
+    end
+  end
+end
