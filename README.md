@@ -65,6 +65,11 @@ Répertoire medias : contient les images nécessaires pour les programmes, mais 
 Répertoire docs : contient la documentation de GVLOGO (programmation et mode d'emploi.
 
 Répertoire tests : contient tous les logiciels de tests des unités de GVLOGO.
+   => testgvwords : test des mots
+   => testgvlists : test des listes
+   => testgvproplists : test des listes de propriétés
+   => testgvturtles : test de la tortue graphique (version avec outils de base fournis)
+   => testgvturtles2 : test de la tortue graphique (version avec la bibliothèque BGRABITMAP)
 
 Répertoire units : contient toutes les unités nécessaires  GVLOGO.
 
@@ -77,6 +82,6 @@ Vous pouvez aussi vous rendre sur mon site pour les éventuelles mises à jour :
 
 Les suggestions, modifications, propositions et questions sont les bienvenues.
 
-Gilles VASSEUR, le 9 août 2014
+Gilles VASSEUR, le 10 août 2014
 
  
