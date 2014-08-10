@@ -232,15 +232,15 @@ type
     // direction de la tortue
     property Heading: Real read fHeading write SetHeading;
     // taille de la tortue
-    property Size: Integer read fSize write SetSize default TurtleDefaultSize;
+    property Size: Integer read fSize write SetSize default CDefaultSize;
     // drapeau d'écriture
     property PenDown: Boolean read fPenDown write SetPenDown default True;
     // type de zone de déplacement
     property Screen: TScreenTurtle read fScreen write fScreen default teWin;
     // échelle des X
-    property ScaleX: Integer read fScaleX write fScaleX default DefaultScale;
+    property ScaleX: Integer read fScaleX write fScaleX default CDefaultScale;
     // échelle des Y
-    property ScaleY: Integer read fScaleY write fScaleY default DefaultScale;
+    property ScaleY: Integer read fScaleY write fScaleY default CDefaultScale;
     // état de la gomme
     property PenRubber: Boolean read fPenRubber write SetRubberPen
       default False;
@@ -252,7 +252,7 @@ type
     // état du remplissage
     property Filled: Boolean read fFilled write SetFilled default True;
     // vitesse de dessin de la tortue
-    property Speed: Integer read fSpeed write SetSpeed default TurtleMaxSpeed div 2;
+    property Speed: Integer read fSpeed write SetSpeed default CMaxSpeed div 2;
     // couleur du fond d'écran
     property ScreenColor: TColor read fScreenColor write SetScreenColor;
     // événement après le changement de la tortue
@@ -437,7 +437,7 @@ begin
       fX := X;
       fY := Y;
       // ralentit le dessin
-      Sleep(TurtleMaxSpeed - Speed);
+      Sleep(CMaxSpeed - Speed);
       // dessine
       if PenDown then
         LineTo(X, Y)
@@ -486,7 +486,7 @@ procedure TGVTurtle.Home;
 begin
   with Canvas.ClipRect do
     DoGo(Right shr 1, Bottom shr 1); // au centre
-  Heading := DefaultHeading; // tête vers le haut de l'écran
+  Heading := CDefaultHeading; // tête vers le haut de l'écran
 end;
 
 procedure TGVTurtle.Reinit;
@@ -501,13 +501,13 @@ begin
     fPenColor := clAqua; // qu'on mémorise
   end;
   fTurtleKind := tkTriangle; // en forme de triangle
-  fScaleX := DefaultScale; // échelle des X
-  fScaleY := DefaultScale; // échelle des Y
+  fScaleX := CDefaultScale; // échelle des X
+  fScaleY := CDefaultScale; // échelle des Y
   fScreen := teWin; // type de champ
   fTurtleVisible := False; // invisible provisoirement
-  fSize := TurtleDefaultSize; // taille par défaut
+  fSize := CDefaultSize; // taille par défaut
   fFilled := True; // remplissage par défaut
-  fSpeed := TurtleMaxSpeed shr 1; // vitesse par défaut
+  fSpeed := CMaxSpeed shr 1; // vitesse par défaut
   Home;
   fTempImg.Canvas.Draw(0, 0, Picture.Bitmap); // vide l'image temporaire
   PenDown := True; // écrit
@@ -537,8 +537,8 @@ begin
   // calcul du cosinus et du sinus du cap
   SinCos((fHeading - 90) * DgToRad, SinT, CosT);
   // calcul des nouvelles coordonnées
-  TX := fX - Value * SinT * (fScaleX / DefaultScale);
-  TY := fY + Value * CosT * (fScaleY / DefaultScale);
+  TX := fX - Value * SinT * (fScaleX / CDefaultScale);
+  TY := fY + Value * CosT * (fScaleY / CDefaultScale);
   SetPos(Round(TX), Round(TY)); // déplacement si possible
 end;
 
@@ -866,6 +866,8 @@ begin
   TV := TurtleVisible;
   try
     TurtleVisible := False;
+    PenReverse := False; // pas d'inversion
+    PenRubber := False; // pas d'effacement non plus
     fPenColor := Value;
     Canvas.Pen.Color := fPenColor;
   finally
@@ -893,6 +895,7 @@ begin
     TV := TurtleVisible;
     try
       TurtleVisible := False;
+      fPenReverse := Value;
       if Value then
         Canvas.Pen.Mode := pmNot // en mode inversion
       else
@@ -960,7 +963,7 @@ begin
     TV := TurtleVisible;
     try
       TurtleVisible := False;
-      fSize := Min(Abs(Value), TurtleMaxSize); // normalise sa taille
+      fSize := Min(Abs(Value), CMaxSize); // normalise sa taille
     finally
       TurtleVisible := TV;
     end;
@@ -972,7 +975,7 @@ procedure TGVTurtle.SetSpeed(const Value: Integer);
 begin
   if fSpeed <> Value then
   begin
-    fSpeed := Min(Value, TurtleMaxSpeed); // nouvelle vitesse  (maximum = 100)
+    fSpeed := Min(Value, CMaxSpeed); // nouvelle vitesse  (maximum = 100)
   end;
 end;
 

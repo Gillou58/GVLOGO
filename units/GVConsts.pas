@@ -32,6 +32,9 @@ unit GVConsts;
 
 interface
 
+uses
+  Graphics;
+
 const
   { séparateurs }
 
@@ -81,6 +84,8 @@ const
   CDefaultSize = 8; // taille d'une tortue par défaut
   CMaxSize = 20; // taille maximale de la tortue
   CMaxSpeed = 100; // vitesse maximum de la tortue
+  CDefaultPenColor = clWhite; // couleur de fond par défaut
+  CDefaultBackColor = clBlack; // couleur du crayon par défaut
 
   { piles }
 

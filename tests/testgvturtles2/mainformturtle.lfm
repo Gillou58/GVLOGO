@@ -4,7 +4,7 @@ object MainForm: TMainForm
   Top = 139
   Width = 1373
   ActiveControl = btnDessin
-  Caption = 'Test de GVTurtles - V1.0.0 - GVLOGO - Gilles VASSEUR 2014'
+  Caption = 'Test de GVTurtles2 - V1.0.0 - GVLOGO - Gilles VASSEUR 2014'
   ClientHeight = 577
   ClientWidth = 1373
   OnCreate = FormCreate
