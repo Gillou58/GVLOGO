@@ -69,8 +69,6 @@ type
     btnArc2: TButton;
     btnPie: TButton;
     btnPie2: TButton;
-    btnChord: TButton;
-    btnChord2: TButton;
     btnFilled: TButton;
     btnRectangle2: TButton;
     btnDessin: TButton;
@@ -84,6 +82,7 @@ type
     btnText: TButton;
     btnText2: TButton;
     btnTextEx: TButton;
+    btnPenWidth: TButton;
     cbScreenColor: TColorBox;
     cbPenColor: TColorBox;
     gbShapes: TGroupBox;
@@ -108,9 +107,8 @@ type
     seY2: TSpinEdit;
     seX3: TSpinEdit;
     seY3: TSpinEdit;
-    seX4: TSpinEdit;
-    seY4: TSpinEdit;
     seLen: TSpinEdit;
+    sePenWidth: TSpinEdit;
     StatusBar: TStatusBar;
     mmoTurtle: TSynMemo;
     tbExample: TTrackBar;
@@ -122,6 +120,7 @@ type
     procedure btnMoveClick(Sender: TObject);
     procedure btnPenColorClick(Sender: TObject);
     procedure btnPenDownClick(Sender: TObject);
+    procedure btnPenWidthClick(Sender: TObject);
     procedure btnRectangleClick(Sender: TObject);
     procedure btnReInitClick(Sender: TObject);
     procedure btnReloadTurtleClick(Sender: TObject);
@@ -318,8 +317,21 @@ begin
   mmoTurtle.Lines.Add('PENDOWN - ' + IfThen(GVTurtle.PenDown, P_True, P_False));
 end;
 
+procedure TMainForm.btnPenWidthClick(Sender: TObject);
+// test de PENWIDTH
+begin
+  GVTurtle.PenWidth := sePenWidth.Value;
+  mmoTurtle.Lines.Add('PENWIDTH - ' + IntToStr(GVTurtle.PenWidth));
+end;
+
 procedure TMainForm.btnRectangleClick(Sender: TObject);
 // dessin de formes
+const
+  St: array[1..14] of string =
+    ('Rectangle','Rectangle tortue','Carré','Carré tortue','Rectangle arrondi',
+    'Rectangle arrondi tortue', 'Ellipse', 'Ellipse tortue', 'Cercle',
+    'Cercle tortue', 'Arc d''ellipse', 'Arc d''ellipse tortue', 'Section d''ellipse',
+    'Section d''ellipse tortue');
 begin
   with GVTurtle do
   case (Sender as TButton).Tag of
@@ -333,13 +345,12 @@ begin
     8: Ellipse(seX2.Value,seY2.Value);
     9: Circle(seX1.Value,seY1.Value,seLen.Value);
     10: Circle(seLen.Value);
-    11: Arc(seX1.Value,seY1.Value,seX2.Value,seY2.Value,seX3.Value,seY3.Value,seX4.Value,seY4.Value);
-    12: Arc(seX2.Value,seY2.Value,seX3.Value,seY3.Value,seX4.Value,seY4.Value);
-    13: Pie(seX1.Value,seY1.Value,seX2.Value,seY2.Value,seX3.Value,seY3.Value,seX4.Value,seY4.Value);
-    14: Pie(seX2.Value,seY2.Value,seX3.Value,seY3.Value,seX4.Value,seY4.Value);
-    15: Chord(seX1.Value,seY1.Value,seX2.Value,seY2.Value,seX3.Value,seY3.Value,seX4.Value,seY4.Value);
-    16: Chord(seX2.Value,seY2.Value,seX3.Value,seY3.Value,seX4.Value,seY4.Value);
+    11: Arc(seX1.Value,seY1.Value,seX2.Value,seY2.Value,seX3.Value,seY3.Value);
+    12: Arc(seX2.Value,seY2.Value,seX3.Value,seY3.Value);
+    13: Pie(seX1.Value,seY1.Value,seX2.Value,seY2.Value,seX3.Value,seY3.Value);
+    14: Pie(seX2.Value,seY2.Value,seX3.Value,seY3.Value);
   end;
+  mmoTurtle.Lines.Add('Forme dessinée : ' + St[(Sender as TButton).Tag]);
 end;
 
 procedure TMainForm.btnReInitClick(Sender: TObject);

@@ -1,12 +1,12 @@
 object MainForm: TMainForm
-  Left = 116
-  Height = 577
-  Top = 139
-  Width = 1373
+  Left = 343
+  Height = 601
+  Top = 146
+  Width = 1375
   ActiveControl = btnDessin
   Caption = 'Test de GVTurtles2 - V1.0.0 - GVLOGO - Gilles VASSEUR 2014'
-  ClientHeight = 577
-  ClientWidth = 1373
+  ClientHeight = 601
+  ClientWidth = 1375
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poScreenCenter
@@ -14,17 +14,17 @@ object MainForm: TMainForm
   object pnlTurtle: TPanel
     Cursor = crNo
     Left = 8
-    Height = 536
+    Height = 568
     Top = 8
     Width = 600
-    ClientHeight = 536
+    ClientHeight = 568
     ClientWidth = 600
     ParentColor = False
     TabOrder = 4
     object imgTurtle: TImage
       Cursor = crNo
       Left = 1
-      Height = 534
+      Height = 566
       Hint = 'Zone de dessin.'
       Top = 1
       Width = 598
@@ -35,24 +35,24 @@ object MainForm: TMainForm
   end
   object StatusBar: TStatusBar
     Left = 0
-    Height = 23
-    Top = 554
-    Width = 1373
+    Height = 21
+    Top = 580
+    Width = 1375
     AutoHint = True
     Panels = <    
       item
         Text = 'Test de TGVTurtles'
-        Width = 500
+        Width = 900
       end    
       item
-        Width = 50
+        Width = 200
       end>
     SimplePanel = False
   end
   inline mmoTurtle: TSynMemo
     Cursor = crNo
     Left = 1080
-    Height = 464
+    Height = 520
     Hint = 'Zone d''affichage.'
     Top = 16
     Width = 284
@@ -542,12 +542,12 @@ object MainForm: TMainForm
   end
   object GroupBox1: TGroupBox
     Left = 616
-    Height = 536
+    Height = 568
     Top = 8
-    Width = 236
+    Width = 248
     Caption = 'Commandes '
-    ClientHeight = 518
-    ClientWidth = 232
+    ClientHeight = 549
+    ClientWidth = 244
     TabOrder = 0
     object btnSetPos: TButton
       Cursor = crHandPoint
@@ -564,10 +564,10 @@ object MainForm: TMainForm
     end
     object seSetPosX: TSpinEdit
       Cursor = crHandPoint
-      Left = 96
-      Height = 23
+      Left = 120
+      Height = 27
       Hint = '// la tortue se déplace'#13#10'    procedure Move(const Value: Real);'
-      Top = 10
+      Top = 8
       Width = 55
       MaxValue = 600
       ParentShowHint = False
@@ -577,10 +577,10 @@ object MainForm: TMainForm
     end
     object seSetPosY: TSpinEdit
       Cursor = crHandPoint
-      Left = 164
-      Height = 23
+      Left = 184
+      Height = 27
       Hint = '// la tortue se déplace'#13#10'    procedure Move(const Value: Real);'
-      Top = 10
+      Top = 8
       Width = 55
       MaxValue = 600
       ParentShowHint = False
@@ -603,10 +603,10 @@ object MainForm: TMainForm
     end
     object seMove: TSpinEdit
       Cursor = crHandPoint
-      Left = 96
-      Height = 23
+      Left = 120
+      Height = 27
       Hint = '// la tortue se déplace'#13#10'    procedure Move(const Value: Real);'
-      Top = 42
+      Top = 40
       Width = 55
       ParentShowHint = False
       ShowHint = True
@@ -628,10 +628,10 @@ object MainForm: TMainForm
     end
     object seScaleX: TSpinEdit
       Cursor = crHandPoint
-      Left = 96
-      Height = 23
+      Left = 120
+      Height = 27
       Hint = '// échelle des X'#13#10'    property ScaleX: Integer read fScaleX write fScaleX default DefaultScale;'
-      Top = 74
+      Top = 72
       Width = 55
       MaxValue = 600
       ParentShowHint = False
@@ -654,8 +654,8 @@ object MainForm: TMainForm
     end
     object seScaleY: TSpinEdit
       Cursor = crHandPoint
-      Left = 96
-      Height = 23
+      Left = 120
+      Height = 27
       Hint = '// échelle des Y'#13#10'    property ScaleY: Integer read fScaleY write fScaleY default DefaultScale;'
       Top = 104
       Width = 55
@@ -680,8 +680,8 @@ object MainForm: TMainForm
     end
     object seTurn: TSpinEdit
       Cursor = crHandPoint
-      Left = 96
-      Height = 23
+      Left = 120
+      Height = 27
       Hint = '// la tortue tourne'#13#10'    procedure Turn(const Value: Real);'
       Top = 136
       Width = 55
@@ -706,10 +706,10 @@ object MainForm: TMainForm
     end
     object seTowardsX: TSpinEdit
       Cursor = crHandPoint
-      Left = 96
-      Height = 23
+      Left = 120
+      Height = 27
       Hint = '// renvoie le cap vers un point'#13#10'    function Towards(const X, Y: Integer): Real;'
-      Top = 170
+      Top = 168
       Width = 55
       MaxValue = 600
       ParentShowHint = False
@@ -718,10 +718,10 @@ object MainForm: TMainForm
     end
     object seTowardsY: TSpinEdit
       Cursor = crHandPoint
-      Left = 164
-      Height = 23
+      Left = 184
+      Height = 27
       Hint = '// renvoie le cap vers un point'#13#10'    function Towards(const X, Y: Integer): Real;'
-      Top = 170
+      Top = 168
       Width = 55
       MaxValue = 600
       ParentShowHint = False
@@ -743,10 +743,10 @@ object MainForm: TMainForm
     end
     object seHeading: TSpinEdit
       Cursor = crHandPoint
-      Left = 96
-      Height = 23
+      Left = 120
+      Height = 27
       Hint = '// direction de la tortue'#13#10'    property Heading: Real read fHeading write SetHeading;'
-      Top = 202
+      Top = 200
       Width = 55
       MaxValue = 360
       ParentShowHint = False
@@ -769,8 +769,8 @@ object MainForm: TMainForm
     end
     object seSize: TSpinEdit
       Cursor = crHandPoint
-      Left = 96
-      Height = 23
+      Left = 120
+      Height = 27
       Hint = '// taille de la tortue'#13#10'    property Size: Integer read fSize write SetSize default TurtleDefaultSize;'
       Top = 232
       Width = 55
@@ -864,7 +864,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = '// couleur du fond d''écran'#13#10'    property ScreenColor: TColor read fScreenColor write SetScreenColor;'
-      Top = 360
+      Top = 392
       Width = 99
       Caption = 'ScreenColor'
       OnClick = btnScreenColorClick
@@ -875,9 +875,9 @@ object MainForm: TMainForm
     object cbScreenColor: TColorBox
       Cursor = crHandPoint
       Left = 120
-      Height = 22
+      Height = 31
       Hint = '// couleur du fond d''écran'#13#10'    property ScreenColor: TColor read fScreenColor write SetScreenColor;'
-      Top = 360
+      Top = 392
       Width = 99
       ItemHeight = 16
       ParentShowHint = False
@@ -889,7 +889,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = '// couleur du crayon'#13#10'    property PenColor: TColor read fPenColor write SetPenColor default clRed;'
-      Top = 392
+      Top = 424
       Width = 99
       Caption = 'PenColor'
       OnClick = btnPenColorClick
@@ -900,9 +900,9 @@ object MainForm: TMainForm
     object cbPenColor: TColorBox
       Cursor = crHandPoint
       Left = 120
-      Height = 22
+      Height = 31
       Hint = '// couleur du crayon'#13#10'    property PenColor: TColor read fPenColor write SetPenColor default clRed;'
-      Top = 392
+      Top = 424
       Width = 99
       Selected = clRed
       ItemHeight = 16
@@ -915,7 +915,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = '// sauvegarde la tortue'#13#10'    procedure SaveTurtle;'
-      Top = 488
+      Top = 520
       Width = 99
       Caption = 'SaveTurtle'
       OnClick = btnSaveTurtleClick
@@ -928,7 +928,7 @@ object MainForm: TMainForm
       Left = 120
       Height = 25
       Hint = '// récupère une tortue sauvée'#13#10'    procedure ReloadTurtle(const Clean: Boolean);'
-      Top = 488
+      Top = 520
       Width = 99
       Caption = 'ReloadTurtle'
       OnClick = btnReloadTurtleClick
@@ -941,7 +941,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = '// texte affiché sur l''écran de la tortue'#13#10'      procedure Text(const St: string; X,Y, Angle: Integer); overload;'
-      Top = 424
+      Top = 456
       Width = 99
       Caption = 'Text'
       OnClick = btnTextClick
@@ -954,7 +954,7 @@ object MainForm: TMainForm
       Left = 120
       Height = 25
       Hint = '// texte affiché à l''emplacement de la tortue'#13#10'      procedure Text(const St: string); overload;'
-      Top = 424
+      Top = 456
       Width = 99
       Caption = 'Text2'
       OnClick = btnText2Click
@@ -967,7 +967,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = 'Exemple de dessin de texte.'
-      Top = 456
+      Top = 488
       Width = 99
       Caption = 'Texte (ex.)'
       OnClick = btnTextExClick
@@ -975,22 +975,49 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 30
     end
+    object btnPenWidth: TButton
+      Cursor = crHandPoint
+      Left = 8
+      Height = 25
+      Hint = ' // largeur du crayon'#10'      property PenWidth: Integer read fPenWidth write SetPenWidth default'#10'        CDefaultPenWidth;'
+      Top = 360
+      Width = 100
+      Caption = 'PenWidth'
+      OnClick = btnPenWidthClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 33
+    end
+    object sePenWidth: TSpinEdit
+      Cursor = crHandPoint
+      Left = 120
+      Height = 27
+      Hint = ' // largeur du crayon'#10'   property PenWidth: Integer read fPenWidth write SetPenWidth default'#10'        CDefaultPenWidth;'
+      Top = 358
+      Width = 55
+      MaxValue = 10
+      MinValue = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 34
+      Value = 1
+    end
   end
   object gbShapes: TGroupBox
     Left = 864
-    Height = 536
+    Height = 568
     Top = 8
     Width = 204
     Caption = 'Formes '
-    ClientHeight = 518
+    ClientHeight = 549
     ClientWidth = 200
     TabOrder = 1
     object seX1: TSpinEdit
       Cursor = crHandPoint
       Left = 8
-      Height = 23
+      Height = 27
       Hint = 'X1'
-      Top = 2
+      Top = 8
       Width = 55
       MaxValue = 600
       ParentShowHint = False
@@ -1001,9 +1028,9 @@ object MainForm: TMainForm
     object seY1: TSpinEdit
       Cursor = crHandPoint
       Left = 104
-      Height = 23
+      Height = 27
       Hint = 'Y1'
-      Top = 2
+      Top = 8
       Width = 55
       MaxValue = 600
       ParentShowHint = False
@@ -1014,92 +1041,65 @@ object MainForm: TMainForm
     object seX2: TSpinEdit
       Cursor = crHandPoint
       Left = 8
-      Height = 23
+      Height = 27
       Hint = 'X2'
-      Top = 34
+      Top = 40
       Width = 55
       MaxValue = 600
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2
-      Value = 300
+      Value = 70
     end
     object seY2: TSpinEdit
       Cursor = crHandPoint
       Left = 104
-      Height = 23
+      Height = 27
       Hint = 'Y2'
-      Top = 32
+      Top = 40
       Width = 55
       MaxValue = 600
       ParentShowHint = False
       ShowHint = True
       TabOrder = 3
-      Value = 100
+      Value = 50
     end
     object seX3: TSpinEdit
       Cursor = crHandPoint
       Left = 8
-      Height = 23
+      Height = 27
       Hint = 'X3'
-      Top = 66
+      Top = 72
       Width = 55
       MaxValue = 600
       ParentShowHint = False
       ShowHint = True
       TabOrder = 4
-      Value = 100
     end
     object seY3: TSpinEdit
       Cursor = crHandPoint
       Left = 104
-      Height = 23
+      Height = 27
       Hint = 'Y3'
-      Top = 64
+      Top = 72
       Width = 55
       MaxValue = 600
       ParentShowHint = False
       ShowHint = True
       TabOrder = 5
-      Value = 150
+      Value = 90
     end
-    object seX4: TSpinEdit
+    object seLen: TSpinEdit
       Cursor = crHandPoint
       Left = 8
-      Height = 23
-      Hint = 'X4'
-      Top = 96
+      Height = 27
+      Hint = 'Rayon ou longueur'
+      Top = 104
       Width = 55
       MaxValue = 600
       ParentShowHint = False
       ShowHint = True
       TabOrder = 6
-      Value = 500
-    end
-    object seY4: TSpinEdit
-      Cursor = crHandPoint
-      Left = 104
-      Height = 23
-      Hint = 'Y4'
-      Top = 96
-      Width = 55
-      MaxValue = 600
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 7
-      Value = 120
-    end
-    object seLen: TSpinEdit
-      Cursor = crHandPoint
-      Left = 8
-      Height = 23
-      Hint = 'Rayon ou longueur'
-      Top = 128
-      Width = 55
-      MaxValue = 600
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 8
       Value = 80
     end
     object btnRectangle: TButton
@@ -1114,7 +1114,7 @@ object MainForm: TMainForm
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 9
+      TabOrder = 7
     end
     object btnRectangle2: TButton
       Tag = 2
@@ -1122,13 +1122,13 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine un rectangle à l''emplacement de la tortue'#13#10'    procedure Rectangle(const X2, Y2: Integer); overload;'
-      Top = 170
+      Top = 168
       Width = 85
       Caption = 'Rectangle2'
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 10
+      TabOrder = 8
     end
     object btnSquare: TButton
       Tag = 3
@@ -1142,7 +1142,7 @@ object MainForm: TMainForm
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 11
+      TabOrder = 9
     end
     object btnSquare2: TButton
       Tag = 4
@@ -1150,13 +1150,13 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine un carré à l''emplacement de la tortue'#13#10'    procedure Square(const L: Integer); overload;'
-      Top = 202
+      Top = 200
       Width = 85
       Caption = 'Square2'
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 12
+      TabOrder = 10
     end
     object btnRoundRect: TButton
       Tag = 5
@@ -1170,7 +1170,7 @@ object MainForm: TMainForm
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 13
+      TabOrder = 11
     end
     object btnRoundRect2: TButton
       Tag = 6
@@ -1184,7 +1184,7 @@ object MainForm: TMainForm
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 14
+      TabOrder = 12
     end
     object btnEllipse: TButton
       Tag = 7
@@ -1198,7 +1198,7 @@ object MainForm: TMainForm
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 15
+      TabOrder = 13
     end
     object btnEllipse2: TButton
       Tag = 8
@@ -1212,7 +1212,7 @@ object MainForm: TMainForm
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 16
+      TabOrder = 14
     end
     object btnCircle: TButton
       Tag = 9
@@ -1226,7 +1226,7 @@ object MainForm: TMainForm
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 17
+      TabOrder = 15
     end
     object btnCircle2: TButton
       Tag = 10
@@ -1234,13 +1234,13 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine un cercle à l''emplacement de la tortue'#13#10'    procedure Circle(const R: Integer); overload;'
-      Top = 298
+      Top = 296
       Width = 85
       Caption = 'Circle2'
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 18
+      TabOrder = 16
     end
     object btnArc: TButton
       Tag = 11
@@ -1254,7 +1254,7 @@ object MainForm: TMainForm
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 19
+      TabOrder = 17
     end
     object btnArc2: TButton
       Tag = 12
@@ -1262,13 +1262,13 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine un arc d''ellipse à l''emplacement de la tortue'#13#10'    procedure Arc(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;'
-      Top = 330
+      Top = 328
       Width = 85
       Caption = 'Arc2'
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 20
+      TabOrder = 18
     end
     object btnPie: TButton
       Tag = 13
@@ -1282,7 +1282,7 @@ object MainForm: TMainForm
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 21
+      TabOrder = 19
     end
     object btnPie2: TButton
       Tag = 14
@@ -1290,74 +1290,46 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine une section d''ellipse à l''emplacement de la tortue'#13#10'    procedure Pie(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;'
-      Top = 362
+      Top = 360
       Width = 85
       Caption = 'Pie2'
       OnClick = btnRectangleClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 22
-    end
-    object btnChord: TButton
-      Tag = 15
-      Cursor = crHandPoint
-      Left = 8
-      Height = 25
-      Hint = '// dessine une corde d''ellipse'#13#10'    procedure Chord(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer); overload;'
-      Top = 392
-      Width = 85
-      Caption = 'Chord'
-      OnClick = btnRectangleClick
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 23
-    end
-    object btnChord2: TButton
-      Tag = 16
-      Cursor = crHandPoint
-      Left = 104
-      Height = 25
-      Hint = '// dessine une corde d''ellipse à l''emplacement de la tortue'#13#10'    procedure Chord(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;'
-      Top = 394
-      Width = 85
-      Caption = 'Chord2'
-      OnClick = btnRectangleClick
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 24
+      TabOrder = 20
     end
     object btnFilled: TButton
       Cursor = crHandPoint
       Left = 8
       Height = 25
       Hint = '// état du remplissage'#13#10'    property Filled: Boolean read fFilled write SetFilled default True;'
-      Top = 488
+      Top = 520
       Width = 85
       Caption = 'Filled'
       OnClick = btnFilledClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 25
+      TabOrder = 21
     end
     object btnDessin: TButton
       Cursor = crHandPoint
       Left = 104
       Height = 25
       Hint = 'Exemple de dessin'
-      Top = 488
+      Top = 520
       Width = 85
       Caption = 'Dessin'
       OnClick = btnDessinClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 26
+      TabOrder = 22
     end
     object tbExample: TTrackBar
       Cursor = crHandPoint
       Left = 8
       Height = 48
       Hint = ' // vitesse de dessin de la tortue'#13#10'    property Speed: Integer read fSpeed write SetSpeed default 50;'
-      Top = 424
+      Top = 401
       Width = 181
       Max = 100
       OnChange = tbExampleChange
@@ -1365,7 +1337,7 @@ object MainForm: TMainForm
       TickMarks = tmTopLeft
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 27
+      TabOrder = 23
     end
   end
   object btnClear: TBitBtn
@@ -1373,7 +1345,7 @@ object MainForm: TMainForm
     Left = 1160
     Height = 30
     Hint = 'Nettoyage de l''éditeur'
-    Top = 504
+    Top = 544
     Width = 96
     Cancel = True
     Caption = 'Nettoyer'
@@ -1389,7 +1361,7 @@ object MainForm: TMainForm
     Left = 1268
     Height = 30
     Hint = 'Quitter le logiciel'
-    Top = 504
+    Top = 544
     Width = 96
     DefaultCaption = True
     Kind = bkClose

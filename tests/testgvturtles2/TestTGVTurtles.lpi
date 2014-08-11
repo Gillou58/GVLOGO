@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="9"/>
+      <BuildNr Value="15"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Test de l'unité GVTurtles2" LegalCopyright="Gilles VASSEUR 2014" LegalTrademarks="GNU GPL" ProductName="GVLOGO" ProductVersion=""/>
     </VersionInfo>

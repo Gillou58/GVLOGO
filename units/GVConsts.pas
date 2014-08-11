@@ -86,6 +86,7 @@ const
   CMaxSpeed = 100; // vitesse maximum de la tortue
   CDefaultPenColor = clWhite; // couleur de fond par défaut
   CDefaultBackColor = clBlack; // couleur du crayon par défaut
+  CDefaultPenWidth = 1; // largeur du crayon par défaut
 
   { piles }
 

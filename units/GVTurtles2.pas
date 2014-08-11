@@ -26,8 +26,10 @@
 // You should have received a copy of the GNU General Public License along with this program.
 //  If not, see <http://www.gnu.org/licenses/>.
 
+{$I GVDefines.inc}
+
 {$IFDEF Delphi}
-  // Cette unité ne fonctionne qu'avec LAZARUS et la bibliothèque BGRABitmap
+  // Cette unité ne fonctionne qu'avec LAZARUS et la bibliothèque BGRABitmap.
 {$ENDIF}
   
 {$mode objfpc}{$H+}
@@ -68,6 +70,7 @@ type
     rScaleX: Integer; // échelle des X
     rScaleY: Integer; // échelle des Y
     rFilled: Boolean; // remplissage
+    rPenWidth: Integer; // largeur de crayon
     rBrush: TBrush; // type de brosse
     rPen: TPen; // type de crayon
     rFont: TFont; // type de fonte
@@ -100,6 +103,7 @@ type
       fFilled: Boolean; // drapeau de remplissage
       fOnBeforeChange: TTurtleBeforeEvent; // notification avant cap changé
       fPenColor: TColor; // couleur du crayon
+      fPenWidth: Integer; // largeur du crayon
       fSpeed: Integer; // vitesse de la tortue
       function GetCoordX: Double;
       function GetCoordY: Double;
@@ -110,6 +114,7 @@ type
       procedure SetHeading(AValue: Double);
       procedure SetPenColor(AValue: TColor);
       procedure SetPenDown(AValue: Boolean);
+      procedure SetPenWidth(AValue: Integer);
       procedure SetScreen(AValue: TScreenTurtle);
       procedure SetScreenColor(AValue: TColor);
       procedure SetSize(AValue: Integer);
@@ -124,6 +129,18 @@ type
       procedure LineTo(X, Y: Double);
       // déplacement sans écrire
       procedure MoveTo(X, Y: Double);
+      // arc d'ellipse (b : début, e : fin - en degrés)
+      procedure ArcAntialias(x, y, rx, ry: single; b, e: word;
+          c: TBGRAPixel; w: single);
+      // arc d'ellipse rempli (b : début, e : fin - en degrés)
+      procedure FillArcAntiAlias(x, y, rx, ry: single; b, e: word;
+        c: TBGRAPixel);
+      // portion d'ellipse (b : début, e : fin - en degrés)
+      procedure PieAntialias(x, y, rx, ry: single; b, e: word;
+          c: TBGRAPixel; w: single);
+      // portion d'ellipse remplie (b : début, e : fin - en degrés)
+      procedure FillPieAntiAlias(x, y, rx, ry: single; b, e: word;
+        c: TBGRAPixel);
     protected
       // change l'ordonnée pour le nouveau repère
       function cY(Y: Double): Integer; virtual;
@@ -154,41 +171,37 @@ type
       // récupère une tortue sauvée
       procedure ReloadTurtle(const Clean: Boolean);
       // renvoie le cap vers un point
-      function Towards(const X, Y: Integer): Double;
+      function Towards(X, Y: Integer): Double;
       // renvoie la distance de la tortue à un point donné
-      function Distance(const X, Y: Integer): Double;
+      function Distance(X, Y: Integer): Double;
       // dessine un rectangle
-      procedure Rectangle(const X1, Y1, X2, Y2: Integer); overload;
+      procedure Rectangle(X1, Y1, X2, Y2: Integer); overload;
       // dessine un rectangle à l'emplacement de la tortue
-      procedure Rectangle(const X2, Y2: Integer); overload;
+      procedure Rectangle(X2, Y2: Integer); overload;
       // dessine un carré
-      procedure Square(const X1, Y1, L: Integer); overload;
+      procedure Square(X1, Y1, L: Integer); overload;
       // dessine un carré à l'emplacement de la tortue
-      procedure Square(const L: Integer); overload;
+      procedure Square(L: Integer); overload;
       // dessine un rectangle arrondi
-      procedure RoundRect(const X1, Y1, X2, Y2: Integer); overload;
+      procedure RoundRect(X1, Y1, X2, Y2: Integer); overload;
       // dessine un rectangle arrondi à l'emplacement de la tortue
-      procedure RoundRect(const X2, Y2: Integer); overload;
+      procedure RoundRect(X2, Y2: Integer); overload;
       // dessine une ellipse
-      procedure Ellipse(const X1, Y1, X2, Y2: Integer); overload;
+      procedure Ellipse(X1, Y1, X2, Y2: Integer); overload;
       // dessine une ellipse à l'emplacement de la tortue
-      procedure Ellipse(const X2, Y2: Integer); overload;
+      procedure Ellipse(X2, Y2: Integer); overload;
       // dessine un cercle
-      procedure Circle(const X1, Y1, R: Integer); overload;
+      procedure Circle(X1, Y1, R: Integer); overload;
       // dessine un cercle à l'emplacement de la tortue
-      procedure Circle(const R: Integer); overload;
+      procedure Circle(R: Integer); overload;
       // dessine un arc d'ellipse
-      procedure Arc(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer); overload;
+      procedure Arc(X1, Y1, X2, Y2, X3, Y3: Integer); overload;
       // dessine un arc d'ellipse à l'emplacement de la tortue
-      procedure Arc(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;
-      // dessine une corde d'ellipse
-      procedure Chord(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer); overload;
-      // dessine une corde d'ellipse à l'emplacement de la tortue
-      procedure Chord(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;
+      procedure Arc(X2, Y2, X3, Y3: Integer); overload;
       // dessine une section d'ellipse
-      procedure Pie(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer); overload;
+      procedure Pie(X1, Y1, X2, Y2, X3, Y3: Integer); overload;
       // dessine une section d'ellipse à l'emplacement de la tortue
-      procedure Pie(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;
+      procedure Pie(X2, Y2, X3, Y3: Integer); overload;
       // texte affiché sur l'écran de la tortue
       procedure Text(const St: string; X,Y, Angle: Integer); overload;
       // texte affiché à l'emplacement de la tortue
@@ -220,6 +233,9 @@ type
       // couleur du crayon
       property PenColor: TColor read fPenColor write SetPenColor
         default CDefaultPenColor;
+      // largeur du crayon
+      property PenWidth: Integer read fPenWidth write SetPenWidth default
+        CDefaultPenWidth;
       // état du remplissage
       property Filled: Boolean read fFilled write SetFilled default True;
       // vitesse de dessin de la tortue
@@ -240,7 +256,7 @@ type
 
 implementation
 
-uses math;
+uses math, BGRAPen;
 
 { TGVTurtle }
 
@@ -347,6 +363,15 @@ begin
   Change; // changement notifié
 end;
 
+procedure TGVTurtle.SetPenWidth(AValue: Integer);
+// ***largeur du crayon ***
+begin
+  if fPenWidth = AValue then // valeur inchangée ?
+    Exit; // on sort
+  fPenWidth := AValue;
+  DrwImg.CanvasBGRA.Pen.Width := fPenWidth; // taille changée
+end;
+
 procedure TGVTurtle.SetScreenColor(AValue: TColor);
 // *** couleur du fond de l'écran ***
 begin
@@ -429,6 +454,38 @@ procedure TGVTurtle.MoveTo(X, Y: Double);
 // *** déplacement sans écrire ***
 begin
   DrwImg.CanvasBGRA.MoveTo(Round(X), cY(Y)); // déplacement effectif
+end;
+
+procedure TGVTurtle.ArcAntialias(x, y, rx, ry: single; b, e: word; c: TBGRAPixel;
+    w: single);
+// *** arc d'ellipse ***
+begin
+  DrwImg.DrawPolygonAntialias(DrwImg.ComputeArcRad(x,y,rx,ry,b * DgToRad,e * DgToRad),
+    c,w);
+end;
+
+procedure TGVTurtle.FillArcAntiAlias(x, y, rx, ry: single; b, e: word;
+  c: TBGRAPixel);
+// *** arc d'ellipse rempli ***
+begin
+  DrwImg.FillPolyAntialias(DrwImg.ComputeArcRad(x,y,rx,ry,b * DgToRad,e * DgToRad),
+    c);
+end;
+
+procedure TGVTurtle.PieAntialias(x, y, rx, ry: single; b, e: word;
+  c: TBGRAPixel; w: single);
+// *** portion d'ellipse ***
+begin
+  DrwImg.DrawPolygonAntialias(DrwImg.ComputePieRad(x,y,rx,ry,b * DgToRad,e * DgToRad),
+    c,w);
+end;
+
+procedure TGVTurtle.FillPieAntiAlias(x, y, rx, ry: single; b, e: word;
+  c: TBGRAPixel);
+// *** portion d'ellipse remplie ***
+begin
+  DrwImg.FillPolyAntialias(DrwImg.ComputePieRad(x,y,rx,ry,b * DgToRad,e * DgToRad),
+    c);
 end;
 
 function TGVTurtle.cY(Y: Double): Integer;
@@ -538,6 +595,7 @@ begin
   Screen := teWin; // mode fenêtre étendue
   ScreenColor := CDefaultBackColor; // couleur de fond par défaut
   PenColor := CDefaultPenColor; // couleur de crayon par défaut
+  PenWidth := CDefaultPenWidth; // largeur du crayon par défaut
   Heading := CDefaultHeading; // orientation
   Size := CDefaultSize; // taille de la tortue
   PenDown := True; // drapeau d'écriture
@@ -607,6 +665,7 @@ begin
     rScaleX := fScaleX; // échelle des X
     rScaleY := fScaleY; // échelle des Y
     rFilled := Filled; // remplissage
+    rPenWidth := PenWidth; // largeur du crayon
     if not rSaved then // création si nécessaire
     begin
       rBrush := TBrush.Create; // type de brosse
@@ -641,6 +700,7 @@ begin
         ScaleX := rScaleX; // échelle des X
         ScaleY := rScaleY; // échelle des Y
         Filled := rFilled; // remplissage
+        PenWidth := rPenWidth; // largeur du crayon
         with DrwImg.Canvas do
         begin
           Brush.Assign(rBrush); // type de brosse
@@ -662,7 +722,7 @@ begin
     end;
 end;
 
-function TGVTurtle.Towards(const X, Y: Integer): Double;
+function TGVTurtle.Towards(X, Y: Integer): Double;
 // *** renvoie le cap vers un point ***
 var
   PX, PY: Integer;
@@ -685,42 +745,42 @@ begin
     Result := 180 + (ArcTan(Abs(PY) / PX) * RadToDg);
 end;
 
-function TGVTurtle.Distance(const X, Y: Integer): Double;
+function TGVTurtle.Distance(X, Y: Integer): Double;
 // *** renvoie la distance de la tortue à un point donné ***
 begin
   Result := Sqrt(Sqr(X - CoordX) + Sqr(Y - CoordY));
 end;
 
-procedure TGVTurtle.Rectangle(const X1, Y1, X2, Y2: Integer);
+procedure TGVTurtle.Rectangle(X1, Y1, X2, Y2: Integer);
 // *** rectangle absolu ***
 begin
   if Filled then
     DrwImg.FillRectAntialias(X1, cY(Y1), X2, cY(Y2), ColorToBGRA(ColorToRGB(PenColor)))
   else
     DrwImg.RectangleAntialias(X1, cY(Y1), X2, cY(Y2),
-      ColorToBGRA(ColorToRGB(PenColor)), 1);
+      ColorToBGRA(ColorToRGB(PenColor)), PenWidth);
   Change; // on notifie le changement
 end;
 
-procedure TGVTurtle.Rectangle(const X2, Y2: Integer);
+procedure TGVTurtle.Rectangle(X2, Y2: Integer);
 // *** rectangle à l'emplacement de la souris ***
 begin
-  Rectangle(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2);
+  Rectangle(Round(CoordX), Round(CoordY), X2, Y2);
 end;
 
-procedure TGVTurtle.Square(const X1, Y1, L: Integer);
+procedure TGVTurtle.Square(X1, Y1, L: Integer);
 // *** carré absolu ***
 begin
   Rectangle(X1, Y1, X1 + L, Y1 - L);
 end;
 
-procedure TGVTurtle.Square(const L: Integer);
+procedure TGVTurtle.Square(L: Integer);
 // *** carré à l'emplacement de la tortue ***
 begin
   Rectangle(Round(CoordX), Round(CoordY), Round(CoordX) + L, Round(CoordY) - L);
 end;
 
-procedure TGVTurtle.RoundRect(const X1, Y1, X2, Y2: Integer);
+procedure TGVTurtle.RoundRect(X1, Y1, X2, Y2: Integer);
 // *** dessine un rectangle arrondi ***
 begin
   if Filled then
@@ -728,89 +788,76 @@ begin
       ColorToBGRA(ColorToRGB(PenColor)))
   else
     DrwImg.RoundRectAntialias(X1, cY(Y1), X2, cY(Y2), 15, 15,
-      ColorToBGRA(ColorToRGB(PenColor)), 1);
+      ColorToBGRA(ColorToRGB(PenColor)), PenWidth);
   Change; // on notifie le changement
 end;
 
-procedure TGVTurtle.RoundRect(const X2, Y2: Integer);
+procedure TGVTurtle.RoundRect(X2, Y2: Integer);
 // *** dessine un rectangle arrondi à l'emplacement de la tortue ***
 begin
-  RoundRect(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2);
+  RoundRect(Round(CoordX), Round(CoordY), X2, Y2);
 end;
 
-procedure TGVTurtle.Ellipse(const X1, Y1, X2, Y2: Integer);
+procedure TGVTurtle.Ellipse(X1, Y1, X2, Y2: Integer);
 // *** dessine une ellipse ***
 begin
   if Filled then
-    DrwImg.Canvas.Brush.Color := PenColor;
-  DrwImg.Canvas.Ellipse(X1, cY(Y1), X2, cY(Y2));
+    DrwImg.FillEllipseAntialias(X1, cY(Y1), X2, Y2,
+      ColorToBGRA(ColorToRGB(PenColor)))
+  else
+    DrwImg.EllipseAntialias(X1, cY(Y1), X2, Y2,
+      ColorToBGRA(ColorToRGB(PenColor)), PenWidth);
   Change; // on notifie le changement
 end;
 
-procedure TGVTurtle.Ellipse(const X2, Y2: Integer);
+procedure TGVTurtle.Ellipse(X2, Y2: Integer);
 // *** dessine une ellipse à l'emplacement de la tortue ***
 begin
-  Ellipse(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2);
+  Ellipse(Round(CoordX), Round(CoordY), X2, Y2);
 end;
 
-procedure TGVTurtle.Circle(const X1, Y1, R: Integer);
+procedure TGVTurtle.Circle(X1, Y1, R: Integer);
 // *** dessine un cercle ***
 begin
-  Ellipse(X1, Y1, X1 + R, Y1 - R);
+  Ellipse(X1, Y1, R, R);
 end;
 
-procedure TGVTurtle.Circle(const R: Integer);
+procedure TGVTurtle.Circle(R: Integer);
 // *** dessine un cercle à l'emplacement de la tortue ***
 begin
   Circle(Round(CoordX), Round(CoordY), R);
 end;
 
-procedure TGVTurtle.Arc(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer);
+procedure TGVTurtle.Arc(X1, Y1, X2, Y2, X3, Y3: Integer);
 // *** dessine un arc d'ellipse ***
 begin
   if Filled then
-    DrwImg.Canvas.Brush.Color := PenColor; // couleur de la brosse
-  DrwImg.Canvas.Arc(X1, cY(Y1), X2, cY(Y2), X3, cY(Y3), X4, cY(Y4));
+    FillArcAntialias(X1, cY(Y1), X2, Y2, X3, Y3, ColorToBGRA(ColorToRGB(PenColor)))
+  else
+    ArcAntiAlias(X1,cY(Y1),X2,Y2,X3,Y3,ColorToBGRA(ColorToRGB(PenColor)),PenWidth);
   Change; // on notifie le changement
 end;
 
-procedure TGVTurtle.Arc(const X2, Y2, X3, Y3, X4, Y4: Integer);
+procedure TGVTurtle.Arc(X2, Y2, X3, Y3: Integer);
 // *** dessine un arc d'ellipse à l'emplacement de la tortue ***
 begin
-  Arc(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2, X3,
-    Y3, X4, Y4);
+  Arc(Round(CoordX), Round(CoordY), X2, Y2, X3, Y3);
 end;
 
-procedure TGVTurtle.Chord(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer);
-// *** dessine une corde ***
-begin
-  if Filled then
-    DrwImg.Canvas.Brush.Color := PenColor; // couleur de la brosse
-  DrwImg.Canvas.Chord(X1, cY(Y1), X2, cY(Y2), X3, cY(Y3), X4, cY(Y4));
-  Change; // on notifie le changement
-end;
-
-procedure TGVTurtle.Chord(const X2, Y2, X3, Y3, X4, Y4: Integer);
-// *** dessine une corde à l'emplacement de la tortue ***
-begin
-  Chord(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2,
-    X3, Y3, X4, Y4);
-end;
-
-procedure TGVTurtle.Pie(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer);
+procedure TGVTurtle.Pie(X1, Y1, X2, Y2, X3, Y3: Integer);
 // *** dessine une section d'ellipse ***
 begin
-  if Filled then
-    DrwImg.Canvas.Brush.Color := PenColor; // couleur de la brosse
-  DrwImg.Canvas.Pie(X1, cY(Y1), X2, cY(Y2), X3, cY(Y3), X4, cY(Y4));
+   if Filled then
+    FillPieAntialias(X1, cY(Y1), X2, Y2, X3, Y3, ColorToBGRA(ColorToRGB(PenColor)))
+  else
+    PieAntiAlias(X1,cY(Y1),X2,Y2,X3,Y3,ColorToBGRA(ColorToRGB(PenColor)),PenWidth);
   Change; // on notifie le changement
 end;
 
-procedure TGVTurtle.Pie(const X2, Y2, X3, Y3, X4, Y4: Integer);
+procedure TGVTurtle.Pie(X2, Y2, X3, Y3: Integer);
 // *** dessine une section d'ellipse à l'emplacement de la tortue ***
 begin
-  Pie(Round(CoordX), Round(CoordY), Round(CoordX) + X2, Round(CoordY) - Y2,
-    X3, Y3, X4, Y4);
+  Pie(Round(CoordX), Round(CoordY), X2, Y2, X3, Y3);
 end;
 
 procedure TGVTurtle.Text(const St: string; X, Y, Angle: Integer);
@@ -829,4 +876,3 @@ begin
 end;
 
 end.
-
