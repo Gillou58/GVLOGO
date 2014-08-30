@@ -383,14 +383,14 @@ begin
     else if I = Length(St) then
       Result := CharInSet(St[I], [CAsk] + CAlphaNum)
     else
-      Result := CharInSet(St[I], CAlphaNum);
+      Result := CharInSet(St[I], [CUnderline] + CAlphaNum);
     {$ELSE}
     if I = 1 then
       Result := St[I] in [CUnderline, CDot] + CAlpha
     else if I = Length(St) then
       Result := St[I] in [CAsk] + CAlphaNum
     else
-      Result := St[I] in CAlphaNum;
+      Result := St[I] in [CUnderline] + CAlphaNum;
     {$ENDIF}
     if not Result then
       Break;
