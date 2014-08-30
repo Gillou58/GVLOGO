@@ -1,9 +1,9 @@
 ﻿GVLOGO
 ======
 
-French LOGO language with LAZARUS (Free Pascal)
+French LOGO language with LAZARUS (FreePascal)
 
-Implémentation de LOGO avec LAZARUS (Free Pascal)
+Implémentation de LOGO avec LAZARUS (FreePascal)
 
 
 ************************************************
