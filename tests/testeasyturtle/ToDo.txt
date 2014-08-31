@@ -1,0 +1,3 @@
+EASYTURTLE
+
+- problème avec la fermeture du logiciel lorsqu'il dessine : le bouton "quitter" devient inopérant.
