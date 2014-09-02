@@ -35,8 +35,8 @@ object MainForm: TMainForm
   end
   object StatusBar: TStatusBar
     Left = 0
-    Height = 21
-    Top = 580
+    Height = 23
+    Top = 578
     Width = 1375
     AutoHint = True
     Panels = <    
@@ -546,7 +546,7 @@ object MainForm: TMainForm
     Top = 8
     Width = 248
     Caption = 'Commandes '
-    ClientHeight = 549
+    ClientHeight = 550
     ClientWidth = 244
     TabOrder = 0
     object btnSetPos: TButton
@@ -565,7 +565,7 @@ object MainForm: TMainForm
     object seSetPosX: TSpinEdit
       Cursor = crHandPoint
       Left = 120
-      Height = 27
+      Height = 23
       Hint = '// la tortue se déplace'#13#10'    procedure Move(const Value: Real);'
       Top = 8
       Width = 55
@@ -578,7 +578,7 @@ object MainForm: TMainForm
     object seSetPosY: TSpinEdit
       Cursor = crHandPoint
       Left = 184
-      Height = 27
+      Height = 23
       Hint = '// la tortue se déplace'#13#10'    procedure Move(const Value: Real);'
       Top = 8
       Width = 55
@@ -604,7 +604,7 @@ object MainForm: TMainForm
     object seMove: TSpinEdit
       Cursor = crHandPoint
       Left = 120
-      Height = 27
+      Height = 23
       Hint = '// la tortue se déplace'#13#10'    procedure Move(const Value: Real);'
       Top = 40
       Width = 55
@@ -629,7 +629,7 @@ object MainForm: TMainForm
     object seScaleX: TSpinEdit
       Cursor = crHandPoint
       Left = 120
-      Height = 27
+      Height = 23
       Hint = '// échelle des X'#13#10'    property ScaleX: Integer read fScaleX write fScaleX default DefaultScale;'
       Top = 72
       Width = 55
@@ -655,7 +655,7 @@ object MainForm: TMainForm
     object seScaleY: TSpinEdit
       Cursor = crHandPoint
       Left = 120
-      Height = 27
+      Height = 23
       Hint = '// échelle des Y'#13#10'    property ScaleY: Integer read fScaleY write fScaleY default DefaultScale;'
       Top = 104
       Width = 55
@@ -681,7 +681,7 @@ object MainForm: TMainForm
     object seTurn: TSpinEdit
       Cursor = crHandPoint
       Left = 120
-      Height = 27
+      Height = 23
       Hint = '// la tortue tourne'#13#10'    procedure Turn(const Value: Real);'
       Top = 136
       Width = 55
@@ -707,7 +707,7 @@ object MainForm: TMainForm
     object seTowardsX: TSpinEdit
       Cursor = crHandPoint
       Left = 120
-      Height = 27
+      Height = 23
       Hint = '// renvoie le cap vers un point'#13#10'    function Towards(const X, Y: Integer): Real;'
       Top = 168
       Width = 55
@@ -719,7 +719,7 @@ object MainForm: TMainForm
     object seTowardsY: TSpinEdit
       Cursor = crHandPoint
       Left = 184
-      Height = 27
+      Height = 23
       Hint = '// renvoie le cap vers un point'#13#10'    function Towards(const X, Y: Integer): Real;'
       Top = 168
       Width = 55
@@ -744,7 +744,7 @@ object MainForm: TMainForm
     object seHeading: TSpinEdit
       Cursor = crHandPoint
       Left = 120
-      Height = 27
+      Height = 23
       Hint = '// direction de la tortue'#13#10'    property Heading: Real read fHeading write SetHeading;'
       Top = 200
       Width = 55
@@ -770,7 +770,7 @@ object MainForm: TMainForm
     object seSize: TSpinEdit
       Cursor = crHandPoint
       Left = 120
-      Height = 27
+      Height = 23
       Hint = '// taille de la tortue'#13#10'    property Size: Integer read fSize write SetSize default TurtleDefaultSize;'
       Top = 232
       Width = 55
@@ -875,7 +875,7 @@ object MainForm: TMainForm
     object cbScreenColor: TColorBox
       Cursor = crHandPoint
       Left = 120
-      Height = 31
+      Height = 22
       Hint = '// couleur du fond d''écran'#13#10'    property ScreenColor: TColor read fScreenColor write SetScreenColor;'
       Top = 392
       Width = 99
@@ -900,7 +900,7 @@ object MainForm: TMainForm
     object cbPenColor: TColorBox
       Cursor = crHandPoint
       Left = 120
-      Height = 31
+      Height = 22
       Hint = '// couleur du crayon'#13#10'    property PenColor: TColor read fPenColor write SetPenColor default clRed;'
       Top = 424
       Width = 99
@@ -991,7 +991,7 @@ object MainForm: TMainForm
     object sePenWidth: TSpinEdit
       Cursor = crHandPoint
       Left = 120
-      Height = 27
+      Height = 23
       Hint = ' // largeur du crayon'#10'   property PenWidth: Integer read fPenWidth write SetPenWidth default'#10'        CDefaultPenWidth;'
       Top = 358
       Width = 55
@@ -1009,13 +1009,13 @@ object MainForm: TMainForm
     Top = 8
     Width = 204
     Caption = 'Formes '
-    ClientHeight = 549
+    ClientHeight = 550
     ClientWidth = 200
     TabOrder = 1
     object seX1: TSpinEdit
       Cursor = crHandPoint
       Left = 8
-      Height = 27
+      Height = 23
       Hint = 'X1'
       Top = 8
       Width = 55
@@ -1028,7 +1028,7 @@ object MainForm: TMainForm
     object seY1: TSpinEdit
       Cursor = crHandPoint
       Left = 104
-      Height = 27
+      Height = 23
       Hint = 'Y1'
       Top = 8
       Width = 55
@@ -1041,7 +1041,7 @@ object MainForm: TMainForm
     object seX2: TSpinEdit
       Cursor = crHandPoint
       Left = 8
-      Height = 27
+      Height = 23
       Hint = 'X2'
       Top = 40
       Width = 55
@@ -1054,7 +1054,7 @@ object MainForm: TMainForm
     object seY2: TSpinEdit
       Cursor = crHandPoint
       Left = 104
-      Height = 27
+      Height = 23
       Hint = 'Y2'
       Top = 40
       Width = 55
@@ -1067,7 +1067,7 @@ object MainForm: TMainForm
     object seX3: TSpinEdit
       Cursor = crHandPoint
       Left = 8
-      Height = 27
+      Height = 23
       Hint = 'X3'
       Top = 72
       Width = 55
@@ -1079,7 +1079,7 @@ object MainForm: TMainForm
     object seY3: TSpinEdit
       Cursor = crHandPoint
       Left = 104
-      Height = 27
+      Height = 23
       Hint = 'Y3'
       Top = 72
       Width = 55
@@ -1092,7 +1092,7 @@ object MainForm: TMainForm
     object seLen: TSpinEdit
       Cursor = crHandPoint
       Left = 8
-      Height = 27
+      Height = 23
       Hint = 'Rayon ou longueur'
       Top = 104
       Width = 55
@@ -1331,8 +1331,10 @@ object MainForm: TMainForm
       Hint = ' // vitesse de dessin de la tortue'#13#10'    property Speed: Integer read fSpeed write SetSpeed default 50;'
       Top = 401
       Width = 181
+      Frequency = 10
       Max = 100
       OnChange = tbExampleChange
+      PageSize = 1
       Position = 50
       TickMarks = tmTopLeft
       ParentShowHint = False

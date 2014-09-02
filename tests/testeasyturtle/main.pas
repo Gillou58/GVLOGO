@@ -7,8 +7,8 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    08-08-2014 12:29:48                          |
-  |                  Version : 1.0.0                                       |
+  |                  Date:    02-09-2014 12:29:48                          |
+  |                  Version : 1.0.1                                       |
   |                                                                        |
   |========================================================================| }
 
@@ -25,6 +25,9 @@
 //
 // You should have received a copy of the GNU General Public License along with this program.
 //  If not, see <http://www.gnu.org/licenses/>.
+//
+// 1.0.1 correction : le bouton quitter n'est actif qu'en cas d'enregistrement
+// 1.0.0 version initiale
 
 unit Main;
 
@@ -203,6 +206,7 @@ type
     procedure ActionLoadExecute(Sender: TObject);
     procedure ActionPenColorExecute(Sender: TObject);
     procedure ActionQuitExecute(Sender: TObject);
+    procedure ActionQuitUpdate(Sender: TObject);
     procedure ActionReplayExecute(Sender: TObject);
     procedure ActionReplayUpdate(Sender: TObject);
     procedure ActionSaveExecute(Sender: TObject);
@@ -426,6 +430,12 @@ begin
   Close; // on ferme la fenêtre principale
 end;
 
+procedure TMainForm.ActionQuitUpdate(Sender: TObject);
+// *** actif si on enregistre ***
+begin
+  ActionQuit.Enabled := (pState = stRecording);
+end;
+
 procedure TMainForm.ActionReplayExecute(Sender: TObject);
 // *** rejoue la séquence de la tortue ***
 begin
@@ -433,7 +443,7 @@ begin
 end;
 
 procedure TMainForm.ActionReplayUpdate(Sender: TObject);
-// actif si ordres enregistrés
+// *** actif si ordres enregistrés ***
 begin
   (Sender as TAction).Enabled := (Length(MemoInt) > C_MinCmds) and
     (pState = stRecording); // ordres présents avec l'état d'enregistrement

@@ -1803,6 +1803,7 @@ object MainForm: TMainForm
       Hint = 'Quitter EasyTurtle.'
       ImageIndex = 55
       OnExecute = ActionQuitExecute
+      OnUpdate = ActionQuitUpdate
       ShortCut = 16465
     end
     object ActionUndo: TAction

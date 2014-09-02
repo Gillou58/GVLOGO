@@ -357,6 +357,7 @@ procedure TMainForm.btnReInitClick(Sender: TObject);
 // test de REINIT
 begin
   GVTurtle.ReInit;
+  tbExample.Position := GVTurtle.Speed;  // indicateur de vitesse ajusté
   mmoTurtle.Lines.Add('REINIT');
 end;
 

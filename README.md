@@ -1,9 +1,9 @@
 ﻿GVLOGO
 ======
 
-French LOGO language with LAZARUS (FreePascal)
+French LOGO language with LAZARUS (Free Pascal)
 
-Implémentation de LOGO avec LAZARUS (FreePascal)
+Implémentation de LOGO avec LAZARUS (Free Pascal)
 
 
 ************************************************
@@ -19,18 +19,18 @@ Sommaire :
 
 ************************************************
 
-1 - Objectifs du travail présenté
+1. Objectifs du travail présenté
 
 GVLOGO est un logiciel qui implémente pour Windows (32 et 64 bits) et Linux une version du langage LOGO. Il est par ailleurs fourni avec tous les programmes sources et les utilitaires nécessaires à la compréhension de son fonctionnement.
 
 Le langage utilisé pour son développement est le PASCAL. La réalisation utilise le logiciel libre LAZARUS qui repose lui-même sur FREEPASCAL. Ce sont deux produits suffisamment stables pour intéreser tout programmeur. Qui plus est, ils sont entièrement gratuits.
 
 Les objectifs sont donc :
- * offrir une version gratuite et opérationnelle d'un dialecte de LOGO.
+* offrir une version gratuite et opérationnelle d'un dialecte de LOGO.
 * permettre à un programmeur inexpérimenté de prendre conscience des difficultés rencontrées lors de la mise en oeuvre d'un tel projet.
 
 
-2 - LICENCE
+2. LICENCE
 
 Les documents et logiciels du dossier GVLOGO sont protégés selon les termes de la licence GNU GPL qui doit être présente dans le dossier "0- Licence GNU GPL".
 
@@ -56,7 +56,7 @@ Copyright (C) 2014 Gilles VASSEUR — Tous droits réservés.
   
   Vous devriez avoir reçu une copie de la Licence Générale Publique GNU avec ce programme ; si ce n’est pas le cas, consultez : <http://www.gnu.org/licenses/>.
 
-3 - Contenu des répertoires
+3. Contenu des répertoires
 
 Répertoire GNU GPL : contient la licence GNU GPL sous plusieurs formats, en anglais et en français.
 
@@ -76,7 +76,7 @@ Répertoire tests : contient tous les logiciels de tests des unités de GVLOGO.
 Répertoire units : contient toutes les unités nécessaires à GVLOGO.
 
 
-4 -  Contact
+4. Contact
 
 Vous pouvez me contacter par mail : gillesvasseur58@gmail.com
 
@@ -84,6 +84,6 @@ Vous pouvez aussi vous rendre sur mon site pour les éventuelles mises à jour :
 
 Les suggestions, modifications, propositions et questions sont les bienvenues.
 
-Gilles VASSEUR, le 10 août 2014
+Gilles VASSEUR, le 31 août 2014
 
  
