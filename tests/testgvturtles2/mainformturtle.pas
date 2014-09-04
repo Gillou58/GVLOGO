@@ -94,6 +94,10 @@ type
     GroupBox1: TGroupBox;
     iTurtle: TImageList;
     pnlTurtle: TPanel;
+    rbteWin: TRadioButton;
+    rbteGate: TRadioButton;
+    rbteRoll: TRadioButton;
+    rgScreen: TRadioGroup;
     seSetPosX: TSpinEdit;
     seSetPosY: TSpinEdit;
     seMove: TSpinEdit;
@@ -145,6 +149,9 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure KindClick(Sender: TObject);
+    procedure rbteGateClick(Sender: TObject);
+    procedure rbteRollChange(Sender: TObject);
+    procedure rbteWinClick(Sender: TObject);
     procedure tbExampleChange(Sender: TObject);
   private
     { private declarations }
@@ -175,7 +182,6 @@ begin
   GVTurtle.OnChange := @TurtleState;  // gestionnaire de changement
   GVTurtle.OnBeforeChange := @TurtleBeforePaint; // idem avant de dessiner
   GVTurtle.ReInit; // initialisation
-  GVTurtle.Screen:= teRoll;
   // mise à jour des boutons
   seSetPosX.Value := imgTurtle.Width shr 1; // position au centre
   seSetPosY.Value := imgTurtle.Height shr 1;
@@ -204,6 +210,27 @@ begin
       S := 'Triangle';
     end;
   mmoTurtle.Lines.Add('KIND - ' + S);
+end;
+
+procedure TMainForm.rbteGateClick(Sender: TObject);
+// test de SCREEN (teWin)
+begin
+  GVTurtle.Screen := teGate;
+  mmoTurtle.Lines.Add('SCREEN - La tortue bute contre les bords.');
+end;
+
+procedure TMainForm.rbteRollChange(Sender: TObject);
+// test de SCREEN (teRoll)
+begin
+  GVTurtle.Screen := teRoll;
+  mmoTurtle.Lines.Add('SCREEN - La tortue s''enroule.');
+end;
+
+procedure TMainForm.rbteWinClick(Sender: TObject);
+// test de SCREEN (teWin)
+begin
+  GVTurtle.Screen := teWin;
+  mmoTurtle.Lines.Add('SCREEN - La tortue a un champ illimité.');
 end;
 
 procedure TMainForm.tbExampleChange(Sender: TObject);

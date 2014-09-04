@@ -1005,11 +1005,11 @@ object MainForm: TMainForm
   end
   object gbShapes: TGroupBox
     Left = 864
-    Height = 472
+    Height = 440
     Top = 8
     Width = 204
     Caption = 'Formes '
-    ClientHeight = 454
+    ClientHeight = 422
     ClientWidth = 200
     TabOrder = 1
     object seX1: TSpinEdit
@@ -1303,7 +1303,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = '// état du remplissage'#13#10'    property Filled: Boolean read fFilled write SetFilled default True;'
-      Top = 424
+      Top = 392
       Width = 85
       Caption = 'Filled'
       OnClick = btnFilledClick
@@ -1316,7 +1316,7 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = 'Exemple de dessin'
-      Top = 424
+      Top = 392
       Width = 85
       Caption = 'Dessin'
       OnClick = btnDessinClick
@@ -1327,9 +1327,9 @@ object MainForm: TMainForm
     object tbExample: TTrackBar
       Cursor = crHandPoint
       Left = 8
-      Height = 48
+      Height = 32
       Hint = ' // vitesse de dessin de la tortue'#13#10'    property Speed: Integer read fSpeed write SetSpeed default 50;'
-      Top = 369
+      Top = 360
       Width = 181
       Frequency = 10
       Max = 100
@@ -1374,11 +1374,11 @@ object MainForm: TMainForm
   end
   object gbPen: TGroupBox
     Left = 864
-    Height = 88
-    Top = 488
+    Height = 56
+    Top = 456
     Width = 204
-    Caption = 'Crayon '
-    ClientHeight = 70
+    Caption = 'Crayon (bonus)'
+    ClientHeight = 38
     ClientWidth = 200
     TabOrder = 7
     object btnPenReverse: TButton
@@ -1403,6 +1403,65 @@ object MainForm: TMainForm
       Width = 85
       Caption = 'PenRubber'
       OnClick = btnPenRubberClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+  end
+  object rgScreen: TRadioGroup
+    Left = 864
+    Height = 55
+    Top = 520
+    Width = 204
+    AutoFill = True
+    Caption = 'Type d''écran'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 37
+    ClientWidth = 200
+    TabOrder = 8
+    object rbteWin: TRadioButton
+      Cursor = crHandPoint
+      Left = 6
+      Height = 12
+      Hint = 'La tortue est en mode illimité.'
+      Top = 0
+      Width = 188
+      Caption = 'teWin'
+      Checked = True
+      OnClick = rbteWinClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      TabStop = True
+    end
+    object rbteGate: TRadioButton
+      Cursor = crHandPoint
+      Left = 6
+      Height = 12
+      Hint = 'La tortue bute contre les bords.'
+      Top = 12
+      Width = 188
+      Caption = 'teGate'
+      OnClick = rbteGateClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object rbteRoll: TRadioButton
+      Cursor = crHandPoint
+      Left = 6
+      Height = 13
+      Hint = 'La tortue s''enroule autour de son champ.'
+      Top = 24
+      Width = 188
+      Caption = 'teRoll'
+      OnChange = rbteRollChange
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1

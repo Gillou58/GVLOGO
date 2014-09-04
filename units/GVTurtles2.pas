@@ -57,7 +57,7 @@ uses
 
 type
   // changement de la tortue
-  TTurtleEvent = procedure(Sender: TObject) of object;
+  TTurtleEvent = TNotifyEvent;
   // avant le changement de la tortue
   TTurtleBeforeEvent = procedure(Sender: TObject; cHeading: Integer) of object;
 
