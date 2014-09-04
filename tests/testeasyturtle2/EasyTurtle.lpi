@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <PathDelim Value="\"/>
+    <General>
+      <SessionStorage Value="InProjectDir"/>
+      <MainUnit Value="0"/>
+      <Title Value="EasyTurtle"/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
+    </General>
+    <i18n>
+      <EnableI18N LFM="False"/>
+    </i18n>
+    <VersionInfo>
+      <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
+      <MajorVersionNr Value="1"/>
+      <BuildNr Value="68"/>
+      <Language Value="040C"/>
+      <StringTable CompanyName="GVSOFT" FileDescription="Tortue pour les enfants" LegalCopyright="Licence GNU GPL" LegalTrademarks="© Gilles VASSEUR 2014" OriginalFilename="EasyTurtle.pas" ProductName="EasyTurtle" ProductVersion="1.0.0"/>
+    </VersionInfo>
+    <BuildModes Count="1">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="3">
+      <Item1>
+        <PackageName Value="BGRABitmapPack"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="SynEdit"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="LCL"/>
+      </Item3>
+    </RequiredPackages>
+    <Units Count="8">
+      <Unit0>
+        <Filename Value="EasyTurtle.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="EasyTurtle"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Main"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="gvabout.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AboutForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="GVAbout"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="help.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="HelpForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Help"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="gvtools.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FormTools"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="GVTools"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="..\..\units\GVConsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVConsts"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="..\..\units\GVDefines.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="..\..\units\GVTurtles2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVTurtles2"/>
+      </Unit7>
+    </Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="EasyTurtle"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir);..\..\units"/>
+      <OtherUnitFiles Value="..\..\units"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <CodeGeneration>
+      <Optimizations>
+        <OptimizationLevel Value="3"/>
+      </Optimizations>
+    </CodeGeneration>
+    <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="False"/>
+        <UseLineInfoUnit Value="False"/>
+      </Debugging>
+      <LinkSmart Value="True"/>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+    </Linking>
+    <Other>
+      <CompilerMessages>
+        <MsgFileName Value=""/>
+      </CompilerMessages>
+      <CompilerPath Value="$(CompPath)"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

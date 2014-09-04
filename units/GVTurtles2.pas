@@ -7,8 +7,8 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    08-08-2014 15:14:48                          |
-  |                  Version : 1.1.0                                       |
+  |                  Date:    04-09-2014 15:14:48                          |
+  |                  Version : 1.1.2                                       |
   |                                                                        |
   |========================================================================| }
 
@@ -25,6 +25,10 @@
 //
 // You should have received a copy of the GNU General Public License along with this program.
 //  If not, see <http://www.gnu.org/licenses/>.
+//
+// 04/09/2014 1.1.2 ajout enroulement, correction PenRubber et corrections mineures
+// 03/09/2014 1.1.1 ajout de PenRubber et PenReverse
+// 08/08/2014 1.1.0 version initiale (dérivée de GVTURTLES
 
 {$I GVDefines.inc}
 
@@ -67,6 +71,7 @@ type
     rVisible: Boolean; // drapeau de visibilité
     rHeading: Extended; // direction
     rPenDown: Boolean; // drapeau de crayon baissé
+    rPenRubber: Boolean; // drapeau d'effacement
     rScaleX: Integer; // échelle des X
     rScaleY: Integer; // échelle des Y
     rFilled: Boolean; // remplissage
@@ -101,6 +106,8 @@ type
       fSavedTurtle: TTurtle; // sauvegarde d'une tortue
       fScreenColor: TColor; // couleur de l'écran
       fFilled: Boolean; // drapeau de remplissage
+      fTempColor: TColor; // sauvegarde temporaire de la couleur d'écriture
+      fPenRubber: Boolean; // gomme du crayon
       fOnBeforeChange: TTurtleBeforeEvent; // notification avant cap changé
       fPenColor: TColor; // couleur du crayon
       fPenWidth: Integer; // largeur du crayon
@@ -121,6 +128,7 @@ type
       procedure SetSpeed(AValue: Integer);
       procedure SetTurtleKind(AValue: TTurtleKind);
       procedure SetTurtleVisible(AValue: Boolean);
+      procedure SetRubberPen(AValue: Boolean); // la tortue efface
       // coordonnées dans limites ?
       function IsWithinLimits(X, Y: Double): Boolean;
       // effectue un déplacement
@@ -143,7 +151,7 @@ type
         c: TBGRAPixel);
     protected
       // change l'ordonnée pour le nouveau repère
-      function cY(Y: Double): Integer; virtual;
+      function cY(Y: Integer): Integer; virtual;
       // on dessine la tortue triangulaire
       procedure DrawTriangleTurtle; virtual;
       // tortue PNG
@@ -156,6 +164,8 @@ type
       constructor Create(Width, Height: Integer); // création
       destructor Destroy; override; // destructeur
       procedure ReInit; // réinitialisation de l'objet
+      // inversion de l'écriture
+      procedure PenReverse;
       // la tortue se déplace
       procedure Move(Value: Double);
       // fixe les coordonnées de la tortue
@@ -169,7 +179,7 @@ type
       // sauvegarde de la tortue
       procedure SaveTurtle;
       // récupère une tortue sauvée
-      procedure ReloadTurtle(const Clean: Boolean);
+      procedure ReloadTurtle(Clean: Boolean);
       // renvoie le cap vers un point
       function Towards(X, Y: Integer): Double;
       // renvoie la distance de la tortue à un point donné
@@ -230,7 +240,10 @@ type
       property ScaleX: Integer read fScaleX write fScaleX default CDefaultScale;
       // échelle des Y
       property ScaleY: Integer read fScaleY write fScaleY default CDefaultScale;
-      // couleur du crayon
+      // état de la gomme
+      property PenRubber: Boolean read fPenRubber write SetRubberPen
+        default False;
+     // couleur du crayon
       property PenColor: TColor read fPenColor write SetPenColor
         default CDefaultPenColor;
       // largeur du crayon
@@ -321,10 +334,7 @@ begin
   with DrwImg.Canvas.Brush do // on modifie la brosse
   begin
     if fFilled then  // remplissage ?
-    begin
-      Style := bsSolid; // brosse solide
-      //Color := ScreenColor;  // de la couleur de l'écran
-    end
+      Style := bsSolid // brosse solide
     else
       Style := bsClear; // brosse transparente
   end;
@@ -388,7 +398,7 @@ begin
   // valeur inchangée ou tortue non triangulaire ?
   if (fSize = AValue) or (Kind <> tkTriangle) then
     Exit; // on sort
-  fSize := Min(Abs(AValue), CMaxSize); // on normalise la taille;
+  fSize := Min(Abs(AValue), CMaxSize); // on normalise la taille
   Change; // changement notifié
 end;
 
@@ -442,18 +452,56 @@ begin
         MoveTo(X, Y); // sans écrire
       Change; // changement notifié
     end;
+    // on continue si l'écran s'enroule
+    if (Screen = teRoll) and not IsWithinLimits(X,Y) then
+    begin
+    // mise à jour des coordonnées après enroulement
+    // débordement à droite ?
+    if (X > fWidth) then
+    begin
+      MoveTo(0, Y);
+      X := X - fWidth;
+    end;
+    // débordement en bas ?
+    if (Y > fHeight) then
+    begin
+      MoveTo(X, 0);
+      Y := Y - fHeight;
+    end;
+    // débordement à gauche ?
+    if (X < 0) then
+    begin
+      MoveTo(fWidth, Y);
+      X := fWidth + X;
+    end;
+    // débordement en haut ?
+    if (Y < 0) then
+    begin
+      MoveTo(X, fHeight);
+      Y := fHeight + Y;
+    end;
+    fX := X; // nouvelle abscisse
+    fY := Y; // nouvelle ordonnée
+    // ralentit le dessin
+    Sleep(CMaxSpeed - Speed);
+    // dessine ou déplace suivant l'état du crayon
+    if PenDown then
+      LineTo(X, Y)
+    else
+      MoveTo(X, Y);
+  end;
 end;
 
 procedure TGVTurtle.LineTo(X, Y: Double);
 // *** déplacement en écrivant ***
 begin
-  DrwImg.CanvasBGRA.LineTo(Round(X), cY(Y)); // écriture effective
+  DrwImg.CanvasBGRA.LineTo(Round(X), cY(Round(Y))); // écriture effective
 end;
 
 procedure TGVTurtle.MoveTo(X, Y: Double);
 // *** déplacement sans écrire ***
 begin
-  DrwImg.CanvasBGRA.MoveTo(Round(X), cY(Y)); // déplacement effectif
+  DrwImg.CanvasBGRA.MoveTo(Round(X), cY(Round(Y))); // déplacement effectif
 end;
 
 procedure TGVTurtle.ArcAntialias(x, y, rx, ry: single; b, e: word; c: TBGRAPixel;
@@ -488,10 +536,10 @@ begin
     c);
 end;
 
-function TGVTurtle.cY(Y: Double): Integer;
+function TGVTurtle.cY(Y: Integer): Integer;
 // *** change l'ordonnée pour le nouveau repère ***
 begin
-  Result := Round(fHeight - Y); // inversion des ordonnées avec arrondi
+  Result := fHeight - Y; // inversion des ordonnées
 end;
 
 procedure TGVTurtle.DrawTriangleTurtle;
@@ -512,7 +560,10 @@ begin
   Y3 := cY(Round(CoordY - SinT - (Size shl 1) * CosT));
   with TtlImg.CanvasBGRA do
   begin
-    Pen.Color := PenColor;
+    if PenColor <> BGRAToColor(BGRAPixelTransparent) then
+      Pen.Color := PenColor
+    else
+      Pen.Color := CDefaultPenColor;
     MoveTo(X1, Y1); // dessin de la tortue
     Pen.Width := 2;
     LineTo(X2, Y2);
@@ -551,7 +602,7 @@ procedure TGVTurtle.BeforeChange;
 // *** gestion avant le changement ***
 // (permet de mettre à jour une image pour la tortue avant de la dessiner)
 begin
-  if Assigned(fOnBeforeChange) then  // sigestionnaire existe
+  if Assigned(fOnBeforeChange) then  // si le gestionnaire existe
     fOnBeforeChange(Self, Round(Heading)); // on l'exécute
 end;
 
@@ -567,7 +618,6 @@ begin
   BckImg := TBGRABitmap.Create(Width, Height, ColorToBGRA(ColorToRGB(CDefaultBackColor)));
   // la surface de dessin
   DrwImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
-  //DrwImg.Canvas.AntialiasingMode := amOn;
   // la tortue
   TtlImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
   fPNGTurtle := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
@@ -591,10 +641,12 @@ end;
 procedure TGVTurtle.ReInit;
 // *** réinitialisation de l'objet ***
 begin
-  TurtleVisible := True; // tortue visible
   Screen := teWin; // mode fenêtre étendue
+  Kind := tkTriangle; // forme triangulaire pour la tortue
+  PenRubber := False; // on ne gomme pas
   ScreenColor := CDefaultBackColor; // couleur de fond par défaut
   PenColor := CDefaultPenColor; // couleur de crayon par défaut
+  fTempColor := PenColor; // on se souvient de cette couleur
   PenWidth := CDefaultPenWidth; // largeur du crayon par défaut
   Heading := CDefaultHeading; // orientation
   Size := CDefaultSize; // taille de la tortue
@@ -606,6 +658,7 @@ begin
   DoGo(fWidth shr 1, fHeight shr 1); // au centre
   DrwImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent,
     dmSet); // on efface la surface
+  TurtleVisible := True; // tortue visible
   Change; // changement notifié
 end;
 
@@ -662,6 +715,7 @@ begin
     rVisible := fTurtleVisible; // drapeau de visibilité
     rHeading := fHeading; // direction
     rPenDown := fPenDown; // drapeau de crayon baissé
+    rPenRubber := fPenRubber; // drapeau d'effacement
     rScaleX := fScaleX; // échelle des X
     rScaleY := fScaleY; // échelle des Y
     rFilled := Filled; // remplissage
@@ -682,13 +736,14 @@ begin
   end;
 end;
 
-procedure TGVTurtle.ReloadTurtle(const Clean: Boolean);
+procedure TGVTurtle.ReloadTurtle(Clean: Boolean);
 // *** récupère une tortue ***
 begin
   if fSavedTurtle.rSaved then // seulement si une tortue a été sauvegardée
     try
       TurtleVisible := False; // on cache la tortue
       PenDown := False; // on n'écrit pas !
+      PenRubber := False; // on n'efface pas !
       with fSavedTurtle do // on recharge la tortue
       begin
         fX := rX; // abscisse
@@ -697,7 +752,8 @@ begin
         fTurtleKind := rKind; // type de tortue
         Size := rSize; // taille de la tortue
         Heading := rHeading; // direction
-        ScaleX := rScaleX; // échelle des X
+        PenRubber := rPenRubber; // drapeau d'effacement
+	ScaleX := rScaleX; // échelle des X
         ScaleY := rScaleY; // échelle des Y
         Filled := rFilled; // remplissage
         PenWidth := rPenWidth; // largeur du crayon
@@ -873,6 +929,29 @@ procedure TGVTurtle.Text(const St: string);
 // *** affiche un texte à l'emplacement de la tortue ***
 begin
   Text(St, Round(CoordX), Round(CoordY), Round(Heading));
+end;
+
+procedure TGVTurtle.PenReverse;
+// *** inversion du crayon ***
+begin
+  PenColor := not PenColor; // couleur inversée
+end;
+
+procedure TGVTurtle.SetRubberPen(AValue: Boolean);
+// *** le crayon gomme ***
+begin
+  if AValue = fPenRubber then
+    Exit;
+  fPenRubber := AValue; // nouvelle valeur
+  if fPenRubber then
+  begin
+    fTempColor := PenColor; // on se souvient de la couleur en cours
+    // on dessine avec la couleur transparente
+    PenColor := BGRAToColor(BGRAPixelTransparent);
+  end
+  else
+  if PenColor = BGRAToColor(BGRAPixelTransparent) then
+    PenColor := fTempColor; // on restitue la couleur d'origine
 end;
 
 end.

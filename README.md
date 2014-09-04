@@ -70,11 +70,10 @@ Répertoire tests : contient tous les logiciels de tests des unités de GVLOGO.
    => testgvproplists : test des listes de propriétés
    => testgvturtles : test de la tortue graphique (version avec outils de base fournis)
    => testgvturtles2 : test de la tortue graphique (version avec la bibliothèque BGRABITMAP)
-   => testeasyturtle : programme de dessin pour enfants (test approfondi de la tortue graphique en version simple).
-
+   => testeasyturtle : programme de dessin pour enfants (test approfondi de la tortue graphique en version simple)
+   => testeasyturtle2 : programme easyturtle amélioré (avec gvturtles2).
 
 Répertoire units : contient toutes les unités nécessaires à GVLOGO.
-
 
 4. Contact
 
@@ -84,6 +83,6 @@ Vous pouvez aussi vous rendre sur mon site pour les éventuelles mises à jour :
 
 Les suggestions, modifications, propositions et questions sont les bienvenues.
 
-Gilles VASSEUR, le 31 août 2014
+Gilles VASSEUR, le 4 septembre 2014
 
  

@@ -1005,11 +1005,11 @@ object MainForm: TMainForm
   end
   object gbShapes: TGroupBox
     Left = 864
-    Height = 568
+    Height = 472
     Top = 8
     Width = 204
     Caption = 'Formes '
-    ClientHeight = 550
+    ClientHeight = 454
     ClientWidth = 200
     TabOrder = 1
     object seX1: TSpinEdit
@@ -1108,7 +1108,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = ' // dessine un rectangle'#13#10'    procedure Rectangle(const X1, Y1, X2, Y2: Integer); overload;'
-      Top = 168
+      Top = 136
       Width = 85
       Caption = 'Rectangle'
       OnClick = btnRectangleClick
@@ -1122,7 +1122,7 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine un rectangle à l''emplacement de la tortue'#13#10'    procedure Rectangle(const X2, Y2: Integer); overload;'
-      Top = 168
+      Top = 136
       Width = 85
       Caption = 'Rectangle2'
       OnClick = btnRectangleClick
@@ -1136,7 +1136,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = '// dessine un carré'#13#10'    procedure Square(const X1, Y1, L: Integer); overload;'
-      Top = 200
+      Top = 168
       Width = 85
       Caption = 'Square'
       OnClick = btnRectangleClick
@@ -1150,7 +1150,7 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine un carré à l''emplacement de la tortue'#13#10'    procedure Square(const L: Integer); overload;'
-      Top = 200
+      Top = 168
       Width = 85
       Caption = 'Square2'
       OnClick = btnRectangleClick
@@ -1164,7 +1164,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = '// dessine un rectangle arrondi'#13#10'    procedure RoundRect(const X1, Y1, X2, Y2: Integer); overload;'
-      Top = 232
+      Top = 200
       Width = 85
       Caption = 'RoundRect'
       OnClick = btnRectangleClick
@@ -1178,7 +1178,7 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine un rectangle arrondi à l''emplacement de la tortue'#13#10'    procedure RoundRect(const X2, Y2: Integer); overload;'
-      Top = 232
+      Top = 200
       Width = 85
       Caption = 'RoundRect2'
       OnClick = btnRectangleClick
@@ -1192,7 +1192,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = '// dessine une ellipse'#13#10'    procedure Ellipse(const X1, Y1, X2, Y2: Integer); overload;'
-      Top = 264
+      Top = 232
       Width = 85
       Caption = 'Ellipse'
       OnClick = btnRectangleClick
@@ -1206,7 +1206,7 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine une ellipse à l''emplacement de la tortue'#13#10'    procedure Ellipse(const X2, Y2: Integer); overload;'
-      Top = 266
+      Top = 234
       Width = 85
       Caption = 'Ellipse2'
       OnClick = btnRectangleClick
@@ -1220,7 +1220,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = '// dessine un cercle'#13#10'    procedure Circle(const X1, Y1, R: Integer); overload;'
-      Top = 296
+      Top = 264
       Width = 85
       Caption = 'Circle'
       OnClick = btnRectangleClick
@@ -1234,7 +1234,7 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine un cercle à l''emplacement de la tortue'#13#10'    procedure Circle(const R: Integer); overload;'
-      Top = 296
+      Top = 264
       Width = 85
       Caption = 'Circle2'
       OnClick = btnRectangleClick
@@ -1248,7 +1248,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = '// dessine un arc d''ellipse'#13#10'    procedure Arc(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer); overload;'
-      Top = 328
+      Top = 296
       Width = 85
       Caption = 'Arc'
       OnClick = btnRectangleClick
@@ -1262,7 +1262,7 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine un arc d''ellipse à l''emplacement de la tortue'#13#10'    procedure Arc(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;'
-      Top = 328
+      Top = 296
       Width = 85
       Caption = 'Arc2'
       OnClick = btnRectangleClick
@@ -1276,7 +1276,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = ' // dessine une section d''ellipse'#13#10'    procedure Pie(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer); overload;'
-      Top = 360
+      Top = 328
       Width = 85
       Caption = 'Pie'
       OnClick = btnRectangleClick
@@ -1290,7 +1290,7 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = '// dessine une section d''ellipse à l''emplacement de la tortue'#13#10'    procedure Pie(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;'
-      Top = 360
+      Top = 328
       Width = 85
       Caption = 'Pie2'
       OnClick = btnRectangleClick
@@ -1303,7 +1303,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 25
       Hint = '// état du remplissage'#13#10'    property Filled: Boolean read fFilled write SetFilled default True;'
-      Top = 520
+      Top = 424
       Width = 85
       Caption = 'Filled'
       OnClick = btnFilledClick
@@ -1316,7 +1316,7 @@ object MainForm: TMainForm
       Left = 104
       Height = 25
       Hint = 'Exemple de dessin'
-      Top = 520
+      Top = 424
       Width = 85
       Caption = 'Dessin'
       OnClick = btnDessinClick
@@ -1329,7 +1329,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 48
       Hint = ' // vitesse de dessin de la tortue'#13#10'    property Speed: Integer read fSpeed write SetSpeed default 50;'
-      Top = 401
+      Top = 369
       Width = 181
       Frequency = 10
       Max = 100
@@ -1371,6 +1371,42 @@ object MainForm: TMainForm
     ParentShowHint = False
     ShowHint = True
     TabOrder = 3
+  end
+  object gbPen: TGroupBox
+    Left = 864
+    Height = 88
+    Top = 488
+    Width = 204
+    Caption = 'Crayon '
+    ClientHeight = 70
+    ClientWidth = 200
+    TabOrder = 7
+    object btnPenReverse: TButton
+      Cursor = crHandPoint
+      Left = 8
+      Height = 25
+      Hint = '// inversion de l''écriture'#13#10'      procedure PenReverse;'
+      Top = 8
+      Width = 85
+      Caption = 'PenReverse'
+      OnClick = btnPenReverseClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object btnPenRubber: TButton
+      Cursor = crHandPoint
+      Left = 104
+      Height = 25
+      Hint = ' // état de la gomme'#13#10'      property PenRubber: Boolean read fPenRubber write SetRubberPen'#13#10'        default False;'
+      Top = 8
+      Width = 85
+      Caption = 'PenRubber'
+      OnClick = btnPenRubberClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
   end
   object iTurtle: TImageList
     Height = 32

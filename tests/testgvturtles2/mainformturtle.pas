@@ -83,9 +83,12 @@ type
     btnText2: TButton;
     btnTextEx: TButton;
     btnPenWidth: TButton;
+    btnPenReverse: TButton;
+    btnPenRubber: TButton;
     cbScreenColor: TColorBox;
     cbPenColor: TColorBox;
     gbShapes: TGroupBox;
+    gbPen: TGroupBox;
     imgTurtle: TImage;
     Kind: TButton;
     GroupBox1: TGroupBox;
@@ -120,6 +123,7 @@ type
     procedure btnMoveClick(Sender: TObject);
     procedure btnPenColorClick(Sender: TObject);
     procedure btnPenDownClick(Sender: TObject);
+    procedure btnPenReverseClick(Sender: TObject);
     procedure btnPenWidthClick(Sender: TObject);
     procedure btnRectangleClick(Sender: TObject);
     procedure btnReInitClick(Sender: TObject);
@@ -137,7 +141,7 @@ type
     procedure btnTurnClick(Sender: TObject);
     procedure btnTurtleVisibleClick(Sender: TObject);
     procedure btnWipeClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure btnPenRubberClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure KindClick(Sender: TObject);
@@ -171,7 +175,8 @@ begin
   GVTurtle.OnChange := @TurtleState;  // gestionnaire de changement
   GVTurtle.OnBeforeChange := @TurtleBeforePaint; // idem avant de dessiner
   GVTurtle.ReInit; // initialisation
-  // mise à jur des boutons
+  GVTurtle.Screen:= teRoll;
+  // mise à jour des boutons
   seSetPosX.Value := imgTurtle.Width shr 1; // position au centre
   seSetPosY.Value := imgTurtle.Height shr 1;
 end;
@@ -290,9 +295,12 @@ begin
   mmoTurtle.Lines.Add('WIPE');
 end;
 
-procedure TMainForm.Button1Click(Sender: TObject);
+procedure TMainForm.btnPenRubberClick(Sender: TObject);
+// test de PENRUUBBER
 begin
-  //gvTurtle.Square(50);
+  with GVTurtle do
+     PenRubber := not PenRubber;
+   mmoTurtle.Lines.Add('PENRUBBER - ' + IfThen(GVTurtle.PenRubber, P_True, P_False));
 end;
 
 procedure TMainForm.btnMoveClick(Sender: TObject);
@@ -315,6 +323,13 @@ begin
   with GVTurtle do
     PenDown := not PenDown;
   mmoTurtle.Lines.Add('PENDOWN - ' + IfThen(GVTurtle.PenDown, P_True, P_False));
+end;
+
+procedure TMainForm.btnPenReverseClick(Sender: TObject);
+// test de PENREVERSE
+begin
+  GVTurtle.PenReverse;
+   mmoTurtle.Lines.Add('PENREVERSE - ');
 end;
 
 procedure TMainForm.btnPenWidthClick(Sender: TObject);

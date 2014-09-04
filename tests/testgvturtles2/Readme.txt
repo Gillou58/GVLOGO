@@ -7,8 +7,8 @@
 |                  Ecrit par  : VASSEUR Gilles                           |
 |                  e-mail : g.vasseur58@laposte.net                      |
 |                  Copyright : © G. VASSEUR                              |
-|                  Date:    08-08-2014 15:14:48                          |
-|                  Version : 1.1.0                                       |
+|                  Date:    04-09-2014 15:14:48                          |
+|                  Version : 1.1.2                                       |
 |                                                                        |
 |============================================================| }
 
@@ -36,3 +36,7 @@
 // Cette unité utilise la bibliothèque BGRABITMAP pour une 
 // meilleure gestion du graphisme.
 // N.B. : ne fonctionne qu'avec LAZARUS
+//
+// 04/09/2014 1.1.2 ajout enroulement, correction PenRubber et // corrections mineures
+// 03/09/2014 1.1.1 ajout de PenRubber et PenReverse
+// 08/08/2014 1.1.0 version initiale (dérivée de GVTURTLES
