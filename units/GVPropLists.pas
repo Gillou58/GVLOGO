@@ -165,7 +165,7 @@ uses
 { TGVPropListEnumerator }
 
 function TGVPropListEnumerator.GetCurrent: string;
-// retourne l'élément courant
+// *** retourne l'élément courant ***
 begin
   Result := fLst.Names[fIndex];
 end;
@@ -187,7 +187,7 @@ begin
 end;
 
 function TGVPropListEnumerator.MoveNext: Boolean;
-// passe à l'élément suivant
+// *** passe à l'élément suivant ***
 begin
   Result := fIndex < (fLst.Count - 1);
   if Result then

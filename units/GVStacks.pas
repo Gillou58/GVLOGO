@@ -85,6 +85,7 @@ type
     procedure Over; // duplication de l'avant-dernier
     procedure Rot; // rotation au sommet de la pile
     procedure Shrink; // contraction de la pile
+    function Needed(Nb: Integer): Boolean; // nombre d'éléments désirés
     property Count: Integer read fCount default 0; // compte des éléments
     // capacité de la pile
     property Capacity: Integer read GetCapacity write SetCapacity
@@ -99,6 +100,8 @@ end;
   TGVIntegerStack = {$IFNDEF Delphi}specialize{$ENDIF} TGVStack<Integer>;
   TGVRealStack = {$IFNDEF Delphi}specialize{$ENDIF} TGVStack<Real>;
   TGVStringStack = {$IFNDEF Delphi}specialize{$ENDIF} TGVStack<string>;
+  TGVDoubleStack = {$IFNDEF Delphi}specialize{$ENDIF} TGVStack<Double>;
+  TGVExtended = {$IFNDEF Delphi}specialize{$ENDIF} TGVStack<Extended>;
 
 implementation
 
@@ -273,6 +276,12 @@ procedure TGVStack{$IFDEF Delphi}<T>{$ENDIF}.Shrink;
 // *** réduction de la taille de la pile ***
 begin
   SetLength(fItems, Max(Count, CMinStack)); // longueur ajustée
+end;
+
+function TGVStack.Needed(Nb: Integer): Boolean;
+// *** nombre d'éléments désirés ***
+begin
+  Result := (Count >= Nb);
 end;
 
 end.

@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    08-08-2014 17:17:49                          |
+  |                  Date:    10-09-2014 16:15:42                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -53,14 +53,29 @@ const
   CAsk = '?';
   CQuote = '"';
   CColon = ':';
-
+    
+  // ************* GVEval *************
+  
+  CPlus = '+'; // addition
+  CMinus = '-'; // soustraction
+  CMul = '*'; // multiplication
+  CDiv = '/'; // division
+  CPower = '^'; // puisssance
+  CGreater = '>'; // plus grand
+  CLower = '<'; // plus petit
+  CEqual = '='; // égal
+  CSpecialChar = [CBlank, CEqual, CPlus, CMinus, CMul, CDiv, CBeginPar, CEndPar,
+    CPower, CGreater, CLower];
+  
   { ensembles de caractères courants }
 
   CLowAlpha = ['a' .. 'z'];
   CHighAlpha = ['A' .. 'Z'];
   CAlpha = CLowAlpha + CHighAlpha;
+  CAlphaPlus = CAlpha + [CUnderline, CColon];
   CDigit = ['0' .. '9'];
   CAlphaNum = CAlpha + CDigit;
+  CAlphaNumPlus = CAlphaPlus + CDigit;
 
   { chaînes utiles }
 
@@ -110,7 +125,16 @@ type
   C_BadFormat, // fichier de format erroné
   C_EmptyStack, // pile interne vide
   C_OutOfMemory, // mémoire insuffisante pour la pile
-  C_LowStack // pile insuffisante
+  C_LowStack, // pile insuffisante
+  C_BadChar2, // caractère interdit ou inconnu
+  C_ClosePar, // parenthèse fermante absente
+  C_BadNumber2, // nombre incorrect
+  C_BadVar, // variable inconnue incorrecte.
+  C_BadFunction, // fonction inconnue
+  C_NoArg, // argument manquant
+  C_BadExp, // expression incorrecte
+  C_Zero, // division par zéro
+  C_NegNumber // nombre négatif interdit
   );
 
   { tortue }
@@ -128,6 +152,9 @@ resourcestring
   { message d'erreur }
 
   ME_None = 'Pas d''erreur à signaler.';
+  
+  // ************* GVList et GVPropList *************
+  
   ME_BadNumber = 'L''objet %s n''est pas un nombre correct.';
   ME_BadInt = 'L''objet %s n''est pas un entier correct.';
   ME_EmptyStr = 'Le mot vide ne convient pas pour la primitive %s.';
@@ -140,10 +167,25 @@ resourcestring
   ME_TwoDelete = 'La liste ne contient pas assez d''éléments pour en supprimer deux à partir de %d.';
   ME_BadListP = 'La liste de propriétés %d est introuvable.';
   ME_BadFormat = 'Le format du fichier %s est incorrect : %s.';
+  
+  // ************* GVStacks *************
+  
   ME_EmptyStack = 'La pile interne est vide.';
   ME_OutOfMemory = 'La mémoire est insuffisante pour la pile.';
   ME_LowStack = 'Pas assez d''éléments dans la pile (%d pour %d).';
 
+  // ************* GVEval *************
+
+  ME_BadChar2 = 'Caractère interdit ou inconnu dans "%s".';
+  ME_ClosePar = 'Parenthèse fermante absente dans "%s".';
+  ME_BadNumber2 = 'Le nombre "%s" est incorrect.';
+  ME_BadVar = 'La variable "%s" est inconnue ou incorrecte.';
+  ME_BadFunction = 'La fonction "%s" est inconnue.';
+  ME_NoArg = 'Il manque un argument pour "%s".';
+  ME_BadExp = 'Il y a une expression incorrecte dans "%s".';
+  ME_Zero = 'Les divisions par zéro sont impossibles. (%s)';
+  ME_NegNumber = 'Un nombre négatif est interdit pour %s';
+  
   { primitives }
 
   P_First = 'PREMIER';
@@ -153,6 +195,108 @@ resourcestring
   P_True = 'VRAI';
   P_False = 'FAUX';
 
+  { noms des fonctions mathématiques}
+  
+  MF_DSum = 'SOMME'; // addition
+  MF_DSub = 'DIFF'; // différence
+  MF_DSub2 = 'DIFFERNCE';
+  MF_DMul = 'PRODUIT'; // multiplication
+  MF_DDiv = 'DIV'; // division
+  MF_DDiv2 = 'DIVISE';
+  MF_DAbs = 'ABS'; // valeur absolue
+  MF_DAbs2 = 'ABSOLUE';
+  MF_DCos = 'COS'; // cosinus
+  MF_DCos2 = 'COSINUS';
+  MF_DSin = 'SIN'; // sinus
+  MF_DSin2 = 'SINUS';
+  MF_DTan = 'TAN'; // tangente
+  MF_DTan2 = 'TANGENTE';
+  MF_DSqrt = 'RAC'; // racine carrée
+  MF_DSqrt2 = 'RACINE';
+  MF_DTrunc = 'TRONQUE'; // nombre tronqué
+  MF_DRound = 'ARRONDI'; // nombre arrondi
+  MF_DSqr = 'CARRE'; // nombre au carré
+  MF_DExp = 'EXP'; // exponentielle
+  MF_DFrac = 'FRAC'; // partie fractionnelle
+  MF_DInt = 'ENT'; // partie entière
+  MF_DInt2 = 'ENTIER';
+  MF_DLn = 'LN'; // log népérien
+  MF_DLog2 = 'LOG2'; // log base 2
+  MF_DLog10 = 'LOG10'; // log base 100
+  MF_DCoTan = 'COTAN'; // cotangente
+  MF_DCoTan2 = 'COTANGENTE';
+  MF_DHypot = 'HYPOTHENUSE'; // hypothénuse
+  MF_DArcCos = 'ARCCOS'; // arc cosinus
+  MF_DArcCos2 = 'ARCCOSINUS';
+  MF_DArcSin = 'ARCSIN'; // arc sinus
+  MF_DArcSin2 = 'ARCSINUS';
+  MF_DPower = 'PUISSANCE'; // puissance
+  MF_DMinus = 'NEGATIF'; // nombre négatif
+  MF_DPLus = 'POSITIF'; // nombre positif
+  MF_DNegate = 'OPPOSE'; // signe inversé
+  MF_DEqual = 'EGAL'; // égalité
+  MF_DInf = 'INF'; // infériorité
+  MF_DInf2 = 'INFERIEUR';
+  MF_DSup = 'SUP'; // supériorité
+  MF_DSup2 = 'SUPERIEUR';
+  MF_DMax = 'MAX'; // maximum
+  MF_DMax2 = 'MAXIMUM';
+  MF_DMin = 'MIN'; // minimum
+  MF_DMin2 = 'MINIMUM';
+  MF_DPi = 'PI'; // PI sur la pile
+  MF_DSign = 'SIGNE'; // signe
+  MF_DRandom = 'HASARD'; // nombre au hasard
+ 
+ // ************* GVEval *************
+ 
+ type
+  // ensemble des fonctions mathématiques
+  TGVFunctions = (C_DSum, // addition
+    C_DSub, // différence
+    C_DSub2, C_DMul, // multiplication
+    C_DDiv, // division
+    C_DDiv2, C_DAbs, // valeur absolue
+    C_DAbs2, C_DCos, // cosinus
+    C_DCos2, C_DSin, // sinus
+    C_DSin2, C_DTan, // tangente
+    C_DTan2, C_DSqrt, // racine carrée
+    C_DSqrt2, C_DTrunc, // nombre tronqué
+    C_DRound, // nombre arrondi
+    C_DSqr, // nombre au carré
+    C_DExp, // exponentielle
+    C_DFrac, // partie fractionnelle
+    C_DInt, // partie entière
+    C_DInt2, C_DLn, // log népérien
+    C_DLog2, // log base 2
+    C_DLog10, // log base 100
+    C_DCoTan, // cotangente
+    C_DCoTan2, C_DHypot, // hypothénuse
+    C_DArcCos, // arc cosinus
+    C_DArcCos2, C_DArcSin, // arc sinus
+    C_DArcSin2, C_DPower, // puissance
+    C_Minus, // négatif
+    C_Plus, // positif
+    C_DNegate, // signe inversé
+    C_DEqual, // égalité sur pile
+    C_DInf, // infériorité sur pile
+    C_DInf2, C_DSup, // supériorité sur pile
+    C_DSup2, C_DMax, // maximum
+    C_DMax2, C_DMin, // minimum
+    C_DMin2, C_DPi, // PI sur la pile
+    C_DSign, // signe
+    C_DRandom); // nombre au hasard
+
+const
+  // tableau du nom des fonctions
+  GVFunctionName: array [TGVFunctions] of string = (MF_DSum, MF_DSub, MF_DSub2,
+    MF_DMul, MF_DDiv, MF_DDiv2, MF_DAbs, MF_DAbs2, MF_DCos, MF_DCos2, MF_DSin,
+    MF_DSin2, MF_DTan, MF_DTan2, MF_DSqrt, MF_DSqrt2, MF_DTrunc, MF_DRound,
+    MF_DSqr, MF_DExp, MF_DFrac, MF_DInt, MF_DInt2, MF_DLn, MF_DLog2, MF_DLog10,
+    MF_DCoTan, MF_DCoTan2, MF_DHypot, MF_DArcCos, MF_DArcCos2, MF_DArcSin,
+    MF_DArcSin2, MF_DPower, MF_DMinus, MF_DPLus, MF_DNegate, MF_DEqual, MF_DInf,
+    MF_DInf2, MF_DSup, MF_DSup2, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2, MF_DPi,
+    MF_DSign, MF_DRandom);
+	
 implementation
 
 end.
