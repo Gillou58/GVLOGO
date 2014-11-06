@@ -135,7 +135,6 @@ var
   StackEnabled : Boolean;
 begin
   StackCount := FStackStr.Count;
-  //ProgressBarStack.Position := StackCount;
   StackEnabled := (StackCount <> 0);
   btnPop.Enabled := StackEnabled;
   btnPeek.Enabled := StackEnabled;

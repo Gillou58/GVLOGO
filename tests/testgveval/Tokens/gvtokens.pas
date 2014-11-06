@@ -26,6 +26,8 @@
 // You should have received a copy of the GNU General Public License along with this program.
 //  If not, see <http://www.gnu.org/licenses/>.
 
+{$I GVDefines.inc}
+
 {$IFNDEF Delphi}
 {$mode objfpc}{$H+}
 {$ENDIF}
@@ -57,7 +59,7 @@ type
 
   { TGVTokens }
 
-  TGVTokens = class
+  TGVTokens = class(TObject)
     private
       fSource: string;
       fIndx: Integer;
@@ -131,11 +133,11 @@ end;
 procedure TGVTokens.SetIndx(AValue: Integer);
 // *** index de lecture ***
 begin
-  if fIndx = AValue then
-    Exit;
-  if fIndx < 0 then // pas de valeur négative
-    fIndx := -fIndx;
-  fIndx := Min(AValue, Length(Source)); // pas plus grand que la source
+  // hors limites ?
+  if (AValue < 1) or (AValue > Length(fText)) then
+    raise EEvalException.CreateFmt(ME_OutOfRange, [Indx, Text]);
+  if fIndx <> AValue then	
+    fIndx := AValue; // nouvelle valeur de l'index
 end;
 
 procedure TGVTokens.SetSource(const AValue: string);

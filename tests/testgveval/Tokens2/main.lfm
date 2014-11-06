@@ -1,0 +1,64 @@
+object MainForm: TMainForm
+  Left = 320
+  Height = 690
+  Top = 223
+  Width = 849
+  Caption = 'Test de TGVTokens2 - Gilles Vasseur 2014 - GVLOGO'
+  ClientHeight = 690
+  ClientWidth = 849
+  Position = poScreenCenter
+  LCLVersion = '1.2.6.0'
+  object Edit1: TEdit
+    Left = 34
+    Height = 23
+    Top = 52
+    Width = 720
+    TabOrder = 0
+    Text = '(45*rac(78))+(78.45/4)>0'
+  end
+  object Label1: TLabel
+    Left = 34
+    Height = 15
+    Top = 24
+    Width = 111
+    Caption = 'Expression à évaluer :'
+    FocusControl = Edit1
+    ParentColor = False
+  end
+  object Memo1: TMemo
+    Left = 32
+    Height = 554
+    Top = 104
+    Width = 344
+    Lines.Strings = (
+      'Résultats...'
+    )
+    ScrollBars = ssBoth
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 679
+    Height = 25
+    Top = 104
+    Width = 75
+    Caption = 'Tokens'
+    OnClick = Button1Click
+    TabOrder = 2
+  end
+  object Label2: TLabel
+    Left = 392
+    Height = 15
+    Top = 104
+    Width = 105
+    Caption = 'Position de l''erreur :'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 512
+    Height = 15
+    Top = 104
+    Width = 11
+    Caption = '-1'
+    ParentColor = False
+  end
+end

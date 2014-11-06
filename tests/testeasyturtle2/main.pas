@@ -915,7 +915,7 @@ procedure TMainForm.ActionEraseExecute(Sender: TObject);
 // *** la surface de dessin est effacée ***
 begin
   GVTurtle.ScreenColor := clBlack;  // on efface : écran noir
-  gvTurtle.PenColor := clWhite; // écriture bleu clair
+  gvTurtle.PenColor := clWhite; // écriture blanche
   GVTurtle.Screen := teGate; // écran clos
   ActionRAZExecute(Sender); // on réinitialise le tableau des ordres
 end;

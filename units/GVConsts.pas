@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    10-09-2014 16:15:42                          |
+  |                  Date:    27-10-2014 16:15:42                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -53,9 +53,17 @@ const
   CAsk = '?';
   CQuote = '"';
   CColon = ':';
+  CExclamation = '!';
     
   // ************* GVEval *************
-  
+type
+  // éléments d'une expression à évaluer
+  CTokensEnum = (cteNumber, cteVar, cteFunction, cteBeginExp, cteEndExp, ctePlus,
+    cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual, cteNotEqual,
+    cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteAnd, cteOr, cteNot, cteEnd,
+    cteUnKnown);
+
+const
   CPlus = '+'; // addition
   CMinus = '-'; // soustraction
   CMul = '*'; // multiplication
@@ -64,18 +72,28 @@ const
   CGreater = '>'; // plus grand
   CLower = '<'; // plus petit
   CEqual = '='; // égal
+  CNotEqual = '<>'; // différent
+  CGreaterOrEqual = '>='; // plus grand ou égal
+  CLowerOrEqual = '<='; // plus petit ou égal
+  // caractères spéciaux
   CSpecialChar = [CBlank, CEqual, CPlus, CMinus, CMul, CDiv, CBeginPar, CEndPar,
     CPower, CGreater, CLower];
+  CRLower = -1; // résultats de comparaisons (plus petit)
+  CREqual = 0;  // (égal)
+  CRGreater = 1; // (plus grand)
+  CRTrue = 1; // vrai
+  CRFalse = 0; // faux
   
   { ensembles de caractères courants }
 
-  CLowAlpha = ['a' .. 'z'];
-  CHighAlpha = ['A' .. 'Z'];
+  CLowAlpha = ['a'..'z'];
+  CHighAlpha = ['A'..'Z'];
   CAlpha = CLowAlpha + CHighAlpha;
-  CAlphaPlus = CAlpha + [CUnderline, CColon];
-  CDigit = ['0' .. '9'];
+  CAlphaPlus = CAlpha + [CUnderline, CColon, CDot];
+  CDigit = ['0'..'9'];
   CAlphaNum = CAlpha + CDigit;
   CAlphaNumPlus = CAlphaPlus + CDigit;
+  CAllValidChars = CAlphaNumPlus + CSpecialChar;
 
   { chaînes utiles }
 
@@ -111,6 +129,7 @@ type
   { erreurs }
   TGVError = (
   C_None, // pas d'erreur
+  C_InternalError, // erreur interne
   C_BadNumber, // nombre incorrect
   C_BadInt, // entier incorrect
   C_EmptyStr, // mot vide interdit
@@ -126,15 +145,19 @@ type
   C_EmptyStack, // pile interne vide
   C_OutOfMemory, // mémoire insuffisante pour la pile
   C_LowStack, // pile insuffisante
+  C_NoInit, // valeur non initialisée
   C_BadChar2, // caractère interdit ou inconnu
   C_ClosePar, // parenthèse fermante absente
   C_BadNumber2, // nombre incorrect
-  C_BadVar, // variable inconnue incorrecte.
+  C_BadVar, // variable incorrecte
+  C_UnknownVar, // variable inconnue
   C_BadFunction, // fonction inconnue
   C_NoArg, // argument manquant
   C_BadExp, // expression incorrecte
   C_Zero, // division par zéro
-  C_NegNumber // nombre négatif interdit
+  C_NegNumber, // nombre négatif interdit
+  C_OutOfRange, // index hors limites pour une expression
+  C_OutOfRange2 // élément hors limites d'une expression
   );
 
   { tortue }
@@ -152,6 +175,7 @@ resourcestring
   { message d'erreur }
 
   ME_None = 'Pas d''erreur à signaler.';
+  ME_InternalError = 'ERREUR INCONNUE (erreur interne).';
   
   // ************* GVList et GVPropList *************
   
@@ -176,17 +200,23 @@ resourcestring
 
   // ************* GVEval *************
 
+  ME_NoInit = 'La valeur à évaluer n''a pas été initialisée.';
   ME_BadChar2 = 'Caractère interdit ou inconnu dans "%s".';
   ME_ClosePar = 'Parenthèse fermante absente dans "%s".';
   ME_BadNumber2 = 'Le nombre "%s" est incorrect.';
-  ME_BadVar = 'La variable "%s" est inconnue ou incorrecte.';
-  ME_BadFunction = 'La fonction "%s" est inconnue.';
+  ME_BadVar = 'La variable "%s" est incorrecte.';
+  ME_UnknownVar = 'La variable "%s" est inconnue.';
+  ME_BadFunction = 'La fonction "%s" est inconnue ou inappropriée.';
   ME_NoArg = 'Il manque un argument pour "%s".';
   ME_BadExp = 'Il y a une expression incorrecte dans "%s".';
   ME_Zero = 'Les divisions par zéro sont impossibles. (%s)';
-  ME_NegNumber = 'Un nombre négatif est interdit pour %s';
-  
-  { primitives }
+  ME_NegNumber = 'Un nombre négatif est interdit pour %s.';
+  ME_OutOfRange = 'Evaluation hors limites : %d pour "%s."';
+  ME_OutOfRange2 = 'Evaluation hors limites : élément %d de "%s."';
+
+  // ************* PRIMITIVES *************
+
+  { primitives de base }
 
   P_First = 'PREMIER';
   P_Last = 'DERNIER';
@@ -197,12 +227,6 @@ resourcestring
 
   { noms des fonctions mathématiques}
   
-  MF_DSum = 'SOMME'; // addition
-  MF_DSub = 'DIFF'; // différence
-  MF_DSub2 = 'DIFFERNCE';
-  MF_DMul = 'PRODUIT'; // multiplication
-  MF_DDiv = 'DIV'; // division
-  MF_DDiv2 = 'DIVISE';
   MF_DAbs = 'ABS'; // valeur absolue
   MF_DAbs2 = 'ABSOLUE';
   MF_DCos = 'COS'; // cosinus
@@ -234,68 +258,73 @@ resourcestring
   MF_DMinus = 'NEGATIF'; // nombre négatif
   MF_DPLus = 'POSITIF'; // nombre positif
   MF_DNegate = 'OPPOSE'; // signe inversé
-  MF_DEqual = 'EGAL'; // égalité
-  MF_DInf = 'INF'; // infériorité
-  MF_DInf2 = 'INFERIEUR';
-  MF_DSup = 'SUP'; // supériorité
-  MF_DSup2 = 'SUPERIEUR';
   MF_DMax = 'MAX'; // maximum
   MF_DMax2 = 'MAXIMUM';
   MF_DMin = 'MIN'; // minimum
   MF_DMin2 = 'MINIMUM';
-  MF_DPi = 'PI'; // PI sur la pile
   MF_DSign = 'SIGNE'; // signe
   MF_DRandom = 'HASARD'; // nombre au hasard
- 
+  // fonctions sans paramètres
+  MF_DPi = 'PI'; // PI sur la pile
+  MF_True = 'VRAI'; // valeur vrai
+  MF_False = 'FAUX'; // valeur faux
+
  // ************* GVEval *************
  
  type
-  // ensemble des fonctions mathématiques
-  TGVFunctions = (C_DSum, // addition
-    C_DSub, // différence
-    C_DSub2, C_DMul, // multiplication
-    C_DDiv, // division
-    C_DDiv2, C_DAbs, // valeur absolue
-    C_DAbs2, C_DCos, // cosinus
-    C_DCos2, C_DSin, // sinus
-    C_DSin2, C_DTan, // tangente
-    C_DTan2, C_DSqrt, // racine carrée
-    C_DSqrt2, C_DTrunc, // nombre tronqué
+  // ensemble des fonctions mathématiques de base
+  TGVFunctions = (
+    C_DAbs, // valeur absolue
+    C_DAbs2,
+    C_DCos, // cosinus
+    C_DCos2,
+    C_DSin, // sinus
+    C_DSin2,
+    C_DTan, // tangente
+    C_DTan2,
+    C_DSqrt, // racine carrée
+    C_DSqrt2,
+    C_DTrunc, // nombre tronqué
     C_DRound, // nombre arrondi
     C_DSqr, // nombre au carré
     C_DExp, // exponentielle
     C_DFrac, // partie fractionnelle
     C_DInt, // partie entière
-    C_DInt2, C_DLn, // log népérien
+    C_DInt2,
+    C_DLn, // log népérien
     C_DLog2, // log base 2
     C_DLog10, // log base 100
     C_DCoTan, // cotangente
-    C_DCoTan2, C_DHypot, // hypothénuse
+    C_DCoTan2,
+    C_DHypot, // hypothénuse
     C_DArcCos, // arc cosinus
-    C_DArcCos2, C_DArcSin, // arc sinus
-    C_DArcSin2, C_DPower, // puissance
+    C_DArcCos2,
+    C_DArcSin, // arc sinus
+    C_DArcSin2,
+    C_DPower, // puissance
     C_Minus, // négatif
     C_Plus, // positif
     C_DNegate, // signe inversé
-    C_DEqual, // égalité sur pile
-    C_DInf, // infériorité sur pile
-    C_DInf2, C_DSup, // supériorité sur pile
-    C_DSup2, C_DMax, // maximum
-    C_DMax2, C_DMin, // minimum
-    C_DMin2, C_DPi, // PI sur la pile
+    C_DMax, // maximum
+    C_DMax2,
+    C_DMin, // minimum
+    C_DMin2,
     C_DSign, // signe
-    C_DRandom); // nombre au hasard
+    C_DRandom, // nombre au hasard
+    C_DPi, // PI sur la pile
+    C_True, // vrai
+    C_False // faux
+   );
 
 const
   // tableau du nom des fonctions
-  GVFunctionName: array [TGVFunctions] of string = (MF_DSum, MF_DSub, MF_DSub2,
-    MF_DMul, MF_DDiv, MF_DDiv2, MF_DAbs, MF_DAbs2, MF_DCos, MF_DCos2, MF_DSin,
-    MF_DSin2, MF_DTan, MF_DTan2, MF_DSqrt, MF_DSqrt2, MF_DTrunc, MF_DRound,
-    MF_DSqr, MF_DExp, MF_DFrac, MF_DInt, MF_DInt2, MF_DLn, MF_DLog2, MF_DLog10,
-    MF_DCoTan, MF_DCoTan2, MF_DHypot, MF_DArcCos, MF_DArcCos2, MF_DArcSin,
-    MF_DArcSin2, MF_DPower, MF_DMinus, MF_DPLus, MF_DNegate, MF_DEqual, MF_DInf,
-    MF_DInf2, MF_DSup, MF_DSup2, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2, MF_DPi,
-    MF_DSign, MF_DRandom);
+  GVFunctionName: array [TGVFunctions] of string = (MF_DAbs, MF_DAbs2, MF_DCos,
+    MF_DCos2, MF_DSin, MF_DSin2, MF_DTan, MF_DTan2, MF_DSqrt, MF_DSqrt2,
+    MF_DTrunc, MF_DRound, MF_DSqr, MF_DExp, MF_DFrac, MF_DInt, MF_DInt2,
+    MF_DLn, MF_DLog2, MF_DLog10, MF_DCoTan, MF_DCoTan2, MF_DHypot, MF_DArcCos,
+    MF_DArcCos2, MF_DArcSin, MF_DArcSin2, MF_DPower, MF_DMinus, MF_DPLus,
+    MF_DNegate, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2, MF_DSign, MF_DRandom,
+    MF_DPi, MF_True, MF_False);
 	
 implementation
 
