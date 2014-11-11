@@ -48,18 +48,18 @@
         <UnitName Value="Main"/>
       </Unit1>
       <Unit2>
-        <Filename Value="..\..\units\GVConsts.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="GVConsts"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="..\..\units\GVDefines.inc"/>
-        <IsPartOfProject Value="True"/>
-      </Unit3>
-      <Unit4>
         <Filename Value="Tokens2\gvtokens2.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GVTokens2"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="..\..\..\units\GVDefines.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="..\..\..\units\GVConsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVConsts"/>
       </Unit4>
     </Units>
   </ProjectOptions>
@@ -70,8 +70,8 @@
       <Filename Value="TestGVEval"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir);..\..\units"/>
-      <OtherUnitFiles Value="..\..\units;Tokens2"/>
+      <IncludeFiles Value="$(ProjOutDir);..\..\..\units"/>
+      <OtherUnitFiles Value="Tokens2;..\..\..\units"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

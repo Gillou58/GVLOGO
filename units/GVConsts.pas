@@ -53,6 +53,7 @@ const
   CAsk = '?';
   CQuote = '"';
   CColon = ':';
+  CComma = ',';
   CExclamation = '!';
     
   // ************* GVEval *************
@@ -61,7 +62,7 @@ type
   CTokensEnum = (cteNumber, cteVar, cteFunction, cteBeginExp, cteEndExp, ctePlus,
     cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual, cteNotEqual,
     cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteAnd, cteOr, cteNot, cteEnd,
-    cteUnKnown);
+    cteOrB, cteAndB, cteUnKnown);
 
 const
   CPlus = '+'; // addition
@@ -73,6 +74,10 @@ const
   CLower = '<'; // plus petit
   CEqual = '='; // égal
   CNotEqual = '<>'; // différent
+  CNotEqual2 = '!='; // différent (2)
+  CNot = '!'; // négation
+  COrB = '|'; // ou binaire
+  CAndB = '&'; // et binaire
   CGreaterOrEqual = '>='; // plus grand ou égal
   CLowerOrEqual = '<='; // plus petit ou égal
   // caractères spéciaux
@@ -148,7 +153,6 @@ type
   C_NoInit, // valeur non initialisée
   C_BadChar2, // caractère interdit ou inconnu
   C_ClosePar, // parenthèse fermante absente
-  C_BadNumber2, // nombre incorrect
   C_BadVar, // variable incorrecte
   C_UnknownVar, // variable inconnue
   C_BadFunction, // fonction inconnue
@@ -179,18 +183,18 @@ resourcestring
   
   // ************* GVList et GVPropList *************
   
-  ME_BadNumber = 'L''objet %s n''est pas un nombre correct.';
-  ME_BadInt = 'L''objet %s n''est pas un entier correct.';
-  ME_EmptyStr = 'Le mot vide ne convient pas pour la primitive %s.';
-  ME_BadChar = 'Le mot %s est trop court pour en traiter l''élément %d.';
-  ME_BadList = 'La liste %s est incorrecte.';
+  ME_BadNumber = 'Le nombre "%s" est incorrect.';
+  ME_BadInt = '"%s" n''est pas un entier correct.';
+  ME_EmptyStr = 'Le mot vide ne convient pas pour la primitive "%s".';
+  ME_BadChar = 'Le mot "%s" est trop court pour en traiter l''élément %d.';
+  ME_BadList = 'La liste "%s" est incorrecte.';
   ME_DelItem = 'L''élément %d n''existe pas pour une suppression.';
   ME_InsItem = 'L''élément %d n''existe pas pour une insertion.';
   ME_ReplaceItem = 'L''élément %d n''existe pas pour un remplacement.';
-  ME_NoListWord = '%s n''est ni une liste ni un mot corrects.';
+  ME_NoListWord = '"%s" n''est ni une liste ni un mot corrects.';
   ME_TwoDelete = 'La liste ne contient pas assez d''éléments pour en supprimer deux à partir de %d.';
   ME_BadListP = 'La liste de propriétés %d est introuvable.';
-  ME_BadFormat = 'Le format du fichier %s est incorrect : %s.';
+  ME_BadFormat = 'Le format du fichier "%s" est incorrect : %s.';
   
   // ************* GVStacks *************
   
@@ -203,16 +207,15 @@ resourcestring
   ME_NoInit = 'La valeur à évaluer n''a pas été initialisée.';
   ME_BadChar2 = 'Caractère interdit ou inconnu dans "%s".';
   ME_ClosePar = 'Parenthèse fermante absente dans "%s".';
-  ME_BadNumber2 = 'Le nombre "%s" est incorrect.';
   ME_BadVar = 'La variable "%s" est incorrecte.';
   ME_UnknownVar = 'La variable "%s" est inconnue.';
-  ME_BadFunction = 'La fonction "%s" est inconnue ou inappropriée.';
+  ME_BadFunction = 'La fonction "%s" est inappropriée.';
   ME_NoArg = 'Il manque un argument pour "%s".';
   ME_BadExp = 'Il y a une expression incorrecte dans "%s".';
-  ME_Zero = 'Les divisions par zéro sont impossibles. (%s)';
-  ME_NegNumber = 'Un nombre négatif est interdit pour %s.';
-  ME_OutOfRange = 'Evaluation hors limites : %d pour "%s."';
-  ME_OutOfRange2 = 'Evaluation hors limites : élément %d de "%s."';
+  ME_Zero = 'Les divisions par zéro sont impossibles. ("%s")';
+  ME_NegNumber = 'Un nombre négatif est interdit pour "%s".';
+  ME_OutOfRange = 'Evaluation hors limites : %d pour "%s".';
+  ME_OutOfRange2 = 'Evaluation hors limites : élément %d de "%s".';
 
   // ************* PRIMITIVES *************
 
@@ -268,6 +271,11 @@ resourcestring
   MF_DPi = 'PI'; // PI sur la pile
   MF_True = 'VRAI'; // valeur vrai
   MF_False = 'FAUX'; // valeur faux
+  // fonctions infixées
+  MF_Or = 'OU'; // ou logique
+  MF_And = 'ET'; // et logique
+  MF_Mod = 'MOD'; // modulo
+  Mf_Not = 'NON'; // négation
 
  // ************* GVEval *************
  
@@ -313,7 +321,11 @@ resourcestring
     C_DRandom, // nombre au hasard
     C_DPi, // PI sur la pile
     C_True, // vrai
-    C_False // faux
+    C_False, // faux
+    C_Or, // ou
+    C_And, // et
+    C_Mod, // mod
+    C_Not // not
    );
 
 const
@@ -324,7 +336,7 @@ const
     MF_DLn, MF_DLog2, MF_DLog10, MF_DCoTan, MF_DCoTan2, MF_DHypot, MF_DArcCos,
     MF_DArcCos2, MF_DArcSin, MF_DArcSin2, MF_DPower, MF_DMinus, MF_DPLus,
     MF_DNegate, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2, MF_DSign, MF_DRandom,
-    MF_DPi, MF_True, MF_False);
+    MF_DPi, MF_True, MF_False, MF_Or, MF_And, MF_Mod, MF_Not);
 	
 implementation
 

@@ -79,7 +79,7 @@ begin
     if Toks.Error = C_None then // pas d'erreur ?
       for Item in Toks do  // on énumère
         Memo1.Lines.Add(Item.Token); // éléments dans le mémo
-    Label3.Caption := IntToStr(Toks.ErrorPos); // position d'une erreur
+    Label3.Caption := IntToStr(Ord(Toks.Error)); // position d'une erreur
   finally
     Toks.Free;  // libération de l'objet
   end;
