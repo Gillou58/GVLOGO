@@ -6,6 +6,8 @@ object MainForm: TMainForm
   Caption = 'Test de TGVTokens2 - Gilles Vasseur 2014 - GVLOGO'
   ClientHeight = 690
   ClientWidth = 849
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   Position = poScreenCenter
   LCLVersion = '1.2.6.0'
   object Edit1: TEdit
@@ -49,12 +51,12 @@ object MainForm: TMainForm
     Left = 392
     Height = 15
     Top = 104
-    Width = 105
-    Caption = 'Position de l''erreur :'
+    Width = 134
+    Caption = 'Position de fin d''analyse :'
     ParentColor = False
   end
   object Label3: TLabel
-    Left = 512
+    Left = 552
     Height = 15
     Top = 104
     Width = 11

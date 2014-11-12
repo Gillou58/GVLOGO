@@ -52,8 +52,14 @@ type
     Label3: TLabel;
     Memo1: TMemo;
     procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { private declarations }
+    Toks: TGVTokens2;
+    procedure GetVar(Sender: TObject; VarName: string; var
+    Value: Double; var Error: TGVError); // gestionnaire de variables
+    procedure GetError(Sender: TObject); // gestionnaire d'erreurs
   public
     { public declarations }
   end;
@@ -70,19 +76,43 @@ implementation
 procedure TMainForm.Button1Click(Sender: TObject);
 // éléments de la chaîne de l'éditeur
 var
-  Toks: TGVTokens2;
   Item: TGVBaseItem;
 begin
   Memo1.Clear; // on nettoie le mémo
-  Toks := TGVTokens2.Create(Edit1.Text); // objet créé
-  try
-    if Toks.Error = C_None then // pas d'erreur ?
-      for Item in Toks do  // on énumère
-        Memo1.Lines.Add(Item.Token); // éléments dans le mémo
-    Label3.Caption := IntToStr(Ord(Toks.Error)); // position d'une erreur
-  finally
-    Toks.Free;  // libération de l'objet
-  end;
+  Toks.Text := Edit1.Text; // texte en place
+  Toks.Tokenize;  // valeur évaluée
+  if Toks.Error = C_None then // pas d'erreur ?
+    for Item in Toks do  // on énumère
+      Memo1.Lines.Add(Item.Token); // éléments dans le mémo
+  Label3.Caption := IntToStr(Ord(Toks.Indx)); // position en fin d'analyse
+end;
+
+procedure TMainForm.FormCreate(Sender: TObject);
+// création de la fenêtre
+begin
+  Toks := TGVTokens2.Create; // objet créé
+  Toks.OnGetVar:= @GetVar; // gestionnaire d'événement pour les variables
+  Toks.OnError := @GetError; // gestionnaire d'erreurs
+end;
+
+procedure TMainForm.FormDestroy(Sender: TObject);
+// destruction de la fenêtre
+begin
+  Toks.Free;
+end;
+
+procedure TMainForm.GetVar(Sender: TObject; VarName: string; var Value: Double;
+  var Error: TGVError);
+// événement concernant les variables *** essai ***
+begin
+  Value := 100;
+  Error := C_None;
+end;
+
+procedure TMainForm.GetError(Sender: TObject);
+// gestionnaire d'erreurs
+begin
+  Memo1.Lines.Add('< ERREUR : ' + Toks.Item + '>');
 end;
 
 end.
