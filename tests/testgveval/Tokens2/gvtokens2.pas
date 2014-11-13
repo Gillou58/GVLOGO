@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    13-11-2014 15:50:20                          |
+  |                  Date:    13-11-2014 17:40:20                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -184,9 +184,11 @@ begin
 end;
 
 function TGVTokens2.GetItem(N: Integer): TGVBaseItem;
-// *** revoie d'un élément ***
+// *** renvoie d'un élément ***
 begin
-  Result := fItemList[N];
+  if (N < 1) or (N > Count) then // hors limites ?
+    raise EEvalException.CreateFmt(ME_OutOfRange, [N, Text]); // erreur
+  Result := fItemList[N-1]; // base 1
 end;
 
 constructor TGVTokens2.Create;

@@ -124,10 +124,10 @@ procedure TMainForm.GetError(Sender: TObject);
 begin
   with Toks do
   begin
-    Memo1.Lines.Add('< *** ERREUR *** : ' + Item[Count-1].Token + ' > Position : '
-   + IntToStr(Indx));
+    Memo1.Lines.Add('< *** ERREUR *** :   ' + Item[Count].Token + ' > Position : '
+   + IntToStr(Indx)); // la base est de 1
     Memo1.Lines.Add('Message : ' + Format(GVErrorName[Error],
-     [Item[Count-1].Token]));
+     [Item[Count].Token]));
   end;
 end;
 
@@ -140,9 +140,9 @@ const
     'cteGreaterOrEqual', 'cteLowerOrEqual', 'cteMod', 'cteAnd', 'cteOr',
     'cteNot', 'cteEnd', 'cteOrB', 'cteAndB', 'cteUnKnown', 'cteForbidden');
 begin
-  with Toks do
-  Memo1.Lines.Add('< AJOUT : ' + Item[Count-1].Token +
-    ' > ## ' + TypArray[Item[Count-1].Kind] + ' ##');
+  with Toks do // la base est de 1
+    Memo1.Lines.Add('< AJOUT : ' + Format('%15s',[Item[Count].Token]) +
+      ' --> ' + Format('%15s',[TypArray[Item[Count].Kind]]) + '<--');
 end;
 
 end.
