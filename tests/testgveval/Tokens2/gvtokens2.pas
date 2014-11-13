@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    13-11-2014 09:02:20                          |
+  |                  Date:    13-11-2014 15:50:20                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -272,7 +272,7 @@ begin
   Res := 0; // résultat par défaut
   Err := C_None; // pas d'erreur par défaut
   Inc(fIndx); // on passe au caractère suivant
-  IndxTmp := fIndx; // on sauvegarde la position du pointeur si erreur
+  IndxTmp := Indx; // on sauvegarde la position du pointeur si erreur
   // on recherche le nom de la variable (: déjà traité)
   // le premier caractère doit être une lettre
   {$IFDEF Delphi}
@@ -332,20 +332,50 @@ procedure TGVTokens2.GetFunction;
 // *** recherche d'une fonction ***  #### PROVISOIRE ####
 var
   St: string;
+  IndxTmp: Integer;
+  I,Where: TGVFunctions;
 begin
  St := EmptyStr; // initialisation
+ IndxTmp := Indx; // pointeur conservé
+ Where := C_Unknown; // fonction inconnue
  // la fonction est composée de caractères alphanumériques
-  {$IFDEF Delphi}
-  while (Indx <= Length(Text)) and CharInSet(Text[Indx], CAlphaNum) do
-  {$ELSE}
-  while (Indx <= Length(Text)) and (Text[Indx] in CAlphaNum) do
-  {$ENDIF}
-  begin
-    St := St + Text[Indx]; // on stocke le caractère
-    Inc(fIndx); // au suivant
-  end;
-  Dec(fIndx); // on réajuste le pointeur
-  AddItem(St, cteFunction); // élément ajouté
+ {$IFDEF Delphi}
+ while (Indx <= Length(Text)) and CharInSet(Text[Indx], CAlphaNum) do
+ {$ELSE}
+ while (Indx <= Length(Text)) and (Text[Indx] in CAlphaNum) do
+ {$ENDIF}
+ begin
+   St := St + Text[Indx]; // on stocke le caractère
+   Inc(fIndx); // au suivant
+ end;
+ Dec(fIndx); // on réajuste le pointeur
+ for I := Low(TGVFunctions) to High(TGVFunctions) do // on balaie les fonctions
+ begin
+   if AnsiCompareText(St, GVFunctionName[I]) = 0 then // égalité des chaînes ?
+   begin
+     Where := I; // sauvegarde de l'indice
+     Break; // on sort de la boucle
+   end;
+ end;
+ if (Where <> C_Unknown) then // trouvée ?
+ begin
+   case Ord(Where) of
+     0..37: AddItem(AnsiUpperCase(St), cteFunction); // élément ajouté
+     38: AddItem(FloatToStr(Pi), cteNumber); // nombre PI
+     39: AddItem(IntToStr(CRTrue), cteNumber); // valeur VRAI
+     40: AddItem(IntToStr(CRFalse), cteNumber); // valeur FAUX
+     // fonctions infixées
+     41: AddItem(MF_Or, cteOr); // ou logique
+     42: AddItem(MF_And, cteAnd); // et logique
+     43: AddItem(MF_Mod, cteMod); // modulo
+   end;
+ end
+ else
+ begin
+   fIndx := IndxTmp; // on retrouve le début du mot
+   AddItem(AnsiUppercase(St), cteUnknown); // on enregistre l'élément fautif
+   SetError(C_BadFunction); // on signale l'erreur
+ end;
 end;
 
 procedure TGVTokens2.GetNumber;

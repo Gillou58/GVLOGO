@@ -209,7 +209,7 @@ resourcestring
   ME_ClosePar = 'Parenthèse fermante absente dans "%s".';
   ME_BadVar = 'La variable "%s" est incorrecte.';
   ME_UnknownVar = 'La variable "%s" est inconnue.';
-  ME_BadFunction = 'La fonction "%s" est inappropriée.';
+  ME_BadFunction = 'La fonction "%s" est inconnue.';
   ME_NoArg = 'Il manque un argument pour "%s".';
   ME_BadExp = 'Il y a une expression incorrecte dans "%s".';
   ME_Zero = 'Les divisions par zéro sont impossibles. ("%s")';
@@ -229,7 +229,8 @@ resourcestring
   P_False = 'FAUX';
 
   { noms des fonctions mathématiques}
-  
+
+  MF_Unknown = ''; // fonction non définie
   MF_DAbs = 'ABS'; // valeur absolue
   MF_DAbs2 = 'ABSOLUE';
   MF_DCos = 'COS'; // cosinus
@@ -267,6 +268,7 @@ resourcestring
   MF_DMin2 = 'MINIMUM';
   MF_DSign = 'SIGNE'; // signe
   MF_DRandom = 'HASARD'; // nombre au hasard
+  MF_Not = 'NON'; // négation
   // fonctions sans paramètres
   MF_DPi = 'PI'; // PI sur la pile
   MF_True = 'VRAI'; // valeur vrai
@@ -275,13 +277,14 @@ resourcestring
   MF_Or = 'OU'; // ou logique
   MF_And = 'ET'; // et logique
   MF_Mod = 'MOD'; // modulo
-  Mf_Not = 'NON'; // négation
+
 
  // ************* GVEval *************
  
  type
   // ensemble des fonctions mathématiques de base
   TGVFunctions = (
+    C_Unknown, // fonction inconnue
     C_DAbs, // valeur absolue
     C_DAbs2,
     C_DCos, // cosinus
@@ -318,14 +321,14 @@ resourcestring
     C_DMin, // minimum
     C_DMin2,
     C_DSign, // signe
-    C_DRandom, // nombre au hasard
+    C_DRandom, // nombre au hasard,
+    C_Not, // not
     C_DPi, // PI sur la pile
     C_True, // vrai
     C_False, // faux
     C_Or, // ou
     C_And, // et
-    C_Mod, // mod
-    C_Not // not
+    C_Mod // mod
    );
 
 const
@@ -338,13 +341,13 @@ const
     ME_NoArg, ME_BadExp, ME_Zero, ME_NegNumber, ME_OutOfRange, ME_OutOfRange2);
 
   // tableau du nom des fonctions
-  GVFunctionName: array [TGVFunctions] of string = (MF_DAbs, MF_DAbs2, MF_DCos,
-    MF_DCos2, MF_DSin, MF_DSin2, MF_DTan, MF_DTan2, MF_DSqrt, MF_DSqrt2,
-    MF_DTrunc, MF_DRound, MF_DSqr, MF_DExp, MF_DFrac, MF_DInt, MF_DInt2,
-    MF_DLn, MF_DLog2, MF_DLog10, MF_DCoTan, MF_DCoTan2, MF_DHypot, MF_DArcCos,
-    MF_DArcCos2, MF_DArcSin, MF_DArcSin2, MF_DPower, MF_DMinus, MF_DPLus,
-    MF_DNegate, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2, MF_DSign, MF_DRandom,
-    MF_DPi, MF_True, MF_False, MF_Or, MF_And, MF_Mod, MF_Not);
+  GVFunctionName: array [TGVFunctions] of string = (MF_Unknown, MF_DAbs,
+    MF_DAbs2, MF_DCos, MF_DCos2, MF_DSin, MF_DSin2, MF_DTan, MF_DTan2, MF_DSqrt,
+    MF_DSqrt2, MF_DTrunc, MF_DRound, MF_DSqr, MF_DExp, MF_DFrac, MF_DInt,
+    MF_DInt2, MF_DLn, MF_DLog2, MF_DLog10, MF_DCoTan, MF_DCoTan2, MF_DHypot,
+    MF_DArcCos, MF_DArcCos2, MF_DArcSin, MF_DArcSin2, MF_DPower, MF_DMinus,
+    MF_DPLus, MF_DNegate, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2, MF_DSign,
+    MF_DRandom, MF_Not, MF_DPi, MF_True, MF_False, MF_Or, MF_And, MF_Mod);
 	
 implementation
 
