@@ -16,7 +16,7 @@ object MainForm: TMainForm
     Top = 52
     Width = 720
     TabOrder = 0
-    Text = '(45*rac(78))+(78.45/4)>0'
+    Text = '(45*rac(78))+(78.45/4)>:var1'
   end
   object Label1: TLabel
     Left = 34

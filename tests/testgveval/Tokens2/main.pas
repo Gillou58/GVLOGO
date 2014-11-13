@@ -60,6 +60,7 @@ type
     procedure GetVar(Sender: TObject; VarName: string; var
     Value: Double; var Error: TGVError); // gestionnaire de variables
     procedure GetError(Sender: TObject); // gestionnaire d'erreurs
+    procedure GetChange(Sender: TObject); // gestionnaire de changement
   public
     { public declarations }
   end;
@@ -82,8 +83,13 @@ begin
   Toks.Text := Edit1.Text; // texte en place
   Toks.Tokenize;  // valeur évaluée
   if Toks.Error = C_None then // pas d'erreur ?
+  begin
+    Memo1.Lines.Add(EmptyStr);
+    Memo1.Lines.Add('*** LISTE des ELEMENTS ***');
+    Memo1.Lines.Add(EmptyStr);
     for Item in Toks do  // on énumère
       Memo1.Lines.Add(Item.Token); // éléments dans le mémo
+  end;
   Label3.Caption := IntToStr(Ord(Toks.Indx)); // position en fin d'analyse
 end;
 
@@ -93,26 +99,50 @@ begin
   Toks := TGVTokens2.Create; // objet créé
   Toks.OnGetVar:= @GetVar; // gestionnaire d'événement pour les variables
   Toks.OnError := @GetError; // gestionnaire d'erreurs
+  Toks.OnChange := @GetChange; // gestionnaire de changement
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 // destruction de la fenêtre
 begin
-  Toks.Free;
+  Toks.Free; // libération de l'objet
 end;
 
 procedure TMainForm.GetVar(Sender: TObject; VarName: string; var Value: Double;
   var Error: TGVError);
 // événement concernant les variables *** essai ***
 begin
-  Value := 100;
-  Error := C_None;
+  Value := 100; // une seule valeur
+  if VarName = 'var1' then
+    Error := C_None
+  else
+    Error := C_UnKnownVar;
 end;
 
 procedure TMainForm.GetError(Sender: TObject);
 // gestionnaire d'erreurs
 begin
-  Memo1.Lines.Add('< ERREUR : ' + Toks.Item + '>');
+  with Toks do
+  begin
+    Memo1.Lines.Add('< *** ERREUR *** : ' + Item[Count-1].Token + ' > Position : '
+   + IntToStr(Indx));
+    Memo1.Lines.Add('Message : ' + Format(GVErrorName[Error],
+     [Item[Count-1].Token]));
+  end;
+end;
+
+procedure TMainForm.GetChange(Sender: TObject);
+// gestionnaire de changement
+const
+  TypArray: array[CTokensEnum] of string = ('cteNumber', 'cteVar', 'cteFunction',
+    'cteBeginExp', 'cteEndExp', 'ctePlus', 'cteMinus', 'cteMul', 'cteDiv',
+    'ctePower', 'cteGreater', 'cteLower', 'cteEqual', 'cteNotEqual',
+    'cteGreaterOrEqual', 'cteLowerOrEqual', 'cteMod', 'cteAnd', 'cteOr',
+    'cteNot', 'cteEnd', 'cteOrB', 'cteAndB', 'cteUnKnown', 'cteForbidden');
+begin
+  with Toks do
+  Memo1.Lines.Add('< AJOUT : ' + Item[Count-1].Token +
+    ' > ## ' + TypArray[Item[Count-1].Kind] + ' ##');
 end;
 
 end.

@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    11-11-2014 16:15:20                          |
+  |                  Date:    13-11-2014 09:02:20                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -75,14 +75,16 @@ type
 
   TGVTokens2 = class(TObject)
   private
+    fOnChange: TNotifyEvent; // gestionnaire de changements
     fOnError: TNotifyEvent; // gestionnaire d'erreurs
     fOnGetVar: TGVGetVarEvent; // événement concernant les variables
     fText: string; // texte à analyser
-    fItem: string; // élément en cours
     fIndx: Integer; // index dans la lecture
     fStartIndx: Integer; // index de départ dans la chaîne de travail
     fItemList: TGVItems; // éléments de la chaîne de travail
     fError: TGVError; // erreur en cours
+    function GetCount: Integer;
+    function GetItem(N: Integer): TGVBaseItem;
     procedure SetStartIndx(AValue: Integer); // index de départ fixé
     procedure SetText(const AValue: string); // texte en cours fixé
     procedure SetError(const Err: TGVError); // erreur fixée
@@ -90,12 +92,13 @@ type
   protected
     // ajoute un élément
     procedure AddItem(const AItem: string; AKind: CTokensEnum); virtual;
-    procedure GetVar; // traitement des variables
-    procedure GetFunction; // traitement des fonctions
-    procedure GetNumber; // traitement des nombres
+    procedure GetVar; virtual; // traitement des variables
+    procedure GetFunction; virtual; // traitement des fonctions
+    procedure GetNumber; virtual; // traitement des nombres
     procedure GetDelimGreater; // plus grand ou >=
     procedure GetDelimLower; // plus petit ou <=
-    procedure GetDelim(AKInd: CTokensEnum); // traitement des délimiteurs
+    procedure GetDelimNot; // non ou !=
+    procedure Change; // notification de changement
   public
     constructor Create; overload; // constructeur simple
     // constructeur avec initialisation
@@ -104,15 +107,18 @@ type
     function GetEnumerator: TGVTokensEnumerator; // énumération
     procedure Tokenize; // répartition en éléments
     property Text: string read fText write SetText; // expression à analyser
-    property Item: string read fItem; // élément en cours
     // index de départ
     property StartIndx: Integer read fStartIndx write SetStartIndx default 1;
-    property Indx: Integer read fIndx default -1; // index en cours
+    property Indx: Integer read fIndx default -1; // index en cours dans la chaîne
+    property Count: Integer read GetCount; // nombre d'éléments
+    property Item[N: Integer]: TGVBaseItem read GetItem; default; // liste des éléments
     property Error: TGVError read fError default C_NoInit; // erreur en cours
     // événement lié à une erreur
     property OnError: TNotifyEvent read fOnError write fOnError;
     // événement lié à la recherche d'une variable
     property OnGetVar: TGVGetVarEvent read fOnGetVar write fOnGetVar;
+    // événement lié à un changement
+    property OnChange: TNotifyEvent read fOnChange write fOnChange;
   end;
 
 implementation
@@ -134,15 +140,15 @@ begin
   fError := Err; // erreur stockée
   if fError <> C_None then
   begin  // erreur réelle ?
-    WipeItems; // on nettoie le tableau
-    // événement erreur
-    if Assigned(OnError) then
+    Dec(fIndx); // ajustement du pointeur
+    if Assigned(OnError) then // événement erreur
       OnError(Self);
+    WipeItems; // on nettoie le tableau
   end;
 end;
 
 procedure TGVTokens2.WipeItems;
-// *** nettoyage du tableau des éléments
+// *** nettoyage du tableau des éléments ***
 begin
   SetLength(fItemList, 0);
 end;
@@ -156,8 +162,8 @@ begin
     Token := AItem; // valeur de l'élément
     Kind := AKind; // catégorie de l'élément
   end;
-  fItem := AItem; // élément en cours
   Inc(fIndx); // caractère suivant
+  Change; // changement notifié
 end;
 
 procedure TGVTokens2.SetStartIndx(AValue: Integer);
@@ -169,6 +175,18 @@ begin
   if (AValue < 1) or (AValue > Length(fText)) then
     raise EEvalException.CreateFmt(ME_OutOfRange, [AValue, Text]);
   fStartIndx := AValue; // nouvelle valeur de l'index
+end;
+
+function TGVTokens2.GetCount: Integer;
+// *** nombre d'éléments ***
+begin
+  Result := Length(fItemList);
+end;
+
+function TGVTokens2.GetItem(N: Integer): TGVBaseItem;
+// *** revoie d'un élément ***
+begin
+  Result := fItemList[N];
 end;
 
 constructor TGVTokens2.Create;
@@ -229,14 +247,14 @@ begin
      CGreater: GetDelimGreater; // plus grand ou >=
      CLower: GetDelimLower; // plus petit ou <= ou <>
      CEqual: AddItem(CEqual, cteEqual); // égal
-     CNot: AddItem(CNot, cteNot); // négation ou !=
+     CNot: GetDelimNot; // négation ou !=
      COrB: AddItem(COrB, cteOrB); // ou logique |
      CAndB: AddItem(CAndB, cteAndB); // et logique &
      CBeginPar: AddItem(CBeginPar, cteBeginExp); // parenthèse ouvrante
      CEndPar: AddItem(CEndPar, cteEndExp); // parenthèse fermante
      'a'..'z', 'A'..'Z': GetFunction; // fonction
    else
-     fItem := Ch; // enregistre le caractère interdit
+     AddItem(Ch, cteUnknown); // enregistre le caractère interdit
      SetError(C_BadChar); // caractère interdit
    end;
  end;
@@ -247,15 +265,20 @@ procedure TGVTokens2.GetVar;
 var
   St: string;
   Res: Double;
+  Err: TGVError;
+  IndxTmp: Integer;
 begin
   St := EmptyStr; // initialisation de la chaîne de travail
   Res := 0; // résultat par défaut
-  // on recherche le nom de la variable (: déjà traité)
+  Err := C_None; // pas d'erreur par défaut
   Inc(fIndx); // on passe au caractère suivant
+  IndxTmp := fIndx; // on sauvegarde la position du pointeur si erreur
+  // on recherche le nom de la variable (: déjà traité)
+  // le premier caractère doit être une lettre
   {$IFDEF Delphi}
-  if CharInSet(Text[Indx], CAlpha) then // le premier caractère doit être une lettre
+  if CharInSet(Text[Indx], CAlpha)  and (Indx <= Length(Text)) then
   {$ELSE}
-  if Text[Indx] in CAlpha then
+  if (Text[Indx] in CAlpha) and (Indx <= Length(Text)) then
   {$ENDIF}
   begin
     St := St + Text[Indx]; // on conserve ce caractère
@@ -263,8 +286,12 @@ begin
   end
   else
   begin
-    SetError(C_UnknownVar); // variable inconnue
-    fItem := St; // élément en cours sauvegardé
+    St := CColon;
+    if Indx <= Length(Text) then
+      St := St + Text[Indx]; // on traite le caractère fautif
+    AddItem(St, cteForbidden); // élément en cours sauvegardé
+    fIndx := IndxTmp; // on retrouve le début de la variable
+    SetError(C_BadVar); // variable incorrecte
     Exit;
   end;
   // la suite peut être un caractère alphanumérique
@@ -283,12 +310,17 @@ begin
     if (Error = C_None) then // pas d'erreur ?
     begin
       // recherche de la variable et de sa valeur
-      OnGetVar(Self, St, Res, fError);
+      OnGetVar(Self, St, Res, Err);
       Dec(fIndx); // réajustement du pointeur
-      if (Error = C_None) then // pas d'erreur ?
+      if (Err = C_None) then // pas d'erreur ?
         AddItem(FloatToStr(Res), cteVar) // on enregistre sa valeur et sa catégorie
       else
-        SetError(Error); // on renvoie l'erreur
+      begin
+        St := CColon + St; // on replace les deux points
+        AddItem(St, cteUnknown); // enregistre l'élément fautif
+        fIndx := IndxTmp; // on retrouve le début de la variable
+        SetError(Err); // on signale l'erreur
+      end;
     end;
   end
   else
@@ -297,9 +329,23 @@ begin
 end;
 
 procedure TGVTokens2.GetFunction;
-// *** recherche d'une fonction ***
+// *** recherche d'une fonction ***  #### PROVISOIRE ####
+var
+  St: string;
 begin
-  inc(fIndx);
+ St := EmptyStr; // initialisation
+ // la fonction est composée de caractères alphanumériques
+  {$IFDEF Delphi}
+  while (Indx <= Length(Text)) and CharInSet(Text[Indx], CAlphaNum) do
+  {$ELSE}
+  while (Indx <= Length(Text)) and (Text[Indx] in CAlphaNum) do
+  {$ENDIF}
+  begin
+    St := St + Text[Indx]; // on stocke le caractère
+    Inc(fIndx); // au suivant
+  end;
+  Dec(fIndx); // on réajuste le pointeur
+  AddItem(St, cteFunction); // élément ajouté
 end;
 
 procedure TGVTokens2.GetNumber;
@@ -375,10 +421,23 @@ begin
     AddItem(CLower, cteLower); // <
 end;
 
-procedure TGVTokens2.GetDelim(AKInd: CTokensEnum);
-// *** traitement des délimiteurs ***
+procedure TGVTokens2.GetDelimNot;
+// *** négation ou != (différent) ***
 begin
+  if (Indx < Length(Text)) and (Text[Indx + 1] = CEqual) then // != ?
+  begin
+    AddItem(CNotEqual2, cteNotEqual); // on enregistre !=
+    Inc(fIndx); // caractère suivant
+  end
+  else
+    AddItem(CNot, cteNot); // >
+end;
 
+procedure TGVTokens2.Change;
+// *** notification de changement ***
+begin
+  if Assigned(fOnChange) then // le gestionnaire existe-t-il ?
+    fOnChange(Self); // on l'exécute
 end;
 
 { TGVTokensEnumerator }

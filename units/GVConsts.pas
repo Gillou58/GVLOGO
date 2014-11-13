@@ -62,7 +62,7 @@ type
   CTokensEnum = (cteNumber, cteVar, cteFunction, cteBeginExp, cteEndExp, ctePlus,
     cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual, cteNotEqual,
     cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteAnd, cteOr, cteNot, cteEnd,
-    cteOrB, cteAndB, cteUnKnown);
+    cteOrB, cteAndB, cteUnKnown, cteForbidden);
 
 const
   CPlus = '+'; // addition
@@ -329,6 +329,14 @@ resourcestring
    );
 
 const
+  // tableau du nom des erreurs
+  GVErrorName: array[TGVError] of string = (ME_None,ME_InternalError,
+    ME_BadNumber, ME_BadInt, ME_EmptyStr, ME_BadChar, ME_BadList, ME_DelItem,
+    ME_InsItem, ME_ReplaceItem, ME_NoListWord, ME_TwoDelete, ME_BadListP,
+    ME_BadFormat, ME_EmptyStack, ME_OutOfMemory, ME_LowStack, ME_NoInit,
+    ME_BadChar2, ME_ClosePar, ME_BadVar, ME_UnknownVar, ME_BadFunction,
+    ME_NoArg, ME_BadExp, ME_Zero, ME_NegNumber, ME_OutOfRange, ME_OutOfRange2);
+
   // tableau du nom des fonctions
   GVFunctionName: array [TGVFunctions] of string = (MF_DAbs, MF_DAbs2, MF_DCos,
     MF_DCos2, MF_DSin, MF_DSin2, MF_DTan, MF_DTan2, MF_DSqrt, MF_DSqrt2,
