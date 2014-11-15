@@ -59,10 +59,10 @@ const
   // ************* GVEval *************
 type
   // éléments d'une expression à évaluer
-  CTokensEnum = (cteNumber, cteVar, cteFunction, cteBeginExp, cteEndExp, ctePlus,
-    cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual, cteNotEqual,
-    cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteAnd, cteOr, cteNot, cteEnd,
-    cteOrB, cteAndB, cteUnKnown, cteForbidden);
+  CTokensEnum = (cteInteger, cteReal, cteVar, cteFunction, cteBeginExp, cteEndExp,
+    ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
+    cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteAnd, cteOr,
+    cteNot, cteEnd, cteOrB, cteAndB, cteUnKnown, cteForbidden);
 
 const
   CPlus = '+'; // addition

@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    13-11-2014 17:40:20                          |
+  |                  Date:    14-11-2014 11:00:20                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -363,9 +363,9 @@ begin
  begin
    case Ord(Where) of
      0..37: AddItem(AnsiUpperCase(St), cteFunction); // élément ajouté
-     38: AddItem(FloatToStr(Pi), cteNumber); // nombre PI
-     39: AddItem(IntToStr(CRTrue), cteNumber); // valeur VRAI
-     40: AddItem(IntToStr(CRFalse), cteNumber); // valeur FAUX
+     38: AddItem(FloatToStr(Pi), cteReal); // nombre PI
+     39: AddItem(IntToStr(CRTrue), cteInteger); // valeur VRAI
+     40: AddItem(IntToStr(CRFalse), cteInteger); // valeur FAUX
      // fonctions infixées
      41: AddItem(MF_Or, cteOr); // ou logique
      42: AddItem(MF_And, cteAnd); // et logique
@@ -415,10 +415,13 @@ begin
       St := St + Text[Indx]; // on stocke le caractère
       Inc(fIndx); // au suivant
     end;
-  end;
+    // on enregistre le réel
+    AddItem(St, cteReal);
+  end
+  else
+    // on enregistre l'entier
+    AddItem(St, cteInteger);
   Dec(fIndx); // on revient sur le dernier caractère
-  // on enregistre le résultat
-  AddItem(St, cteNumber);
 end;
 
 procedure TGVTokens2.GetDelimGreater;
