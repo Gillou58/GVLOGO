@@ -62,7 +62,7 @@ type
   CTokensEnum = (cteInteger, cteReal, cteVar, cteFunction, cteBeginExp, cteEndExp,
     ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
     cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteAnd, cteOr,
-    cteNot, cteEnd, cteOrB, cteAndB, cteUnKnown, cteForbidden);
+    cteNot, cteEnd, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden);
 
 const
   CPlus = '+'; // addition

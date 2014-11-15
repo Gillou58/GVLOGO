@@ -362,14 +362,14 @@ begin
  if (Where <> C_Unknown) then // trouvée ?
  begin
    case Ord(Where) of
-     0..37: AddItem(AnsiUpperCase(St), cteFunction); // élément ajouté
-     38: AddItem(FloatToStr(Pi), cteReal); // nombre PI
-     39: AddItem(IntToStr(CRTrue), cteInteger); // valeur VRAI
-     40: AddItem(IntToStr(CRFalse), cteInteger); // valeur FAUX
+     0..38: AddItem(AnsiUpperCase(St), cteFunction); // élément ajouté
+     39: AddItem(FloatToStr(Pi), cteReal); // nombre PI
+     40: AddItem(IntToStr(CRTrue), cteBoolean); // valeur VRAI
+     41: AddItem(IntToStr(CRFalse), cteBoolean); // valeur FAUX
      // fonctions infixées
-     41: AddItem(MF_Or, cteOr); // ou logique
-     42: AddItem(MF_And, cteAnd); // et logique
-     43: AddItem(MF_Mod, cteMod); // modulo
+     42: AddItem(MF_Or, cteOr); // ou logique
+     43: AddItem(MF_And, cteAnd); // et logique
+     44: AddItem(MF_Mod, cteMod); // modulo
    end;
  end
  else

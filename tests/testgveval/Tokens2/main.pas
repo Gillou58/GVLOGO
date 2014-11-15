@@ -134,11 +134,12 @@ end;
 procedure TMainForm.GetChange(Sender: TObject);
 // gestionnaire de changement
 const
-  TypArray: array[CTokensEnum] of string = ('cteInteger', 'cteReal', 'cteVar',
-    'cteFunction', 'cteBeginExp', 'cteEndExp', 'ctePlus', 'cteMinus', 'cteMul',
-    'cteDiv', 'ctePower', 'cteGreater', 'cteLower', 'cteEqual', 'cteNotEqual',
-    'cteGreaterOrEqual', 'cteLowerOrEqual', 'cteMod', 'cteAnd', 'cteOr',
-    'cteNot', 'cteEnd', 'cteOrB', 'cteAndB', 'cteUnKnown', 'cteForbidden');
+  TypArray: array[CTokensEnum] of string = ('Integer', 'Real', 'Var',
+    'Function', 'BeginExp', 'EndExp', 'Plus', 'Minus', 'Mul',
+    'Div', 'Power', 'Greater', 'Lower', 'Equal', 'NotEqual',
+    'GreaterOrEqual', 'LowerOrEqual', 'Mod', 'And', 'Or',
+    'Not', 'End', 'OrB', 'AndB', 'Boolean', 'UnKnown',
+    'Forbidden');
 begin
   with Toks do // la base est de 1
     Memo1.Lines.Add('< AJOUT : ' + Format('%-15s',[Item[Count].Token]) +
