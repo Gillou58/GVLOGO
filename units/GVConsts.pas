@@ -62,7 +62,8 @@ type
   CTokensEnum = (cteInteger, cteReal, cteVar, cteFunction, cteBeginExp, cteEndExp,
     ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
     cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteAnd, cteOr,
-    cteNot, cteEnd, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden);
+    cteNot, cteEnd, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden,
+    cteNotSupported);
 
 const
   CPlus = '+'; // addition
@@ -161,7 +162,8 @@ type
   C_Zero, // division par zéro
   C_NegNumber, // nombre négatif interdit
   C_OutOfRange, // index hors limites pour une expression
-  C_OutOfRange2 // élément hors limites d'une expression
+  C_OutOfRange2, // élément hors limites d'une expression
+  C_NotSupported // élément non supporté dans une expression
   );
 
   { tortue }
@@ -216,6 +218,7 @@ resourcestring
   ME_NegNumber = 'Un nombre négatif est interdit pour "%s".';
   ME_OutOfRange = 'Evaluation hors limites : %d pour "%s".';
   ME_OutOfRange2 = 'Evaluation hors limites : élément %d de "%s".';
+  ME_NotSupported = 'On ne peut pas utiliser la fonction "%s" dans une expression.';
 
   // ************* PRIMITIVES *************
 
@@ -258,14 +261,9 @@ resourcestring
   MF_DArcCos2 = 'ARCCOSINUS';
   MF_DArcSin = 'ARCSIN'; // arc sinus
   MF_DArcSin2 = 'ARCSINUS';
-  MF_DPower = 'PUISSANCE'; // puissance
   MF_DMinus = 'NEGATIF'; // nombre négatif
   MF_DPLus = 'POSITIF'; // nombre positif
   MF_DNegate = 'OPPOSE'; // signe inversé
-  MF_DMax = 'MAX'; // maximum
-  MF_DMax2 = 'MAXIMUM';
-  MF_DMin = 'MIN'; // minimum
-  MF_DMin2 = 'MINIMUM';
   MF_DSign = 'SIGNE'; // signe
   MF_DRandom = 'HASARD'; // nombre au hasard
   MF_Not = 'NON'; // négation
@@ -277,7 +275,12 @@ resourcestring
   MF_Or = 'OU'; // ou logique
   MF_And = 'ET'; // et logique
   MF_Mod = 'MOD'; // modulo
-
+  MF_DPower = 'PUISSANCE'; // puissance
+  // deux opératerus
+  MF_DMax = 'MAX'; // maximum
+  MF_DMax2 = 'MAXIMUM';
+  MF_DMin = 'MIN'; // minimum
+  MF_DMin2 = 'MINIMUM';
 
  // ************* GVEval *************
  
@@ -312,14 +315,9 @@ resourcestring
     C_DArcCos2,
     C_DArcSin, // arc sinus
     C_DArcSin2,
-    C_DPower, // puissance
     C_Minus, // négatif
     C_Plus, // positif
     C_DNegate, // signe inversé
-    C_DMax, // maximum
-    C_DMax2,
-    C_DMin, // minimum
-    C_DMin2,
     C_DSign, // signe
     C_DRandom, // nombre au hasard,
     C_Not, // not
@@ -328,7 +326,12 @@ resourcestring
     C_False, // faux
     C_Or, // ou
     C_And, // et
-    C_Mod // mod
+    C_Mod, // mod
+    C_DPower, // puissance
+    C_DMax, // maximum
+    C_DMax2,
+    C_DMin, // minimum
+    C_DMin2
    );
 
 const
@@ -338,16 +341,18 @@ const
     ME_InsItem, ME_ReplaceItem, ME_NoListWord, ME_TwoDelete, ME_BadListP,
     ME_BadFormat, ME_EmptyStack, ME_OutOfMemory, ME_LowStack, ME_NoInit,
     ME_BadChar2, ME_ClosePar, ME_BadVar, ME_UnknownVar, ME_BadFunction,
-    ME_NoArg, ME_BadExp, ME_Zero, ME_NegNumber, ME_OutOfRange, ME_OutOfRange2);
+    ME_NoArg, ME_BadExp, ME_Zero, ME_NegNumber, ME_OutOfRange, ME_OutOfRange2,
+    ME_NotSupported);
 
   // tableau du nom des fonctions
   GVFunctionName: array [TGVFunctions] of string = (MF_Unknown, MF_DAbs,
     MF_DAbs2, MF_DCos, MF_DCos2, MF_DSin, MF_DSin2, MF_DTan, MF_DTan2, MF_DSqrt,
     MF_DSqrt2, MF_DTrunc, MF_DRound, MF_DSqr, MF_DExp, MF_DFrac, MF_DInt,
     MF_DInt2, MF_DLn, MF_DLog2, MF_DLog10, MF_DCoTan, MF_DCoTan2, MF_DHypot,
-    MF_DArcCos, MF_DArcCos2, MF_DArcSin, MF_DArcSin2, MF_DPower, MF_DMinus,
-    MF_DPLus, MF_DNegate, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2, MF_DSign,
-    MF_DRandom, MF_Not, MF_DPi, MF_True, MF_False, MF_Or, MF_And, MF_Mod);
+    MF_DArcCos, MF_DArcCos2, MF_DArcSin, MF_DArcSin2,  MF_DMinus,
+    MF_DPLus, MF_DNegate,  MF_DSign,
+    MF_DRandom, MF_Not, MF_DPi, MF_True, MF_False, MF_Or, MF_And, MF_Mod,
+    MF_DPower, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2);
 	
 implementation
 

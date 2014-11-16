@@ -139,11 +139,11 @@ const
     'Div', 'Power', 'Greater', 'Lower', 'Equal', 'NotEqual',
     'GreaterOrEqual', 'LowerOrEqual', 'Mod', 'And', 'Or',
     'Not', 'End', 'OrB', 'AndB', 'Boolean', 'UnKnown',
-    'Forbidden');
+    'Forbidden', 'NotSupported');
 begin
   with Toks do // la base est de 1
     Memo1.Lines.Add('< AJOUT : ' + Format('%-15s',[Item[Count].Token]) +
-      ' --> ' + Format('%15s',[TypArray[Item[Count].Kind]]) + '  <--');
+      ' --> ' + Format('%-15s',[TypArray[Item[Count].Kind]]) + '  <--');
 end;
 
 end.

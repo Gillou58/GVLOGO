@@ -359,24 +359,33 @@ begin
      Break; // on sort de la boucle
    end;
  end;
- if (Where <> C_Unknown) then // trouvée ?
+ if (Where <> C_Unknown) and (Ord(Where) < Ord(C_DMax)) then // trouvée ?
  begin
    case Ord(Where) of
-     0..38: AddItem(AnsiUpperCase(St), cteFunction); // élément ajouté
-     39: AddItem(FloatToStr(Pi), cteReal); // nombre PI
-     40: AddItem(IntToStr(CRTrue), cteBoolean); // valeur VRAI
-     41: AddItem(IntToStr(CRFalse), cteBoolean); // valeur FAUX
+     0..33: AddItem(AnsiUpperCase(St), cteFunction); // élément ajouté
+     34: AddItem(FloatToStr(Pi), cteReal); // nombre PI
+     35: AddItem(IntToStr(CRTrue), cteBoolean); // valeur VRAI
+     36: AddItem(IntToStr(CRFalse), cteBoolean); // valeur FAUX
      // fonctions infixées
-     42: AddItem(MF_Or, cteOr); // ou logique
-     43: AddItem(MF_And, cteAnd); // et logique
-     44: AddItem(MF_Mod, cteMod); // modulo
+     37: AddItem(MF_Or, cteOr); // ou logique
+     38: AddItem(MF_And, cteAnd); // et logique
+     39: AddItem(MF_Mod, cteMod); // modulo
+     40: AddItem(MF_DPower, ctePower); // puissance
    end;
  end
  else
  begin
    fIndx := IndxTmp; // on retrouve le début du mot
-   AddItem(AnsiUppercase(St), cteUnknown); // on enregistre l'élément fautif
-   SetError(C_BadFunction); // on signale l'erreur
+   if (Where <> C_Unknown) then
+   begin
+     AddItem(AnsiUppercase(St), cteNotSupported); // non supporté dans une expression
+     SetError(C_NotSupported); // on signale l'erreur
+   end
+   else
+   begin
+     AddItem(AnsiUppercase(St), cteUnknown); // on enregistre l'élément fautif
+     SetError(C_BadFunction); // on signale l'erreur
+   end;
  end;
 end;
 
