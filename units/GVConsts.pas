@@ -218,7 +218,7 @@ resourcestring
   ME_NegNumber = 'Un nombre négatif est interdit pour "%s".';
   ME_OutOfRange = 'Evaluation hors limites : %d pour "%s".';
   ME_OutOfRange2 = 'Evaluation hors limites : élément %d de "%s".';
-  ME_NotSupported = 'On ne peut pas utiliser la fonction "%s" dans une expression.';
+  ME_NotSupported = 'La fonction "%s" n''est pas utilisable dans une expression.';
 
   // ************* PRIMITIVES *************
 
@@ -276,7 +276,7 @@ resourcestring
   MF_And = 'ET'; // et logique
   MF_Mod = 'MOD'; // modulo
   MF_DPower = 'PUISSANCE'; // puissance
-  // deux opératerus
+  // deux opérateurs
   MF_DMax = 'MAX'; // maximum
   MF_DMax2 = 'MAXIMUM';
   MF_DMin = 'MIN'; // minimum

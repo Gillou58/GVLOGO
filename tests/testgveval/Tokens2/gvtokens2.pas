@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    14-11-2014 11:00:20                          |
+  |                  Date:    16-11-2014 20:08:20                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -259,7 +259,10 @@ begin
      AddItem(Ch, cteUnknown); // enregistre le caractère interdit
      SetError(C_BadChar); // caractère interdit
    end;
+
  end;
+ if (Error = C_None) then  // une erreur ?
+   AddItem(EmptyStr, cteEnd); // marque de fin
 end;
 
 procedure TGVTokens2.GetVar;
@@ -362,15 +365,16 @@ begin
  if (Where <> C_Unknown) and (Ord(Where) < Ord(C_DMax)) then // trouvée ?
  begin
    case Ord(Where) of
-     0..33: AddItem(AnsiUpperCase(St), cteFunction); // élément ajouté
-     34: AddItem(FloatToStr(Pi), cteReal); // nombre PI
-     35: AddItem(IntToStr(CRTrue), cteBoolean); // valeur VRAI
-     36: AddItem(IntToStr(CRFalse), cteBoolean); // valeur FAUX
+     // élément ajouté
+     Ord(C_DAbs)..Ord(C_Not): AddItem(AnsiUpperCase(St), cteFunction);
+     Ord(C_DPi): AddItem(FloatToStr(Pi), cteReal); // nombre PI
+     Ord(C_True): AddItem(IntToStr(CRTrue), cteBoolean); // valeur VRAI
+     Ord(C_False): AddItem(IntToStr(CRFalse), cteBoolean); // valeur FAUX
      // fonctions infixées
-     37: AddItem(MF_Or, cteOr); // ou logique
-     38: AddItem(MF_And, cteAnd); // et logique
-     39: AddItem(MF_Mod, cteMod); // modulo
-     40: AddItem(MF_DPower, ctePower); // puissance
+     Ord(C_Or): AddItem(MF_Or, cteOr); // ou logique
+     Ord(C_And): AddItem(MF_And, cteAnd); // et logique
+     Ord(C_Mod): AddItem(MF_Mod, cteMod); // modulo
+     Ord(C_DPower): AddItem(MF_DPower, ctePower); // puissance
    end;
  end
  else
