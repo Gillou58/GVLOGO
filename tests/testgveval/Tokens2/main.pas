@@ -110,10 +110,10 @@ end;
 
 procedure TMainForm.GetVar(Sender: TObject; VarName: string; var Value: Double;
   var Error: TGVError);
-// événement concernant les variables *** essai ***
+// événement concernant les variables *** essai 3 variables seulement ***
 begin
-  Value := 100; // une seule valeur
-  if VarName = 'var1' then
+  Value := 100* random(5); // valeur au hasard
+  if (VarName = 'var1') or  (VarName = 'var2') or (VarName = 'var3') then
     Error := C_None
   else
     Error := C_UnKnownVar;
