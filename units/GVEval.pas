@@ -2,7 +2,7 @@
   |                                                                        |
   |                  G V S O F T                                           |
   |                  Projet : GVLogo                                       |
-  |                  Description : Evzaluation d'une expression            |
+  |                  Description : Evaluation d'une expression             |
   |                  Unité : GVEval.pas                                    |
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
