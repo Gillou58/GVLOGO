@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    23-11-2014 21:03:20                          |
+  |                  Date:    23-11-2014 21:41:20                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -57,9 +57,9 @@ type
   // tableau des éléments
   TGVItems = array of TGVBaseItem;
 
-  { TGVTokensEnumerator }
+  { TGVEvalEnumerator }
 
-  TGVTokensEnumerator = class(TObject) // énumération
+  TGVEvalEnumerator = class(TObject) // énumération
   private
     fLst: TGVItems;
     fIndex: Integer;
@@ -99,13 +99,18 @@ type
     procedure GetDelimLower; // plus petit ou <=
     procedure GetDelimNot; // non ou !=
     procedure Change; // notification de changement
+    procedure Tokenize; // répartition en éléments
+    procedure DoScan; // on analyse les  éléments
+    procedure DoEvaluate; // on évalue
   public
     constructor Create; overload; // constructeur simple
     // constructeur avec initialisation
     constructor Create(const AText: string); overload;
     destructor Destroy; override; // destructeur
-    function GetEnumerator: TGVTokensEnumerator; // énumération
-    procedure Tokenize; // répartition en éléments
+    function GetEnumerator: TGVEvalEnumerator; // énumération
+    procedure Scan; // étudie la chaîne entrée
+    function Association(AValue: CTokensEnum): Integer; // associativité
+    function Precedence(AValue: CTokensEnum): Integer; // priorité
     property Text: string read fText write SetText; // expression à analyser
     // index de départ
     property StartIndx: Integer read fStartIndx write SetStartIndx default 1;
@@ -120,6 +125,7 @@ type
     // événement lié à un changement
     property OnChange: TNotifyEvent read fOnChange write fOnChange;
   end;
+
 
 implementation
 
@@ -151,6 +157,18 @@ procedure TGVEval.WipeItems;
 // *** nettoyage du tableau des éléments ***
 begin
   SetLength(fItemList, 0);
+end;
+
+function TGVEval.Association(AValue: CTokensEnum): Integer;
+// *** associativité d'un opérateur ***
+begin
+  Result := CTokenAssociation[AValue];
+end;
+
+function TGVEval.Precedence(AValue: CTokensEnum): Integer;
+// *** priorité d'un opérateur ***
+begin
+  Result := CTokenPrecedence[AValue];
 end;
 
 procedure TGVEval.AddItem(const AItem: string; AKind: CTokensEnum);
@@ -215,10 +233,20 @@ begin
   inherited Destroy; // on hérite
 end;
 
-function TGVEval.GetEnumerator: TGVTokensEnumerator;
+function TGVEval.GetEnumerator: TGVEvalEnumerator;
 // *** énumération des éléments ***
 begin
-  Result := TGVTokensEnumerator.Create(fItemList);
+  Result := TGVEvalEnumerator.Create(fItemList);
+end;
+
+procedure TGVEval.Scan;
+// *** analyse de la chaîne entrée ***
+begin
+  Tokenize; // répartition en éléments
+  if Error = C_None then // pas d'erreur ?
+    DoScan; // on analyse
+  if Error = C_None then // toujours pas d'erreur ?
+    DoEvaluate; // on évalue
 end;
 
 { TGVEval }
@@ -259,10 +287,21 @@ begin
      AddItem(Ch, cteUnknown); // enregistre le caractère interdit
      SetError(C_BadChar); // caractère interdit
    end;
-
  end;
  if (Error = C_None) then  // une erreur ?
    AddItem(EmptyStr, cteEnd); // marque de fin
+end;
+
+procedure TGVEval.DoScan;
+// *** analyse des éléments ***
+begin
+
+end;
+
+procedure TGVEval.DoEvaluate;
+// *** évaluation ***
+begin
+
 end;
 
 procedure TGVEval.GetVar;
@@ -489,15 +528,15 @@ begin
     fOnChange(Self); // on l'exécute
 end;
 
-{ TGVTokensEnumerator }
+{ TGVEvalEnumerator }
 
-function TGVTokensEnumerator.GetCurrent: TGVBaseItem;
+function TGVEvalEnumerator.GetCurrent: TGVBaseItem;
 // *** retourne l'élément courant ***
 begin
   Result := fLst[fIndex];
 end;
 
-constructor TGVTokensEnumerator.Create(const AValue: TGVItems);
+constructor TGVEvalEnumerator.Create(const AValue: TGVItems);
 // *** création de l'énumérateur ***
 begin
   inherited Create;
@@ -505,7 +544,7 @@ begin
   fLst := AValue;
 end;
 
-function TGVTokensEnumerator.MoveNext: Boolean;
+function TGVEvalEnumerator.MoveNext: Boolean;
 // *** passe à l'élément suivant ***
 begin
   Result := fIndex < High(fLst);
