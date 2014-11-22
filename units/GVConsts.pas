@@ -61,13 +61,14 @@ type
   // éléments d'une expression à évaluer
   CTokensEnum = (cteInteger, cteReal, cteVar, cteFunction, cteBeginExp, cteEndExp,
     ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
-    cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteAnd, cteOr,
-    cteEnd, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden,
-    cteNotSupported, cteNot);
+    cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteNot, cteAnd,
+    cteOr, cteEnd, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden,
+    cteNotSupported);
 const
   // priorité des éléments d'une expression
   // nombre le plus élevé = priorité la moins élevée
   // -1 : ne s'applique pas
+  // ( )
   // 1: non
   // 2: * / % mod
   // 3: + -
@@ -78,12 +79,12 @@ const
   // 8: et
   // 9: ou
   // 10: ^ puissance
-  CTokenPrecedence: array[CTokensEnum] of Integer = (-1, -1, -1, -1, -1, -1, 3,
-    3, 2, 2, 10, 4, 4, 5, 5, 4, 4, 2, 8, 9, -1, 7, 6, -1, -1, -1, -1, 1);
-  // associativité des éléments (1 = droite 0 = gauche)
+  CTokenPrecedence: array[CTokensEnum] of Integer = (-1, -1, -1, -1, 0, 0, 3,
+    3, 2, 2, 10, 4, 4, 5, 5, 4, 4, 2, 1, 8, 9, -1, 7, 6, -1, -1, -1, -1);
+  // associativité des éléments (1 = droite 0 = gauche -1 = ne s'applique pas)
   CTokenAssociation: array[CTokensEnum] of Integer =
-    (-1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-      0, -1, -1, -1, -1, 1);
+    (-1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+      0, -1, -1, -1, -1);
 
 const
   CPlus = '+'; // addition

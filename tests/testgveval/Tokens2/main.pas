@@ -137,13 +137,15 @@ const
   TypArray: array[CTokensEnum] of string = ('Integer', 'Real', 'Var',
     'Function', 'BeginExp', 'EndExp', 'Plus', 'Minus', 'Mul',
     'Div', 'Power', 'Greater', 'Lower', 'Equal', 'NotEqual',
-    'GreaterOrEqual', 'LowerOrEqual', 'Mod', 'And', 'Or',
-    'Not', 'End', 'OrB', 'AndB', 'Boolean', 'UnKnown',
+    'GreaterOrEqual', 'LowerOrEqual', 'Mod', 'Not', 'And', 'Or',
+    'End', 'OrB', 'AndB', 'Boolean', 'UnKnown',
     'Forbidden', 'NotSupported');
 begin
   with Toks do // la base est de 1
     Memo1.Lines.Add('< AJOUT : ' + Format('%-15s',[Item[Count].Token]) +
-      ' --> ' + Format('%-15s',[TypArray[Item[Count].Kind]]) + '  <--');
+      ' --> ' + Format('%-15s',[TypArray[Item[Count].Kind]]) +
+      ' Priorité: ' + IntToStr(CTokenPrecedence[Item[Count].Kind]) +
+      ' Association : ' + IntToStr(CTokenAssociation[Item[Count].Kind]) + ' <--');
 end;
 
 end.

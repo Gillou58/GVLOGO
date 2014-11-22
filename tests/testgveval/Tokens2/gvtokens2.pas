@@ -366,7 +366,8 @@ begin
  begin
    case Ord(Where) of
      // élément ajouté
-     Ord(C_DAbs)..Ord(C_Not): AddItem(AnsiUpperCase(St), cteFunction);
+     Ord(C_DAbs)..Ord(C_DRandom): AddItem(AnsiUpperCase(St), cteFunction);
+     Ord(C_Not): AddItem(MF_Not, cteNot); // non logique
      Ord(C_DPi): AddItem(FloatToStr(Pi), cteReal); // nombre PI
      Ord(C_True): AddItem(IntToStr(CRTrue), cteBoolean); // valeur VRAI
      Ord(C_False): AddItem(IntToStr(CRFalse), cteBoolean); // valeur FAUX
