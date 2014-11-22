@@ -2,12 +2,12 @@
   |                                                                        |
   |                  G V S O F T                                           |
   |                  Projet : GVLogo                                       |
-  |                  Description : Evaluation d'une expression             |
+  |                  Description : Evzaluation d'une expression            |
   |                  Unité : GVEval.pas                                    |
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    22-11-2014 17:52:20                          |
+  |                  Date:    23-11-2014 21:03:20                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -33,7 +33,7 @@
 {$ENDIF}
 
 unit GVEval;
-// évaluation d'une expression mathématique
+// Evaluation d'une expression mathématique
 
 interface
 
@@ -366,7 +366,8 @@ begin
  begin
    case Ord(Where) of
      // élément ajouté
-     Ord(C_DAbs)..Ord(C_Not): AddItem(AnsiUpperCase(St), cteFunction);
+     Ord(C_DAbs)..Ord(C_DRandom): AddItem(AnsiUpperCase(St), cteFunction);
+     Ord(C_Not): AddItem(MF_Not, cteNot); // non logique
      Ord(C_DPi): AddItem(FloatToStr(Pi), cteReal); // nombre PI
      Ord(C_True): AddItem(IntToStr(CRTrue), cteBoolean); // valeur VRAI
      Ord(C_False): AddItem(IntToStr(CRFalse), cteBoolean); // valeur FAUX
