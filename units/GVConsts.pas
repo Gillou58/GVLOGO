@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    27-10-2014 16:15:42                          |
+  |                  Date:    22-11-2014 17:00:42                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -62,8 +62,28 @@ type
   CTokensEnum = (cteInteger, cteReal, cteVar, cteFunction, cteBeginExp, cteEndExp,
     ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
     cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteAnd, cteOr,
-    cteNot, cteEnd, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden,
-    cteNotSupported);
+    cteEnd, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden,
+    cteNotSupported, cteNot);
+const
+  // priorité des éléments d'une expression
+  // nombre le plus élevé = priorité la moins élevée
+  // -1 : ne s'applique pas
+  // 1: non
+  // 2: * / % mod
+  // 3: + -
+  // 4: > < <= >=
+  // 5: = <> !=
+  // 6: &
+  // 7: |
+  // 8: et
+  // 9: ou
+  // 10: ^ puissance
+  CTokenPrecedence: array[CTokensEnum] of Integer = (-1, -1, -1, -1, -1, -1, 3,
+    3, 2, 2, 10, 4, 4, 5, 5, 4, 4, 2, 8, 9, -1, 7, 6, -1, -1, -1, -1, 1);
+  // associativité des éléments (1 = droite 0 = gauche)
+  CTokenAssociation: array[CTokensEnum] of Integer =
+    (-1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+      0, -1, -1, -1, -1, 1);
 
 const
   CPlus = '+'; // addition
