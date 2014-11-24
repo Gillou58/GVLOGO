@@ -64,6 +64,13 @@ type
     cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteNot, cteAnd,
     cteOr, cteEnd, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden,
     cteNotSupported);
+
+  // élément de base de l'expression
+  TGVBaseItem = record
+    Token: string; // élément
+    Kind: CTokensEnum; // type d'élément
+  end;
+
 const
   // priorité des éléments d'une expression
   // nombre le plus élevé = priorité la moins élevée
@@ -85,7 +92,6 @@ const
   CTokenAssociation: array[CTokensEnum] of Integer =
     (-1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
       0, -1, -1, -1, -1);
-
 const
   CPlus = '+'; // addition
   CMinus = '-'; // soustraction

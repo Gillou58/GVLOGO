@@ -38,7 +38,7 @@ unit GVEval;
 interface
 
 uses
-  GVConsts, SysUtils, Classes;
+  GVConsts, SysUtils, Classes, GVStacks;
 
 type
   // *** classes pour l'évaluation d'une expression mathématique infixée
@@ -47,12 +47,6 @@ type
   // événement de recherche d'une variable
   TGVGetVarEvent = procedure(Sender: TObject; VarName: string; var
     Value: Double; var Error: TGVError) of object;
-
-  // élément de base de l'expression
-  TGVBaseItem = record
-    Token: string; // élément
-    Kind: CTokensEnum; // type d'élément
-  end;
 
   // tableau des éléments
   TGVItems = array of TGVBaseItem;
@@ -84,6 +78,7 @@ type
     fItemList: TGVItems; // éléments de la chaîne de travail
     fError: TGVError; // erreur en cours
     fScan: TGVItems; // résultat du scan
+    fScanStack: TGVEvalStack; // pile pour l'évaluation
     function GetCount: Integer;
     function GetItem(N: Integer): TGVBaseItem;
     procedure SetStartIndx(AValue: Integer); // index de départ fixé
@@ -99,8 +94,6 @@ type
     procedure AddItem(const AItem: string; AKind: CTokensEnum); virtual;
     // ajoute un élément à la liste de scan
     procedure AddScan(const AItem: TGVBaseItem); virtual;
-    // empilement d'un élément du scan
-    procedure PushScan(const AItem: TGVBaseItem); virtual;
     procedure GetVar; virtual; // traitement des variables
     procedure GetFunction; virtual; // traitement des fonctions
     procedure GetNumber; virtual; // traitement des nombres
@@ -166,9 +159,10 @@ begin
 end;
 
 procedure TGVEval.WipeScan;
-// *** nettoyage tu tableau de scan ***
+// *** nettoyage du scan ***
 begin
-  SetLength(fScan, 0);
+  SetLength(fScan, 0); // nettoyage du tableau de sortie
+  fScanStack.Clear; // nettoyage de la pile
 end;
 
 function TGVEval.Association(AValue: CTokensEnum): Integer;
@@ -204,12 +198,6 @@ begin
   Change; // changement notifié
 end;
 
-procedure TGVEval.PushScan(const AItem: TGVBaseItem);
-// *** empilement d'un élément du scan ***
-begin
-  // *** TODO ***
-end;
-
 procedure TGVEval.SetStartIndx(AValue: Integer);
 // *** fixe l'index de départ dans l'expression ***
 begin
@@ -242,6 +230,7 @@ begin
   fError := C_NoInit; // erreur par défaut (chaîne non initialisée)
   fStartIndx := 1; // index par défaut de départ
   fIndx := -1; // index de travail
+  fScanStack := TGVEvalStack.Create; // pile de scan
   fText := EmptyStr; // chaîne de travail vide
   WipeItems; // tableau vide
 end;
@@ -256,6 +245,7 @@ end;
 destructor TGVEval.Destroy;
 // *** destructeur ***
 begin
+  fScanStack.Free; // pile de scan libérée
   inherited Destroy; // on hérite
 end;
 
@@ -322,7 +312,7 @@ procedure TGVEval.DoScan;
 // *** analyse des éléments (algorithme shunting-yard)***
 var
   I: Integer;
-  Which: TGVBaseItem;
+  Which, Which2: TGVBaseItem;
 begin
   WipeScan; // nettoyage de la sortie
   for I := 1 to Count do // on balaie la liste
@@ -332,15 +322,24 @@ begin
       cteReal, cteInteger, cteVar, cteBoolean:
         AddScan(Which); // élément pour la sortie
       cteFunction:
-        PushScan(Which); // fonction empilée
+        fScanStack.Push(Which); // fonction empilée
       ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
       cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteNot, cteAnd,
       cteOr, cteEnd, cteOrB, cteAndB:
         begin
-          // *** TODO ***
-        end; // traitement des opérateurs
+          while (Association(fScanStack.Peek.Kind) <> -1) // un opérateur ?
+            and (((Association(Which.Kind) = 0) and (Precedence(Which.Kind) >=
+            Precedence(fScanStack.Peek.Kind))) or
+            ((Association(Which.Kind) = 1) and (Precedence(Which.Kind) <
+            Precedence(fScanStack.Peek.Kind)))) do
+          begin
+            Which2 := fScanStack.Pop; // on récupère l'opérateur
+            AddScan(Which2); // on le stocke
+            fScanStack.Push(Which); // on empile le nouvel opérateur
+          end; // traitement des opérateurs
+        end;
       cteBeginExp:
-        PushScan(Which); // parenthèse ouvrante empilée
+        fScanStack.Push(Which); // parenthèse ouvrante empilée
       cteEndExp:
         begin
           // *** TODO ***
@@ -349,7 +348,7 @@ begin
   end;
   if Error = C_None then // pas d'erreur ?
   begin
-    // *** TODO ***
+
   end;
 end;
 

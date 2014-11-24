@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    08-08-2014 17:22:57                          |
+  |                  Date:    24-11-2014 09:08:57                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -101,7 +101,8 @@ end;
   TGVRealStack = {$IFNDEF Delphi}specialize{$ENDIF} TGVStack<Real>;
   TGVStringStack = {$IFNDEF Delphi}specialize{$ENDIF} TGVStack<string>;
   TGVDoubleStack = {$IFNDEF Delphi}specialize{$ENDIF} TGVStack<Double>;
-  TGVExtended = {$IFNDEF Delphi}specialize{$ENDIF} TGVStack<Extended>;
+  TGVExtendedStack = {$IFNDEF Delphi}specialize{$ENDIF} TGVStack<Extended>;
+  TGVEvalStack = {$IFNDEF Delphi}specialize{$ENDIF} TGVStack<TGVBaseItem>;
 
 implementation
 
