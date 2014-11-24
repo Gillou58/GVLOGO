@@ -83,21 +83,27 @@ type
     fStartIndx: Integer; // index de départ dans la chaîne de travail
     fItemList: TGVItems; // éléments de la chaîne de travail
     fError: TGVError; // erreur en cours
+    fScan: TGVItems; // résultat du scan
     function GetCount: Integer;
     function GetItem(N: Integer): TGVBaseItem;
     procedure SetStartIndx(AValue: Integer); // index de départ fixé
     procedure SetText(const AValue: string); // texte en cours fixé
     procedure SetError(const Err: TGVError); // erreur fixée
-    procedure WipeItems; inline; // nettoyage du tableau des éléments
-  protected
-    // ajoute un élément
-    procedure AddItem(const AItem: string; AKind: CTokensEnum); virtual;
-    procedure GetVar; virtual; // traitement des variables
-    procedure GetFunction; virtual; // traitement des fonctions
-    procedure GetNumber; virtual; // traitement des nombres
     procedure GetDelimGreater; // plus grand ou >=
     procedure GetDelimLower; // plus petit ou <=
     procedure GetDelimNot; // non ou !=
+    procedure WipeItems; inline; // nettoyage du tableau des éléments
+    procedure WipeScan; inline; // nettoyage du scan
+  protected
+    // ajoute un élément au tableau des éléments
+    procedure AddItem(const AItem: string; AKind: CTokensEnum); virtual;
+    // ajoute un élément à la liste de scan
+    procedure AddScan(const AItem: TGVBaseItem); virtual;
+    // empilement d'un élément du scan
+    procedure PushScan(const AItem: TGVBaseItem); virtual;
+    procedure GetVar; virtual; // traitement des variables
+    procedure GetFunction; virtual; // traitement des fonctions
+    procedure GetNumber; virtual; // traitement des nombres
     procedure Change; // notification de changement
     procedure Tokenize; // répartition en éléments
     procedure DoScan; // on analyse les  éléments
@@ -159,6 +165,12 @@ begin
   SetLength(fItemList, 0);
 end;
 
+procedure TGVEval.WipeScan;
+// *** nettoyage tu tableau de scan ***
+begin
+  SetLength(fScan, 0);
+end;
+
 function TGVEval.Association(AValue: CTokensEnum): Integer;
 // *** associativité d'un opérateur ***
 begin
@@ -182,6 +194,20 @@ begin
   end;
   Inc(fIndx); // caractère suivant
   Change; // changement notifié
+end;
+
+procedure TGVEval.AddScan(const AItem: TGVBaseItem);
+// *** ajoute un élément à la liste de scan ***
+begin
+  SetLength(fScan, Length(fScan) + 1); // adapte la longueur du tableau
+  fScan[Length(fScan) - 1] := AItem; // affecte le nouvel élément
+  Change; // changement notifié
+end;
+
+procedure TGVEval.PushScan(const AItem: TGVBaseItem);
+// *** empilement d'un élément du scan ***
+begin
+  // *** TODO ***
 end;
 
 procedure TGVEval.SetStartIndx(AValue: Integer);
@@ -293,15 +319,44 @@ begin
 end;
 
 procedure TGVEval.DoScan;
-// *** analyse des éléments ***
+// *** analyse des éléments (algorithme shunting-yard)***
+var
+  I: Integer;
+  Which: TGVBaseItem;
 begin
-
+  WipeScan; // nettoyage de la sortie
+  for I := 1 to Count do // on balaie la liste
+  begin
+    Which := Item[I]; // élément en cours
+    case Which.Kind of // on analyse sa nature
+      cteReal, cteInteger, cteVar, cteBoolean:
+        AddScan(Which); // élément pour la sortie
+      cteFunction:
+        PushScan(Which); // fonction empilée
+      ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
+      cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteNot, cteAnd,
+      cteOr, cteEnd, cteOrB, cteAndB:
+        begin
+          // *** TODO ***
+        end; // traitement des opérateurs
+      cteBeginExp:
+        PushScan(Which); // parenthèse ouvrante empilée
+      cteEndExp:
+        begin
+          // *** TODO ***
+        end; // traitement d'une parenthèse fermante
+    end;
+  end;
+  if Error = C_None then // pas d'erreur ?
+  begin
+    // *** TODO ***
+  end;
 end;
 
 procedure TGVEval.DoEvaluate;
 // *** évaluation ***
 begin
-
+  // *** TODO ***
 end;
 
 procedure TGVEval.GetVar;
