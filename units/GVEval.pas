@@ -278,6 +278,7 @@ begin
   fText := EmptyStr; // chaîne de travail vide
   fResult := 0; // résultat par défaut
   WipeItems; // tableau vide
+  randomize; // nombres pseudo-aléatoires
 end;
 
 constructor TGVEval.Create(const AText: string);
@@ -471,6 +472,47 @@ var
           C_DExp: Push(Exp(Pop)); // *** exponentielle
           C_DFrac: Push(Frac(Pop)); // *** partie fractionnelle
           C_DInt, C_DInt2: Push(Int(Pop)); // *** partie entière
+          C_DLn: begin // *** log népérien
+                   if (Peek > 0) then // pas de nombre négatif ou nul
+                               Push(Ln(Pop))
+                             else
+                               SetError(C_Ln);
+                 end;
+          C_DLog2:  begin // *** log base 2
+                      if (Peek > 0) then // pas de nombre négatif ou nul
+                        Push(Log2(Pop))
+                      else
+                        SetError(C_Ln);
+                    end;
+          C_DLog10: begin // *** log népérien
+                      if (Peek > 0) then // pas de nombre négatif ou nul
+                        Push(Log10(Pop))
+                      else
+                        SetError(C_Ln);
+                 end;
+          C_DCoTan, C_DCoTan2: begin // *** cotangente
+                                 Dbl := DegToRad(Pop);
+                                 if not IsZero(Sin(Dbl)) then // pas de sinus nul
+                                   Push(Tan(Dbl))
+                                 else
+                                   SetError(C_CoTan);
+                               end;
+          C_DHypot:; // hypothénuse
+          C_DArcCos, // arc cosinus
+          C_DArcCos2:;
+          C_DArcSin, // arc sinus
+          C_DArcSin2:;
+          C_Minus:; // négatif
+          C_Plus:; // positif
+          C_DNegate: Push(-Pop); // *** signe inversé
+          C_DSign: ; // signe
+          C_DRandom: begin // *** nombre au hasard
+                       Dbl := Pop;
+                       if (Trunc(Dbl) = Dbl) then
+                         Push(Random(Trunc(Dbl)))
+                       else
+                         SetError(C_NeedsInteger); // erreur : entier exigé
+                     end;
         end;
       end
       else

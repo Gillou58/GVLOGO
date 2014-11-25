@@ -195,7 +195,9 @@ type
   C_NotSupported, // élément non supporté dans une expression
   C_ParMismatch, // parenthèses non concordantes
   C_NeedsInteger, // entiers exigés
-  C_Tan // tangente avec un cosinus nul
+  C_Tan, // tangente avec un cosinus nul
+  C_Ln, // log avec nombre <= 0
+  C_CoTan // cotangente avec sinus nul
   );
 
   { tortue }
@@ -254,6 +256,8 @@ resourcestring
   ME_ParMismatch = 'Les parenthèses de l''expression ne sont pas appariées.';
   ME_NeedsInteger = '"%s" ne fonctionne qu''avec des entiers.';
   ME_Tan = 'La fonction tangente n''est pas définie pour un cosinus nul. ("%s")';
+  Me_Ln = 'Les fonctions logarithmiques n''acceptent que des paramètres strictement positifs. ("%s")';
+  ME_CoTan = 'La fonction cotangente n''est pas définie pour un sinus nul. ("%s")';
 
   // ************* PRIMITIVES *************
 
@@ -288,7 +292,7 @@ resourcestring
   MF_DInt2 = 'ENTIER';
   MF_DLn = 'LN'; // log népérien
   MF_DLog2 = 'LOG2'; // log base 2
-  MF_DLog10 = 'LOG10'; // log base 100
+  MF_DLog10 = 'LOG'; // log base 10
   MF_DCoTan = 'COTAN'; // cotangente
   MF_DCoTan2 = 'COTANGENTE';
   MF_DHypot = 'HYPOTHENUSE'; // hypothénuse
@@ -342,7 +346,7 @@ resourcestring
     C_DInt2,
     C_DLn, // log népérien
     C_DLog2, // log base 2
-    C_DLog10, // log base 100
+    C_DLog10, // log base 10
     C_DCoTan, // cotangente
     C_DCoTan2,
     C_DHypot, // hypothénuse
@@ -354,7 +358,7 @@ resourcestring
     C_Plus, // positif
     C_DNegate, // signe inversé
     C_DSign, // signe
-    C_DRandom, // nombre au hasard,
+    C_DRandom, // nombre au hasard
     C_Not, // not
     C_DPi, // PI sur la pile
     C_True, // vrai
@@ -377,7 +381,7 @@ const
     ME_BadFormat, ME_EmptyStack, ME_OutOfMemory, ME_LowStack, ME_NoInit,
     ME_BadChar2, ME_ClosePar, ME_BadVar, ME_UnknownVar, ME_BadFunction,
     ME_NoArg, ME_BadExp, ME_Zero, ME_NegNumber, ME_OutOfRange, ME_OutOfRange2,
-    ME_NotSupported, ME_ParMismatch, ME_NeedsInteger, ME_Tan);
+    ME_NotSupported, ME_ParMismatch, ME_NeedsInteger, ME_Tan, ME_Ln, ME_CoTan);
 
   // tableau du nom des fonctions
   GVFunctionName: array [TGVFunctions] of string = (MF_Unknown, MF_DAbs,
