@@ -194,7 +194,8 @@ type
   C_OutOfRange2, // élément hors limites d'une expression
   C_NotSupported, // élément non supporté dans une expression
   C_ParMismatch, // parenthèses non concordantes
-  C_NeedsInteger // entiers exigés
+  C_NeedsInteger, // entiers exigés
+  C_Tan // tangente avec un cosinus nul
   );
 
   { tortue }
@@ -252,6 +253,7 @@ resourcestring
   ME_NotSupported = 'La fonction "%s" n''est pas utilisable dans une expression.';
   ME_ParMismatch = 'Les parenthèses de l''expression ne sont pas appariées.';
   ME_NeedsInteger = '"%s" ne fonctionne qu''avec des entiers.';
+  ME_Tan = 'La fonction tangente n''est pas définie pour un cosinus nul. ("%s")';
 
   // ************* PRIMITIVES *************
 
@@ -375,7 +377,7 @@ const
     ME_BadFormat, ME_EmptyStack, ME_OutOfMemory, ME_LowStack, ME_NoInit,
     ME_BadChar2, ME_ClosePar, ME_BadVar, ME_UnknownVar, ME_BadFunction,
     ME_NoArg, ME_BadExp, ME_Zero, ME_NegNumber, ME_OutOfRange, ME_OutOfRange2,
-    ME_NotSupported, ME_ParMismatch, ME_NeedsInteger);
+    ME_NotSupported, ME_ParMismatch, ME_NeedsInteger, ME_Tan);
 
   // tableau du nom des fonctions
   GVFunctionName: array [TGVFunctions] of string = (MF_Unknown, MF_DAbs,

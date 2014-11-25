@@ -441,6 +441,7 @@ var
   // une fonction
   var
     Afunc: TGVFunctions;
+    Dbl: Double;
   begin
     AFunc := WhichFunction(Which.Token); // numéro de fonction
     with ValStack do
@@ -451,7 +452,13 @@ var
           C_DAbs, C_DAbs2: Push(Abs(Pop)); // *** valeur absolue
           C_DCos, C_DCos2: Push(Cos(DegToRad(Pop))); // *** cosinus
           C_DSin, C_DSin2: Push(Sin(DegToRad(Pop))); // *** sinus
-          C_DTan, C_DTan2: Push(Tan(DegToRad(Pop))); // *** tangente
+          C_DTan, C_DTan2: begin // *** tangente
+                             Dbl := DegToRad(Pop);
+                             if not IsZero(Cos(Dbl)) then // pas de cosinus nul
+                               Push(Tan(Dbl))
+                             else
+                               SetError(C_Tan);
+                           end;
         end;
       end
       else

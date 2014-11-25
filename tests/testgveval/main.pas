@@ -107,7 +107,7 @@ begin
     Memo1.Lines.Add(Compute.ScanItem[I].Token);
   end;
  Memo1.Lines.Add(EmptyStr);
- Memo1.Lines.Add(Format('*** Résultat : %4f', [Compute.Res]));
+ Memo1.Lines.Add(Format('*** Résultat : %2f', [Compute.Res]));
  Memo1.Lines.Add(EmptyStr);
 end;
 
