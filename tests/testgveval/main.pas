@@ -107,7 +107,7 @@ begin
     Memo1.Lines.Add(Compute.ScanItem[I].Token);
   end;
  Memo1.Lines.Add(EmptyStr);
- Memo1.Lines.Add('*** Résultat : ' + FloatToStr(Compute.Res));
+ Memo1.Lines.Add(Format('*** Résultat : %4f', [Compute.Res]));
  Memo1.Lines.Add(EmptyStr);
 end;
 
@@ -129,7 +129,7 @@ begin
   begin
     Memo1.Lines.Add('< *** ERREUR *** :   ' + ActualItem);
     Memo1.Lines.Add('Message : ' + Format(GVErrorName[Error],
-     [Item[Count].Token]));
+     [ActualItem]));
   end;
 end;
 

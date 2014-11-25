@@ -93,6 +93,7 @@ type
     procedure GetDelimNot; // non ou !=
     procedure WipeItems; inline; // nettoyage du tableau des éléments
     procedure WipeScan; inline; // nettoyage du scan
+    function WhichFunction(const St: string): TGVFunctions; // cherche une fonction
   protected
     // ajoute un élément au tableau des éléments
     procedure AddItem(const AItem: string; AKind: CTokensEnum); virtual;
@@ -175,6 +176,22 @@ begin
   SetLength(fScan, 0); // nettoyage du tableau de sortie
   fActualItem := EmptyStr; // on nettoie l'élément en cours
   fScanStack.Clear; // nettoyage de la pile
+end;
+
+function TGVEval.WhichFunction(const St: string): TGVFunctions;
+// *** recherche d'une fonction ***
+var
+  I: TGVFunctions;
+begin
+  Result := C_Unknown; // valeur si non trouvée
+  for I := Low(TGVFunctions) to High(TGVFunctions) do // on balaie les fonctions
+ begin
+   if AnsiCompareText(St, GVFunctionName[I]) = 0 then // égalité des chaînes ?
+   begin
+     Result := I; // sauvegarde de l'indice
+     Break; // on sort de la boucle
+   end;
+ end;
 end;
 
 function TGVEval.Association(AValue: CTokensEnum): Integer;
@@ -418,19 +435,45 @@ var
   I: Integer;
   Which: TGVBaseItem;
   ValStack: TGVDoubleStack;
-  Dbl: Double;
+  Dbl, Dbl2: Double;
+
+  procedure DoFunction;
+  // une fonction
+  var
+    Afunc: TGVFunctions;
+  begin
+    AFunc := WhichFunction(Which.Token); // numéro de fonction
+    with ValStack do
+    begin
+      if Needed(1) then // il faut un élément sur la pile
+      begin
+        case AFunc of
+          C_DAbs, C_DAbs2: Push(Abs(Pop)); // *** valeur absolue
+          C_DCos, C_DCos2: Push(Cos(DegToRad(Pop))); // *** cosinus
+          C_DSin, C_DSin2: Push(Sin(DegToRad(Pop))); // *** sinus
+          C_DTan, C_DTan2: Push(Tan(DegToRad(Pop))); // *** tangente
+        end;
+      end
+      else
+        SetError(C_NoArg); // pas assez d'arguments
+    end;
+  end;
+
 begin
   Result := 0;
   ValStack := TGVDoubleStack.Create; // création de la pile
   try
     for I := 1 to ScanCount do // on balaie les valeurs
     begin
+      if Error <> C_None then
+        exit; // on sort en cas d'erreur
       Which := ScanItem[I]; // élément en cours
+      fActualItem := Which.Token; // élément en cours stocké
       with ValStack do
         case Which.Kind of
           cteReal, cteInteger, cteVar, cteBoolean: // *** nombre? => empilé
             begin
-              if TryStrToFloat(Which.Token,Dbl) then // correct ?
+              if TryStrToFloat(Which.Token, Dbl) then // correct ?
                 Push(Dbl) // on l'empile
               else
                 SetError(C_BadNumber);
@@ -525,18 +568,56 @@ begin
              SetError(C_NoArg);
          cteMod: if Needed(2) then // *** mod
            begin
-             Push(Trunc(Pop) mod Trunc(Pop)); // ### erreur à déclencher ? ###
+               Dbl := Pop;
+               Dbl2 := Pop;
+               if (Trunc(Dbl) = Dbl) and (Trunc(Dbl2) = Dbl2) then
+                 Push(Trunc(Dbl2) mod Trunc(Dbl))
+               else
+                 SetError(C_NeedsInteger); // erreur : entiers exigés
            end
            else
              SetError(C_NoArg);
+         cteNot: if Needed(1) then // *** non
+           begin
+             Dbl := Pop;
+             if (Trunc(Dbl) = Dbl) then
+                 Push(not Trunc(Dbl))
+               else
+                 SetError(C_NeedsInteger); // erreur : entiers exigés
+           end
+           else
+             SetError(C_NoArg);
+         cteOr, cteOrB: if Needed(2) then // *** ou
+           begin
+             Dbl := Pop;
+             Dbl2 := Pop;
+             if (Trunc(Dbl) = Dbl) and (Trunc(Dbl2) = Dbl2) then
+                 Push(Trunc(Dbl) or Trunc(Dbl2))
+               else
+                 SetError(C_NeedsInteger); // erreur : entiers exigés
+           end
+           else
+             SetError(C_NoArg);
+         cteAnd, cteAndB: if Needed(2) then // *** et
+           begin
+             Dbl := Pop;
+             Dbl2 := Pop;
+             if (Trunc(Dbl) = Dbl) and (Trunc(Dbl2) = Dbl2) then
+                 Push(Trunc(Dbl) and Trunc(Dbl2))
+               else
+                 SetError(C_NeedsInteger); // erreur : entiers exigés
+           end
+           else
+             SetError(C_NoArg);
+         cteFunction: DoFunction; // *** une fonction
       end;
     end;
     if Error = C_None then // pas d'erreur ?
     begin
       if ValStack.Count = 1 then // un élément attendu
-        Result := ValStack.Pop
+        Result := ValStack.Pop  // c'est lui...
       else
-        SetError(C_BadExp);
+        SetError(C_BadExp); // il reste des éléments inutilisés
     end;
   finally
     ValStack.Free; // libération de la pile
@@ -612,11 +693,11 @@ begin
 end;
 
 procedure TGVEval.GetFunction;
-// *** recherche d'une fonction ***  #### PROVISOIRE ####
+// *** recherche d'une fonction ***
 var
   St: string;
   IndxTmp: Integer;
-  I,Where: TGVFunctions;
+  Where: TGVFunctions;
 begin
  St := EmptyStr; // initialisation
  IndxTmp := Indx; // pointeur conservé
@@ -632,28 +713,21 @@ begin
    Inc(fIndx); // au suivant
  end;
  Dec(fIndx); // on réajuste le pointeur
- for I := Low(TGVFunctions) to High(TGVFunctions) do // on balaie les fonctions
+ Where := WhichFunction(St); // on cherche une fonction
+ if (Where <> C_Unknown) and (Where < C_DMax) then // trouvée ?
  begin
-   if AnsiCompareText(St, GVFunctionName[I]) = 0 then // égalité des chaînes ?
-   begin
-     Where := I; // sauvegarde de l'indice
-     Break; // on sort de la boucle
-   end;
- end;
- if (Where <> C_Unknown) and (Ord(Where) < Ord(C_DMax)) then // trouvée ?
- begin
-   case Ord(Where) of
+   case Where of
      // élément ajouté
-     Ord(C_DAbs)..Ord(C_DRandom): AddItem(AnsiUpperCase(St), cteFunction);
-     Ord(C_Not): AddItem(MF_Not, cteNot); // non logique
-     Ord(C_DPi): AddItem(FloatToStr(Pi), cteReal); // nombre PI
-     Ord(C_True): AddItem(IntToStr(CRTrue), cteBoolean); // valeur VRAI
-     Ord(C_False): AddItem(IntToStr(CRFalse), cteBoolean); // valeur FAUX
+     C_DAbs..C_DRandom: AddItem(AnsiUpperCase(St), cteFunction);
+     C_Not: AddItem(MF_Not, cteNot); // non logique
+     C_DPi: AddItem(FloatToStr(Pi), cteReal); // nombre PI
+     C_True: AddItem(IntToStr(CRTrue), cteBoolean); // valeur VRAI
+     C_False: AddItem(IntToStr(CRFalse), cteBoolean); // valeur FAUX
      // fonctions infixées
-     Ord(C_Or): AddItem(MF_Or, cteOr); // ou logique
-     Ord(C_And): AddItem(MF_And, cteAnd); // et logique
-     Ord(C_Mod): AddItem(MF_Mod, cteMod); // modulo
-     Ord(C_DPower): AddItem(MF_DPower, ctePower); // puissance
+     C_Or: AddItem(MF_Or, cteOr); // ou logique
+     C_And: AddItem(MF_And, cteAnd); // et logique
+     C_Mod: AddItem(MF_Mod, cteMod); // modulo
+     C_DPower: AddItem(MF_DPower, ctePower); // puissance
    end;
  end
  else
@@ -695,7 +769,7 @@ begin
   if (Text[Indx] in [CDot, CComma]) then
   {$ENDIF}
   begin
-    St := St + Text[Indx]; // si oui, on ajoute le signe
+    St := St + CComma; // si oui, on ajoute le signe [, en France]
     Inc(fIndx); // caractère suivant
     // on cherche la partie décimale
     {$IFDEF Delphi}
