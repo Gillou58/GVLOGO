@@ -3,10 +3,10 @@
   |                  G V S O F T                                           |
   |                  Projet : GVLogo                                       |
   |                  Description : Constantes, types et variables          |
-  |                  Unité : GVConsts.pas                                  |
+  |                  UnitÃ© : GVConsts.pas                                  |
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
-  |                  Copyright : © G. VASSEUR                              |
+  |                  Copyright : Â© G. VASSEUR                              |
   |                  Date:    22-11-2014 17:00:42                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
@@ -36,7 +36,7 @@ uses
   Graphics;
 
 const
-  { séparateurs }
+  { sÃ©parateurs }
 
   CBlank = ' ';
   CBeginList = '[';
@@ -45,7 +45,7 @@ const
   CEndPar = ')';
   CSeparators = [CBlank, CBeginList, CEndList, CBeginPar, CEndPar];
 
-  { caractères spéciaux }
+  { caractÃ¨res spÃ©ciaux }
 
   CLink = '$';
   CUnderline = '_';
@@ -58,25 +58,25 @@ const
     
   // ************* GVEval *************
 type
-  // éléments d'une expression à évaluer
+  // Ã©lÃ©ments d'une expression Ã  Ã©valuer
   CTokensEnum = (cteInteger, cteReal, cteVar, cteFunction, cteBeginExp, cteEndExp,
     ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
     cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteNot, cteAnd,
     cteOr, cteEnd, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden,
     cteNotSupported);
 
-  // élément de base de l'expression
+  // Ã©lÃ©ment de base de l'expression
   TGVBaseItem = record
-    Token: string; // élément
-    Kind: CTokensEnum; // type d'élément
+    Token: string; // Ã©lÃ©ment
+    Kind: CTokensEnum; // type d'Ã©lÃ©ment
   end;
 
 const
-  // priorité des éléments d'une expression
-  // nombre le plus élevé = priorité la moins élevée
+  // prioritÃ© des Ã©lÃ©ments d'une expression
+  // nombre le plus Ã©levÃ© = prioritÃ© la moins Ã©levÃ©e
   // -1 : ne s'applique pas
   // ( )
-  // 1: (réservé)
+  // 1: (rÃ©servÃ©)
   // 2: * / % mod
   // 3: + -
   // 4: > < <= >=
@@ -90,7 +90,7 @@ const
   // 12: ( )
   CTokenPrecedence: array[CTokensEnum] of Integer = (-1, -1, -1, -1, 12, 12, 3,
     3, 2, 2, 11, 4, 4, 5, 5, 4, 4, 2, 10, 8, 9, -1, 7, 6, -1, -1, -1, -1);
-  // associativité des éléments (1 = droite 0 = gauche -1 = ne s'applique pas)
+  // associativitÃ© des Ã©lÃ©ments (1 = droite 0 = gauche -1 = ne s'applique pas)
   CTokenAssociation: array[CTokensEnum] of Integer =
     (-1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
       0, -1, -1, -1, -1);
@@ -102,24 +102,24 @@ const
   CPower = '^'; // puisssance
   CGreater = '>'; // plus grand
   CLower = '<'; // plus petit
-  CEqual = '='; // égal
-  CNotEqual = '<>'; // différent
-  CNotEqual2 = '!='; // différent (2)
-  CNot = '!'; // négation
+  CEqual = '='; // Ã©gal
+  CNotEqual = '<>'; // diffÃ©rent
+  CNotEqual2 = '!='; // diffÃ©rent (2)
+  CNot = '!'; // nÃ©gation
   COrB = '|'; // ou binaire
   CAndB = '&'; // et binaire
-  CGreaterOrEqual = '>='; // plus grand ou égal
-  CLowerOrEqual = '<='; // plus petit ou égal
-  // caractères spéciaux
+  CGreaterOrEqual = '>='; // plus grand ou Ã©gal
+  CLowerOrEqual = '<='; // plus petit ou Ã©gal
+  // caractÃ¨res spÃ©ciaux
   CSpecialChar = [CBlank, CEqual, CPlus, CMinus, CMul, CDiv, CBeginPar, CEndPar,
     CPower, CGreater, CLower];
-  CRLower = -1; // résultats de comparaisons (plus petit)
-  CREqual = 0;  // (égal)
+  CRLower = -1; // rÃ©sultats de comparaisons (plus petit)
+  CREqual = 0;  // (Ã©gal)
   CRGreater = 1; // (plus grand)
   CRTrue = -1; // vrai
   CRFalse = 0; // faux
   
-  { ensembles de caractères courants }
+  { ensembles de caractÃ¨res courants }
 
   CLowAlpha = ['a'..'z'];
   CHighAlpha = ['A'..'Z'];
@@ -130,31 +130,31 @@ const
   CAlphaNumPlus = CAlphaPlus + CDigit;
   CAllValidChars = CAlphaNumPlus + CSpecialChar;
 
-  { chaînes utiles }
+  { chaÃ®nes utiles }
 
   CEmptyList = CBeginList + CEndList;
 
-  { listes de propriétés}
+  { listes de propriÃ©tÃ©s}
 
-  // extension pour les fichiers de listes de propriétés
+  // extension pour les fichiers de listes de propriÃ©tÃ©s
   CExtPl = '.GPL';
-  // entête de fichier
+  // entÃªte de fichier
   CHeader = '[GPL100 (c) GV 2014]';
-  // séparateur de liste de propriétés
+  // sÃ©parateur de liste de propriÃ©tÃ©s
   CSep = '|';
 
   { tortue }
 
   DgToRad = Pi / 180; // pour les conversions en radians
-  RadToDg = 180 / Pi; // pour les conversions en degrés
-  CDefaultScale = 100; // échelle par défaut
-  CDefaultHeading = 90; // cap par défaut
-  CDefaultSize = 8; // taille d'une tortue par défaut
+  RadToDg = 180 / Pi; // pour les conversions en degrÃ©s
+  CDefaultScale = 100; // Ã©chelle par dÃ©faut
+  CDefaultHeading = 90; // cap par dÃ©faut
+  CDefaultSize = 8; // taille d'une tortue par dÃ©faut
   CMaxSize = 20; // taille maximale de la tortue
   CMaxSpeed = 100; // vitesse maximum de la tortue
-  CDefaultPenColor = clWhite; // couleur de fond par défaut
-  CDefaultBackColor = clBlack; // couleur du crayon par défaut
-  CDefaultPenWidth = 1; // largeur du crayon par défaut
+  CDefaultPenColor = clWhite; // couleur de fond par dÃ©faut
+  CDefaultBackColor = clBlack; // couleur du crayon par dÃ©faut
+  CDefaultPenWidth = 1; // largeur du crayon par dÃ©faut
 
   { piles }
 
@@ -168,39 +168,39 @@ type
   C_BadNumber, // nombre incorrect
   C_BadInt, // entier incorrect
   C_EmptyStr, // mot vide interdit
-  C_BadChar, // caractère incorrect
+  C_BadChar, // caractÃ¨re incorrect
   C_BadList, // erreur dans une liste
   C_DelItem,  // position incorrecte pour une suppression
   C_InsItem, // position incorrecte pour une insertion
   C_ReplaceItem, // position incorrecte pour un remplacement
   C_NoListWord, // ni un mot ni une liste
-  C_TwoDelete, // pas assez d'éléments pour en supprimer deux
-  C_BadListP, // liste de propriétés incorrecte
-  C_BadFormat, // fichier de format erroné
+  C_TwoDelete, // pas assez d'Ã©lÃ©ments pour en supprimer deux
+  C_BadListP, // liste de propriÃ©tÃ©s incorrecte
+  C_BadFormat, // fichier de format erronÃ©
   C_EmptyStack, // pile interne vide
-  C_OutOfMemory, // mémoire insuffisante pour la pile
+  C_OutOfMemory, // mÃ©moire insuffisante pour la pile
   C_LowStack, // pile insuffisante
-  C_NoInit, // valeur non initialisée
-  C_BadChar2, // caractère interdit ou inconnu
-  C_ClosePar, // parenthèse fermante absente
+  C_NoInit, // valeur non initialisÃ©e
+  C_BadChar2, // caractÃ¨re interdit ou inconnu
+  C_ClosePar, // parenthÃ¨se fermante absente
   C_BadVar, // variable incorrecte
   C_UnknownVar, // variable inconnue
   C_BadFunction, // fonction inconnue
   C_NoArg, // argument manquant
   C_BadExp, // expression incorrecte
-  C_Zero, // division par zéro
-  C_NegNumber, // nombre négatif interdit
+  C_Zero, // division par zÃ©ro
+  C_NegNumber, // nombre nÃ©gatif interdit
   C_OutOfRange, // index hors limites pour une expression
-  C_OutOfRange2, // élément hors limites d'une expression
-  C_NotSupported, // élément non supporté dans une expression
-  C_ParMismatch, // parenthèses non concordantes
-  C_NeedsInteger, // entiers exigés
+  C_OutOfRange2, // Ã©lÃ©ment hors limites d'une expression
+  C_NotSupported, // Ã©lÃ©ment non supportÃ© dans une expression
+  C_ParMismatch, // parenthÃ¨ses non concordantes
+  C_NeedsInteger, // entiers exigÃ©s
   C_Tan // tangente avec un cosinus nul
   );
 
   { tortue }
 
-  // type d'écrans : enroule, fenêtre illimitée ou champ clos
+  // type d'Ã©crans : enroule, fenÃªtre illimitÃ©e ou champ clos
   TScreenTurtle = (teWin, teGate, teRoll);
   // types de tortue
   TTurtleKind = (tkTriangle, tkPng, tkOwner);
@@ -212,7 +212,7 @@ type
 resourcestring
   { message d'erreur }
 
-  ME_None = 'Pas d''erreur à signaler.';
+  ME_None = 'Pas d''erreur Ã  signaler.';
   ME_InternalError = 'ERREUR INCONNUE (erreur interne).';
   
   // ************* GVList et GVPropList *************
@@ -220,40 +220,40 @@ resourcestring
   ME_BadNumber = 'Le nombre "%s" est incorrect.';
   ME_BadInt = '"%s" n''est pas un entier correct.';
   ME_EmptyStr = 'Le mot vide ne convient pas pour la primitive "%s".';
-  ME_BadChar = 'Le mot "%s" est trop court pour en traiter l''élément %d.';
+  ME_BadChar = 'Le mot "%s" est trop court pour en traiter l''Ã©lÃ©ment %d.';
   ME_BadList = 'La liste "%s" est incorrecte.';
-  ME_DelItem = 'L''élément %d n''existe pas pour une suppression.';
-  ME_InsItem = 'L''élément %d n''existe pas pour une insertion.';
-  ME_ReplaceItem = 'L''élément %d n''existe pas pour un remplacement.';
+  ME_DelItem = 'L''Ã©lÃ©ment %d n''existe pas pour une suppression.';
+  ME_InsItem = 'L''Ã©lÃ©ment %d n''existe pas pour une insertion.';
+  ME_ReplaceItem = 'L''Ã©lÃ©ment %d n''existe pas pour un remplacement.';
   ME_NoListWord = '"%s" n''est ni une liste ni un mot corrects.';
-  ME_TwoDelete = 'La liste ne contient pas assez d''éléments pour en supprimer deux à partir de %d.';
-  ME_BadListP = 'La liste de propriétés %d est introuvable.';
+  ME_TwoDelete = 'La liste ne contient pas assez d''Ã©lÃ©ments pour en supprimer deux Ã  partir de %d.';
+  ME_BadListP = 'La liste de propriÃ©tÃ©s %d est introuvable.';
   ME_BadFormat = 'Le format du fichier "%s" est incorrect : %s.';
   
   // ************* GVStacks *************
   
   ME_EmptyStack = 'La pile interne est vide.';
-  ME_OutOfMemory = 'La mémoire est insuffisante pour la pile.';
-  ME_LowStack = 'Pas assez d''éléments dans la pile (%d pour %d).';
+  ME_OutOfMemory = 'La mÃ©moire est insuffisante pour la pile.';
+  ME_LowStack = 'Pas assez d''Ã©lÃ©ments dans la pile (%d pour %d).';
 
   // ************* GVEval *************
 
-  ME_NoInit = 'La valeur à évaluer n''a pas été initialisée.';
-  ME_BadChar2 = 'Caractère interdit ou inconnu dans "%s".';
-  ME_ClosePar = 'Parenthèse fermante absente dans "%s".';
+  ME_NoInit = 'La valeur Ã  Ã©valuer n''a pas Ã©tÃ© initialisÃ©e.';
+  ME_BadChar2 = 'CaractÃ¨re interdit ou inconnu dans "%s".';
+  ME_ClosePar = 'ParenthÃ¨se fermante absente dans "%s".';
   ME_BadVar = 'La variable "%s" est incorrecte.';
   ME_UnknownVar = 'La variable "%s" est inconnue.';
   ME_BadFunction = 'La fonction "%s" est inconnue.';
   ME_NoArg = 'Il manque au moins un argument pour "%s".';
   ME_BadExp = 'Il y a une expression incorrecte dans "%s".';
   ME_Zero = 'Les divisions par 0 sont impossibles. ("%s")';
-  ME_NegNumber = 'Un nombre négatif est interdit pour "%s".';
+  ME_NegNumber = 'Un nombre nÃ©gatif est interdit pour "%s".';
   ME_OutOfRange = 'Evaluation hors limites : %d pour "%s".';
-  ME_OutOfRange2 = 'Evaluation hors limites : élément %d de "%s".';
+  ME_OutOfRange2 = 'Evaluation hors limites : Ã©lÃ©ment %d de "%s".';
   ME_NotSupported = 'La fonction "%s" n''est pas utilisable dans une expression.';
-  ME_ParMismatch = 'Les parenthèses de l''expression ne sont pas appariées.';
+  ME_ParMismatch = 'Les parenthÃ¨ses de l''expression ne sont pas appariÃ©es.';
   ME_NeedsInteger = '"%s" ne fonctionne qu''avec des entiers.';
-  ME_Tan = 'La fonction tangente n''est pas définie pour un cosinus nul. ("%s")';
+  ME_Tan = 'La fonction tangente n''est pas dÃ©finie pour un cosinus nul. ("%s")';
 
   // ************* PRIMITIVES *************
 
@@ -266,9 +266,9 @@ resourcestring
   P_True = 'VRAI';
   P_False = 'FAUX';
 
-  { noms des fonctions mathématiques}
+  { noms des fonctions mathÃ©matiques}
 
-  MF_Unknown = ''; // fonction non définie
+  MF_Unknown = ''; // fonction non dÃ©finie
   MF_DAbs = 'ABS'; // valeur absolue
   MF_DAbs2 = 'ABSOLUE';
   MF_DCos = 'COS'; // cosinus
@@ -277,41 +277,41 @@ resourcestring
   MF_DSin2 = 'SINUS';
   MF_DTan = 'TAN'; // tangente
   MF_DTan2 = 'TANGENTE';
-  MF_DSqrt = 'RAC'; // racine carrée
+  MF_DSqrt = 'RAC'; // racine carrÃ©e
   MF_DSqrt2 = 'RACINE';
-  MF_DTrunc = 'TRONQUE'; // nombre tronqué
+  MF_DTrunc = 'TRONQUE'; // nombre tronquÃ©
   MF_DRound = 'ARRONDI'; // nombre arrondi
-  MF_DSqr = 'CARRE'; // nombre au carré
+  MF_DSqr = 'CARRE'; // nombre au carrÃ©
   MF_DExp = 'EXP'; // exponentielle
   MF_DFrac = 'FRAC'; // partie fractionnelle
-  MF_DInt = 'ENT'; // partie entière
+  MF_DInt = 'ENT'; // partie entiÃ¨re
   MF_DInt2 = 'ENTIER';
-  MF_DLn = 'LN'; // log népérien
+  MF_DLn = 'LN'; // log nÃ©pÃ©rien
   MF_DLog2 = 'LOG2'; // log base 2
   MF_DLog10 = 'LOG10'; // log base 100
   MF_DCoTan = 'COTAN'; // cotangente
   MF_DCoTan2 = 'COTANGENTE';
-  MF_DHypot = 'HYPOTHENUSE'; // hypothénuse
+  MF_DHypot = 'HYPOTHENUSE'; // hypothÃ©nuse
   MF_DArcCos = 'ARCCOS'; // arc cosinus
   MF_DArcCos2 = 'ARCCOSINUS';
   MF_DArcSin = 'ARCSIN'; // arc sinus
   MF_DArcSin2 = 'ARCSINUS';
-  MF_DMinus = 'NEGATIF'; // nombre négatif
+  MF_DMinus = 'NEGATIF'; // nombre nÃ©gatif
   MF_DPLus = 'POSITIF'; // nombre positif
-  MF_DNegate = 'OPPOSE'; // signe inversé
+  MF_DNegate = 'OPPOSE'; // signe inversÃ©
   MF_DSign = 'SIGNE'; // signe
   MF_DRandom = 'HASARD'; // nombre au hasard
-  MF_Not = 'NON'; // négation
-  // fonctions sans paramètres
+  MF_Not = 'NON'; // nÃ©gation
+  // fonctions sans paramÃ¨tres
   MF_DPi = 'PI'; // PI sur la pile
   MF_True = 'VRAI'; // valeur vrai
   MF_False = 'FAUX'; // valeur faux
-  // fonctions infixées
+  // fonctions infixÃ©es
   MF_Or = 'OU'; // ou logique
   MF_And = 'ET'; // et logique
   MF_Mod = 'MOD'; // modulo
   MF_DPower = 'PUISSANCE'; // puissance
-  // deux opérateurs
+  // deux opÃ©rateurs
   MF_DMax = 'MAX'; // maximum
   MF_DMax2 = 'MAXIMUM';
   MF_DMin = 'MIN'; // minimum
@@ -320,7 +320,7 @@ resourcestring
  // ************* GVEval *************
  
  type
-  // ensemble des fonctions mathématiques de base
+  // ensemble des fonctions mathÃ©matiques de base
   TGVFunctions = (
     C_Unknown, // fonction inconnue
     C_DAbs, // valeur absolue
@@ -331,28 +331,28 @@ resourcestring
     C_DSin2,
     C_DTan, // tangente
     C_DTan2,
-    C_DSqrt, // racine carrée
+    C_DSqrt, // racine carrÃ©e
     C_DSqrt2,
-    C_DTrunc, // nombre tronqué
+    C_DTrunc, // nombre tronquÃ©
     C_DRound, // nombre arrondi
-    C_DSqr, // nombre au carré
+    C_DSqr, // nombre au carrÃ©
     C_DExp, // exponentielle
     C_DFrac, // partie fractionnelle
-    C_DInt, // partie entière
+    C_DInt, // partie entiÃ¨re
     C_DInt2,
-    C_DLn, // log népérien
+    C_DLn, // log nÃ©pÃ©rien
     C_DLog2, // log base 2
     C_DLog10, // log base 100
     C_DCoTan, // cotangente
     C_DCoTan2,
-    C_DHypot, // hypothénuse
+    C_DHypot, // hypothÃ©nuse
     C_DArcCos, // arc cosinus
     C_DArcCos2,
     C_DArcSin, // arc sinus
     C_DArcSin2,
-    C_Minus, // négatif
+    C_Minus, // nÃ©gatif
     C_Plus, // positif
-    C_DNegate, // signe inversé
+    C_DNegate, // signe inversÃ©
     C_DSign, // signe
     C_DRandom, // nombre au hasard,
     C_Not, // not
