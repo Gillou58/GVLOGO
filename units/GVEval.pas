@@ -72,7 +72,9 @@ type
     fOnChange: TNotifyEvent; // gestionnaire de changements
     fOnError: TNotifyEvent; // gestionnaire d'erreurs
     fOnGetVar: TGVGetVarEvent; // événement concernant les variables
+    fResult: Double; // résultat de l'évaluation
     fText: string; // texte à analyser
+    fActualItem: string;
     fIndx: Integer; // index dans la lecture
     fStartIndx: Integer; // index de départ dans la chaîne de travail
     fItemList: TGVItems; // éléments de la chaîne de travail
@@ -81,6 +83,8 @@ type
     fScanStack: TGVEvalStack; // pile pour l'évaluation
     function GetCount: Integer;
     function GetItem(N: Integer): TGVBaseItem;
+    function GetScanCount: Integer;
+    function GetScanItem(N: Integer): TGVBaseItem;
     procedure SetStartIndx(AValue: Integer); // index de départ fixé
     procedure SetText(const AValue: string); // texte en cours fixé
     procedure SetError(const Err: TGVError); // erreur fixée
@@ -100,7 +104,7 @@ type
     procedure Change; // notification de changement
     procedure Tokenize; // répartition en éléments
     procedure DoScan; // on analyse les  éléments
-    procedure DoEvaluate; // on évalue
+    function DoEvaluate: Double; // on évalue
   public
     constructor Create; overload; // constructeur simple
     // constructeur avec initialisation
@@ -111,11 +115,15 @@ type
     function Association(AValue: CTokensEnum): Integer; // associativité
     function Precedence(AValue: CTokensEnum): Integer; // priorité
     property Text: string read fText write SetText; // expression à analyser
+    property ActualItem: string read fActualItem; // élément en cours
+    property Res: Double read fResult; // résultat de l'évaluation
     // index de départ
     property StartIndx: Integer read fStartIndx write SetStartIndx default 1;
     property Indx: Integer read fIndx default -1; // index en cours dans la chaîne
     property Count: Integer read GetCount; // nombre d'éléments
+    property ScanCount: Integer read GetScanCount; // nombre d'éléments après scan
     property Item[N: Integer]: TGVBaseItem read GetItem; default; // liste des éléments
+    property ScanItem[N: Integer]: TGVBaseItem read GetScanItem; // liste pour évaluation
     property Error: TGVError read fError default C_NoInit; // erreur en cours
     // événement lié à une erreur
     property OnError: TNotifyEvent read fOnError write fOnError;
@@ -127,6 +135,8 @@ type
 
 
 implementation
+
+uses Math;
 
 { TGVEval }
 
@@ -156,12 +166,14 @@ procedure TGVEval.WipeItems;
 // *** nettoyage du tableau des éléments ***
 begin
   SetLength(fItemList, 0);
+  fActualItem := EmptyStr; // on nettoie l'élément en cours
 end;
 
 procedure TGVEval.WipeScan;
 // *** nettoyage du scan ***
 begin
   SetLength(fScan, 0); // nettoyage du tableau de sortie
+  fActualItem := EmptyStr; // on nettoie l'élément en cours
   fScanStack.Clear; // nettoyage de la pile
 end;
 
@@ -186,6 +198,7 @@ begin
     Token := AItem; // valeur de l'élément
     Kind := AKind; // catégorie de l'élément
   end;
+  fActualItem := AItem; // élément en cours
   Inc(fIndx); // caractère suivant
   Change; // changement notifié
 end;
@@ -195,7 +208,7 @@ procedure TGVEval.AddScan(const AItem: TGVBaseItem);
 begin
   SetLength(fScan, Length(fScan) + 1); // adapte la longueur du tableau
   fScan[Length(fScan) - 1] := AItem; // affecte le nouvel élément
-  Change; // changement notifié
+  fActualItem := AItem.Token; // élément en cours
 end;
 
 procedure TGVEval.SetStartIndx(AValue: Integer);
@@ -223,6 +236,20 @@ begin
   Result := fItemList[N-1]; // base 1
 end;
 
+function TGVEval.GetScanCount: Integer;
+// *** éléments après scan ***
+begin
+  Result := Length(fScan);
+end;
+
+function TGVEval.GetScanItem(N: Integer): TGVBaseItem;
+// *** élément après scan pour évaluation ***
+begin
+  if (N < 1) or (N > ScanCount) then // hors limites ?
+    raise EEvalException.CreateFmt(ME_OutOfRange, [N, Text]); // erreur
+  Result := fScan[N-1]; // base 1
+end;
+
 constructor TGVEval.Create;
 // *** constructeur simple ***
 begin
@@ -232,6 +259,7 @@ begin
   fIndx := -1; // index de travail
   fScanStack := TGVEvalStack.Create; // pile de scan
   fText := EmptyStr; // chaîne de travail vide
+  fResult := 0; // résultat par défaut
   WipeItems; // tableau vide
 end;
 
@@ -262,7 +290,7 @@ begin
   if Error = C_None then // pas d'erreur ?
     DoScan; // on analyse
   if Error = C_None then // toujours pas d'erreur ?
-    DoEvaluate; // on évalue
+    fResult := DoEvaluate; // on évalue
 end;
 
 { TGVEval }
@@ -315,7 +343,7 @@ var
   Which, Which2: TGVBaseItem;
 begin
   WipeScan; // nettoyage de la sortie
-  for I := 1 to Count do // on balaie la liste
+  for I := 1 to Count-1 do // on balaie la liste (sauf marque de fin
   begin
     Which := Item[I]; // élément en cours
     case Which.Kind of // on analyse sa nature
@@ -325,9 +353,9 @@ begin
         fScanStack.Push(Which); // fonction empilée
       ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
       cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteNot, cteAnd,
-      cteOr, cteEnd, cteOrB, cteAndB:
+      cteOr, cteEnd, cteOrB, cteAndB: // un opérateur ?
         begin
-          while (Association(fScanStack.Peek.Kind) <> -1) // un opérateur ?
+          while (not fScanStack.IsEmpty) // tant que la pile n'est pas vide
             and (((Association(Which.Kind) = 0) and (Precedence(Which.Kind) >=
             Precedence(fScanStack.Peek.Kind))) or
             ((Association(Which.Kind) = 1) and (Precedence(Which.Kind) <
@@ -335,39 +363,196 @@ begin
           begin
             Which2 := fScanStack.Pop; // on récupère l'opérateur
             AddScan(Which2); // on le stocke
-            fScanStack.Push(Which); // on empile le nouvel opérateur
-          end; // traitement des opérateurs
+          end;
+          fScanStack.Push(Which); // on empile le nouvel opérateur
         end;
-      cteBeginExp:
+      cteBeginExp: // traitement d'une parenthèse ouvrante
         fScanStack.Push(Which); // parenthèse ouvrante empilée
-      cteEndExp:
+      cteEndExp: // traitement d'une parenthèse fermante
         begin
-          // *** TODO ***
-        end; // traitement d'une parenthèse fermante
+           // tant que pile non vide et sommet <> (
+          while (not fScanStack.IsEmpty) and
+            (fScanStack.Peek.Kind <> cteBeginExp) do
+          begin
+            Which2 := fScanStack.Pop; // on récupère l'opérateur
+            AddScan(Which2); // on le stocke
+          end;
+          // parenthèse ouvrante trouvée ?
+          if (not fScanStack.IsEmpty) and (fScanStack.Peek.Kind = cteBeginExp) then
+          begin
+            fScanStack.Pop; // on retire la parenthèse
+            if (not fScanStack.IsEmpty) and // pile non vide ?
+              (fScanStack.Peek.Kind = cteFunction) then // et fonction au sommet ?
+            begin
+              Which2 := fScanStack.Pop; // on la récupère
+              AddScan(Which2); // on la stocke
+            end;
+          end
+          else
+          begin
+            SetError(C_ParMismatch); // erreur de parenthèses
+            Exit; // on quitte la procédure
+          end;
+        end;
     end;
   end;
   if Error = C_None then // pas d'erreur ?
   begin
-
+    while (not fScanStack.IsEmpty) do
+    begin
+      Which2 := fScanStack.Pop; // on récupère le sommet
+      if (Which2.Kind in [cteBeginExp, cteEndExp])then
+      begin
+        SetError(C_ParMismatch); // erreur de parenthèses
+        Exit; // on quitte la procédure
+      end
+      else
+        AddScan(Which2); // on stocke
+    end;
   end;
 end;
 
-procedure TGVEval.DoEvaluate;
+function TGVEval.DoEvaluate: Double;
 // *** évaluation ***
+var
+  I: Integer;
+  Which: TGVBaseItem;
+  ValStack: TGVDoubleStack;
+  Dbl: Double;
 begin
-  // *** TODO ***
+  Result := 0;
+  ValStack := TGVDoubleStack.Create; // création de la pile
+  try
+    for I := 1 to ScanCount do // on balaie les valeurs
+    begin
+      Which := ScanItem[I]; // élément en cours
+      with ValStack do
+        case Which.Kind of
+          cteReal, cteInteger, cteVar, cteBoolean: // *** nombre? => empilé
+            begin
+              if TryStrToFloat(Which.Token,Dbl) then // correct ?
+                Push(Dbl) // on l'empile
+              else
+                SetError(C_BadNumber);
+            end;
+          ctePlus: if Needed(2) then // *** addition ?
+              Push(Pop + Pop)
+            else
+              SetError(C_NoArg); // pas assez d'arguments
+         cteMinus: if Needed(2) then // *** soustraction ?
+           begin
+             Swap; // inversion sur la pile
+             Push(Pop - Pop);
+           end
+           else
+             SetError(C_NoArg);
+         cteMul: if Needed(2) then // *** multiplication ?
+              Push(Pop * Pop)
+            else
+              SetError(C_NoArg);
+         cteDiv: if Needed(2) then // *** division ?
+           begin
+             if Peek <> 0 then // division par zéro ?
+             begin
+               Swap; // inversion sur la pile
+               Push(Pop / Pop);
+             end
+             else
+               SetError(C_Zero); // erreur division par zéro
+           end
+           else
+             SetError(C_NoArg);
+         ctePower: if Needed(2) then // *** puissance
+           begin
+            Swap;
+            Push(Power(Pop, Pop));
+           end
+           else
+             SetError(C_NoArg);
+         cteGreater: if Needed(2) then // *** >
+           begin
+             if Pop <= Pop then
+               Push(CRTrue)
+             else
+               Push(CrFalse);
+           end
+           else
+             SetError(C_NoArg);
+         cteLower: if Needed(2) then // *** <
+           begin
+             if Pop >= Pop then
+               Push(CRTrue)
+             else
+               Push(CrFalse);
+           end
+           else
+             SetError(C_NoArg);
+         cteGreaterOrEqual: if Needed(2) then // *** >=
+           begin
+             if Pop < Pop then
+               Push(CRTrue)
+             else
+               Push(CrFalse);
+           end
+           else
+             SetError(C_NoArg);
+         cteLowerOrEqual: if Needed(2) then // *** <=
+           begin
+             if Pop > Pop then
+               Push(CRTrue)
+             else
+               Push(CrFalse);
+           end
+           else
+             SetError(C_NoArg);
+         cteEqual: if Needed(2) then // *** =
+           begin
+             if Pop = Pop then
+               Push(CRTrue)
+             else
+               Push(CrFalse);
+           end
+           else
+             SetError(C_NoArg);
+         cteNotEqual: if Needed(2) then // *** <> ou !=
+           begin
+             if Pop <> Pop then
+               Push(CRTrue)
+             else
+               Push(CrFalse);
+           end
+           else
+             SetError(C_NoArg);
+         cteMod: if Needed(2) then // *** mod
+           begin
+             Push(Trunc(Pop) mod Trunc(Pop)); // ### erreur à déclencher ? ###
+           end
+           else
+             SetError(C_NoArg);
+      end;
+    end;
+    if Error = C_None then // pas d'erreur ?
+    begin
+      if ValStack.Count = 1 then // un élément attendu
+        Result := ValStack.Pop
+      else
+        SetError(C_BadExp);
+    end;
+  finally
+    ValStack.Free; // libération de la pile
+  end;
 end;
 
 procedure TGVEval.GetVar;
 // *** recherche d'une variable ***
 var
   St: string;
-  Res: Double;
+  OutRes: Double;
   Err: TGVError;
   IndxTmp: Integer;
 begin
   St := EmptyStr; // initialisation de la chaîne de travail
-  Res := 0; // résultat par défaut
+  OutRes := 0; // résultat par défaut
   Err := C_None; // pas d'erreur par défaut
   Inc(fIndx); // on passe au caractère suivant
   IndxTmp := Indx; // on sauvegarde la position du pointeur si erreur
@@ -408,10 +593,10 @@ begin
     if (Error = C_None) then // pas d'erreur ?
     begin
       // recherche de la variable et de sa valeur
-      OnGetVar(Self, St, Res, Err);
+      OnGetVar(Self, St, OutRes, Err);
       Dec(fIndx); // réajustement du pointeur
       if (Err = C_None) then // pas d'erreur ?
-        AddItem(FloatToStr(Res), cteVar) // on enregistre sa valeur et sa catégorie
+        AddItem(FloatToStr(OutRes), cteVar) // on enregistre sa valeur et sa catégorie
       else
       begin
         St := CColon + St; // on replace les deux points

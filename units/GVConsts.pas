@@ -86,7 +86,7 @@ const
   // 8: et
   // 9: ou
   // 10: ^ puissance
-  CTokenPrecedence: array[CTokensEnum] of Integer = (-1, -1, -1, -1, 0, 0, 3,
+  CTokenPrecedence: array[CTokensEnum] of Integer = (-1, -1, -1, -1, 10, 10, 3,
     3, 2, 2, 10, 4, 4, 5, 5, 4, 4, 2, 1, 8, 9, -1, 7, 6, -1, -1, -1, -1);
   // associativité des éléments (1 = droite 0 = gauche -1 = ne s'applique pas)
   CTokenAssociation: array[CTokensEnum] of Integer =
@@ -190,7 +190,8 @@ type
   C_NegNumber, // nombre négatif interdit
   C_OutOfRange, // index hors limites pour une expression
   C_OutOfRange2, // élément hors limites d'une expression
-  C_NotSupported // élément non supporté dans une expression
+  C_NotSupported, // élément non supporté dans une expression
+  C_ParMismatch // parenthèses non concordantes
   );
 
   { tortue }
@@ -241,11 +242,12 @@ resourcestring
   ME_BadFunction = 'La fonction "%s" est inconnue.';
   ME_NoArg = 'Il manque un argument pour "%s".';
   ME_BadExp = 'Il y a une expression incorrecte dans "%s".';
-  ME_Zero = 'Les divisions par zéro sont impossibles. ("%s")';
+  ME_Zero = 'Les divisions par 0 sont impossibles. ("%s")';
   ME_NegNumber = 'Un nombre négatif est interdit pour "%s".';
   ME_OutOfRange = 'Evaluation hors limites : %d pour "%s".';
   ME_OutOfRange2 = 'Evaluation hors limites : élément %d de "%s".';
   ME_NotSupported = 'La fonction "%s" n''est pas utilisable dans une expression.';
+  ME_ParMismatch = 'Les parenthèses de l''expression ne sont pas appariées.';
 
   // ************* PRIMITIVES *************
 
@@ -369,7 +371,7 @@ const
     ME_BadFormat, ME_EmptyStack, ME_OutOfMemory, ME_LowStack, ME_NoInit,
     ME_BadChar2, ME_ClosePar, ME_BadVar, ME_UnknownVar, ME_BadFunction,
     ME_NoArg, ME_BadExp, ME_Zero, ME_NegNumber, ME_OutOfRange, ME_OutOfRange2,
-    ME_NotSupported);
+    ME_NotSupported, ME_ParMismatch);
 
   // tableau du nom des fonctions
   GVFunctionName: array [TGVFunctions] of string = (MF_Unknown, MF_DAbs,

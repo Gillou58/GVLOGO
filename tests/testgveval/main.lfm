@@ -4,6 +4,8 @@ object MainForm: TMainForm
   Top = 155
   Width = 792
   Caption = 'Test de GVEval - GVLOGO V1.00 - Gilles Vasseur 2014'
+  ClientHeight = 499
+  ClientWidth = 792
   Icon.Data = {
     6612000000000100040010101000000000002801000046000000101000000000
     0000680500006E0100002020100000000000E8020000D6060000202000000000
@@ -154,6 +156,35 @@ object MainForm: TMainForm
     000FFC000003FE000001FF000001FF800000FFE00000FFF80000FFFF0030FFFF
     FFF8FFFFFFFFFFFFFFFF
   }
+  OnCreate = FormCreate
   Position = poScreenCenter
   LCLVersion = '1.2.6.0'
+  object Edit1: TEdit
+    Left = 16
+    Height = 23
+    Top = 24
+    Width = 720
+    TabOrder = 0
+    Text = '(2*3)+(pi*5)>0'
+  end
+  object Memo1: TMemo
+    Left = 16
+    Height = 418
+    Top = 64
+    Width = 464
+    Lines.Strings = (
+      'Evaluation'
+    )
+    ScrollBars = ssBoth
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 661
+    Height = 25
+    Top = 64
+    Width = 75
+    Caption = 'Tokenize'
+    OnClick = Button1Click
+    TabOrder = 2
+  end
 end

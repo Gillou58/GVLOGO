@@ -76,6 +76,7 @@ type
     constructor Create; overload; // création
     destructor Destroy; override; // destruction
     procedure Clear; // nettoyage
+    function IsEmpty: Boolean; inline; // pile vide ?
     procedure Push(const Value: T); // empilement avec notification
     function Pop: T; // dépilement avec notification
     function Peek: T; // sommet de la pile
@@ -190,6 +191,12 @@ begin
     DoPop; // le haut de la pile est enlevé
   SetLength(fItems, CMinStack); // espace au minimum
   Notify(stCleared);
+end;
+
+function TGVStack.IsEmpty: Boolean;
+// *** pile vide ? ***
+begin
+  Result := (Count = 0);
 end;
 
 procedure TGVStack{$IFDEF Delphi}<T>{$ENDIF}.Push(const Value: T);
