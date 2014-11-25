@@ -75,7 +75,7 @@ const
   // priorité des éléments d'une expression
   // nombre le plus élevé = priorité la moins élevée
   // -1 : ne s'applique pas
-  // ( )
+  // 0: (unaires) - + ### à faire ###
   // 1: (réservé)
   // 2: * / % mod
   // 3: + -

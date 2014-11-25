@@ -459,6 +459,18 @@ var
                              else
                                SetError(C_Tan);
                            end;
+          C_DSqrt, C_DSqrt2: begin // *** racine carrée
+                             if (Peek >= 0) then // pas de nombre négatif
+                               Push(Sqrt(Pop))
+                             else
+                               SetError(C_NegNumber);
+                           end;
+          C_DTrunc: Push(Trunc(Pop));  // *** nombre tronqué
+          C_DRound: Push(Round(Pop));  // *** nombre arrondi
+          C_DSqr: Push(Peek * Pop); // *** nombre au carré
+          C_DExp: Push(Exp(Pop)); // *** exponentielle
+          C_DFrac: Push(Frac(Pop)); // *** partie fractionnelle
+          C_DInt, C_DInt2: Push(Int(Pop)); // *** partie entière
         end;
       end
       else
