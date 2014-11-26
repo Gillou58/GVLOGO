@@ -58,22 +58,28 @@ Copyright (C) 2014 Gilles VASSEUR — Tous droits réservés.
 
 3. Contenu des répertoires
 
-Répertoire GNU GPL : contient la licence GNU GPL sous plusieurs formats, en anglais et en français.
+a. Répertoire GNU GPL : contient la licence GNU GPL sous plusieurs formats, en anglais et en français.
 
-Répertoire medias : contient les images nécessaires pour les programmes, mais aussi pour la documentation.
+b. Répertoire medias : contient les images nécessaires pour les programmes, mais aussi pour la documentation.
 
-Répertoire docs : contient la documentation de GVLOGO (programmation et mode d'emploi.
+c. Répertoire docs : contient la documentation de GVLOGO (programmation et mode d'emploi.
 
-Répertoire tests : contient tous les logiciels de tests des unités de GVLOGO.
+d. Répertoire tests : contient tous les logiciels de tests des unités de GVLOGO.
    => testgvwords : test des mots
-   => testgvlists : test des listes
-   => testgvproplists : test des listes de propriétés
-   => testgvturtles : test de la tortue graphique (version avec outils de base fournis)
-   => testgvturtles2 : test de la tortue graphique (version avec la bibliothèque BGRABITMAP)
-   => testeasyturtle : programme de dessin pour enfants (test approfondi de la tortue graphique en version simple).
-   => testgveval : tests de l’évaluation d’expressions (*** travail en cours ***)
 
-Répertoire units : contient toutes les unités nécessaires à GVLOGO.
+   => testgvlists : test des listes
+
+   => testgvproplists : test des listes de propriétés
+
+   => testgvturtles : test de la tortue graphique (version avec outils de base fournis)
+
+   => testgvturtles2 : test de la tortue graphique (version avec la bibliothèque BGRABITMAP)
+
+   => testeasyturtle : programme de dessin pour enfants (test approfondi de la tortue graphique en version simple)
+
+   => testgveval : tests de l’évaluation d’expressions 
+
+d. Répertoire units : contient toutes les unités nécessaires à GVLOGO.
 
 
 4. Contact
@@ -84,6 +90,6 @@ Vous pouvez aussi vous rendre sur mon site pour les éventuelles mises à jour :
 
 Les suggestions, modifications, propositions et questions sont les bienvenues.
 
-Gilles VASSEUR, le 25 novembre 2014
+Gilles VASSEUR, le 26 novembre 2014
 
  

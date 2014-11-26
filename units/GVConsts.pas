@@ -63,7 +63,7 @@ type
     ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
     cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteNot, cteAnd,
     cteOr, cteEnd, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden,
-    cteNotSupported);
+    cteNotSupported, cteUnaryMinus, cteUnaryPlus);
 
   // élément de base de l'expression
   TGVBaseItem = record
@@ -75,7 +75,7 @@ const
   // priorité des éléments d'une expression
   // nombre le plus élevé = priorité la moins élevée
   // -1 : ne s'applique pas
-  // 0: (unaires) - + ### à faire ###
+  // 0: (unaires) - +
   // 1: (réservé)
   // 2: * / % mod
   // 3: + -
@@ -89,11 +89,11 @@ const
   // 11: ^ puissance
   // 12: ( )
   CTokenPrecedence: array[CTokensEnum] of Integer = (-1, -1, -1, -1, 12, 12, 3,
-    3, 2, 2, 11, 4, 4, 5, 5, 4, 4, 2, 10, 8, 9, -1, 7, 6, -1, -1, -1, -1);
+    3, 2, 2, 11, 4, 4, 5, 5, 4, 4, 2, 10, 8, 9, -1, 7, 6, -1, -1, -1, -1, 0, 0);
   // associativité des éléments (1 = droite 0 = gauche -1 = ne s'applique pas)
   CTokenAssociation: array[CTokensEnum] of Integer =
     (-1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
-      0, -1, -1, -1, -1);
+      0, -1, -1, -1, -1, 0, 0);
 const
   CPlus = '+'; // addition
   CMinus = '-'; // soustraction

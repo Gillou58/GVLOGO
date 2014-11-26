@@ -145,7 +145,7 @@ const
     'Div', 'Power', 'Greater', 'Lower', 'Equal', 'NotEqual',
     'GreaterOrEqual', 'LowerOrEqual', 'Mod', 'Not', 'And', 'Or',
     'End', 'OrB', 'AndB', 'Boolean', 'UnKnown',
-    'Forbidden', 'NotSupported');
+    'Forbidden', 'NotSupported', 'UnaryMinus', 'UnaryPlus');
   StateArray: array[TGVEvalState] of string = ('Waiting', 'Tokenizing',
     'Scanning', 'Computing', 'NoInit');
 begin

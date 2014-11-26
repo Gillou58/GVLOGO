@@ -350,8 +350,14 @@ begin
      CBlank: Inc(fIndx); // on ignore les blancs
      '0'..'9': GetNumber; // c'est un nombre
      CColon: GetVar; // c'est une variable
-     CPlus: AddItem(CPlus, ctePlus); // addition
-     CMinus: AddItem(CMinus, cteMinus); // soustraction
+     CPlus: if (Count = 0) or (Item[Count].Kind = cteBeginExp) then
+               AddItem(CPlus, cteUnaryPlus) // plus unaire
+             else
+               AddItem(CPlus, ctePlus); // addition ou plus unaire
+     CMinus: if (Count = 0) or (Item[Count].Kind = cteBeginExp) then
+               AddItem(CMinus, cteUnaryMinus) // moins unaire
+             else
+               AddItem(CMinus, cteMinus); // soustraction ou moins unaire
      CMul: AddItem(CMul, cteMul); // multiplication
      CDiv: AddItem(CDiv, cteDiv); // division
      CPower: AddItem(CPower, ctePower); // puissance
@@ -391,7 +397,7 @@ begin
         fScanStack.Push(Which); // fonction empilée
       ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
       cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteNot, cteAnd,
-      cteOr, cteEnd, cteOrB, cteAndB: // un opérateur ?
+      cteOr, cteEnd, cteOrB, cteAndB, cteUnaryMinus, cteUnaryPlus: // un opérateur ?
         begin
           while (not fScanStack.IsEmpty) // tant que la pile n'est pas vide
             and (((Association(Which.Kind) = 0) and (Precedence(Which.Kind) >=
@@ -713,6 +719,12 @@ begin
            else
              SetError(C_NoArg);
          cteFunction: DoFunction; // *** une fonction
+         cteUnaryMinus: if Needed(1) then // *** moins unaire
+                          Push(-Pop)
+                        else
+                          SetError(C_NoArg);
+         cteUnaryPlus: if not Needed(1) then // *** plus unaire
+                         SetError(C_NoArg);
       end;
     end;
     if Error = C_None then // pas d'erreur ?
