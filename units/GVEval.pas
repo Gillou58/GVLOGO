@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    23-11-2014 21:41:20                          |
+  |                  Date:    27-11-2014 10:47:20                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -69,23 +69,25 @@ type
 
   TGVEval = class(TObject)
   private
+    fEvalState: TGVEvalState; // état de l'évaluation
     fOnChange: TNotifyEvent; // gestionnaire de changements
     fOnError: TNotifyEvent; // gestionnaire d'erreurs
     fOnGetVar: TGVGetVarEvent; // événement concernant les variables
     fResult: Double; // résultat de l'évaluation
     fText: string; // texte à analyser
-    fActualItem: string;
+    fActualItem: string; // élément en cours
     fIndx: Integer; // index dans la lecture
     fStartIndx: Integer; // index de départ dans la chaîne de travail
     fItemList: TGVItems; // éléments de la chaîne de travail
     fError: TGVError; // erreur en cours
     fScan: TGVItems; // résultat du scan
     fScanStack: TGVEvalStack; // pile pour l'évaluation
-    function GetCount: Integer;
-    function GetItem(N: Integer): TGVBaseItem;
-    function GetScanCount: Integer;
-    function GetScanItem(N: Integer): TGVBaseItem;
+    function GetCount: Integer; // nombre d'éléments
+    function GetItem(N: Integer): TGVBaseItem; // accès aux éléments
+    function GetScanCount: Integer; // nombre d'éléments scannés
+    function GetScanItem(N: Integer): TGVBaseItem; // élément de scan
     procedure SetStartIndx(AValue: Integer); // index de départ fixé
+    procedure SetState(AValue: TGVEvalState); // état fixé
     procedure SetText(const AValue: string); // texte en cours fixé
     procedure SetError(const Err: TGVError); // erreur fixée
     procedure GetDelimGreater; // plus grand ou >=
@@ -125,7 +127,9 @@ type
     property ScanCount: Integer read GetScanCount; // nombre d'éléments après scan
     property Item[N: Integer]: TGVBaseItem read GetItem; default; // liste des éléments
     property ScanItem[N: Integer]: TGVBaseItem read GetScanItem; // liste pour évaluation
-    property Error: TGVError read fError default C_NoInit; // erreur en cours
+    property Error: TGVError read fError default C_None; // erreur en cours
+    // état de l'évaluateur
+    property State: TGVEvalState read fEvalState write SetState default esNoInit;
     // événement lié à une erreur
     property OnError: TNotifyEvent read fOnError write fOnError;
     // événement lié à la recherche d'une variable
@@ -144,10 +148,11 @@ uses Math;
 procedure TGVEval.SetText(const AValue: string);
 // *** fixe l'expression à analyser ***
 begin
-  if fText = AValue then
-    Exit; // sortie si aucun changement
+  if (fText = AValue) or (not (State in [esWaiting, esNoInit])) then
+    Exit; // sortie si aucun changement ou évaluateur au travail
   fText := AValue; // nouvelle valeur
   SetError(C_None); // pas d'erreur
+  State := esWaiting; // état d'attente
 end;
 
 procedure TGVEval.SetError(const Err: TGVError);
@@ -239,6 +244,15 @@ begin
   fStartIndx := AValue; // nouvelle valeur de l'index
 end;
 
+procedure TGVEval.SetState(AValue: TGVEvalState);
+// *** état de l'évaluateur ***
+begin
+  if fEvalState = AValue then
+    Exit; // on sort si aucun changement
+  fEvalState := AValue; // nouvelle valeur
+  Change; // on notifie le changement
+end;
+
 function TGVEval.GetCount: Integer;
 // *** nombre d'éléments ***
 begin
@@ -271,7 +285,8 @@ constructor TGVEval.Create;
 // *** constructeur simple ***
 begin
   inherited Create; // on hérite
-  fError := C_NoInit; // erreur par défaut (chaîne non initialisée)
+  fEvalState := esNoInit; // état de l'évaluation (non initialisée)
+  fError := C_None; // pas d'erreur
   fStartIndx := 1; // index par défaut de départ
   fIndx := -1; // index de travail
   fScanStack := TGVEvalStack.Create; // pile de scan
@@ -304,11 +319,18 @@ end;
 procedure TGVEval.Scan;
 // *** analyse de la chaîne entrée ***
 begin
+  if (State = esNoInit) then // erreur si rien à évaluer
+    raise EEvalException.Create(ME_NoInit);
+  try
+  SetError(C_None); // pas d'erreur
   Tokenize; // répartition en éléments
   if Error = C_None then // pas d'erreur ?
     DoScan; // on analyse
   if Error = C_None then // toujours pas d'erreur ?
     fResult := DoEvaluate; // on évalue
+  finally
+    State := esWaiting; // état d'attente
+  end;
 end;
 
 { TGVEval }
@@ -318,14 +340,11 @@ procedure TGVEval.Tokenize;
 var
   Ch: Char;
 begin
- // erreur si rien à évaluer
- if (Error = C_NoInit) then
-   raise EEvalException.Create(ME_NoInit);
- SetError(C_None); // pas d'erreur
- WipeItems; // liste interne nettoyée
- fIndx := StartIndx; // départ initialisé
- while (Error = C_None) and (fIndx <= Length(Text)) do // on balaie l'expression
- begin
+  State := esTokenizing; // état mis à jour
+  WipeItems; // liste interne nettoyée
+  fIndx := StartIndx; // départ initialisé
+  while (Error = C_None) and (fIndx <= Length(Text)) do // on balaie l'expression
+  begin
    Ch := fText[fIndx]; // caractère en cours
    case Ch of
      CBlank: Inc(fIndx); // on ignore les blancs
@@ -349,9 +368,9 @@ begin
      AddItem(Ch, cteUnknown); // enregistre le caractère interdit
      SetError(C_BadChar); // caractère interdit
    end;
- end;
- if (Error = C_None) then  // une erreur ?
-   AddItem(EmptyStr, cteEnd); // marque de fin
+  end;
+  if (Error = C_None) then  // une erreur ?
+    AddItem(EmptyStr, cteEnd); // marque de fin
 end;
 
 procedure TGVEval.DoScan;
@@ -360,6 +379,7 @@ var
   I: Integer;
   Which, Which2: TGVBaseItem;
 begin
+  State := esScanning; // état mis à jour
   WipeScan; // nettoyage de la sortie
   for I := 1 to Count-1 do // on balaie la liste (sauf marque de fin
   begin
@@ -521,6 +541,7 @@ var
   end;
 
 begin
+  State := esComputing; // état mis à jour
   Result := 0;
   ValStack := TGVDoubleStack.Create; // création de la pile
   try

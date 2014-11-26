@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    22-11-2014 17:00:42                          |
+  |                  Date:    27-11-2014 10:47:42                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -210,6 +210,10 @@ type
   { piles }
 
   TGVStackNotification = (stAdded, stRemoved, stChanged, stCleared);
+
+  { évaluation }
+
+  TGVEvalState = (esWaiting, esTokenizing, esScanning, esComputing, esNoInit);
 
 resourcestring
   { message d'erreur }

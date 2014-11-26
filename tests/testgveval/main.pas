@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    27-11-2014 21:11:57                          |
+  |                  Date:    28-11-2014 10:47:57                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -89,18 +89,21 @@ begin
   Memo1.Clear;
   Compute.Text := Edit1.Text; // texte en place
   Memo1.Lines.Add(Format('*** ANALYSE de : %s', [Edit1.Text]));
+  Memo1.Lines.Add('___________________________________');
   Memo1.Lines.Add(EmptyStr);
   Compute.Scan;  // valeur évaluée
   if Compute.Error = C_None then // pas d'erreur ?
   begin
     Memo1.Lines.Add(EmptyStr);
-    Memo1.Lines.Add('*** LISTE des ELEMENTS ***');
+    Memo1.Lines.Add('*** LISTE des éléments ***');
+    Memo1.Lines.Add('__________________________');
     Memo1.Lines.Add(EmptyStr);
     for Item in Compute do  // on énumère
       Memo1.Lines.Add(Item.Token); // éléments dans le mémo
   end;
   Memo1.Lines.Add(EmptyStr);
-  Memo1.Lines.Add('*** LISTE des ELEMENTS après scan ***');
+  Memo1.Lines.Add('*** LISTE des éléments après scan ***');
+  Memo1.Lines.Add('_____________________________________');
   Memo1.Lines.Add(EmptyStr);
   for I := 1 to Compute.ScanCount do
   begin
@@ -108,6 +111,7 @@ begin
   end;
  Memo1.Lines.Add(EmptyStr);
  Memo1.Lines.Add(Format('*** Résultat : %2f', [Compute.Res]));
+ Memo1.Lines.Add('___________________________________');
  Memo1.Lines.Add(EmptyStr);
 end;
 
@@ -142,12 +146,22 @@ const
     'GreaterOrEqual', 'LowerOrEqual', 'Mod', 'Not', 'And', 'Or',
     'End', 'OrB', 'AndB', 'Boolean', 'UnKnown',
     'Forbidden', 'NotSupported');
+  StateArray: array[TGVEvalState] of string = ('Waiting', 'Tokenizing',
+    'Scanning', 'Computing', 'NoInit');
 begin
   with Compute do // la base est de 1
-    Memo1.Lines.Add('< AJOUT : ' + Format('%-15s',[Item[Count].Token]) +
-      ' --> ' + Format('%-15s',[TypArray[Item[Count].Kind]]) +
-      ' Priorité: ' + IntToStr(CTokenPrecedence[Item[Count].Kind]) +
-      ' Association : ' + IntToStr(CTokenAssociation[Item[Count].Kind]) + ' <--');
+  begin
+    if (Count <> 0) and (State = esTokenizing) then
+    begin
+      Memo1.Lines.Add('< AJOUT : ' + Item[Count].Token);
+      Memo1.Lines.Add(' --> ' + TypArray[Item[Count].Kind]);
+      Memo1.Lines.Add(' Priorité: ' + IntToStr(CTokenPrecedence[Item[Count].Kind]) +
+        ' Association : ' + IntToStr(CTokenAssociation[Item[Count].Kind]));
+    end
+    else
+      Memo1.Lines.Add('Etat : ' + StateArray[State]);
+    Memo1.Lines.Add(EmptyStr);
+  end;
 end;
 
 end.
