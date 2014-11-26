@@ -1,0 +1,8 @@
+object MainForm: TMainForm
+  Left = 238
+  Height = 653
+  Top = 150
+  Width = 1220
+  Caption = 'Test de GVKernel - V1.0.0 - Gilles Vasseur 2014 - GVLOGO'
+  LCLVersion = '1.2.6.0'
+end

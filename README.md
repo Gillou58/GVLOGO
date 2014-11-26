@@ -79,6 +79,8 @@ d. Répertoire tests : contient tous les logiciels de tests des unités de GVLOG
 
    => testgveval : tests de l’évaluation d’expressions 
 
+⇨ Testkernel : test du noyau (*** travail en cours ***)
+
 d. Répertoire units : contient toutes les unités nécessaires à GVLOGO.
 
 

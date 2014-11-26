@@ -57,6 +57,7 @@ const
   CExclamation = '!';
     
   // ************* GVEval *************
+  
 type
   // éléments d'une expression à évaluer
   CTokensEnum = (cteInteger, cteReal, cteVar, cteFunction, cteBeginExp, cteEndExp,
@@ -165,6 +166,7 @@ type
   TGVError = (
   C_None, // pas d'erreur
   C_InternalError, // erreur interne
+  // Listes
   C_BadNumber, // nombre incorrect
   C_BadInt, // entier incorrect
   C_EmptyStr, // mot vide interdit
@@ -177,9 +179,11 @@ type
   C_TwoDelete, // pas assez d'éléments pour en supprimer deux
   C_BadListP, // liste de propriétés incorrecte
   C_BadFormat, // fichier de format erroné
+  // GVStack
   C_EmptyStack, // pile interne vide
   C_OutOfMemory, // mémoire insuffisante pour la pile
   C_LowStack, // pile insuffisante
+  // GVEval
   C_NoInit, // valeur non initialisée
   C_BadChar2, // caractère interdit ou inconnu
   C_ClosePar, // parenthèse fermante absente
@@ -198,7 +202,48 @@ type
   C_Tan, // tangente avec un cosinus nul
   C_Ln, // log avec nombre <= 0
   C_CoTan, // cotangente avec sinus nul
-  C_Arc // arccosinus ou arcsinus non définies
+  C_Arc, // arccosinus ou arcsinus non définies
+  // GVKernel
+  C_Protected, // objet protégé
+  C_BadName, // nom incorrect
+  C_NotVar, // pas une variable
+  C_AlreadyBurried, // déjà enterré
+  C_NotPackage, // pas un paquet
+  C_NotObject, // pas un objet
+  C_NotPrim, // pas une primitive
+  C_PackageForbidden, // paquet interdit
+  C_PrimForbidden, // primitive interdite
+  C_NotBurried, // non enterré
+  C_NotProc, // procédure attendue
+  C_BadParam, // mauvais paramètre
+  C_BadLine, // mauvaise ligne
+  C_AlreadyPackage, // déjà un paquet
+  C_BadSave, // erreur de sauvegarde
+  C_NotLProp, // liste de propriétés inconnue
+  C_BadDef, // mauvaise définition
+  C_BadFile, // mauvais fichier
+  C_NotProp, // propriété inconnue
+  C_BadProp, // mauvaise propriété
+  C_BadObj, // erreur interne
+  C_NotFor, // mot POUR absent
+  C_EmptyEdit, // éditeur vide
+  C_OKProc, // procédure OK
+  C_NotEnd, // mot FIN absent
+  C_Bad, // mauvais nombre
+  C_Inc, // erreur inconnue
+  C_EmptyList, // liste vide non attendue
+  C_FileNotFound, // fichier introuvable
+  C_Version, // mauvaise version de fichier
+  C_BadContent, // mauvais contenu
+  C_NorProcnorList, // ni une procédure ni une liste de procédures
+  C_Burried, // objet enterré
+  C_NotInPackage, // objet absent d'un paquet
+  C_NorPrimNorProc, // ni une procédure ni une primitive
+  C_BadTo, // mot POUR mal placé
+  C_BadEnd, // mot FIN mal placé
+  C_WhatAbout, // que faire de ?
+  C_BadNum, // nombre inapproprié pour une opération
+  C_Nothing // rien n'a été fourni
   );
 
   { tortue }
@@ -265,10 +310,58 @@ resourcestring
   ME_CoTan = 'La fonction cotangente n''est pas définie pour un sinus nul. ("%s")';
   ME_Arc = 'La fonction "%s" n''est définie que dans l''intervalle [-1,1].';
 
+  // ************* GVKernel *************
+
+  ME_C_Protected = 'L''objet "%s" est protégé.';
+  ME_C_BadName = 'Le nom "%s" est incorrect.';
+  ME_C_NotVar = 'L''objet "%s" n''est pas une variable.';
+  ME_C_AlreadyBurried = 'L''objet "%s" est déjà enterré.';
+  ME_C_NotPackage = 'L''objet "%s" n''est pas un paquet.';
+  ME_C_NotObject = 'L''objet "%s" n''existe pas.';
+  ME_C_NotPrim = 'L''objet "%s" n''est pas une primitive.';
+  ME_C_PackageForbidden =
+    'Le paquet "%s" ne peut pas être placé dans un autre paquet.';
+  ME_C_PrimForbidden = 'La primitive "%s" ne peut pas être modifiée.';
+  ME_C_NotBurried = 'L''objet "%s" n''est pas enterré.';
+  ME_C_NotProc = 'L''objet "%s" n''est pas une procédure.';
+  ME_C_BadParam = 'Le paramètre "%s" est incorrect.';
+  ME_C_BadLine = 'La ligne "%s" est incorrecte.';
+  ME_C_AlreadyPackage = 'L''objet "%s" est déjà un paquet.';
+  ME_C_BadSave = 'Erreur de sauvegarde de "%s".';
+  ME_C_NotLProp = 'La liste de propriétés "%s" est inconnue.';
+  ME_C_BadDef = 'La définition "%s" est incorrecte.';
+  ME_C_BadFile = 'Le fichier "%s" est introuvable ou corrompu.';
+  ME_C_NotProp = 'La propriété "%s" est inconnue.';
+  ME_C_BadProp = 'La définition de la propriété "%s" est incorrecte.';
+  ME_C_BadObj = 'Le nom "%s" est déjà utilisé pour un autre type d''objet.';
+  ME_C_NotFor = 'Le mot POUR est introuvable.';
+  ME_C_EmptyEdit = 'L''éditeur est vide (lignes : "%s").';
+  ME_C_OKProc = 'La procédure "%s" est correcte.';
+  ME_C_NotEnd = 'Le mot FIN est introuvable pour "%s".';
+  ME_C_Bad = 'Le nombre "%s" est incorrect.';
+  ME_C_Inc = 'Oups ! Erreur inconnue !';
+  ME_C_EmptyList = 'La liste "%s" est vide.';
+  ME_C_FileNotFound = 'Le fichier "%s" est introuvable.';
+  ME_C_Version = 'La version du fichier "%s" est incorrecte.';
+  ME_C_BadContent = 'Le contenu du fichier "%s" est incorrect.';
+  ME_C_NorProcnorList =
+    'L''objet "%s" n''est ni une procédure ni une liste de procédures.';
+  ME_C_Burried = 'L''objet %s est enterré.';
+  ME_C_NotInPackage = 'L''objet %s n''appartient à aucun paquet.';
+  ME_C_NorPrimNorProc = 'L''objet %S n''est ni une procédure ni une primitive.';
+  ME_C_BadTo = 'Le mot POUR est mal placé dans %s.';
+  ME_C_BadEnd = 'Le mot FIN est mal placé dans %s.';
+  ME_C_WhatAbout = 'Que faut-il faire de %s ?';
+  ME_C_BadNum = 'Le nombre %d ne convient pas pour cette opération.';
+  ME_C_Nothing = '<vide>';
+
   // ************* PRIMITIVES *************
 
   { primitives de base }
 
+  CComment = '//'; // commentaire
+  P_For = 'POUR';
+  P_End = 'END';
   P_First = 'PREMIER';
   P_Last = 'DERNIER';
   P_ButFirst = 'SAUFPREMIER';
@@ -388,7 +481,16 @@ const
     ME_BadChar2, ME_ClosePar, ME_BadVar, ME_UnknownVar, ME_BadFunction,
     ME_NoArg, ME_BadExp, ME_Zero, ME_NegNumber, ME_OutOfRange, ME_OutOfRange2,
     ME_NotSupported, ME_ParMismatch, ME_NeedsInteger, ME_Tan, ME_Ln, ME_CoTan,
-    ME_Arc);
+    ME_Arc, ME_C_Protected, ME_C_BadName, ME_C_NotVar,
+    ME_C_AlreadyBurried, ME_C_NotPackage, ME_C_NotObject, ME_C_NotPrim,
+    ME_C_PackageForbidden, ME_C_PrimForbidden, ME_C_NotBurried, ME_C_NotProc,
+    ME_C_BadParam, ME_C_BadLine, ME_C_AlreadyPackage, ME_C_BadSave,
+    ME_C_NotLProp, ME_C_BadDef, ME_C_BadFile, ME_C_NotProp, ME_C_BadProp,
+    ME_C_BadObj, ME_C_NotFor, ME_C_EmptyEdit, ME_C_OKProc, ME_C_NotEnd,
+    ME_C_Bad, ME_C_Inc, ME_C_EmptyList, ME_C_FileNotFound,
+    ME_C_Version, ME_C_BadContent, ME_C_NorProcnorList, ME_C_Burried,
+    ME_C_NotInPackage, ME_C_NorPrimNorProc, ME_C_BadTo, ME_C_BadEnd,
+    ME_C_WhatAbout, ME_C_BadNum, ME_C_Nothing);
 
   // tableau du nom des fonctions
   GVFunctionName: array [TGVFunctions] of string = (MF_Unknown, MF_DAbs,
@@ -400,6 +502,16 @@ const
     MF_DRandom, MF_Not, MF_DPi, MF_True, MF_False, MF_Or, MF_And, MF_Mod,
     MF_DPower, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2, MF_DHypot);
 	
+// ************* KERNEL **************
+
+const
+  CVr = CDot + 'VAR'; // variable	
+  CBurried = CDot + 'BUR'; // enterré
+  CInPackage = CDot + 'INP'; // dans un paquet
+  CPackage = CDot + 'PKG'; // un paquet
+  CProc = CDot + 'PRC'; // une procédure
+  CExtLP = CDot + 'GVE'; // extension d'un espace de travail
+  
 implementation
 
 end.
