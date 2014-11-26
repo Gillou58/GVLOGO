@@ -531,10 +531,22 @@ var
                                    else
                                      SetError(C_Arc);
                                   end;
-          C_Minus:; // négatif
-          C_Plus:; // positif
+          C_Minus: begin // *** négatif ?
+                      Dbl := Pop;
+                      if (Dbl <= 0) then
+                        Push(CRTrue)
+                      else
+                        Push(CRFalse);
+                   end;
+          C_Plus: begin // *** positif ?
+                      Dbl := Pop;
+                      if (Dbl >= 0) then
+                        Push(CRTrue)
+                      else
+                        Push(CRFalse);
+                   end;
           C_DNegate: Push(-Pop); // *** signe inversé
-          C_DSign: ; // signe
+          C_DSign: Push(Sign(Pop)); // *** signe
           C_DRandom: begin // *** nombre au hasard
                        Dbl := Pop;
                        if (Trunc(Dbl) = Dbl) then

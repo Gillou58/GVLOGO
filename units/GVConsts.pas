@@ -355,7 +355,6 @@ resourcestring
     C_DLog10, // log base 10
     C_DCoTan, // cotangente
     C_DCoTan2,
-
     C_DArcCos, // arc cosinus
     C_DArcCos2,
     C_DArcSin, // arc sinus
