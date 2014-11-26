@@ -197,7 +197,8 @@ type
   C_NeedsInteger, // entiers exigés
   C_Tan, // tangente avec un cosinus nul
   C_Ln, // log avec nombre <= 0
-  C_CoTan // cotangente avec sinus nul
+  C_CoTan, // cotangente avec sinus nul
+  C_Arc // arccosinus ou arcsinus non définies
   );
 
   { tortue }
@@ -262,6 +263,7 @@ resourcestring
   ME_Tan = 'La fonction tangente n''est pas définie pour un cosinus nul. ("%s")';
   Me_Ln = 'Les fonctions logarithmiques n''acceptent que des paramètres strictement positifs. ("%s")';
   ME_CoTan = 'La fonction cotangente n''est pas définie pour un sinus nul. ("%s")';
+  ME_Arc = 'La fonction "%s" n''est définie que dans l''intervalle [-1,1].';
 
   // ************* PRIMITIVES *************
 
@@ -299,7 +301,6 @@ resourcestring
   MF_DLog10 = 'LOG'; // log base 10
   MF_DCoTan = 'COTAN'; // cotangente
   MF_DCoTan2 = 'COTANGENTE';
-  MF_DHypot = 'HYPOTHENUSE'; // hypothénuse
   MF_DArcCos = 'ARCCOS'; // arc cosinus
   MF_DArcCos2 = 'ARCCOSINUS';
   MF_DArcSin = 'ARCSIN'; // arc sinus
@@ -324,6 +325,7 @@ resourcestring
   MF_DMax2 = 'MAXIMUM';
   MF_DMin = 'MIN'; // minimum
   MF_DMin2 = 'MINIMUM';
+  MF_DHypot = 'HYPOTHENUSE'; // hypothénuse
 
  // ************* GVEval *************
  
@@ -353,7 +355,7 @@ resourcestring
     C_DLog10, // log base 10
     C_DCoTan, // cotangente
     C_DCoTan2,
-    C_DHypot, // hypothénuse
+
     C_DArcCos, // arc cosinus
     C_DArcCos2,
     C_DArcSin, // arc sinus
@@ -374,7 +376,8 @@ resourcestring
     C_DMax, // maximum
     C_DMax2,
     C_DMin, // minimum
-    C_DMin2
+    C_DMin2,
+    C_DHypot // hypothénuse
    );
 
 const
@@ -385,17 +388,18 @@ const
     ME_BadFormat, ME_EmptyStack, ME_OutOfMemory, ME_LowStack, ME_NoInit,
     ME_BadChar2, ME_ClosePar, ME_BadVar, ME_UnknownVar, ME_BadFunction,
     ME_NoArg, ME_BadExp, ME_Zero, ME_NegNumber, ME_OutOfRange, ME_OutOfRange2,
-    ME_NotSupported, ME_ParMismatch, ME_NeedsInteger, ME_Tan, ME_Ln, ME_CoTan);
+    ME_NotSupported, ME_ParMismatch, ME_NeedsInteger, ME_Tan, ME_Ln, ME_CoTan,
+    ME_Arc);
 
   // tableau du nom des fonctions
   GVFunctionName: array [TGVFunctions] of string = (MF_Unknown, MF_DAbs,
     MF_DAbs2, MF_DCos, MF_DCos2, MF_DSin, MF_DSin2, MF_DTan, MF_DTan2, MF_DSqrt,
     MF_DSqrt2, MF_DTrunc, MF_DRound, MF_DSqr, MF_DExp, MF_DFrac, MF_DInt,
-    MF_DInt2, MF_DLn, MF_DLog2, MF_DLog10, MF_DCoTan, MF_DCoTan2, MF_DHypot,
+    MF_DInt2, MF_DLn, MF_DLog2, MF_DLog10, MF_DCoTan, MF_DCoTan2,
     MF_DArcCos, MF_DArcCos2, MF_DArcSin, MF_DArcSin2,  MF_DMinus,
     MF_DPLus, MF_DNegate,  MF_DSign,
     MF_DRandom, MF_Not, MF_DPi, MF_True, MF_False, MF_Or, MF_And, MF_Mod,
-    MF_DPower, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2);
+    MF_DPower, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2, MF_DHypot);
 	
 implementation
 

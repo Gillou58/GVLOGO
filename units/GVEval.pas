@@ -517,11 +517,20 @@ var
                                  else
                                    SetError(C_CoTan);
                                end;
-          C_DHypot:; // hypothénuse
-          C_DArcCos, // arc cosinus
-          C_DArcCos2:;
-          C_DArcSin, // arc sinus
-          C_DArcSin2:;
+          C_DArcCos, C_DArcCos2: begin // *** arc cosinus
+                                   Dbl := Pop;
+                                   if (Dbl >= -1.0) and (Dbl <= 1) then
+                                     Push(RadToDeg(ArcCos(Dbl)))
+                                   else
+                                     SetError(C_Arc);
+                                  end;
+          C_DArcSin, C_DArcSin2: begin // *** arc sinus
+                                   Dbl := Pop;
+                                   if (Dbl >= -1.0) and (Dbl <= 1) then
+                                     Push(RadToDeg(ArcSin(Dbl)))
+                                   else
+                                     SetError(C_Arc);
+                                  end;
           C_Minus:; // négatif
           C_Plus:; // positif
           C_DNegate: Push(-Pop); // *** signe inversé
