@@ -1,4 +1,34 @@
+{ |========================================================================|
+  |                                                                        |
+  |                  G V S O F T                                           |
+  |                  Projet : GVLogo                                       |
+  |                  Description : Test du noyau de GVLOGO                 |
+  |                  Unité : Test.pas                                      |
+  |                  Ecrit par  : VASSEUR Gilles                           |
+  |                  e-mail : g.vasseur58@laposte.net                      |
+  |                  Copyright : © G. VASSEUR                              |
+  |                  Date:    27-11-2014 11:14:40                          |
+  |                  Version : 1.0.0                                       |
+  |                                                                        |
+  |========================================================================| }
+
+{$I GVDefines.inc}
+
 unit Test;
+
+// GVKernel - part of GVLOGO
+// Copyright (C) 2014 Gilles VASSEUR
+//
+// This program is free software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
+// either version 3 of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with this program.
+//  If not, see <http://www.gnu.org/licenses/>.
 
 {$mode objfpc}{$H+}
 
@@ -6,7 +36,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls, Spin, ExtCtrls, Buttons, PopupNotifier, GVConsts, GVKernel;
+  StdCtrls, Spin, ExtCtrls, Buttons, GVConsts, GVKernel;
 
 type
 
@@ -86,6 +116,7 @@ type
     btnKernelResult: TButton;
     btnIsValidVar: TButton;
     btnLoadVars: TButton;
+    btnAllProcsToEdit: TButton;
     GroupBoxPropLists: TGroupBox;
     GroupBoxGeneral: TGroupBox;
     GroupBoxProperties: TGroupBox;
@@ -106,6 +137,7 @@ type
     procedure BitBtnKerCancelClick(Sender: TObject);
     procedure btnAddProcClick(Sender: TObject);
     procedure btnAddVarClick(Sender: TObject);
+    procedure btnAllProcsToEditClick(Sender: TObject);
     procedure btnAnPropClick(Sender: TObject);
     procedure btnBelongToClick(Sender: TObject);
     procedure btnBurryPackageClick(Sender: TObject);
@@ -247,7 +279,7 @@ begin
     StError.Font.Color:= clRed;
   if Message = EmptyStr then
     Message := ME_C_Nothing;
-  StError.Caption := Message;
+  StError.Caption := Format(GVErrorName[Err], [Message]);
 end;
 
 procedure TMainForm.btnExistsClick(Sender: TObject);
@@ -348,7 +380,7 @@ procedure TMainForm.btnIsProtectedClick(Sender: TObject);
 var
   S: string;
 begin
-  if GVKer.IsProc(LabEditKerName.Text) then
+  if GVKer.IsProtected(LabEditKerName.Text) then
     S := P_True
   else
     S := P_False;
@@ -416,8 +448,8 @@ end;
 procedure TMainForm.btnKernelResultClick(Sender: TObject);
 // test de KERNELRESULT
 begin
-  mmoGVKer.Lines.Add(FmtMess('KERNELRESULT '));
-  ErrorMessage(GVKer.KernelResult, EmptyStr);
+  mmoGVKer.Lines.Add(FmtMess('KERNELRESULT ') +
+    Format(GVErrorName[GVKer.KernelResult], [EmptyStr]));
 end;
 
 procedure TMainForm.btnKErrorClick(Sender: TObject);
@@ -459,6 +491,13 @@ procedure TMainForm.btnAddVarClick(Sender: TObject);
 begin
   if GVKer.AddVar(LabEditKerName.Text,LabEditKerValue.Text) then
     mmoGVKer.Lines.Add(fmtMess('ADDVAR') + LabEditKerName.Text + ' créée.');
+end;
+
+procedure TMainForm.btnAllProcsToEditClick(Sender: TObject);
+// Test de AllProcsToEdit
+begin
+  if GVKer.AllProcsToEdit(mmoGVKer.Lines) then
+    mmoGVKer.Lines.Add(fmtMess('Toutes les procédures ont été éditées'));
 end;
 
 procedure TMainForm.btnAnPropClick(Sender: TObject);
@@ -525,8 +564,13 @@ begin
   try
     GVKer.Dump(Lst);
     mmoGVKer.Lines.Add(fmtMess('DUMP'));
-    for S in Lst do
-      mmoGVKer.Lines.Append('// '+ S);
+      if Lst.Count <> 0 then
+      begin
+        for S in Lst do
+          mmoGVKer.Lines.Append('// '+ S);
+      end
+      else
+        mmoGVKer.Lines.Append('// Aucun objet n''est enregistré !');
   finally
     Lst.Free;
   end;

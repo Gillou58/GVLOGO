@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="4"/>
+      <BuildNr Value="6"/>
       <Language Value="040C"/>
       <StringTable Comments="Test des unités de GVLOGO" ProductVersion="1"/>
     </VersionInfo>
@@ -38,7 +38,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="6">
+    <Units Count="5">
       <Unit0>
         <Filename Value="TestGVLogo.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -53,24 +53,19 @@
         <UnitName Value="Test"/>
       </Unit1>
       <Unit2>
-        <Filename Value="..\GVLOGO - Copie\units\GVConsts.pas"/>
+        <Filename Value="..\..\units\GVConsts.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GVConsts"/>
       </Unit2>
       <Unit3>
-        <Filename Value="..\GVLOGO - Copie\units\GVDefines.inc"/>
+        <Filename Value="..\..\units\GVDefines.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit3>
       <Unit4>
-        <Filename Value="..\GVLOGO - Copie\units\GVKernel.pas"/>
+        <Filename Value="..\..\units\GVKernel.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GVKernel"/>
       </Unit4>
-      <Unit5>
-        <Filename Value="..\GVLOGO - Copie\units\GVLists.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="GVLists"/>
-      </Unit5>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -80,8 +75,8 @@
       <Filename Value="TestGVLogo"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir);M:\GIT\GVLOGO\GVLOGO - Copie\units\"/>
-      <OtherUnitFiles Value=".;M:\GIT\GVLOGO\GVLOGO - Copie\units\"/>
+      <IncludeFiles Value="$(ProjOutDir);M:\GIT\GVLOGO\GVLOGO - Copie\units\;..\..\units"/>
+      <OtherUnitFiles Value=".;M:\GIT\GVLOGO\GVLOGO - Copie\units\;..\..\units"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
@@ -91,9 +86,6 @@
       </Optimizations>
     </CodeGeneration>
     <Linking>
-      <Debugging>
-        <GenerateDebugInfo Value="False"/>
-      </Debugging>
       <LinkSmart Value="True"/>
       <Options>
         <Win32>

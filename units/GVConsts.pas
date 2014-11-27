@@ -346,12 +346,12 @@ resourcestring
   ME_C_BadContent = 'Le contenu du fichier "%s" est incorrect.';
   ME_C_NorProcnorList =
     'L''objet "%s" n''est ni une procédure ni une liste de procédures.';
-  ME_C_Burried = 'L''objet %s est enterré.';
-  ME_C_NotInPackage = 'L''objet %s n''appartient à aucun paquet.';
-  ME_C_NorPrimNorProc = 'L''objet %S n''est ni une procédure ni une primitive.';
+  ME_C_Burried = 'L''objet "%s" est enterré.';
+  ME_C_NotInPackage = 'L''objet "%s" n''appartient à aucun paquet.';
+  ME_C_NorPrimNorProc = 'L''objet "%s" n''est ni une procédure ni une primitive.';
   ME_C_BadTo = 'Le mot POUR est mal placé dans %s.';
   ME_C_BadEnd = 'Le mot FIN est mal placé dans %s.';
-  ME_C_WhatAbout = 'Que faut-il faire de %s ?';
+  ME_C_WhatAbout = 'Que faut-il faire de "%s" ?';
   ME_C_BadNum = 'Le nombre %d ne convient pas pour cette opération.';
   ME_C_Nothing = '<vide>';
 

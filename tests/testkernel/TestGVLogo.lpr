@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, GVKernel, GVLists, Test, GVConsts;
+  Forms, Test, GVConsts, GVKernel;
 
 {$R *.res}
 

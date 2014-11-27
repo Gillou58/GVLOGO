@@ -182,11 +182,11 @@ object MainForm: TMainForm
       end
       object GroupBoxProcs: TGroupBox
         Left = 292
-        Height = 344
+        Height = 376
         Top = 8
         Width = 193
         Caption = 'Procédures'
-        ClientHeight = 326
+        ClientHeight = 358
         ClientWidth = 189
         TabOrder = 1
         object btnIsProcedure: TButton
@@ -448,6 +448,19 @@ object MainForm: TMainForm
           ParentShowHint = False
           ShowHint = True
           TabOrder = 19
+        end
+        object btnAllProcsToEdit: TButton
+          Left = 1
+          Height = 25
+          Hint = '   // envoie toutes lesprocédures en cours vers l''éditeur'#13#10'  function AllProcsToEdit(Lst: TStrings): Boolean;'
+          Top = 328
+          Width = 90
+          Caption = 'AllProcsToEdit'
+          DragCursor = crHandPoint
+          OnClick = btnAllProcsToEditClick
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 20
         end
       end
       object mmoGVKer: TMemo
@@ -1107,9 +1120,11 @@ object MainForm: TMainForm
         Top = 169
         Width = 50
         Color = clHighlight
+        MinValue = 1
         ParentShowHint = False
         ShowHint = True
         TabOrder = 11
+        Value = 1
       end
       object lblIndice: TLabel
         Left = 692

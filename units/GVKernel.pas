@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    26-11-2014 22:24:40                          |
+  |                  Date:    27-11-2014 11:14:40                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -58,6 +58,7 @@ type
 
   TGVLogoKernel = class(TObject)
   private
+    fProtected: Boolean; // drapeau de protection
     fWorkZone: TGVPropList; // zone de travail
     fLocalVars: TGVPropList; // zone des variables locales
     fKernelResult: TGVError; // numéro d'erreur
@@ -66,6 +67,7 @@ type
     fTempList: TGVListUtils; // liste de travail
     function GetKernelResult: TGVError; // résultat d'une opération
     function GetError: Boolean; // erreur ?
+    procedure SetProtected(AValue: Boolean); // protection des données
   protected
     // gestion des changements
     procedure Change; dynamic;
@@ -305,6 +307,8 @@ type
     property Error: Boolean read GetError;
     // numéro de l'erreur ?
     property KernelResult: TGVError read GetKernelResult default C_None;
+    // protection ?
+    property Protected: Boolean read fProtected write SetProtected default False;
     // événement si changement
     property OnChange: TNotifyEvent read fOnChange write fOnChange;
     // événement si erreur
@@ -576,6 +580,7 @@ begin
   fWorkZone := TGVPropList.Create; // on crée la liste de travail
   fLocalVars := TGVPropList.Create; // on crée la zone des variables locales
   fTempList := TGVListUtils.Create; // liste temporaire de travail
+  fProtected := False; // pas de protection par défaut
   OnChange := nil; // gestionnaires à nil
   OnKernelError := nil;
   Clear; // on nettoie
@@ -780,6 +785,15 @@ begin
   Result := (fKernelResult <> C_None);
 end;
 
+procedure TGVLogoKernel.SetProtected(AValue: Boolean);
+// *** protection ? ***
+begin
+  if fProtected = AValue then
+    Exit; // on sort si aucun changement
+  fProtected := AValue;
+  Change; // on signifie le changement
+end;
+
 (* ********************************************************************* *)
 
 function TGVLogoKernel.GetKernelResult: TGVError;
@@ -856,6 +870,7 @@ function TGVLogoKernel.IsPrim(const Name: string): Boolean;
 // *** primitive ? ***
 begin
   // ### TODO ###
+  Result := False;
 end;
 
 (* ********************************************************************* *)
@@ -881,7 +896,9 @@ begin
     begin
       if IsInPck(Name) then
         // quel paquet ? quelle protection ?
-        Result := IsBurriedPck(RProp(Name, CInPackage));
+        Result := IsBurriedPck(RProp(Name, CInPackage))
+      else
+        Result := Protected; // sinon protection courante
     end;
   end
   else
@@ -1581,13 +1598,13 @@ begin
   ClearError; // pas de message
   if IsProc(Name) then // est-ce une procédure ?
   begin
-    if (Num < ParamsCount(Name)) and (Num >= 0) then
+    if (Num <= ParamsCount(Name)) and (Num >= 1) then
     begin
       S := ParamsLine(Name); // ligne des paramètres
       Lst := TGVList.Create; // liste de travail
       try
         Lst.Text := S;
-        Result := Lst[Num]; // paramètre si possible
+        Result := Lst[Num-1]; // paramètre si possible
       finally
         Lst.Free; // libération de la liste de travail
       end;
@@ -1612,13 +1629,13 @@ begin
   ClearError; // pas de message
   if IsProc(Name) then // est-ce une procédure ?
   begin
-    if (Num < ParamsCount(Name)) and (Num >= 0) then
+    if (Num <= ParamsCount(Name)) and (Num >= 1) then
     begin
       S := ParamsLine(Name); // ligne des paramètres
       Lst := TGVList.Create; // liste de travail
       try
         Lst.Text := S;
-        ParNum := Lst[Num]; // paramètre si possible
+        ParNum := Lst[Num-1]; // paramètre si possible
         Result := True;
       finally
         Lst.Free; // libération de la liste de travail
@@ -1736,8 +1753,8 @@ begin
     Lst := TGVList.Create; // liste de travail
     try
       Lst.Text := S;
-      if (Line >= 0) and (Line < Lst.Count) then
-        Result := Lst[Line] // paramètre si possible
+      if (Line > 0) and (Line <= Lst.Count) then
+        Result := Lst[Line-1] // paramètre si possible
       else
         ErrorMessage(C_BadLine, IntToStr(Line)); // mauvaise ligne
     finally
@@ -1889,12 +1906,12 @@ begin
     S := EmptyStr; // chaîne vide
     J := ParamsCount(Name); // nombre de paramètres
     if (J <> 0) then // si au moins un paramètre
-      for I := 0 to J - 1 do // les recherche
+      for I := 1 to J do // les recherche
         S := S + CBlank + ParamNum(Name, I); // paramètres
     Lst.Add(P_For + CBlank + Name + S); // entête
     J := ProcLinesCount(Name); // nombre de lignes
     if (J <> 0) then // s'il y a au moins une ligne
-      for I := 0 to J - 1 do // les recherche et les ajoute
+      for I := 1 to J do // les recherche et les ajoute
         Lst.Add(CBlank + CBlank + fTempList.ListToStr(ProcLine(Name, I)));
     Lst.Add(P_End); // fin de la procédure
     Lst.Add(EmptyStr); // espace
