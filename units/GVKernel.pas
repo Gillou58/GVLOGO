@@ -532,8 +532,6 @@ end;
 
 procedure TGVLogoKernel.Clear;
 // *** remise à zéro du noyau ***
-var
-  S: string;
 begin
   ClearError; // pas d'erreur
   fWorkZone.Clear; // on nettoie
@@ -827,7 +825,7 @@ procedure TGVLogoKernel.Dump(Lst: TStrings);
 var
   I: Integer;
 begin
-  for I := 0 to fWorkZone.CountListP - 1 do
+  for I := 1 to fWorkZone.CountListP do
     Lst.Append(fWorkZone[I]);
 end;
 
@@ -1687,8 +1685,6 @@ end;
 
 function TGVLogoKernel.PrimByNum(const N: Integer): string;
 // *** primitive par son numéro ***
-var
-  S: string;
 begin
   Result := EmptyStr; // suppose une erreur
     // ### TODO ###
@@ -1701,8 +1697,6 @@ end;
 function TGVLogoKernel.PrimByNum(const N: Integer;
   out PrimBNum: string): Boolean;
 // *** primitive par son numéro ***
-var
-  S: string;
 begin
   Result := False; // suppose une erreur
     // ### TODO ###
