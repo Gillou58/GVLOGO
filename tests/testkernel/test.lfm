@@ -1120,6 +1120,7 @@ object MainForm: TMainForm
         Top = 169
         Width = 50
         Color = clHighlight
+        MaxValue = 125
         MinValue = 1
         ParentShowHint = False
         ShowHint = True

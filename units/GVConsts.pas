@@ -1,4 +1,4 @@
-﻿{ |========================================================================|
+{ |========================================================================|
   |                                                                        |
   |                  G V S O F T                                           |
   |                  Projet : GVLogo                                       |
@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    27-11-2014 16:29:42                          |
+  |                  Date:    27-11-2014 21:51:42                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -132,9 +132,45 @@ resourcestring
 
   // ************* PRIMITIVES *************
 
-  { primitives de base }
-
   CComment = '//'; // commentaire
+  P_SetPos = 'FIXEPOS';
+  P_SetPos2 = 'FPOS';
+  P_SetXY = 'FIXE XY';
+  P_SetX = 'FIXEX';
+  P_SetX2 = 'FX';
+  P_SetY = 'FIXEY';
+  P_SetY2 = 'FY';
+  P_Pos = 'POS';
+  P_X = 'XCOOR';
+  P_Y = 'YCOOR';
+  P_SetSpeed = 'FIXEVITESSE';
+  P_Speed = 'VITESSE';
+  P_Fen = 'CLOS';
+  P_Roll = 'ENROULE';
+  P_Window = 'FENETRE';
+  P_Window2 = 'FEN';
+  P_ScreenState = 'ETATECRAN';
+  P_SetScale = 'FIXEECHELLE';
+  P_SetScaleX = 'FIXEECHELLEX';
+  P_SetScaleY = 'FIXEECHELLEY';
+  P_Scale = 'ECHELLE';
+  P_ClearScreen = 'VIDEECRAN';
+  P_ClearScreen2 = 'VE';
+  P_Home = 'ORIGINE';
+  P_Wipe = 'NETTOIE';
+  P_SetBackGroundColor = 'FIXECOULEURFOND';
+  P_SetBackGroundColor2 = 'FCF';
+  P_BackGroundColor = 'COULEURFOND';
+  P_BackGroundColor2 = 'CF';
+  P_Distance = 'DISTANCE';
+  P_Forward = 'AVANCE';
+  P_Forward2 = 'AV';
+  P_Backward = 'RECULE';
+  P_Backward2 = 'RE';
+  P_Left = 'GAUCHE';
+  P_Left2 = 'TG';
+  P_Right = 'DROITE';
+  P_Right2 = 'TD';
   P_For = 'POUR';
   P_End = 'FIN';
   P_First = 'PREMIER';
@@ -147,6 +183,49 @@ resourcestring
   P_ButLast2 = 'SD';
   P_True = 'VRAI';
   P_False = 'FAUX';
+  P_Write = 'ECRIS';
+  P_WriteA = 'ECRIST';
+  P_PutFirst = 'METSPREMIER';
+  P_PutFirst2 = 'MP';
+  P_PutLast = 'METSDERNIER';
+  P_PutLast2 = 'MD';
+  P_Insert = 'INSERE';
+  P_Reverse = 'INVERSE';
+  P_Uppercase = 'MAJUSCULES';
+  P_Lowercase = 'MINUSCULES';
+  P_Shuffle = 'MELANGE';
+  P_Replace = 'REMPLACE';
+  P_Sort = 'TRIE';
+  P_Rotate = 'ROTATION';
+  P_Item = 'ELEMENT';
+  P_Random = 'HASARD';
+  P_BeforeP = 'AVANT?';
+  P_AfterP = 'APRES?';
+  P_Count = 'COMPTE';
+  P_EQUALP = 'EGAL?';
+  P_Ident = 'IDENTIFICATEUR?';
+  P_MemberP = 'MEMBRE?';
+  P_NumberP = 'NOMBRE?';
+  P_Word = 'MOT?';
+  P_Previous = 'PRECEDENT';
+  P_Next = 'SUIVANT';
+  P_EmptyP = 'VIDE?';
+  P_Sentence = 'PHRASE';
+  P_Sentence2 = 'PH';
+  P_Firsts = 'PREMS';
+  P_ButFirsts = 'SAUFPREMS';
+  P_ListP = 'LISTE?';
+  P_DProp = 'DPROP';
+  P_RProp = 'RPROP';
+  P_DelProp = 'ANNULEPROP';
+  P_Props = 'PROPS';
+  P_Del = 'ANNULE';
+  P_CountProps = 'COMPTEPROPS';
+  P_PropP = 'PROP?';
+  P_PropList = 'LISTEPROP?';
+  P_ProcedureP = 'PROCEDURE?';
+  P_Prim = 'PRIMITIVE?';
+  P_NameP = 'NOM?';
 
   { noms des fonctions mathématiques}
 
@@ -389,7 +468,7 @@ const
 
   // ************* GVKernel *************
 const
-  CPrimCount = 56; // nombre de primitives
+  CPrimCount = 137; // nombre de primitives
   CVr = CDot + 'VAR'; // variable
   CBurried = CDot + 'BUR'; // enterré
   CInPackage = CDot + 'INP'; // dans un paquet
@@ -404,6 +483,44 @@ type
 const
   // *** tableau des primitives ***
   GVPrimName: array[1..CPrimCount] of GVPrimRec = (
+   (Name:P_SetPos; NbParams: 1),
+   (Name:P_SetPos2; NbParams: 1),
+   (Name:P_SetXY; NbParams: 2),
+   (Name:P_SetX; NbParams: 1),
+   (Name:P_SetX2; NbParams: 1),
+   (Name:P_SetY; NbParams: 1),
+   (Name:P_SetY2; NbParams: 1),
+   (Name:P_Pos; NbParams: 0),
+   (Name:P_X; NbParams: 0),
+   (Name:P_Y; NbParams: 0),
+   (Name:P_SetSpeed; NbParams: 1),
+   (Name:P_Speed; NbParams: 0),
+   (Name:P_Fen; NbParams: 0),
+   (Name:P_Roll; NbParams: 0),
+   (Name:P_Window; NbParams: 0),
+   (Name:P_Window2; NbParams: 0),
+   (Name:P_ScreenState; NbParams: 0),
+   (Name:P_SetScale; NbParams: 1),
+   (Name:P_SetScaleX; NbParams: 1),
+   (Name:P_SetScaleY; NbParams: 1),
+   (Name:P_Scale; NbParams: 0),
+   (Name:P_ClearScreen; NbParams: 0),
+   (Name:P_ClearScreen2; NbParams: 0),
+   (Name:P_Home; NbParams: 0),
+   (Name:P_Wipe; NbParams: 0),
+   (Name:P_SetBackGroundColor; NbParams: 1),
+   (Name:P_SetBackGroundColor2; NbParams: 1),
+   (Name:P_BackGroundColor; NbParams: 0),
+   (Name:P_BackGroundColor2; NbParams: 0),
+   (Name:P_Distance; NbParams: 1),
+   (Name:P_Forward; NbParams: 1),
+   (Name:P_Forward2; NbParams: 1),
+   (Name:P_Backward; NbParams: 1),
+   (Name:P_Backward2; NbParams: 1),
+   (Name:P_Left; NbParams: 1),
+   (Name:P_Left2; NbParams: 1),
+   (Name:P_Right; NbParams: 1),
+   (Name:P_Right2; NbParams: 1),
    (Name:P_For; NbParams: -1),
    (Name:P_End; NbParams: 0),
    (Name:P_First; NbParams: 1),
@@ -416,6 +533,49 @@ const
    (Name:P_ButLast2; NbParams: 1),
    (Name:P_True; NbParams: 0),
    (Name:P_False; NbParams: 0),
+   (Name:P_Write; NbParams: 1),
+   (Name:P_WriteA; NbParams: 1),
+   (Name:P_PutFirst; NbParams: 1),
+   (Name:P_PutFirst2; NbParams: 2),
+   (Name:P_PutLast; NbParams: 2),
+   (Name:P_PutLast2; NbParams: 2),
+   (Name:P_Insert; NbParams: 2),
+   (Name:P_Reverse; NbParams: 1),
+   (Name:P_Uppercase; NbParams: 1),
+   (Name:P_Lowercase; NbParams: 1),
+   (Name:P_Shuffle; NbParams: 1),
+   (Name:P_Replace; NbParams: 2),
+   (Name:P_Sort; NbParams: 1),
+   (Name:P_Rotate; NbParams: 1),
+   (Name:P_Item; NbParams: 1),
+   (Name:P_Random; NbParams: 1),
+   (Name:P_BeforeP; NbParams: 2),
+   (Name:P_AfterP; NbParams: 2),
+   (Name:P_Count; NbParams: 1),
+   (Name:P_EQUALP; NbParams: 2),
+   (Name:P_Ident; NbParams: 1),
+   (Name:P_MemberP; NbParams: 2),
+   (Name:P_NumberP; NbParams: 1),
+   (Name:P_Word; NbParams: 1),
+   (Name:P_Previous; NbParams: 2),
+   (Name:P_Next; NbParams: 2),
+   (Name:P_EmptyP; NbParams: 1),
+   (Name:P_Sentence; NbParams: 2),
+   (Name:P_Sentence2; NbParams: 2),
+   (Name:P_Firsts; NbParams: 1),
+   (Name:P_ButFirsts; NbParams: 1),
+   (Name:P_ListP; NbParams: 1),
+   (Name:P_DProp; NbParams: 3),
+   (Name:P_RProp; NbParams: 2),
+   (Name:P_DelProp; NbParams: 2),
+   (Name:P_Props; NbParams: 1),
+   (Name:P_Del; NbParams: 1),
+   (Name:P_CountProps; NbParams: 1),
+   (Name:P_PropP; NbParams: 2),
+   (Name:P_PropList; NbParams: 1),
+   (Name:P_ProcedureP; NbParams: 1),
+   (Name:P_Prim; NbParams: 1),
+   (Name:P_NameP; NbParams: 1),
    // fonctions
    (Name:MF_DAbs; NbParams: 1),
    (Name:MF_DAbs2; NbParams: 1),
