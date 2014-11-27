@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    27-11-2014 10:47:42                          |
+  |                  Date:    27-11-2014 13:17:42                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -361,11 +361,15 @@ resourcestring
 
   CComment = '//'; // commentaire
   P_For = 'POUR';
-  P_End = 'END';
+  P_End = 'FIN';
   P_First = 'PREMIER';
+  P_First2 = 'PREM';
   P_Last = 'DERNIER';
+  P_Last2 = 'DER';
   P_ButFirst = 'SAUFPREMIER';
+  P_ButFirst2 = 'SP';
   P_ButLast = 'SAUFDERNIER';
+  P_ButLast2 = 'SD';
   P_True = 'VRAI';
   P_False = 'FAUX';
 
@@ -472,6 +476,7 @@ resourcestring
     C_DHypot // hypothénuse
    );
 
+
 const
   // tableau du nom des erreurs
   GVErrorName: array[TGVError] of string = (ME_None,ME_InternalError,
@@ -501,10 +506,81 @@ const
     MF_DPLus, MF_DNegate,  MF_DSign,
     MF_DRandom, MF_Not, MF_DPi, MF_True, MF_False, MF_Or, MF_And, MF_Mod,
     MF_DPower, MF_DMax, MF_DMax2, MF_DMin, MF_DMin2, MF_DHypot);
-	
-// ************* KERNEL **************
 
-const
+ // ************* KERNEL **************
+
+  // enregistrement d'une primitive
+  type
+    GVPrimRec = record
+      Name: string;
+      NbParams: Integer;
+    end;
+
+ const
+  CPrimCount = 56; // nombre de primitives
+
+  // tableau des primitives
+  GVPrimName: array[1..CPrimCount] of GVPrimRec = (
+   (Name:P_For; NbParams: -1),
+   (Name:P_End; NbParams: 0),
+   (Name:P_First; NbParams: 1),
+   (Name:P_First2; NbParams: 1),
+   (Name:P_Last; NbParams: 1),
+   (Name:P_Last2; NbParams: 1),
+   (Name:P_ButFirst; NbParams: 1),
+   (Name:P_ButFirst2; NbParams: 1),
+   (Name:P_ButLast; NbParams: 1),
+   (Name:P_ButLast2; NbParams: 1),
+   (Name:P_True; NbParams: 0),
+   (Name:P_False; NbParams: 0),
+   // fonctions
+   (Name:MF_DAbs; NbParams: 1),
+   (Name:MF_DAbs2; NbParams: 1),
+   (Name:MF_DCos; NbParams: 1),
+   (Name:MF_DCos2; NbParams: 1),
+   (Name:MF_DSin; NbParams: 1),
+   (Name:MF_DSin2; NbParams: 1),
+   (Name:MF_DTan; NbParams: 1),
+   (Name:MF_DTan2; NbParams: 1),
+   (Name:MF_DSqrt; NbParams: 1),
+   (Name:MF_DSqrt2; NbParams: 1),
+   (Name:MF_DTrunc; NbParams: 1),
+   (Name:MF_DRound; NbParams: 1),
+   (Name:MF_DSqr; NbParams: 1),
+   (Name:MF_DExp; NbParams: 1),
+   (Name:MF_DFrac; NbParams: 1),
+   (Name:MF_DInt; NbParams: 1),
+   (Name:MF_DInt2; NbParams: 1),
+   (Name:MF_DLn; NbParams: 1),
+   (Name:MF_DLog2; NbParams: 1),
+   (Name:MF_DLog10; NbParams: 1),
+   (Name:MF_DCoTan; NbParams: 1),
+   (Name:MF_DCoTan2; NbParams: 1),
+   (Name:MF_DArcCos; NbParams: 1),
+   (Name:MF_DArcCos2; NbParams: 1),
+   (Name:MF_DArcSin; NbParams: 1),
+   (Name:MF_DArcSin2; NbParams: 1),
+   (Name:MF_DMinus; NbParams: 1),
+   (Name:MF_DPLus; NbParams: 1),
+   (Name:MF_DNegate; NbParams: 1),
+   (Name:MF_DSign; NbParams: 1),
+   (Name:MF_DRandom; NbParams: 1),
+   (Name:MF_Not; NbParams: 1),
+   (Name:MF_DPi; NbParams: 0),
+   (Name:MF_True; NbParams: 0),
+   (Name:MF_False; NbParams: 0),
+   (Name:MF_Or; NbParams: 2),
+   (Name:MF_And; NbParams: 2),
+   (Name:MF_Mod; NbParams: 2),
+   (Name:MF_DPower; NbParams: 2),
+   (Name:MF_DMax; NbParams: 2),
+   (Name:MF_DMax; NbParams: 2),
+   (Name:MF_DMin; NbParams: 2),
+   (Name:MF_DMin2; NbParams: 2),
+   (Name:MF_DHypot; NbParams: 2)
+   );
+
+
   CVr = CDot + 'VAR'; // variable	
   CBurried = CDot + 'BUR'; // enterré
   CInPackage = CDot + 'INP'; // dans un paquet

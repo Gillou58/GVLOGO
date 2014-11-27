@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    27-11-2014 11:14:40                          |
+  |                  Date:    27-11-2014 13:17:40                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -869,8 +869,7 @@ end;
 function TGVLogoKernel.IsPrim(const Name: string): Boolean;
 // *** primitive ? ***
 begin
-  // ### TODO ###
-  Result := False;
+  Result := (NumPrim(Name) <> -1);
 end;
 
 (* ********************************************************************* *)
@@ -1342,9 +1341,9 @@ function TGVLogoKernel.NumParamsPrim(const Name: string): Integer;
 // *** nombre de paramètres de la primitive ***
 begin
   ClearError; // pas de message
-  Result := -1; // mauvais nombre
-  if IsPrim(Name) then // une primitive ?
-      // ### TODO ###
+  Result := NumPrim(Name); // on cherche la primitive
+  if (Result <> -1) then // trouvée ?
+    Result := GVPrimName[Result].NbParams // on renvoie le nombre de paramètres
   else
     ErrorMessage(C_NotPrim, Name); // ce n'est pas une primitive
 end;
@@ -1353,13 +1352,20 @@ end;
 
 function TGVLogoKernel.NumPrim(const Name: string): Integer;
 // *** numéro de primitive ***
+var
+  I: Integer;
 begin
   ClearError; // pas de message
   Result := -1; // mauvais nombre
-  if IsPrim(Name) then // est-ce une primitive ?
-    // recherche du numéro
-    // ### TODO ###
-  else
+  for I := 1 to CPrimCount do // on balaie le tableau
+  begin
+    if AnsiSameText(GVPrimName[I].Name, Name) then // trouvée ?
+    begin
+      Result := I; // on stocke le résultat
+      break; // on sort de la boucle
+    end;
+  end;
+  if Result = -1 then // non trouvée
     ErrorMessage(C_NotPrim, Name); // ce n'est pas une primitive
 end;
 
@@ -1703,9 +1709,9 @@ end;
 function TGVLogoKernel.PrimByNum(const N: Integer): string;
 // *** primitive par son numéro ***
 begin
-  Result := EmptyStr; // suppose une erreur
-    // ### TODO ###
-  if Result = EmptyStr then // chaîne trouvée vide ?
+  if (N > 0) and (N <= CPrimCount) then // dans les bornes ?
+    Result := GVPrimName[N].Name // recherche du nom de la primitive
+  else
     ErrorMessage(C_NotPrim, IntToStr(N)); // non !
 end;
 
@@ -1716,8 +1722,12 @@ function TGVLogoKernel.PrimByNum(const N: Integer;
 // *** primitive par son numéro ***
 begin
   Result := False; // suppose une erreur
-    // ### TODO ###
-  if not Result then
+  if (N > 0) and (N <= CPrimCount) then // dans les bornes ?
+  begin
+    PrimBNum := GVPrimName[N].Name; // recherche du nom de la primitive
+    Result := True;
+  end
+  else
     ErrorMessage(C_NotPrim, IntToStr(N)) // non !
 end;
 
@@ -1726,15 +1736,23 @@ end;
 function TGVLogoKernel.PrimsCount: Integer;
 // *** décompte du nombre de primitives ***
 begin
-  // ### TODO ###
+  Result := CPrimCount;
 end;
 
 (* ********************************************************************* *)
 
 function TGVLogoKernel.PrimsToList: string;
 // *** liste des primitives ***
+var
+  S: GVPrimRec;
 begin
-  // ### TODO ###
+  Result := CBeginList; // début de liste
+  try
+    for S in GVPrimName do // on balaie le tableau
+      Result := Result + S.Name + ' '; // on ajoute le nom trouvé
+  finally
+    Result := TrimRight(Result) + CEndList; // fin de liste
+  end;
 end;
 
 (* ********************************************************************* *)
