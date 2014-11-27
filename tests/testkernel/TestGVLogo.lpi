@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="9"/>
+      <BuildNr Value="10"/>
       <Language Value="040C"/>
       <StringTable Comments="Test des unités de GVLOGO" ProductVersion="1"/>
     </VersionInfo>
