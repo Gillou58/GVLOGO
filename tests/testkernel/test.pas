@@ -117,6 +117,7 @@ type
     btnIsValidVar: TButton;
     btnLoadVars: TButton;
     btnAllProcsToEdit: TButton;
+    btnProtected: TButton;
     GroupBoxPropLists: TGroupBox;
     GroupBoxGeneral: TGroupBox;
     GroupBoxProperties: TGroupBox;
@@ -188,6 +189,7 @@ type
     procedure btnProcsToEditClick(Sender: TObject);
     procedure btnProcsToListClick(Sender: TObject);
     procedure btnProcToEditClick(Sender: TObject);
+    procedure btnProtectedClick(Sender: TObject);
     procedure btnRemoveAllProcsClick(Sender: TObject);
     procedure btnRemoveAllVarsClick(Sender: TObject);
     procedure btnRemovePackageClick(Sender: TObject);
@@ -497,7 +499,8 @@ procedure TMainForm.btnAllProcsToEditClick(Sender: TObject);
 // Test de AllProcsToEdit
 begin
   if GVKer.AllProcsToEdit(mmoGVKer.Lines) then
-    mmoGVKer.Lines.Add(fmtMess('Toutes les procédures ont été éditées'));
+    mmoGVKer.Lines.Add(fmtMess('ALLPROCSTOEDIT') +
+      'Toutes les procédures ont été éditées.');
 end;
 
 procedure TMainForm.btnAnPropClick(Sender: TObject);
@@ -771,6 +774,18 @@ procedure TMainForm.btnProcToEditClick(Sender: TObject);
 begin
   if GVKer.ProcToEdit(LabEditKerName.Text, mmoGVKer.Lines) then
     mmoGVKer.Lines.Add(fmtMess('PROCTOEDIT') + 'Procédure éditée.');
+end;
+
+procedure TMainForm.btnProtectedClick(Sender: TObject);
+// test de Protected
+begin
+  GVKer.Protected := not GVKer.Protected;
+  if GVKer.Protected then
+    mmoGVKer.Lines.Add(fmtMess('PROTECTED') +
+      'Tous les objets sont protégés.')
+  else
+    mmoGVKer.Lines.Add(fmtMess('PROTECTED') +
+      'Les objets ne sont plus protégés.')
 end;
 
 procedure TMainForm.btnRemoveAllProcsClick(Sender: TObject);

@@ -669,17 +669,17 @@ var
   St, Name, Def: string;
 begin
   ClearError; // pas de message
-  Error := 0; // ligne en cours pour erreur
+  Error := 1; // ligne en cours pour erreur
   // on ajuste la recherche à la taille de l'éditeur
-  if (ToLine > (Editor.Count - 1)) or (ToLine = 0) then
-    ToLine := Editor.Count - 1;
-  if FromLine < 0 then
-    FromLine := 0;
-  if (ToLine - FromLine) > 0 then // s'il y a des lignes à analyser
+  if (ToLine > Editor.Count) or (ToLine = 0) then
+    ToLine := Editor.Count;
+  if FromLine < 1 then
+    FromLine := 1;
+  if (ToLine - FromLine) >= 0 then // s'il y a des lignes à analyser
   begin
-    Line := FromLine; // départ de l'analyse
+    Line := FromLine-1; // départ de l'analyse
     // tant qu'il y a des lignes et qu'il n'y a pas d'erreur
-    while (Line <= ToLine) and (fKernelResult = C_None) do
+    while (Line < ToLine) and (fKernelResult = C_None) do
     begin
       L1 := TGVList.Create;
       try
@@ -697,56 +697,61 @@ begin
           begin
             try // si erreur : mauvaise définition
               // on extrait le nom de la procédure (après Pour !)
-              Name := L1[1];
-              St := CBeginList; // St est le caractère [
-              // *** construit la liste des paramètres si nécessaire
-              if L1.Count > 2 then
-                // on ajoute les paramètres (ni le Pour ni le nom)
-                for I := 2 to L1.Count - 1 do
-                  if St = CBeginList then
-                    St := St + L1[I]
-                  else
-                    St := St + CBlank + L1[I];
-              // on stocke les paramètres
-              Def := CBeginList + St + CEndList + CBlank;
-              // *** on passe à la définition
-              St := CBeginList;
-              Inc(Line); // en changeant de ligne
-              repeat
-                // on examine la ligne en cours
-                L2 := TGVList.Create;
-                try
-                  L2.Text := (CBeginList + Trim(Editor[Line]) + CEndList);
-                  if not L2.IsEmptyList then // on ignore une ligne vide
-                  begin
-                    // *** c'est le mot Fin ?
-                    if AnsiSameText(L2.First, P_End) then
-                    begin
-                      // on clôt la liste de définition
-                      Def := Def + Trim(St) + CEndList + CEndList;
-                      if AddProc(Name, Def) then // enregistre la définition
-                      begin // l'enregistrement s'est bien déroulé
-                        fKernelResult := C_OKProc; // procédure enregistrée
-                        Change; // on signale le changement
-                      end;
-                    end
+              if L1.Count > 1 then // un mot au moins suit ?
+              begin
+                Name := L1[1];
+                St := CBeginList; // St est le caractère [
+                // *** construit la liste des paramètres si nécessaire
+                if L1.Count > 2 then
+                  // on ajoute les paramètres (ni le Pour ni le nom)
+                  for I := 2 to L1.Count - 1 do
+                    if St = CBeginList then
+                      St := St + L1[I]
                     else
-                      St := St + CBeginList + Trim(Editor[Line]) + CEndList +
-                        CBlank; // on ajoute la ligne
+                      St := St + CBlank + L1[I];
+                // on stocke les paramètres
+                Def := CBeginList + St + CEndList + CBlank;
+                // *** on passe à la définition
+                St := CBeginList;
+                Inc(Line); // en changeant de ligne
+                repeat
+                  // on examine la ligne en cours
+                  L2 := TGVList.Create;
+                  try
+                    L2.Text := (CBeginList + Trim(Editor[Line]) + CEndList);
+                    if not L2.IsEmptyList then // on ignore une ligne vide
+                    begin
+                      // *** c'est le mot Fin ?
+                      if AnsiSameText(L2.First, P_End) then
+                      begin
+                        // on clôt la liste de définition
+                        Def := Def + Trim(St) + CEndList + CEndList;
+                        if AddProc(Name, Def) then // enregistre la définition
+                        begin // l'enregistrement s'est bien déroulé
+                          fKernelResult := C_OKProc; // procédure enregistrée
+                          Change; // on signale le changement
+                        end;
+                      end
+                      else
+                        St := St + CBeginList + Trim(Editor[Line]) + CEndList +
+                          CBlank; // on ajoute la ligne
+                    end;
+                  finally
+                    L2.Free; // on libère la liste de travail
                   end;
-                finally
-                  L2.Free; // on libère la liste de travail
-                end;
-                if (Line > ToLine) and (fKernelResult <> C_OKProc) then
-                begin
-                  Error := Line;
-                  ErrorMessage(C_NotEnd, Name); // mot Fin non rencontré
-                end;
-                Inc(Line);
-              until (fKernelResult <> C_None); // on change de ligne
-              if fKernelResult = C_OKProc then
-                // on annule le drapeau de mauvais enregistrement
-                ClearError;
+                  if (Line > ToLine) and (fKernelResult <> C_OKProc) then
+                  begin
+                    Error := Line;
+                    ErrorMessage(C_NotEnd, Name); // mot Fin non rencontré
+                  end;
+                  Inc(Line);
+                until (fKernelResult <> C_None); // on change de ligne
+                if fKernelResult = C_OKProc then
+                  // on annule le drapeau de mauvais enregistrement
+                  ClearError;
+              end
+              else
+                ErrorMessage(C_NoName, Editor[Line]); // pas de nom après Pour
             except
               Error := Line;
               ErrorMessage(C_BadDef, Name); // mauvaise définition
@@ -870,6 +875,7 @@ function TGVLogoKernel.IsPrim(const Name: string): Boolean;
 // *** primitive ? ***
 begin
   Result := (NumPrim(Name) <> -1);
+  ClearError; // on annule une éventuelle erreur
 end;
 
 (* ********************************************************************* *)

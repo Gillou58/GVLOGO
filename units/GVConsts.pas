@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    27-11-2014 21:51:42                          |
+  |                  Date:    28-11-2014 08:34:42                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -124,15 +124,47 @@ resourcestring
   ME_C_Burried = 'L''objet "%s" est enterré.';
   ME_C_NotInPackage = 'L''objet "%s" n''appartient à aucun paquet.';
   ME_C_NorPrimNorProc = 'L''objet "%s" n''est ni une procédure ni une primitive.';
-  ME_C_BadTo = 'Le mot POUR est mal placé dans %s.';
-  ME_C_BadEnd = 'Le mot FIN est mal placé dans %s.';
+  ME_C_BadTo = 'Le mot POUR est mal placé dans "%s".';
+  ME_C_BadEnd = 'Le mot FIN est mal placé dans "%s".';
   ME_C_WhatAbout = 'Que faut-il faire de "%s" ?';
   ME_C_BadNum = 'Le nombre %d ne convient pas pour cette opération.';
   ME_C_Nothing = '<vide>';
+  ME_C_NoName = 'Le mot POUR n''est pas suivi d''un nom. Ligne = "%s".';
 
   // ************* PRIMITIVES *************
 
   CComment = '//'; // commentaire
+  P_SetHeading = 'FIXECAP';
+  P_SetHeading2 = 'FCAP';
+  P_Heading = 'CAP';
+  P_Towards = 'VERS';
+  P_ShowTurtle = 'MONTRETORTUE';
+  P_ShowTurtle2 = 'MT';
+  P_HideTurtle = 'CACHETORTUE';
+  P_HideTurtle2 = 'CT';
+  P_VisibleP = 'VISIBLE?';
+  P_TurtleState = 'ETATTORTUE';
+  P_SetTurtleState = 'FIXEETATTORTUE';
+  P_NormalTurtle = 'TORTUENORMALE';
+  P_GreenTurtle =' TORTUEVERTE';
+  P_SetTurtleSize = 'FIXETAILLETORTUE';
+  P_TurtleSize = 'TAILLETORTUE';
+  P_PenDown = 'BAISSECRAYON';
+  P_PenDown2 = 'BC';
+  P_PenUp = 'LEVECRAYON';
+  P_PenUp2 = 'LC';
+  P_DownP = 'BAISSE?';
+  P_SetPenColor = 'FIXECOULEURCRAYON';
+  P_SetPenColor2 = 'FCC';
+  P_PenColor = 'COULEURCRAYON';
+  P_SetPenWidth = 'FIXEEPAISSEURCRAYON';
+  P_PenWidth = 'EPAISSEURCRAYON';
+  P_PenReverse = 'INVERSECRAYON';
+  P_Rubber = 'GOMME';
+  P_Normal = 'NORMAL';
+  P_PenState = 'ETATCRAYON';
+  P_SetPenState = 'FIXEETATCRAYON';
+  P_SetPenState2 = 'FEC';
   P_SetPos = 'FIXEPOS';
   P_SetPos2 = 'FPOS';
   P_SetXY = 'FIXE XY';
@@ -468,7 +500,7 @@ const
 
   // ************* GVKernel *************
 const
-  CPrimCount = 137; // nombre de primitives
+  CPrimCount = 168; // nombre de primitives
   CVr = CDot + 'VAR'; // variable
   CBurried = CDot + 'BUR'; // enterré
   CInPackage = CDot + 'INP'; // dans un paquet
@@ -483,6 +515,37 @@ type
 const
   // *** tableau des primitives ***
   GVPrimName: array[1..CPrimCount] of GVPrimRec = (
+   (Name:P_SetHeading; NbParams: 1),
+   (Name:P_SetHeading2; NbParams: 1),
+   (Name:P_Heading; NbParams: 0),
+   (Name:P_Towards; NbParams: 1),
+   (Name:P_ShowTurtle; NbParams: 0),
+   (Name:P_ShowTurtle2; NbParams: 0),
+   (Name:P_HideTurtle; NbParams: 0),
+   (Name:P_HideTurtle; NbParams: 0),
+   (Name:P_VisibleP; NbParams: 0),
+   (Name:P_TurtleState; NbParams: 0),
+   (Name:P_SetTurtleState; NbParams: 1),
+   (Name:P_NormalTurtle; NbParams: 0),
+   (Name:P_GreenTurtle; NbParams: 0),
+   (Name:P_SetTurtleSize; NbParams: 1),
+   (Name:P_TurtleSize; NbParams: 0),
+   (Name:P_PenDown; NbParams: 0),
+   (Name:P_PenDown2; NbParams: 0),
+   (Name:P_PenUp; NbParams: 0),
+   (Name:P_PenUp2; NbParams: 0),
+   (Name:P_DownP; NbParams: 0),
+   (Name:P_SetPenColor; NbParams: 1),
+   (Name:P_SetPenColor2; NbParams: 1),
+   (Name:P_PenColor; NbParams: 0),
+   (Name:P_SetPenWidth; NbParams: 1),
+   (Name:P_PenWidth; NbParams: 0),
+   (Name:P_PenReverse; NbParams: 0),
+   (Name:P_Rubber; NbParams: 0),
+   (Name:P_Normal; NbParams: 0),
+   (Name:P_PenState; NbParams: 0),
+   (Name:P_SetPenState; NbParams: 1),
+   (Name:P_SetPenState2; NbParams: 1),
    (Name:P_SetPos; NbParams: 1),
    (Name:P_SetPos2; NbParams: 1),
    (Name:P_SetXY; NbParams: 2),
@@ -706,7 +769,8 @@ type
   C_BadEnd, // mot FIN mal placé
   C_WhatAbout, // que faire de ?
   C_BadNum, // nombre inapproprié pour une opération
-  C_Nothing // rien n'a été fourni
+  C_Nothing, // rien n'a été fourni
+  C_NoName // pas de nom après Pour
   );
 const
   // *** tableau du nom des erreurs ***
@@ -726,7 +790,7 @@ const
     ME_C_Bad, ME_C_Inc, ME_C_EmptyList, ME_C_FileNotFound,
     ME_C_Version, ME_C_BadContent, ME_C_NorProcnorList, ME_C_Burried,
     ME_C_NotInPackage, ME_C_NorPrimNorProc, ME_C_BadTo, ME_C_BadEnd,
-    ME_C_WhatAbout, ME_C_BadNum, ME_C_Nothing);
+    ME_C_WhatAbout, ME_C_BadNum, ME_C_Nothing, ME_C_NoName);
 
 implementation
 
