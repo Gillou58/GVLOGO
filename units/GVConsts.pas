@@ -407,7 +407,7 @@ type
   CTokensEnum = (cteInteger, cteReal, cteVar, cteFunction, cteBeginExp, cteEndExp,
     ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
     cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteNot, cteAnd,
-    cteOr, cteEnd, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden,
+    cteOr, cteOrB, cteAndB, cteBoolean, cteUnKnown, cteForbidden,
     cteNotSupported, cteUnaryMinus, cteUnaryPlus);
   // élément de base d'une expression
   TGVBaseItem = record
@@ -415,7 +415,8 @@ type
     Kind: CTokensEnum; // type d'élément
   end;
   // états de l'évaluateur
-   TGVEvalState = (esWaiting, esTokenizing, esScanning, esComputing, esNoInit);
+   TGVEvalState = (esWaiting, esTokenizing, esScanning, esComputing, esNoInit,
+   esOK);
   // ensemble des fonctions mathématiques de base
   TGVFunctions = (
     C_Unknown, // fonction inconnue
@@ -482,12 +483,12 @@ const
   // 11: ^ puissance
   // 12: ( )
   CTokenPrecedence: array[CTokensEnum] of Integer = (-1, -1, -1, -1, 12, 12, 3,
-    3, 2, 2, 11, 4, 4, 5, 5, 4, 4, 2, 10, 8, 9, -1, 7, 6, -1, -1, -1, -1, 0, 0);
+    3, 2, 2, 11, 4, 4, 5, 5, 4, 4, 2, 10, 8, 9, 7, 6, -1, -1, -1, -1, 0, 0);
   // associativité des éléments
   // 1 = droite - 0 = gauche  - -1 = ne s'applique pas
   CTokenAssociation: array[CTokensEnum] of Integer =
     (-1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
-      0, -1, -1, -1, -1, 0, 0);
+      -1, -1, -1, -1, 0, 0);
   // tableau du nom des fonctions
   GVFunctionName: array [TGVFunctions] of string = (MF_Unknown, MF_DAbs,
     MF_DAbs2, MF_DCos, MF_DCos2, MF_DSin, MF_DSin2, MF_DTan, MF_DTan2, MF_DSqrt,

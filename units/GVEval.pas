@@ -71,6 +71,7 @@ type
   private
     fEvalState: TGVEvalState; // état de l'évaluation
     fOnChange: TNotifyEvent; // gestionnaire de changements
+    fOnStateChange: TNotifyEvent; // notification de changement d'état
     fOnError: TNotifyEvent; // gestionnaire d'erreurs
     fOnGetVar: TGVGetVarEvent; // événement concernant les variables
     fResult: Double; // résultat de l'évaluation
@@ -105,9 +106,10 @@ type
     procedure GetFunction; virtual; // traitement des fonctions
     procedure GetNumber; virtual; // traitement des nombres
     procedure Change; // notification de changement
+    procedure StateChange; // notification de changement de l'état
     procedure Tokenize; // répartition en éléments
     procedure DoScan; // on analyse les  éléments
-    function DoEvaluate: Double; // on évalue
+    procedure DoEvaluate; // on évalue
   public
     constructor Create; overload; // constructeur simple
     // constructeur avec initialisation
@@ -136,6 +138,8 @@ type
     property OnGetVar: TGVGetVarEvent read fOnGetVar write fOnGetVar;
     // événement lié à un changement
     property OnChange: TNotifyEvent read fOnChange write fOnChange;
+    // événement lié à un changement
+    property OnStateChange: TNotifyEvent read fOnStateChange write fOnStateChange;
   end;
 
 
@@ -161,7 +165,9 @@ begin
   fError := Err; // erreur stockée
   if fError <> C_None then
   begin  // erreur réelle ?
-    Dec(fIndx); // ajustement du pointeur
+    if (State = esTokenizing) then // recherche des éléments ?
+      Dec(fIndx); // ajustement du pointeur
+    Change; // notification de changement
     if Assigned(OnError) then // événement erreur
       OnError(Self);
     WipeItems; // on nettoie le tableau
@@ -221,8 +227,8 @@ begin
     Kind := AKind; // catégorie de l'élément
   end;
   fActualItem := AItem; // élément en cours
-  Inc(fIndx); // caractère suivant
   Change; // changement notifié
+  Inc(fIndx); // caractère suivant
 end;
 
 procedure TGVEval.AddScan(const AItem: TGVBaseItem);
@@ -231,6 +237,7 @@ begin
   SetLength(fScan, Length(fScan) + 1); // adapte la longueur du tableau
   fScan[Length(fScan) - 1] := AItem; // affecte le nouvel élément
   fActualItem := AItem.Token; // élément en cours
+  Change; // notification de changement
 end;
 
 procedure TGVEval.SetStartIndx(AValue: Integer);
@@ -250,7 +257,7 @@ begin
   if fEvalState = AValue then
     Exit; // on sort si aucun changement
   fEvalState := AValue; // nouvelle valeur
-  Change; // on notifie le changement
+  StateChange; // notification de changement
 end;
 
 function TGVEval.GetCount: Integer;
@@ -323,11 +330,12 @@ begin
     raise EEvalException.Create(ME_NoInit);
   try
   SetError(C_None); // pas d'erreur
+  Change; // notification de changement
   Tokenize; // répartition en éléments
   if Error = C_None then // pas d'erreur ?
     DoScan; // on analyse
   if Error = C_None then // toujours pas d'erreur ?
-    fResult := DoEvaluate; // on évalue
+    DoEvaluate; // on évalue
   finally
     State := esWaiting; // état d'attente
   end;
@@ -375,8 +383,6 @@ begin
      SetError(C_BadChar); // caractère interdit
    end;
   end;
-  if (Error = C_None) then  // une erreur ?
-    AddItem(EmptyStr, cteEnd); // marque de fin
 end;
 
 procedure TGVEval.DoScan;
@@ -387,7 +393,7 @@ var
 begin
   State := esScanning; // état mis à jour
   WipeScan; // nettoyage de la sortie
-  for I := 1 to Count-1 do // on balaie la liste (sauf marque de fin
+  for I := 1 to Count do // on balaie la liste
   begin
     Which := Item[I]; // élément en cours
     case Which.Kind of // on analyse sa nature
@@ -397,7 +403,7 @@ begin
         fScanStack.Push(Which); // fonction empilée
       ctePlus, cteMinus, cteMul, cteDiv, ctePower, cteGreater, cteLower, cteEqual,
       cteNotEqual, cteGreaterOrEqual, cteLowerOrEqual, cteMod, cteNot, cteAnd,
-      cteOr, cteEnd, cteOrB, cteAndB, cteUnaryMinus, cteUnaryPlus: // un opérateur ?
+      cteOr, cteOrB, cteAndB, cteUnaryMinus, cteUnaryPlus: // un opérateur ?
         begin
           while (not fScanStack.IsEmpty) // tant que la pile n'est pas vide
             and (((Association(Which.Kind) = 0) and (Precedence(Which.Kind) >=
@@ -456,7 +462,7 @@ begin
   end;
 end;
 
-function TGVEval.DoEvaluate: Double;
+procedure TGVEval.DoEvaluate;
 // *** évaluation ***
 var
   I: Integer;
@@ -569,7 +575,7 @@ var
 
 begin
   State := esComputing; // état mis à jour
-  Result := 0;
+  fResult := 0;
   ValStack := TGVDoubleStack.Create; // création de la pile
   try
     for I := 1 to ScanCount do // on balaie les valeurs
@@ -578,6 +584,7 @@ begin
         exit; // on sort en cas d'erreur
       Which := ScanItem[I]; // élément en cours
       fActualItem := Which.Token; // élément en cours stocké
+      Change; // notification de changement
       with ValStack do
         case Which.Kind of
           cteReal, cteInteger, cteVar, cteBoolean: // *** nombre? => empilé
@@ -729,8 +736,12 @@ begin
     end;
     if Error = C_None then // pas d'erreur ?
     begin
-      if ValStack.Count = 1 then // un élément attendu
-        Result := ValStack.Pop  // c'est lui...
+      if ValStack.Count = 1 then // un élément attendu pour le résultat
+      begin
+        fResult := ValStack.Pop;  // c'est lui...
+        State := esOk; // résultat trouvé
+        Change; // notification de changement
+      end
       else
         SetError(C_BadExp); // il reste des éléments inutilisés
     end;
@@ -954,6 +965,13 @@ procedure TGVEval.Change;
 begin
   if Assigned(fOnChange) then // le gestionnaire existe-t-il ?
     fOnChange(Self); // on l'exécute
+end;
+
+procedure TGVEval.StateChange;
+// *** changement de l'état de l'évaluateur ***
+begin
+  if Assigned(fOnStateChange) then // gestionnaire assigné ?
+    fOnStateChange(Self); // on l'exécute
 end;
 
 { TGVEvalEnumerator }

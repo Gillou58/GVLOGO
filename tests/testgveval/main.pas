@@ -49,6 +49,7 @@ type
     Button1: TButton;
     Edit1: TEdit;
     Memo1: TMemo;
+    Memo2: TMemo;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
@@ -58,6 +59,7 @@ type
     Value: Double; var Error: TGVError); // gestionnaire de variables
     procedure GetError(Sender: TObject); // gestionnaire d'erreurs
     procedure GetChange(Sender: TObject); // gestionnaire de changement
+    procedure GetStateChange(Sender: TObject); // gestionnaire de changement d'état
   public
     { public declarations }
   end;
@@ -69,6 +71,10 @@ implementation
 
 {$R *.lfm}
 
+const
+  StateArray: array[TGVEvalState] of string = ('Attente', 'Découpage',
+    'Analyse', 'Calcul', 'Non initialisé', 'Calcul effectué');
+
 { TMainForm }
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -78,6 +84,7 @@ begin
   Compute.OnGetVar:= @GetVar; // gestionnaire d'événement pour les variables
   Compute.OnError := @GetError; // gestionnaire d'erreurs
   Compute.OnChange := @GetChange; // gestionnaire de changement
+  Compute.OnStateChange := @GetStateChange; // gestionnaire de changement d'état
 end;
 
 procedure TMainForm.Button1Click(Sender: TObject);
@@ -87,24 +94,22 @@ var
   I: Integer;
 begin
   Memo1.Clear;
+  Memo2.Lines.Add('*********');
   Compute.Text := Edit1.Text; // texte en place
-  Memo1.Lines.Add(Format('*** ANALYSE de : %s', [Edit1.Text]));
+  Memo1.Lines.Add(Format('*** EVALUATION de : %s', [Edit1.Text]));
   Memo1.Lines.Add('___________________________________');
-  Memo1.Lines.Add(EmptyStr);
   Compute.Scan;  // valeur évaluée
   if Compute.Error = C_None then // pas d'erreur ?
   begin
     Memo1.Lines.Add(EmptyStr);
     Memo1.Lines.Add('*** LISTE des éléments ***');
     Memo1.Lines.Add('__________________________');
-    Memo1.Lines.Add(EmptyStr);
     for Item in Compute do  // on énumère
       Memo1.Lines.Add(Item.Token); // éléments dans le mémo
   end;
   Memo1.Lines.Add(EmptyStr);
   Memo1.Lines.Add('*** LISTE des éléments après scan ***');
   Memo1.Lines.Add('_____________________________________');
-  Memo1.Lines.Add(EmptyStr);
   for I := 1 to Compute.ScanCount do
   begin
     Memo1.Lines.Add(Compute.ScanItem[I].Token);
@@ -112,7 +117,6 @@ begin
  Memo1.Lines.Add(EmptyStr);
  Memo1.Lines.Add(Format('*** Résultat : %2f', [Compute.Res]));
  Memo1.Lines.Add('___________________________________');
- Memo1.Lines.Add(EmptyStr);
 end;
 
 procedure TMainForm.GetVar(Sender: TObject; VarName: string; var Value: Double;
@@ -144,24 +148,33 @@ const
     'Function', 'BeginExp', 'EndExp', 'Plus', 'Minus', 'Mul',
     'Div', 'Power', 'Greater', 'Lower', 'Equal', 'NotEqual',
     'GreaterOrEqual', 'LowerOrEqual', 'Mod', 'Not', 'And', 'Or',
-    'End', 'OrB', 'AndB', 'Boolean', 'UnKnown',
+    'OrB', 'AndB', 'Boolean', 'UnKnown',
     'Forbidden', 'NotSupported', 'UnaryMinus', 'UnaryPlus');
-  StateArray: array[TGVEvalState] of string = ('Waiting', 'Tokenizing',
-    'Scanning', 'Computing', 'NoInit');
+
 begin
   with Compute do // la base est de 1
   begin
-    if (Count <> 0) and (State = esTokenizing) then
-    begin
-      Memo1.Lines.Add('< AJOUT : ' + Item[Count].Token);
-      Memo1.Lines.Add(' --> ' + TypArray[Item[Count].Kind]);
-      Memo1.Lines.Add(' Priorité: ' + IntToStr(CTokenPrecedence[Item[Count].Kind]) +
-        ' Association : ' + IntToStr(CTokenAssociation[Item[Count].Kind]));
-    end
-    else
-      Memo1.Lines.Add('Etat : ' + StateArray[State]);
-    Memo1.Lines.Add(EmptyStr);
+    case State of
+      esWaiting:
+        Memo1.Lines.Add('Expression à évaluer: ' + Text);
+      esTokenizing: if (Count <> 0) then
+        begin
+          Memo1.Lines.Add(Format('< %s: %s ---> %s',[StateArray[State],
+            Item[Count].Token, TypArray[Item[Count].Kind]]));
+          Memo1.Lines.Add(' Priorité: ' + IntToStr(CTokenPrecedence[Item[Count].Kind]) +
+            ' --- Association : ' + IntToStr(CTokenAssociation[Item[Count].Kind]));
+        end;
+      esScanning, esComputing: Memo1.Lines.Add(Format('%s de l''élément : %s',
+        [StateArray[State], ActualItem]));
+      esOk: Memo1.Lines.Add(Format('Résultat : %f', [Res]));
+   end;
   end;
+end;
+
+procedure TMainForm.GetStateChange(Sender: TObject);
+// gestionnaire de changement d'état
+begin
+  Memo2.Lines.Add(StateArray[Compute.State]);
 end;
 
 end.

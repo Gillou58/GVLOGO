@@ -187,4 +187,15 @@ object MainForm: TMainForm
     OnClick = Button1Click
     TabOrder = 2
   end
+  object Memo2: TMemo
+    Left = 488
+    Height = 418
+    Top = 64
+    Width = 150
+    Lines.Strings = (
+      'Etat'
+    )
+    ScrollBars = ssAutoVertical
+    TabOrder = 3
+  end
 end
