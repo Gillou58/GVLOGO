@@ -46,6 +46,7 @@
         <Filename Value="main.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="main"/>
       </Unit1>
@@ -94,7 +95,7 @@
         <UnitName Value="GVWords"/>
       </Unit10>
       <Unit11>
-        <Filename Value="..\..\units\gvinterpreter.pas"/>
+        <Filename Value="..\..\units\GVInterpreter.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GVInterpreter"/>
       </Unit11>

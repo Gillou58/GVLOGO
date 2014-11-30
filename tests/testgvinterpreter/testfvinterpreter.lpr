@@ -8,7 +8,7 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, bgrabitmappack, main, GVConsts, GVEval, GVKernel, GVLists, GVPropLists,
-  GVStacks, GVTurtles2, GVInterpreter, GVWords;
+  GVStacks, GVTurtles2, GVWords, GVInterpreter;
 
 {$R *.res}
 

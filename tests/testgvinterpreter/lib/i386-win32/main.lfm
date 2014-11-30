@@ -1,0 +1,9 @@
+object MainForm: TMainForm
+  Left = 238
+  Height = 583
+  Top = 150
+  Width = 897
+  Caption = 'Test de GVInterpreter - (c) Gilles Vasseur 2014 - GVLOGO'
+  Position = poScreenCenter
+  LCLVersion = '1.2.6.0'
+end
