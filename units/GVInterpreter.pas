@@ -7,7 +7,7 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    01-12-2014 07:40:23                          |
+  |                  Date:    01-12-2014 18:39:23                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
@@ -32,13 +32,15 @@
 {$mode objfpc}{$H+}
 {$ENDIF}
 
+{$DEFINE Debug}
+
 unit GVInterpreter;
 
 // Unité de l'interpréteur
 //
 // ##############################################################
 //
-// L'interpréteur utilise les unités précedemment définies
+// L'interpréteur utilise les unités précédemment définies
 // pour l'interprétation des programmes écrits en GVLOGO.
 //
 
@@ -46,7 +48,7 @@ interface
 
 uses
   Classes, SysUtils, ExtCtrls,
-  GVConsts, GVStacks, GVKernel, GVEval;
+  GVConsts, GVStacks, GVKernel, GVEval, GVLists;
 
 type
 
@@ -71,14 +73,18 @@ type
     procedure LPrim(const AValue: string); // traitement d'une primitive
     procedure LProc(const AValue: string); // traitement d'une procédure
     procedure LCommand(const AValue: string); // traitement d'une commande
+    procedure LEval(const AValue: string); // traitement d'une évaluation
     procedure SetError(AValue: TGVError); // traitement d'une erreur
     procedure ExePrim(N: Integer); // exécution d'une primitive
+    procedure ExeProc; // exécution d'une procédure
     procedure ExeCommand; // exécution de la commande en attente
   protected
     procedure Change; // changement signalé
   public
+    fTextRes: string; // résultat texte ### DEBUG ###
     constructor Create; // constructeur
     destructor Destroy; override; // destructeur
+    procedure ComputeLine(const St: string); // interprète une ligne
     property Error: TGVError read fError write SetError default C_None; // erreur
     property ActualItem: string read fActualItem write fActualItem; // élément en cours
     property OnChange: TNotifyEvent read fOnChange write fOnChange; // changement notifié
@@ -92,10 +98,9 @@ procedure TGVInterpreter.PushConst(const St: string);
 // *** empilement d'une constante ***
 begin
   fDatasStack.Push(St); // on empile la constante
-  Change; // changement notifié
   with fParamsStack do
   begin
-    Push(Pop -1); // un paramètre a été trouvé
+    Push(Pop - 1); // un paramètre a été trouvé
     // trop de paramètres ?
     if (Peek < 0) or ((Peek = 0) and (fCommandsStack.Count = 0)) then
       Error := C_WhatAbout // [Erreur : que faire de ? ]
@@ -159,11 +164,10 @@ begin
   N := fKernel.NumParamsPrim(AValue);
   fParamsStack.Push(N); // on enregistre le nombre d'arguments attendus
   fParamsStack.Dup; // on double ce nombre
+  // $ + numéro de la primitive empilé
+  fCommandsStack.Push(CLink + IntToStr(Num));
   if N = 0 then // pas de paramètres ?
-    ExePrim(Num) // exécute la primitive
-  else
-    // $ + numéro de la primitive empilé
-    fCommandsStack.Push(CLink + IntToStr(Num));
+    ExePrim(Num); // exécute immédiatement la primitive
 end;
 
 procedure TGVInterpreter.LProc(const AValue: string);
@@ -184,6 +188,17 @@ begin
     Error := C_NorPrimNorProc;
 end;
 
+procedure TGVInterpreter.LEval(const AValue: string);
+// *** traitement d'une évaluation ***
+begin
+  fEval.Text := AValue; // on affecte l'évaluateur
+  fEVal.Scan; // on évalue
+  if (fEval.Error = C_None) then  // pas d'erreur ?
+    PushConst(FloatToStr(fEval.Res)) // valeur empilée
+  else
+    Error := fEval.Error; // on récupère l'erreur
+end;
+
 procedure TGVInterpreter.SetError(AValue: TGVError);
 // *** traitement d'une erreur ***
 begin
@@ -195,6 +210,36 @@ end;
 
 procedure TGVInterpreter.ExePrim(N: Integer);
 // *** exécution d'une primitive
+var
+  Prm: Integer;
+  St: string;
+begin
+  if (N = -1) then // numéro primitive à rechercher ?
+  begin
+    St := fCommandsStack.Peek; // $ + numéro de la primitive
+    N := StrToInt(Copy(St, 2, Length(St) - 1)); // numéro retrouvé
+  end;
+  fParamsStack.Pop; // on libère les paramètres
+  Prm := fParamsStack.Pop; // nombre de paramètres de la primitive
+  while Prm <> 0 do // tant qu'il y a des paramètres
+  begin
+    // on empile les paramètres sur la pile d'exécution
+    fExeStack.Push(fDatasStack.Pop);
+    Dec(Prm); // paramètre suivant
+  end;
+  case N of // exécution
+    {$IFDEF Debug}
+    0..255: begin
+      fTextRes := Format('PRIMITIVE : %d - Exécution : %d', [N, fExeStack.Count]);
+      Change;
+    end;
+    {$ENDIF}
+  end;
+  fCommandsStack.Pop; // on retire la primitive de la pile des commandes
+end;
+
+procedure TGVInterpreter.ExeProc;
+// *** exécution d'une procédure ***
 begin
   // ### TODO ###
 end;
@@ -202,7 +247,39 @@ end;
 procedure TGVInterpreter.ExeCommand;
 // *** exécution de la commande en attente ***
 begin
-  // ### TODO ###
+  if fCommandsStack.Peek[1] = CLink then // $ ?
+    ExePrim(-1) // c'est une primitive
+  else
+    ExeProc; // sinon une procédure
+end;
+
+procedure TGVInterpreter.ComputeLine(const St: string);
+// *** interprète une ligne ***
+var
+  L: TGVList;
+  S: string;
+begin
+  L := TGVList.Create; // création de la liste
+  try
+    L.Text := CBeginList + St + CEndList;
+    for S in L do // on balaie les éléments
+    begin
+      ActualItem := S; // élément en cours
+      Change; // changement notifié
+      case S[1] of // premier caractère déterminant
+        CQuote: LWord(S); // un littéral
+        CBeginList: LList(S); // une liste
+        CColon: LVar(S); // une variable
+        CPlus, CMinus, '0'..'9' : LNumber(S); // un nombre
+        'a'..'z','A'..'Z',CUnderline, CDot : LCommand(S); // une commande
+        CBeginPar: LEval(S); // une valeur à évaluer
+      end;
+      if Error <> C_None then // une ereur ?
+        Break; // on arrête
+    end;
+  finally
+    L.Free; // libération de la liste
+  end;
 end;
 
 procedure TGVInterpreter.Change;

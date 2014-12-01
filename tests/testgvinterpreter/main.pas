@@ -37,7 +37,7 @@ unit main;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, ExtCtrls,
+  Classes, SysUtils, FileUtil, Forms, ExtCtrls, StdCtrls,
   GVInterpreter
   ;
 
@@ -46,10 +46,15 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    Button1: TButton;
+    Edit1: TEdit;
+    Memo1: TMemo;
+    procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
     { private declarations }
+    procedure Change(Sender: TObject); // gestionnaire de changement
   public
     { public declarations }
     Interpreter: TGVInterpreter;
@@ -69,11 +74,30 @@ procedure TMainForm.FormCreate(Sender: TObject);
 // création de la fiche
 begin
   Interpreter := TGVInterpreter.Create; // création de l'interpréteur
+  Interpreter.OnChange := @Change; // gestionnaire affecté;
+end;
+
+procedure TMainForm.Button1Click(Sender: TObject);
+// demande d'interprétation
+begin
+  Memo1.Clear;
+  Interpreter.ComputeLine(Edit1.Text);
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin
   Interpreter.Free; // libération de l'interpréteur
+end;
+
+procedure TMainForm.Change(Sender: TObject);
+// gestionnaire de changement
+begin
+  with Interpreter do
+    begin
+      Memo1.Lines.Add(Format('Elément traité : %s',[ActualItem]));
+      Memo1.Lines.Add(Format('Erreur : %d',[Ord(Error)]));
+      Memo1.Lines.Add(Format('Compute : %s',[fTextRes]));
+    end;
 end;
 
 end.
