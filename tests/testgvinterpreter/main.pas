@@ -38,13 +38,11 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, ExtCtrls, StdCtrls,
-  GVInterpreter
+  GVInterpreter, GVConsts
   ;
 
 type
-
   { TMainForm }
-
   TMainForm = class(TForm)
     Button1: TButton;
     Edit1: TEdit;
@@ -69,7 +67,6 @@ implementation
 
 { TMainForm }
 
-
 procedure TMainForm.FormCreate(Sender: TObject);
 // création de la fiche
 begin
@@ -80,7 +77,9 @@ end;
 procedure TMainForm.Button1Click(Sender: TObject);
 // demande d'interprétation
 begin
-  Memo1.Clear;
+  Memo1.Lines.Add(EmptyStr);
+  Interpreter.Error := C_None;
+  Interpreter.Lines := Memo1.Lines;
   Interpreter.ComputeLine(Edit1.Text);
 end;
 
@@ -92,12 +91,9 @@ end;
 procedure TMainForm.Change(Sender: TObject);
 // gestionnaire de changement
 begin
-  with Interpreter do
-    begin
-      Memo1.Lines.Add(Format('Elément traité : %s',[ActualItem]));
-      Memo1.Lines.Add(Format('Erreur : %d',[Ord(Error)]));
-      Memo1.Lines.Add(Format('Compute : %s',[fTextRes]));
-    end;
+  //with Interpreter do
+  //  Memo1.Lines.Add(Format('>> Elément:  %s Erreur: %d  - %s',
+  //    [ActualItem, Ord(Error), fTextRes]));
 end;
 
 end.

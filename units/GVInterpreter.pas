@@ -48,7 +48,7 @@ interface
 
 uses
   Classes, SysUtils, ExtCtrls,
-  GVConsts, GVStacks, GVKernel, GVEval, GVLists;
+  GVConsts, GVStacks, GVKernel, GVEval, GVLists, GVWords;
 
 type
 
@@ -56,6 +56,7 @@ type
 
   TGVInterpreter = class(TObject)
   private
+    fLines: TStrings; // lignes de l'éditeur
     fOnChange: TNotifyEvent; // notification de changement
     fError: TGVError; // erreur en cours
     fActualItem: string; // donnée en cours
@@ -88,6 +89,7 @@ type
     property Error: TGVError read fError write SetError default C_None; // erreur
     property ActualItem: string read fActualItem write fActualItem; // élément en cours
     property OnChange: TNotifyEvent read fOnChange write fOnChange; // changement notifié
+    property Lines: TStrings read fLines write fLines; // éditeur
   end;
 
 implementation
@@ -100,19 +102,28 @@ begin
   fDatasStack.Push(St); // on empile la constante
   with fParamsStack do
   begin
-    Push(Pop - 1); // un paramètre a été trouvé
-    // trop de paramètres ?
-    if (Peek < 0) or ((Peek = 0) and (fCommandsStack.Count = 0)) then
+    // pas de paramètres ou pas de commande en attente
+    if (Count = 0) or ((Peek > 0) and (fCommandsStack.Count = 0)) then
       Error := C_WhatAbout // [Erreur : que faire de ? ]
     else
-      ExeCommand; // on exécute la commande en attente
+    begin
+      Push(Pop - 1); // un paramètre a été trouvé
+      if (Peek = 0) then // plus de paramètres en attente
+        ExeCommand; // on exécute la commande en attente
+    end;
   end;
 end;
 
 procedure TGVInterpreter.LWord(const AValue: string);
 // *** traitement d'un littéral mot ***
+var
+  St: string;
 begin
-  PushConst(Copy(AValue, 1, Length(AValue)-1)); // empiler la constante sans le "
+  St := AValue;
+  // empiler la constante non vide sans le "
+  if (St <> EmptyStr) and (St[1] = CQuote) then
+    St := Copy(St, 2, Length(St));
+  PushConst(St);
 end;
 
 procedure TGVInterpreter.LNumber(const AValue: string);
@@ -185,7 +196,7 @@ begin
   if fKernel.IsProc(AValue) then
     LProc(AValue) // on traite la procédure
   else
-    Error := C_NorPrimNorProc;
+    Error := C_NorPrimNorProc; // [Erreur: ni une primitive ni une procédure
 end;
 
 procedure TGVInterpreter.LEval(const AValue: string);
@@ -196,7 +207,7 @@ begin
   if (fEval.Error = C_None) then  // pas d'erreur ?
     PushConst(FloatToStr(fEval.Res)) // valeur empilée
   else
-    Error := fEval.Error; // on récupère l'erreur
+    Error := fEval.Error; // [Erreur signalée]
 end;
 
 procedure TGVInterpreter.SetError(AValue: TGVError);
@@ -205,7 +216,6 @@ begin
   if fError = AValue then
     Exit; // on sort si aucun changement
   fError := AValue; // nouvelle valeur d'erreur
-  Change; // changement notifié
 end;
 
 procedure TGVInterpreter.ExePrim(N: Integer);
@@ -213,29 +223,48 @@ procedure TGVInterpreter.ExePrim(N: Integer);
 var
   Prm: Integer;
   St: string;
+  L: TGVList;
+  W: TGVWord;
+
+  {$I Prims.inc} // fichier des primitives
+
 begin
-  if (N = -1) then // numéro primitive à rechercher ?
-  begin
-    St := fCommandsStack.Peek; // $ + numéro de la primitive
-    N := StrToInt(Copy(St, 2, Length(St) - 1)); // numéro retrouvé
-  end;
-  fParamsStack.Pop; // on libère les paramètres
-  Prm := fParamsStack.Pop; // nombre de paramètres de la primitive
-  while Prm <> 0 do // tant qu'il y a des paramètres
-  begin
-    // on empile les paramètres sur la pile d'exécution
-    fExeStack.Push(fDatasStack.Pop);
-    Dec(Prm); // paramètre suivant
-  end;
-  case N of // exécution
-    {$IFDEF Debug}
-    0..255: begin
-      fTextRes := Format('PRIMITIVE : %d - Exécution : %d', [N, fExeStack.Count]);
-      Change;
+  L := TGVList.Create; // liste de travail
+  W := TGVWord.Create; // mot de travail
+  try
+    if (N = -1) then // numéro primitive à rechercher ?
+    begin
+      St := fCommandsStack.Peek; // $ + numéro de la primitive
+      N := StrToInt(Copy(St, 2, Length(St) - 1)); // numéro retrouvé
     end;
+    fParamsStack.Pop; // on libère les paramètres
+    Prm := fParamsStack.Pop; // nombre de paramètres de la primitive
+    while Prm <> 0 do // tant qu'il y a des paramètres
+    begin
+      // on empile les paramètres sur la pile d'exécution
+      fExeStack.Push(fDatasStack.Pop);
+      Dec(Prm); // paramètre suivant
+    end;
+    // on retire la primitive de la pile des commandes
+    ActualItem := fCommandsStack.Pop;
+    case N of // exécution
+      72, 73: First;
+      74, 75: Last;
+      76, 77: ButFirst;
+      78, 79: ButLast;
+      80: PTrue;
+      81: PFalse;
+    {$IFDEF Debug}
+      82: begin // ECRIS
+        fLines.Add(fExeStack.Pop);
+      end;
     {$ENDIF}
+    end;
+  finally
+    Change; // changement notifié
+    L.Free; // libération de la liste des travail
+    W.Free; // idem mot de travail
   end;
-  fCommandsStack.Pop; // on retire la primitive de la pile des commandes
 end;
 
 procedure TGVInterpreter.ExeProc;
@@ -265,7 +294,6 @@ begin
     for S in L do // on balaie les éléments
     begin
       ActualItem := S; // élément en cours
-      Change; // changement notifié
       case S[1] of // premier caractère déterminant
         CQuote: LWord(S); // un littéral
         CBeginList: LList(S); // une liste
@@ -274,7 +302,7 @@ begin
         'a'..'z','A'..'Z',CUnderline, CDot : LCommand(S); // une commande
         CBeginPar: LEval(S); // une valeur à évaluer
       end;
-      if Error <> C_None then // une ereur ?
+      if Error <> C_None then // une erreur ?
         Break; // on arrête
     end;
   finally

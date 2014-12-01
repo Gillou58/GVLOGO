@@ -94,6 +94,6 @@ Vous pouvez aussi vous rendre sur mon site pour les éventuelles mises à jour :
 
 Les suggestions, modifications, propositions et questions sont les bienvenues.
 
-Gilles VASSEUR, le 30 novembre 2014
+Gilles VASSEUR, le 1 décembre 2014
 
  

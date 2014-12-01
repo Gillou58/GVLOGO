@@ -36,7 +36,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="12">
+    <Units Count="13">
       <Unit0>
         <Filename Value="testfvinterpreter.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -99,6 +99,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="GVInterpreter"/>
       </Unit11>
+      <Unit12>
+        <Filename Value="..\..\units\Prims.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit12>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
