@@ -363,6 +363,8 @@ const
   // caractères alphabétiques autorisés pour un identificateur
   CAlphaPlus = CAlpha + [CUnderline, CColon, CDot];
   CDigit = ['0'..'9']; // chiffres
+  CDigitPlus = CDigit + [Cplus, CMinus]; // chiffres et signes
+  CDigitPlusDot = CDigitPlus + [CDot]; // point en plus
   // caractères alphanumériques
   CAlphaNum = CAlpha + CDigit;
   // caractères autorisés pour un identificateur
@@ -382,6 +384,7 @@ const
   RadToDg = 180 / Pi; // pour les conversions en degrés
   CDefaultScale = 100; // échelle par défaut
   CDefaultHeading = 90; // cap par défaut
+  CDefaultXY = 600; // taille écran tortue par défaut
   CDefaultSize = 8; // taille d'une tortue par défaut
   CMaxSize = 20; // taille maximale de la tortue
   CMaxSpeed = 100; // vitesse maximum de la tortue
