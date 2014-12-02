@@ -204,7 +204,7 @@ resourcestring
   P_Left2 = 'TG';
   P_Right = 'DROITE';
   P_Right2 = 'TD';
-  P_For = 'POUR';  // premier élément
+  P_For = 'POUR';  // *** premier élément actuel  70
   P_End = 'FIN';
   P_First = 'PREMIER';
   P_First2 = 'PREM';
@@ -230,8 +230,8 @@ resourcestring
   P_Replace = 'REMPLACE';
   P_Sort = 'TRIE';
   P_Rotate = 'ROTATION';
-  P_Item = 'ELEMENT';
-  P_Random = 'HASARD';
+  P_Item = 'ELEMENT'; // 96
+  P_Random = 'AUHASARD';
   P_BeforeP = 'AVANT?';
   P_AfterP = 'APRES?';
   P_Count = 'COMPTE';
@@ -614,8 +614,8 @@ const
    (Name:P_Shuffle; NbParams: 1),
    (Name:P_Replace; NbParams: 3),
    (Name:P_Sort; NbParams: 1),
-   (Name:P_Rotate; NbParams: 1), //
-   (Name:P_Item; NbParams: 1),
+   (Name:P_Rotate; NbParams: 1),
+   (Name:P_Item; NbParams: 2), // fin 96
    (Name:P_Random; NbParams: 1),
    (Name:P_BeforeP; NbParams: 2),
    (Name:P_AfterP; NbParams: 2),

@@ -277,6 +277,8 @@ begin
       93: Replace; // REMPLACE
       94: Sort; // TRIE
       95: Rotate; // ROTATION
+      96: Item; // ELEMENT
+      97: AtRandom; // AUHASARD
     end;
   finally
     Change; // changement notifié

@@ -310,6 +310,30 @@ begin
     LWord(W.Rotate(St)); // rotation des lettres du mot
 end;
 
+procedure Item;
+// *** ELEMENT ***
+begin
+ // ### TODO ###
+end;
+
+procedure AtRandom;
+// *** HASARD ***
+var
+  St: string;
+begin
+  St := fExeStack.Pop; // donnée dépilée
+  if (St = EmptyStr) or (St = CEmptyList) then // une liste ou un mot vide ?
+    Error := C_EmptyWordOrList // [Erreur : mot ou liste vide]
+  else
+  if (St[1] = CBeginList) then  // une liste ?
+  begin
+    L.Text := St; // on l'analyse
+    L.Text := L.ShuffleItems; // on mélange les éléments
+    LList(L.First); // on renvoie le premier élément
+  end
+  else
+    LWord(W.Atrandom(St)); // on renvoie un caractère au hasard
+end;
 
 
 
