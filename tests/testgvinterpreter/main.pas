@@ -53,6 +53,7 @@ type
   private
     { private declarations }
     procedure Change(Sender: TObject); // gestionnaire de changement
+    procedure Error(Sender: TObject); // gestionnaire de changement
   public
     { public declarations }
     Interpreter: TGVInterpreter;
@@ -72,6 +73,7 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Interpreter := TGVInterpreter.Create; // création de l'interpréteur
   Interpreter.OnChange := @Change; // gestionnaire affecté;
+  Interpreter.OnError := @Error; // erreur;
 end;
 
 procedure TMainForm.Button1Click(Sender: TObject);
@@ -92,8 +94,19 @@ procedure TMainForm.Change(Sender: TObject);
 // gestionnaire de changement
 begin
   //with Interpreter do
-  //  Memo1.Lines.Add(Format('>> Elément:  %s Erreur: %d  - %s',
-  //    [ActualItem, Ord(Error), fTextRes]));
+  //  Memo1.Lines.Add(Format('>> Elément:  %s Erreur: %d',
+  //    [ActualItem, Ord(Error)]));
+end;
+
+procedure TMainForm.Error(Sender: TObject);
+// gestionnaire d'erreur
+begin
+  with Interpreter do
+  begin
+    //Memo1.Lines.Add(Format('>>> ERREUR <<< Elément:  %s', [ActualItem]));
+    Memo1.Lines.Add(Format('>>> ERREUR <<< ' + GVErrorName[Error], [ActualItem]));
+  end;
+
 end;
 
 end.

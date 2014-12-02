@@ -56,10 +56,12 @@ type
 
   TGVInterpreter = class(TObject)
   private
-    fLines: TStrings; // lignes de l'éditeur
+    fLines: TStrings; // lignes de l'éditeur de sortie
     fOnChange: TNotifyEvent; // notification de changement
+    fOnError: TNotifyEvent; // notification d'erreur
     fError: TGVError; // erreur en cours
     fActualItem: string; // donnée en cours
+    fActualLine: string; // ligne en cours
     fKernel: TGVLogoKernel; // noyau de travail
     fParamsStack: TGVIntegerStack; // pile des paramètres
     fDatasStack: TGVStringStack; // pile des données
@@ -81,6 +83,7 @@ type
     procedure ExeCommand; // exécution de la commande en attente
   protected
     procedure Change; // changement signalé
+    procedure ErrorEvent; // erreur signalée
   public
     fTextRes: string; // résultat texte ### DEBUG ###
     constructor Create; // constructeur
@@ -88,7 +91,9 @@ type
     procedure ComputeLine(const St: string); // interprète une ligne
     property Error: TGVError read fError write SetError default C_None; // erreur
     property ActualItem: string read fActualItem write fActualItem; // élément en cours
+    property ActualLine: string read fActualLine; // ligne en cours
     property OnChange: TNotifyEvent read fOnChange write fOnChange; // changement notifié
+    property OnError: TNotifyEvent read fOnError write fOnError; // erreur notifiée
     property Lines: TStrings read fLines write fLines; // éditeur
   end;
 
@@ -216,6 +221,7 @@ begin
   if fError = AValue then
     Exit; // on sort si aucun changement
   fError := AValue; // nouvelle valeur d'erreur
+  ErrorEvent; // notification du changement
 end;
 
 procedure TGVInterpreter.ExePrim(N: Integer);
@@ -245,28 +251,32 @@ begin
       fExeStack.Push(fDatasStack.Pop);
       Dec(Prm); // paramètre suivant
     end;
-    // on retire la primitive de la pile des commandes
-    ActualItem := fCommandsStack.Pop;
+    // on retire la primitive de la pile des commandes et on la conserve
+    ActualItem := GVPrimName[(StrToInt(Copy(fCommandsStack.Pop, 2, 127)))].Name;
     case N of // exécution
 
-      70: SetError(C_BadTo); // mauvais POUR
-      71: SetError(C_BadEnd); // mauvais FIN
-      72, 73: First;
-      74, 75: Last;
-      76, 77: ButFirst;
-      78, 79: ButLast;
-      80: PTrue;
-      81: PFalse;
+      70: BadTo; // POUR
+      71: BadEnd; // FIN
+      72, 73: First; // PREM PREMIER
+      74, 75: Last;  // DER DERNIER
+      76, 77: ButFirst; // SAUFPREMIER SP
+      78, 79: ButLast; // SAUFDERNIER SD
+      80: PTrue; // VRAI
+      81: PFalse; // FAUX
     {$IFDEF Debug}
       82: fLines.Add(fExeStack.Pop); // ECRIS
     {$ENDIF}
-      83: WriteAll;
-      84, 85: PutFirst;
-      86, 87: PutLast;
-      88: Insert;
-      89: Reverse;
-      90: UpperCase;
-      91: LowerCase;
+      83: WriteAll; // ECRIST
+      84, 85: PutFirst; // METSPREMIER
+      86, 87: PutLast; // METSDERNIER
+      88: Insert; // INSERE
+      89: Reverse; // INVERSE
+      90: UpperCase; // MAJUSCULES
+      91: LowerCase; // MINUSCULES
+      92: Shuffle; // MELANGE
+      93: Replace; // REMPLACE
+      94: Sort; // TRIE
+      95: Rotate; // ROTATION
     end;
   finally
     Change; // changement notifié
@@ -296,6 +306,7 @@ var
   L: TGVList;
   S: string;
 begin
+  fActualLine := St; // on conserve la ligne à analyser
   L := TGVList.Create; // création de la liste
   try
     L.Text := CBeginList + St + CEndList;
@@ -323,6 +334,13 @@ procedure TGVInterpreter.Change;
 begin
   if Assigned(fOnChange) then // gestionnaire assigné ?
     fOnChange(self); // on l'exécute
+end;
+
+procedure TGVInterpreter.ErrorEvent;
+// *** notification d'erreur ***
+begin
+  if Assigned(fOnError) and (Error <> C_None) then // gestionnaire assigné et erreur ?
+    fOnError(self); // on l'exécute
 end;
 
 constructor TGVInterpreter.Create;

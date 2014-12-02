@@ -52,12 +52,12 @@ resourcestring
   ME_EmptyStr = 'Le mot vide ne convient pas pour la primitive "%s".';
   ME_BadChar = 'Le mot "%s" est trop court pour en traiter l''élément %d.';
   ME_BadList = 'La liste "%s" est incorrecte.';
-  ME_DelItem = 'L''élément %d n''existe pas pour une suppression.';
-  ME_InsItem = 'L''élément %d n''existe pas pour une insertion.';
-  ME_ReplaceItem = 'L''élément %d n''existe pas pour un remplacement.';
+  ME_DelItem = 'L''élément %s n''existe pas pour la suppression.';
+  ME_InsItem = 'L''élément %s n''existe pas pour l''insertion.';
+  ME_ReplaceItem = 'L''élément %s n''existe pas pour le remplacement.';
   ME_NoListWord = '"%s" n''est ni une liste ni un mot corrects.';
   ME_TwoDelete = 'La liste ne contient pas assez d''éléments pour en supprimer deux à partir de %d.';
-  ME_BadListP = 'La liste de propriétés %d est introuvable.';
+  ME_BadListP = 'La liste de propriétés %s est introuvable.';
   ME_BadFormat = 'Le format du fichier "%s" est incorrect : %s.';
 
   // ************* GVStacks *************
@@ -130,6 +130,7 @@ resourcestring
   ME_C_BadNum = 'Le nombre %d ne convient pas pour cette opération.';
   ME_C_Nothing = '<vide>';
   ME_C_NoName = 'Le mot POUR n''est pas suivi d''un nom. Ligne = "%s".';
+  ME_C_EmptyWordOrList = 'La primitive "%s" a besoin d''une donnée non vide.';
 
   // ************* PRIMITIVES *************
 
@@ -203,7 +204,7 @@ resourcestring
   P_Left2 = 'TG';
   P_Right = 'DROITE';
   P_Right2 = 'TD';
-  P_For = 'POUR';
+  P_For = 'POUR';  // premier élément
   P_End = 'FIN';
   P_First = 'PREMIER';
   P_First2 = 'PREM';
@@ -588,7 +589,7 @@ const
    (Name:P_Left2; NbParams: 1),
    (Name:P_Right; NbParams: 1),
    (Name:P_Right2; NbParams: 1),
-   (Name:P_For; NbParams: -1),
+   (Name:P_For; NbParams: 0),  // début d'implémentation
    (Name:P_End; NbParams: 0),
    (Name:P_First; NbParams: 1),
    (Name:P_First2; NbParams: 1),
@@ -606,20 +607,20 @@ const
    (Name:P_PutFirst2; NbParams: 2),
    (Name:P_PutLast; NbParams: 2),
    (Name:P_PutLast2; NbParams: 2),
-   (Name:P_Insert; NbParams: 2),
+   (Name:P_Insert; NbParams: 3),
    (Name:P_Reverse; NbParams: 1),
    (Name:P_Uppercase; NbParams: 1),
    (Name:P_Lowercase; NbParams: 1),
    (Name:P_Shuffle; NbParams: 1),
-   (Name:P_Replace; NbParams: 2),
+   (Name:P_Replace; NbParams: 3),
    (Name:P_Sort; NbParams: 1),
-   (Name:P_Rotate; NbParams: 1),
+   (Name:P_Rotate; NbParams: 1), //
    (Name:P_Item; NbParams: 1),
    (Name:P_Random; NbParams: 1),
    (Name:P_BeforeP; NbParams: 2),
    (Name:P_AfterP; NbParams: 2),
    (Name:P_Count; NbParams: 1),
-   (Name:P_EQUALP; NbParams: 2),
+   (Name:P_EqualP; NbParams: 2),
    (Name:P_Ident; NbParams: 1),
    (Name:P_MemberP; NbParams: 2),
    (Name:P_NumberP; NbParams: 1),
@@ -774,7 +775,8 @@ type
   C_WhatAbout, // que faire de ?
   C_BadNum, // nombre inapproprié pour une opération
   C_Nothing, // rien n'a été fourni
-  C_NoName // pas de nom après Pour
+  C_NoName, // pas de nom après Pour
+  C_EmptyWordOrList // mot ou liste vide interdit
   );
 const
   // *** tableau du nom des erreurs ***
@@ -794,7 +796,8 @@ const
     ME_C_Bad, ME_C_Inc, ME_C_EmptyList, ME_C_FileNotFound,
     ME_C_Version, ME_C_BadContent, ME_C_NorProcnorList, ME_C_Burried,
     ME_C_NotInPackage, ME_C_NorPrimNorProc, ME_C_BadTo, ME_C_BadEnd,
-    ME_C_WhatAbout, ME_C_BadNum, ME_C_Nothing, ME_C_NoName);
+    ME_C_WhatAbout, ME_C_BadNum, ME_C_Nothing, ME_C_NoName,
+    ME_C_EmptyWordOrList);
 
 implementation
 
