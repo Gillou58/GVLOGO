@@ -33,7 +33,7 @@ object MainForm: TMainForm
     Top = 56
     Width = 768
     Lines.Strings = (
-      '*** ZONE D''CRITURE ***'
+      '*** ZONE D''ECRITURE ***'
       ''
       ''
     )

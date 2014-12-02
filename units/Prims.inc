@@ -78,6 +78,96 @@ begin
   LNumber(IntToStr(CRFalse));
 end;
 
+procedure WriteAll;
+// ECRIST
+begin
+  fLines.Add(fExeStack.Pop);
+end;
+
+procedure PutLast;
+// METSDERNIER
+var
+  St: string;
+begin
+  St := fExeStack.Pop;
+  if (St <> EmptyStr) and (St[1] = CBeginList) then
+  begin
+    L.Text := St;
+    LList(L.PutLast(fExeStack.Pop));
+  end
+  else
+    LWord(W.PutLast(St, fExeStack.Pop));
+end;
+
+procedure PutFirst;
+// METSPREMIER
+var
+  St: string;
+begin
+  St := fExeStack.Pop;
+  if (St <> EmptyStr) and (St[1] = CBeginList) then
+  begin
+    L.Text := St;
+    LList(L.PutFirst(fExeStack.Pop));
+  end
+  else
+    LWord(W.PutFirst(St, fExeStack.Pop));
+end;
+
+Procedure Insert;
+// INSERE
+begin
+   // ### TODO ###
+end;
+
+Procedure Reverse;
+// INVERSE
+var
+  St: string;
+begin
+  St := fExeStack.Pop;
+  if (St <> EmptyStr) and (St[1] = CBeginList) then
+  begin
+    L.Text := St;
+    LList(L.ReverseItems);
+  end
+  else
+    LWord(W.Reverse(St));
+end;
+
+procedure UpperCase;
+// MAJUSCULES
+var
+  St: string;
+begin
+  St := fExeStack.Pop;
+  if (St <> EmptyStr) and (St[1] = CBeginList) then
+  begin
+    L.Text := St;
+    LList(L.Uppercase);
+  end
+  else
+    LWord(W.Uppercase(St));
+end;
+
+procedure LowerCase;
+// MINUSCULES
+var
+  St: string;
+begin
+  St := fExeStack.Pop;
+  if (St <> EmptyStr) and (St[1] = CBeginList) then
+  begin
+    L.Text := St;
+    LList(L.Lowercase);
+  end
+  else
+    LWord(W.Lowercase(St));
+end;
+
+
+
+
 
 
 

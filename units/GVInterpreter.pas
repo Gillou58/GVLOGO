@@ -248,6 +248,9 @@ begin
     // on retire la primitive de la pile des commandes
     ActualItem := fCommandsStack.Pop;
     case N of // exécution
+
+      70: SetError(C_BadTo); // mauvais POUR
+      71: SetError(C_BadEnd); // mauvais FIN
       72, 73: First;
       74, 75: Last;
       76, 77: ButFirst;
@@ -255,10 +258,15 @@ begin
       80: PTrue;
       81: PFalse;
     {$IFDEF Debug}
-      82: begin // ECRIS
-        fLines.Add(fExeStack.Pop);
-      end;
+      82: fLines.Add(fExeStack.Pop); // ECRIS
     {$ENDIF}
+      83: WriteAll;
+      84, 85: PutFirst;
+      86, 87: PutLast;
+      88: Insert;
+      89: Reverse;
+      90: UpperCase;
+      91: LowerCase;
     end;
   finally
     Change; // changement notifié
