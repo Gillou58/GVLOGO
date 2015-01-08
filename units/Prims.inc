@@ -1427,7 +1427,8 @@ begin
           if not fKernel.AddVar(LS,IntToStr(Li)) then // une erreur ?
             Exit; // on sort
           for Li := Li to Lj do // on boucle comme demandé
-            Process(LLst); // exécution de la liste
+            if Stop or (not Error.Ok) then
+              Process(LLst); // exécution de la liste
         end
         else
         // [### Erreur: mauvaise liste ###]
