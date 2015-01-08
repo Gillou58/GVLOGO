@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="17">
+      <Unit0>
+        <Filename Value="testGVAutomat.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="testGVAutomat"/>
+        <UsageCount Value="20"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="main"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="26"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="..\..\units\GVAutomat.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVAutomat"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="327"/>
+        <CursorPos X="3" Y="332"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="..\..\units\GVTurtles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVTurtles"/>
+        <UsageCount Value="20"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="..\..\units\GVConsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVConsts"/>
+        <UsageCount Value="20"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="..\..\units\GVDefines.inc"/>
+        <IsPartOfProject Value="True"/>
+        <UsageCount Value="20"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="..\..\units\GVErrConsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVErrConsts"/>
+        <UsageCount Value="20"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="..\..\units\GVErrors.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVErrors"/>
+        <UsageCount Value="20"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="..\..\units\GVEval.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVEval"/>
+        <UsageCount Value="20"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="..\..\units\GVKernel.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVKernel"/>
+        <UsageCount Value="20"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="..\..\units\GVLists.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVLists"/>
+        <UsageCount Value="20"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="..\..\units\GVLocVars.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVLocVars"/>
+        <UsageCount Value="20"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="..\..\units\GVPrimConsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVPrimConsts"/>
+        <UsageCount Value="20"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="..\..\units\GVPropLists.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVPropLists"/>
+        <UsageCount Value="20"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="..\..\units\GVStacks.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVStacks"/>
+        <UsageCount Value="20"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="..\..\units\GVWords.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVWords"/>
+        <UsageCount Value="20"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="..\..\units\Prims.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="34"/>
+        <CursorPos X="8" Y="57"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit16>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="2" HistoryIndex="1">
+      <Position1>
+        <Filename Value="..\..\units\Prims.inc"/>
+        <Caret Line="6" Column="23" TopLine="1"/>
+      </Position1>
+      <Position2>
+        <Filename Value="..\..\units\Prims.inc"/>
+        <Caret Line="57" Column="8" TopLine="34"/>
+      </Position2>
+    </JumpHistory>
+  </ProjectSession>
+  <EditorMacros Count="0"/>
+</CONFIG>
