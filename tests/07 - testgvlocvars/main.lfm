@@ -1,0 +1,260 @@
+object MainForm: TMainForm
+  Left = 300
+  Height = 404
+  Top = 145
+  Width = 804
+  ActiveControl = edtName
+  BorderStyle = bsDialog
+  Caption = 'TestGVLocVars - v1.0.0 - Gilles Vasseur 2014 - Test de GVLocVars'
+  ClientHeight = 404
+  ClientWidth = 804
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  Position = poScreenCenter
+  LCLVersion = '1.2.6.0'
+  object btnClose: TBitBtn
+    Cursor = crHandPoint
+    Left = 710
+    Height = 30
+    Hint = 'Fermer le logiciel'
+    Top = 344
+    Width = 90
+    Caption = 'Fermer'
+    Kind = bkClose
+    ModalResult = 11
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 5
+  end
+  object mmoGVKer: TMemo
+    Cursor = crNo
+    Left = 8
+    Height = 366
+    Hint = 'Zone d''affichage'
+    Top = 8
+    Width = 432
+    Lines.Strings = (
+      'Zone d''affichage'
+    )
+    ParentShowHint = False
+    ReadOnly = True
+    ScrollBars = ssAutoBoth
+    ShowHint = True
+    TabOrder = 6
+  end
+  object btnClear: TBitBtn
+    Cursor = crHandPoint
+    Left = 608
+    Height = 30
+    Hint = 'Nettoyer l''éditeur'
+    Top = 344
+    Width = 90
+    Cancel = True
+    Caption = 'Nettoyer'
+    Kind = bkCancel
+    ModalResult = 2
+    OnClick = btnClearClick
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 4
+  end
+  object edtName: TLabeledEdit
+    Cursor = crHandPoint
+    Left = 456
+    Height = 23
+    Hint = 'Nom de la variable'
+    Top = 32
+    Width = 328
+    EditLabel.AnchorSideLeft.Control = edtName
+    EditLabel.AnchorSideRight.Control = edtName
+    EditLabel.AnchorSideRight.Side = asrBottom
+    EditLabel.AnchorSideBottom.Control = edtName
+    EditLabel.Left = 456
+    EditLabel.Height = 15
+    EditLabel.Top = 14
+    EditLabel.Width = 328
+    EditLabel.Caption = 'Nom de la variable :'
+    EditLabel.ParentColor = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 0
+    Text = 'Essai'
+  end
+  object edtValue: TLabeledEdit
+    Cursor = crHandPoint
+    Left = 456
+    Height = 23
+    Hint = 'Valeur de la variable'
+    Top = 80
+    Width = 331
+    EditLabel.AnchorSideLeft.Control = edtValue
+    EditLabel.AnchorSideRight.Control = edtValue
+    EditLabel.AnchorSideRight.Side = asrBottom
+    EditLabel.AnchorSideBottom.Control = edtValue
+    EditLabel.Left = 456
+    EditLabel.Height = 15
+    EditLabel.Top = 62
+    EditLabel.Width = 331
+    EditLabel.Caption = 'Valeur de la variable :'
+    EditLabel.ParentColor = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 1
+    Text = '145'
+  end
+  object seNumber: TSpinEdit
+    Cursor = crHandPoint
+    Left = 456
+    Height = 23
+    Hint = 'Nombre de variables dans le bloc'
+    Top = 136
+    Width = 50
+    MaxValue = 5
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 2
+  end
+  object lblNumber: TLabel
+    Left = 456
+    Height = 15
+    Top = 112
+    Width = 181
+    Caption = 'Nombre de variables dans le bloc :'
+    ParentColor = False
+  end
+  object gbMethods: TGroupBox
+    Left = 456
+    Height = 160
+    Top = 168
+    Width = 344
+    Caption = 'Méthodes '
+    ClientHeight = 142
+    ClientWidth = 340
+    TabOrder = 3
+    object btnAddLocNumber: TButton
+      Cursor = crHandPoint
+      Left = 0
+      Height = 25
+      Hint = '// réservation pour N variables locales'#13#10'   procedure AddLocNumber(N: Integer);'
+      Top = 8
+      Width = 100
+      Caption = 'AddLocNumber'
+      OnClick = btnAddLocNumberClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object btnIsLocVar: TButton
+      Cursor = crHandPoint
+      Left = 112
+      Height = 25
+      Hint = '// est-ce une variable locale ?'#13#10'  function IsLocVar(const Name: string): Boolean;'
+      Top = 8
+      Width = 110
+      Caption = 'IsLocVar'
+      OnClick = btnIsLocVarClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object btnLocVarsCount: TButton
+      Cursor = crHandPoint
+      Left = 232
+      Height = 25
+      Hint = '//  function LocVarsCount: Integer;'#13#10'  affectation à une variable locale'
+      Top = 8
+      Width = 100
+      Caption = 'LocVarsCount'
+      OnClick = btnLocVarsCountClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object btnAddLocVar: TButton
+      Cursor = crHandPoint
+      Left = 0
+      Height = 25
+      Hint = '// affectation à une variable locale'#13#10'  function AddLocVar(const Name, Value: string): Boolean;'
+      Top = 56
+      Width = 100
+      Caption = 'AddLocVar'
+      OnClick = btnAddLocVarClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object btnUpdateLocVar: TButton
+      Cursor = crHandPoint
+      Left = 112
+      Height = 25
+      Hint = '//  function UpdateLocVar(const Name, Value: string): Boolean; overload;'#13#10'  valeur d''une variable locale'
+      Top = 56
+      Width = 110
+      Caption = 'UpdateLocVar'
+      OnClick = btnUpdateLocVarClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+    end
+    object btnValLocVar: TButton
+      Cursor = crHandPoint
+      Left = 232
+      Height = 25
+      Hint = '// valeur d''une variable locale'#13#10'  function ValLocVar(const Name: string; out Value: string): Boolean;'#13#10'  overload;'#13#10'  function ValLocVar(const Name: string): string; overload;'
+      Top = 56
+      Width = 100
+      Caption = 'ValLocVar'
+      OnClick = btnValLocVarClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+    end
+    object btnDelLastGroup: TButton
+      Cursor = crHandPoint
+      Left = 0
+      Height = 25
+      Hint = '// destruction du dernier groupe de variables locales'#13#10'  procedure DelLastGroup;'
+      Top = 104
+      Width = 100
+      Caption = 'DelLastGroup'
+      OnClick = btnDelLastGroupClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 6
+    end
+    object btnRemoveAllLocVars: TButton
+      Cursor = crHandPoint
+      Left = 112
+      Height = 25
+      Hint = '// destruction de toutes les variables locales'#13#10' procedure Clear;'
+      Top = 104
+      Width = 110
+      Caption = 'Clear'
+      OnClick = btnRemoveAllLocVarsClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 7
+    end
+    object btnLocVarsToList: TButton
+      Cursor = crHandPoint
+      Left = 232
+      Height = 25
+      Hint = '// liste des variables locales'#13#10'  function LocVarsToList: string;'
+      Top = 104
+      Width = 100
+      Caption = 'LocVarsToList'
+      OnClick = btnLocVarsToListClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 8
+    end
+  end
+  object sbMain: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 381
+    Width = 804
+    AutoHint = True
+    Panels = <>
+  end
+end

@@ -1,1 +1,0 @@
-Ce petit programme permet de vérifier que les chaînes accentuées ne sont traitées correctement qu'à la condition d'utiliser l'unité lazutf8.

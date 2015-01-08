@@ -6,41 +6,38 @@
   |                  Unité : GVWords.pas                                   |
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
-  |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    08-08-2014 18:05:08                          |
+  |                  Copyright : © G. VASSEUR 2014-2015                    |
+  |                  Date:    23-12-2014 18:00:00                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
 
-// GVWords - part of GVLOGO
-// Copyright (C) 2014 Gilles VASSEUR
+// HISTORIQUE
+// 23/12/2014 - 1.0.0 - première version opérationnelle
+
+// GVWORDS - part of GVLOGO
+// Copyright (C) 2014-2015 Gilles VASSEUR
 //
-// This program is free software: you can redistribute it and/or modify it under the terms of
-// the GNU General Public License as published by the Free Software Foundation,
-// either version 3 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation, either version 3 of the License,
+// or (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License along with this program.
-//  If not, see <http://www.gnu.org/licenses/>.
-  
-{$I GVDefines.inc}
+// You should have received a copy of the GNU General Public License
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
 
-{$IFNDEF Delphi}
-{$mode objfpc}{$H+}
-{$ENDIF}
+{$I GVDefines.inc} // fichier des définitions préalables
 
 unit GVWords;
-
-//
-// classe TGVWord pour GVLOGO
-//
-// ##############################################################
-//
-// L'unité regroupe la classe chargée de traiter les mots du
-// projet GVLOGO.
+// L'unité GVWORDS regroupe les classes chargées de traiter les mots
+// du projet GVLOGO.
 //
 // MOTS
 //
@@ -60,41 +57,40 @@ interface
 
 uses
   Classes, SysUtils,
-  GVConsts; // constantes
+  GVErrConsts, // constantes pour les erreurs
+  GVPrimConsts, // constantes des primitives
+  GVErrors; // traitement des erreurs
 
 type
-  { classe des chaînes }
-
-  { TGVString }
-
-  EGVStringException = class(Exception);
-
-  TGVString = class
+  // *** classe des chaînes ***
+  TGVString = class(TObject)
   strict private
-    fRawStr: string; // chaîne brute interne
-    fStr: string; // chaîne formatée interne
-    function GetRawStr: string; // renvoie la chaîne brute
-    function GetStr: string; // renvoie la chaîne formatée
-    procedure SetStr(const St: string);
-  protected
+    fRawStr: string; // chaîne brute entrée
+    fIsValid: Boolean; // validité de la chaîne d'entrée
+    fStr: string; // chaîne brute interne
+    fFmtStr: string; // chaîne formatée interne
+    function GetFmtStr: string; // renvoie la chaîne formatée
+    function GetStr: string; // renvoie la chaîne brute
+    procedure SetStr(const St: string); // établit une nouvelle chaîne brute
     function WithEsc(const St: string): string; // avec échappement
     function WithoutEsc(const St: string): string; // sans échappement
   public
     constructor Create; // constructeur
     destructor Destroy; override; // destructeur
     procedure Clear; // remise à zéro
-    property Str: string read GetStr write SetStr; // chaîne formatée
-    property RawStr: string read GetRawStr; // chaîne brute
+    property IsValid: Boolean read fIsValid; // validité de la chaîne d'entrée
+    property Str: string read GetStr write SetStr; // chaîne brute d'entrée
+    property FmtStr: string read GetFmtStr; // chaîne formatée
+    property RawStr: string read fRawStr; // chaîne brute
   end;
 
-  { classe des nombres }
+  // *** classe des nombres ***
 
   { TGVNumber }
 
-  EGVNumberException = class(Exception);
-
-  TGVNumber = class
+  TGVNumber = class(TObject)
   strict private
+    fError: TGVErrors; // traitement des erreurs
     fNum: Double; // nombre de travail
     fSt: string; // chaîne brute d'entrée
     fValid: Boolean; // drapeau de validité
@@ -109,624 +105,593 @@ type
     function IsValid: Boolean; // est-ce un nombre ?
     function IsInt: Boolean; // est-ce un entier ?
     function IsZero: Boolean; // nombre 0 ?
-    property AsString: string read GetStr write SetStr; // une chaîne de nombre
+    function IsNegate: Boolean; // nombre négatif ?
+    property Text: string read GetStr write SetStr; // une chaîne de nombre
     property AsDouble: Double read GetDouble; // un réel
     property AsInt: Integer read GetInt; // un entier
+    // notification d'une erreur
+    property Error: TGVErrors read fError write fError;
   end;
 
-  { classe des mots }
+  // *** classe des mots ***
 
   { TGVWord }
 
-  EGVWordException = class(Exception);
-
-  TGVWord = class
+  TGVWord = class(TObject)
   strict private
+    fError: TGVErrors; // traitement des erreurs
+    fText: TGVString; // mot à traiter
     fWord, fWord2: TGVString; // mots de travail
-    fNum, fNum2: TGVNumber; // nombre de travail
+    fNum, fNum2: TGVNumber; // nombres de travail
+    function GetFmtText: string; // texte formaté
+    function GetText: string; // texte brut
+    procedure SetText(const St: string); // établit le texte
   protected
     // comparaison de deux mots
-    function Compare(const StFirst, StTwo: string): Integer;
+    function Compare(const St: string): Integer;
   public
     constructor Create; // constructeur
     destructor Destroy; override; // destructeur
+    procedure Clear; // nettoyage
     // premier caractère d'un mot
-    function First(const St: string): string;
+    function First: string;
     // dernier caractère d'un mot
-    function Last(const St: string): string;
+    function Last: string;
     // sauf le premier caractère d'un mot
-    function ButFirst(const St: string): string;
+    function ButFirst: string;
     // sauf le dernier caractère d'un mot
-    function ButLast(const St: string): string;
+    function ButLast: string;
     // concatène les deux mots, le second en premier
-    function PutFirst(const StOne, StTwo: string): string;
+    function PutFirst(const St: string): string;
     // concatène les deux mots, le premier d'abord
-    function PutLast(const StOne, StTwo: string): string;
+    function PutLast(const St: string): string;
     // supprime si nécessaire le " initial d'un mot
-    function WithoutQuote(const St: string): string;
+    function WithoutQuote: string;
     // supprime si nécessaire le : initial d'un mot
-    function WithoutColon(const St: string): string;
+    function WithoutColon: string;
     // est-ce un identificateur valide ?
-    function IsValidIdent(const St: string): Boolean;
+    function IsValidIdent: Boolean;
     // les deux mots sont-ils égaux ?
-    function EqualP(const StFirst, StTwo: string): Boolean;
+    function IsEqual(const St: string): Boolean;
     // le premier mot est-il à placer avant le second par ordre alphabétique ?
-    function LowerP(const StFirst, StTwo: string): Boolean;
+    function IsLower(const St: string): Boolean;
     // renvoie le mot qui vient avant par ordre alphabétique
-    function Lowest(const StFirst, StTwo: string): string;
+    function Lowest(const St: string): string;
     // le premier mot est-il à placer après le second par ordre alphabétique ?
-    function GreaterP(const StFirst, StTwo: string): Boolean;
+    function IsGreater(const St: string): Boolean;
     // renvoie le mot qui vient après par ordre alphabétique
-    function Greatest(const StFirst, StTwo: string): string;
+    function Greatest(const St: string): string;
     // le mot est-il vide ?
-    function EmptyWordP(const St: string): Boolean;
+    function IsEmptyWord: Boolean;
     // le mot est-il compris dans un autre ?
-    function MemberP(const St, SubSt: string): Boolean;
+    function IsMember(const St: string): Boolean;
     // longueur du mot
-    function Count(const St: string): Integer;
+    function Count: Integer;
     // longueur de mot en chaîne
-    function StrCount(const St: string): string;
+    function StrCount: string;
     // élément N d'un mot
-    function Item(const St: string; N: Integer): string;
+    function GetItem(const N: Integer): string;
     // remplacement de l'élément N d'un mot
-    function Replace(const St, SubSt: string; N: Integer): string;
+    function Replace(const N: Integer; const St: string): string;
+    // suppression de l'élément N d'un mot
+    function DelItem(const N: Integer): string;
     // mot inversé
-    function Reverse(const St: string): string;
+    function Reverse: string;
     // mot mélangé
-    function Shuffle(const St: string): string;
+    function Shuffle: string;
     // lettre au hasard
-    function AtRandom(const St: string): string;
+    function AtRandom: string;
     // mot en majuscules
-    function Uppercase(const St: string): string;
+    function Uppercase: string;
     // mot en minuscules
-    function Lowercase(const St: string): string;
+    function Lowercase: string;
     // insertion en position N
-    function Insert(const St, SubSt: string; N: Integer): string;
+    function Insert(const N: Integer; const St: string): string;
     // tri des lettres du mot
-    function Sort(const St: string): string;
+    function Sort: string;
     // est-ce un nombre ?
-    function NumberP(const St: string): Boolean;
+    function IsNumber: Boolean;
+    // est-ce un entier ?
+    function IsInt: Boolean;
+    // est-ce un booléen ?
+    function IsBoolean: Boolean;
+    // renvoie un nombre
+    function AsNumber: Double;
+    // renvoie un entier
+    function AsInt: Integer;
+    // nombre négatif ?
+    function IsNegate: Boolean;
     // chaîne formatée
-    function WithEsc(const St: string): string;
+    function WithEsc: string;
     // chaîne brute
-    function WithoutEsc(const St: string): string;
+    function WithoutEsc: string;
     // le mot est-il valide sans traitement ?
-    function IsValid(const St: string): Boolean;
+    function IsValid: Boolean;
     // rotation des caractères d'un mot
-    function Rotate(const St: string): string;
+    function Rotate: string;
+    // élément N
+    property Item[N: Integer]: string read GetItem; default;
+    // mot à traiter
+    property Text: string read GetText write SetText;
+    // mot à traiter formaté
+    property FmtText: string read GetFmtText;
+    // notification d'une erreur
+    property Error: TGVErrors read fError write fError;
   end;
 
 implementation
 
-uses StrUtils, Math
-  {$IFNDEF Delphi}
-  , lazutf8 // traitement des chaînes UTF8
-  {$ENDIF};
+uses StrUtils,
+  // *** BUG Lazarus : un conseil ("hint") indique que cette unité n'est pas
+  // utilisée alors que la compilation échouera si elle est omise.
+  // En effet, elle est indispensable pour le traitement de IFTHEN
+  // avec des chaînes.
+  // [Il semblerait que le compilateur soit trompé par le IFTHEN présent
+  // dans l'unité "math" utilisée ci-après].
+  Math, // pour les calculs
+  lazutf8, // traitement des chaînes UTF8
+  GVConsts; // constantes
 
 { ========================================================== }
 
 { TGVWord }
 
-function TGVWord.Compare(const StFirst, StTwo: string): Integer;
+procedure TGVWord.SetText(const St: string);
+// *** établit le texte de travail ***
+begin
+  if (fText.Str = St) then
+    Exit; // on sort si aucun changement
+  fText.Str := St; // mot normalisé conservé
+end;
+
+function TGVWord.GetText: string;
+// *** récupère le texte de travail ***
+begin
+  Result := fText.Str; // renvoi du mot brut
+end;
+
+function TGVWord.GetFmtText: string;
+// *** récupère le texte formaté de travail ***
+begin
+ Result := fText.FmtStr; // renvoi du mot formaté
+end;
+
+function TGVWord.Compare(const St: string): Integer;
 // *** comparaison de deux mots ***
 begin
-  fNum.AsString := StFirst; // essai de conversion en nombre
-  fNum2.AsString := StTwo;
+  // essai de conversion en nombre des deux mots
+  fNum.Text := Text;
+  fNum2.Text := St;
   // ce sont des nombres ?
   if fNum.IsValid and fNum2.IsValid then
     // si oui, on les compare
-    Result := CompareValue(fNum.AsDouble, fNum2.AsDouble)
+    Result := CompareValue(fNum2.AsDouble, fNum.AsDouble)
   else
-  begin // les autres mots
-    fWord.Str := StFirst; // mots normalisés
-    fWord2.Str := StTwo;
-    {$IFDEF Delphi}
-    Result := AnsiCompareText(fWord.Str, fWord2.Str); // comparaison
-    {$ELSE}
-    Result := UTF8CompareText(fWord.Str, fWord2.Str);
-    {$ENDIF}
-  end;
+    // on compare les  mots ordinaires
+    Result := UTF8CompareText(St, Text); // comparaison UTF8
 end;
 
-function TGVWord.Count(const St: string): Integer;
+function TGVWord.Count: Integer;
 // *** compte les caractères d'un mot ***
 begin
-  with fWord do
-  begin
-    Str := St; // normalisation du mot
-    {$IFDEF Delphi}
-    Result := Length(RawStr); // renvoie sa longueur sans l'échappement
-    {$ELSE}
-    Result := UTF8Length(RawStr);
-    {$ENDIF}
-  end;
+  Result := UTF8Length(Text); // longueur UTF8
 end;
 
-function TGVWord.StrCount(const St: string): string;
-// *** compte les caractères d'un mot (chaîne) ***
+function TGVWord.StrCount: string;
+// *** compte les caractères d'un mot (renvoi en chaîne) ***
 begin
-  Result := IntToStr(Count(St));
+  Result := IntToStr(Count);
 end;
 
 constructor TGVWord.Create;
 // *** création ***
 begin
   inherited Create; // on hérite
-  fWord := TGVString.Create; // création des outils
+  fText := TGVString.Create; // création des outils
+  fWord := TGVString.Create;
   fWord2 := TGVString.Create;
   fNum := TGVNumber.Create;
   fNum2 := TGVNumber.Create;
+  Error := TGVErrors.Create; // on crée le gestionnaire d'erreurs
 end;
 
 destructor TGVWord.Destroy;
 // *** destruction ***
 begin
-  fWord.Free; // libération des outils
+  Error.Free; // libération du gestionnaire d'erreurs
+  fText.Free; // libération des outils
+  fWord.Free;
   fWord2.Free;
   fNum.Free;
   fNum2.Free;
   inherited Destroy; // on hérite
 end;
 
-function TGVWord.EmptyWordP(const St: string): Boolean;
+procedure TGVWord.Clear;
+// *** nettoyage ***
+begin
+  Error.Clear; // pas d'erreur
+  Text := EmptyStr; // texte réinitialisé
+end;
+
+function TGVWord.IsEmptyWord: Boolean;
 // *** le mot est-il vide ? ***
 begin
-  with fWord do
-  begin
-    Str := St; // on normalise le mot
-    Result := (Str = EmptyStr); // vide ?
-  end;
+  Result := (Text = EmptyStr); // vide ?
 end;
 
-function TGVWord.EqualP(const StFirst, StTwo: string): Boolean;
+function TGVWord.IsEqual(const St: string): Boolean;
 // *** les mots sont-ils égaux ? ***
 begin
-  Result := (Compare(StFirst, StTwo) = 0);
+  Result := (Compare(St) = 0);
 end;
 
-function TGVWord.First(const St: string): string;
+function TGVWord.First: string;
 // *** premier caractère d'un mot ***
 begin
-  with fWord do
-  begin
-    Str := St; // on traite la chaîne
-    if Str <> EmptyStr then
-    {$IFDEF Delphi}
-      Result := AnsiLeftStr(RawStr, 1) // premier caractère seulement
-    {$ELSE}
-      Result := UTF8LeftStr(RawStr, 1)
-    {$ENDIF}
-    else
-      raise EGVStringException.CreateFmt(ME_EmptyStr, [P_First]);
-    Str := Result; // chaîne formatée
-    Result := Str; // on la renvoie
-  end;
+  Result := EmptyStr; // chaîne vide par défaut
+  if Text <> EmptyStr then // mot non vide ?
+    Result := UTF8LeftStr(Text, 1) // premier caractère UTF8
+  else
+    // [### Erreur : mot vide ###]
+    Error.SetError(CE_EmptyWord, P_First);
 end;
 
-function TGVWord.GreaterP(const StFirst, StTwo: string): Boolean;
-// *** le premier mot vint-il après le second ? ***
+function TGVWord.IsGreater(const St: string): Boolean;
+// *** le premier mot vient-il après le second ? ***
 begin
-  Result := (Compare(StFirst, StTwo) > 0);
   // ni plus petit ni égal
+  Result := (Compare(St) < 0);
 end;
 
-function TGVWord.Greatest(const StFirst, StTwo: string): string;
- // *** renvoie le mot qui vient en dernier ***
+function TGVWord.Greatest(const St: string): string;
+// *** renvoie le mot qui vient en dernier ***
 begin
-  fWord.Str := StFirst; // on normalise les mots
-  fWord2.Str := StTwo;
-  Result := IfThen((Compare(StFirst, StTwo) > 0), fWord.Str,
-    fWord2.Str); // on renvoie le plus grand
+  Result := IfThen((Compare(St) > 0), St, Text);
 end;
 
-function TGVWord.Insert(const St, SubSt: string; N: Integer): string;
+function TGVWord.Insert(const N: Integer; const St: string): string;
 // *** insertion à l'emplacement N ***
 begin
-  with fWord do
-  begin
-    Str := St; // mot normalisé
-    if (RawStr = EmptyStr) or (N <= 0) or // mot vide ou N hors bornes ?
-      {$IFDEF Delphi}
-      (Length(RawStr) < (N - 1)) // vérifie la longueur du mot
-      {$ELSE}
-      (UTF8Length(RawStr) < (N - 1))
-      {$ENDIF}
-    then
-      raise EGVWordException.CreateFmt(ME_BadChar, [St, N]); // erreur !
-    {$IFDEF Delphi}
-    Str := AnsiLeftStr(RawStr, N - 1) + SubSt + AnsiMidStr(RawStr, N,
-      Length(RawStr) - N + 1);
-    {$ELSE}
-    Str := UTF8LeftStr(RawStr, N - 1) + SubSt + UTF8Copy(RawStr, N,
-      UTF8Length(RawStr) - N + 1);
-    {$ENDIF}
-    Result := Str; // mot normalisé
-  end;
+  Result := EmptyStr; // chaîne vide par défaut
+  if (Text = EmptyStr) or (N <= 0) or // mot vide ou N hors bornes ?
+    (Count < (N - 1)) then
+      // [### Erreur : hors bornes ###]
+      Error.SetError(CE_BadItem, Text, N)
+  else
+    // on insère dans la chaîne à l'emplacement prévu
+    Result := UTF8LeftStr(Text, N - 1) + St + UTF8Copy(Text, N,
+        UTF8Length(Text) - N + 1);
 end;
 
-function TGVWord.IsValid(const St: string): Boolean;
+function TGVWord.IsValid: Boolean;
 // *** le mot est-il valide sans traitement ? ***
 begin
-  with fWord do
-  begin
-    Str := St; // mot normalisé
-    Result := (Str = RawStr); // correct si n'a pas changé
-  end;
+  Result := fText.IsValid;
 end;
 
-function TGVWord.Rotate(const St: string): string;
+function TGVWord.Rotate: string;
 // *** rotation des caractères d'un mot
 begin
   Result := EmptyStr; // chaîne vide par défaut
-  if St <> EmptyStr then
-    {$IFDEF Delphi}
-    Result := AnsiMidStr(St,2,Length(St)-1) + AnsiLeftStr(St,1); // premier à la fin
-    {$ELSE}
-    Result := UTF8Copy(St,2,UTF8Length(St)-1) + UTF8Copy(St,1,1);
-    {$ENDIF}
+  if Text <> EmptyStr then
+    // premier à la fin
+    Result := UTF8Copy(Text, 2, Count - 1) + First;
 end;
 
-function TGVWord.IsValidIdent(const St: string): Boolean;
+function TGVWord.IsValidIdent: Boolean;
 // *** le mot est-il un identificateur correct ? ***
 var
-  I: Integer;
+  Li: Integer;
+  LPredDot: Boolean;
 begin
   Result := False; // suppose une erreur
-  for I := 1 to Length(St) do
+  LPredDot := False; // pas de point rencontré juste avant
+  for Li := 1 to Length(Text) do
   begin
     // on accepte les minuscules et les majuscules non accentuées, le "_",
     // les chiffres non placés en première position
-    // le "." en première position et le "?" en dernière.
-    {$IFDEF Delphi}
-    if I = 1 then
-      Result := CharInSet(St[I], [CUnderline, CDot] + CAlpha)
-    else if I = Length(St) then
-      Result := CharInSet(St[I], [CAsk] + CAlphaNum)
+    // le "." pas en dernière position et doublé, et le "?" en dernière.
+    if Li = 1 then // premier caractère
+    begin
+      Result := Text[Li] in [CUnderline, CDot] + CAlpha;
+      LPredDot := (Text[Li] = CDot); // point enregistré
+    end
+    else if Li = Length(Text) then // dernier caractère
+      Result := Text[Li] in [CAsk] + CAlphaNum
     else
-      Result := CharInSet(St[I], [CUnderline] + CAlphaNum);
-    {$ELSE}
-    if I = 1 then
-      Result := St[I] in [CUnderline, CDot] + CAlpha
-    else if I = Length(St) then
-      Result := St[I] in [CAsk] + CAlphaNum
-    else
-      Result := St[I] in [CUnderline] + CAlphaNum;
-    {$ENDIF}
-    if not Result then
+    begin // les autres positions
+      Result := Text[Li] in [CUnderline, CDot] + CAlphaNum;
+      if Text[Li] = CDot then // un point ?
+      begin
+        Result := not LPredDot; // pas deux fois d'affilée !
+        LPredDot := True; // point mémorisé
+      end
+      else
+        LPredDot := False; // pas de point en cours
+    end;
+    if not Result then // on sort si un caractère fautif
       Break;
   end;
 end;
 
-function TGVWord.Item(const St: string; N: Integer): string;
+function TGVWord.GetItem(const N: Integer): string;
 // *** élément N d'un mot ***
 begin
-  with fWord do
-  begin
-    Str := St; // chaîne normalisée
-    if (RawStr = EmptyStr) or (N <= 0) or // mot vide ou N hors bornes ?
-      {$IFDEF Delphi}
-      (Length(RawStr) < N) // vérifie la longueur du mot
-      {$ELSE}
-      (UTF8Length(RawStr) < N)
-      {$ENDIF}
-    then
-      raise EGVWordException.CreateFmt(ME_BadChar, [RawStr, N]); // erreur !
-    {$IFDEF Delphi}
-    Str := AnsiMidStr(RawStr, N, 1); // on cherche l'élément
-    {$ELSE}
-    Str := UTF8Copy(RawStr, N, 1);
-    {$ENDIF}
-    Result := Str; // chaîne normalisée
-  end;
+  Result := EmptyStr; // chaîne vide par défaut
+  // mot vide ou N hors bornes ?
+  if (Text = EmptyStr) or (N <= 0) or (Count < N) then
+    // [### Erreur : élément inexistant ###]
+    Error.SetError(CE_BadItem, Text, N)
+  else
+    Result := UTF8Copy(Text, N, 1); // on renvoie l'élément cherché
 end;
 
-function TGVWord.Last(const St: string): string;
+function TGVWord.Last: string;
 // *** dernier caractère d'un mot ***
 begin
-  with fWord do
-  begin Str := St; // on traite la chaîne
-    if Str <> EmptyStr then
-      {$IFDEF Delphi}
-      Result := AnsiRightStr(RawStr, 1) // dernier caractère seulement
-      {$ELSE}
-      Result := UTF8RightStr(RawStr, 1)
-      {$ENDIF}
-    else
-      raise EGVStringException.CreateFmt(ME_EmptyStr, [P_Last]);
-    Str := Result; // chaîne formatée
-    Result := Str; // on la renvoie
-  end;
+  Result := EmptyStr; // chaîne vide par défaut
+  if Text <> EmptyStr then // mot non vide ?
+    Result := UTF8RightStr(Text, 1) // dernier élément seulement
+  else
+    // [### Erreur : mot vide ###]
+    Error.SetError(CE_EmptyWord, P_Last);
 end;
 
-function TGVWord.Lowercase(const St: string): string;
+function TGVWord.Lowercase: string;
 // *** mot en minuscules ***
 begin
-  fWord.Str := St; // on normalise le mot
-  {$IFDEF Delphi}
-  Result := AnsiLowerCase(fWord.Str);
-  {$ELSE}
-  Result := UTF8LowerCase(fWord.Str);
-  {$ENDIF}
+  Result := UTF8LowerCase(Text); // minuscules UTF8
 end;
 
- function TGVWord.LowerP(const StFirst, StTwo: string): Boolean;
- // *** le premier mot vient-il avant le second ? ***
+function TGVWord.IsLower(const St: string): Boolean;
+// *** le premier mot vient-il avant le second ? ***
 begin
-  Result := (Compare(StFirst, StTwo) < 0);
+  Result := (Compare(St) > 0);
 end;
 
- function TGVWord.Lowest(const StFirst, StTwo: string): string;
- // *** renvoie le mot qui vient en premier ***
+function TGVWord.Lowest(const St: string): string;
+// *** renvoie le mot qui vient en premier ***
 begin
-  fWord.Str := StFirst; // on normalise les mots
-  fWord2.Str := StTwo;
-  Result := IfThen((Compare(StFirst, StTwo) < 0), fWord.Str,
-    fWord2.Str); // on renvoie le plus petit
- end;
-
-function TGVWord.MemberP(const St, SubSt: string): Boolean;
-// *** Un sous-mot est-il présent ? ***
-begin
-  fWord.Str := St; // mots normalisés
-  fWord2.Str := SubSt;
-  {$IFDEF Delphi}
-  Result := (AnsiPos(fWord2.RawStr, fWord.RawStr) <> 0); // position <> 0 ?
-  {$ELSE}
-  Result := (UTF8Pos(fWord2.RawStr, fWord.RawStr) <> 0);
-  {$ENDIF}
+  Result := IfThen((Compare(St) < 0), St, Text);
 end;
 
-function TGVWord.NumberP(const St: string): Boolean;
+function TGVWord.IsMember(const St: string): Boolean;
+// *** un sous-mot est-il présent ? ***
+begin
+  Result := (UTF8Pos(St, Text) <> 0); // position UTF8
+end;
+
+function TGVWord.IsNumber: Boolean;
 // *** le mot est-il un nombre ? ***
 begin
-  fNum.AsString := St; // on tente de convertir
+  fNum.Text := Text; // on tente de convertir
   Result := fNum.IsValid; // résultat de la conversion
 end;
 
-function TGVWord.PutFirst(const StOne, StTwo: string): string;
+function TGVWord.IsInt: Boolean;
+// *** le mot est-il un entier ? ***
+begin
+  fNum.Text := Text; // on tente de convertir
+  Result := fNum.IsValid and fNum.IsInt; // résultat de la conversion
+end;
+
+function TGVWord.IsBoolean: Boolean;
+// *** est-ce un booléen ? ***
+begin
+  // entier = -1 ou 0 ?
+  Result := IsInt and ((StrToInt(Text) = CRTrue) or (StrToInt(Text) = CRFalse));
+end;
+
+function TGVWord.AsNumber: Double;
+// *** renvoie un nombre ***
+begin
+  Result := -1;
+  if IsNumber then // un nombre ?
+    Result :=  fNum.AsDouble // on retrouve le résultat
+  else
+    // [### Erreur: pas un nombre ###]
+   Error.SetError(CE_BadNumber, Text);
+end;
+
+function TGVWord.AsInt: Integer;
+// *** renvoie un entier ***
+begin
+  Result := -1;
+  if IsInt then // un entier ?
+    Result :=  fNum.AsInt // on retrouve le résultat
+  else
+    // [### Erreur: pas un entier ###]
+   Error.SetError(CE_BadInt, Text);
+end;
+
+function TGVWord.IsNegate: Boolean;
+// *** nombre négatif ? ***
+begin
+  Result := False;
+  if IsNumber then // un nombre ?
+    Result := (Sign(fNum.AsDouble) =  NegativeValue) // on retrouve le résultat
+  else
+    // [### Erreur: pas un nombre ###]
+    Error.SetError(CE_BadNumber, Text);
+end;
+
+function TGVWord.PutFirst(const St: string): string;
 // *** concatène les deux mots, le second en premier ***
 begin
-  with fWord do
-  begin
-    Str := StTwo + StOne; // on normalise la concaténation
-    Result := Str; // on la renvoie
-  end;
+  Result := St + Text;
 end;
 
-function TGVWord.PutLast(const StOne, StTwo: string): string;
+function TGVWord.PutLast(const St: string): string;
 // *** concatène les deux mots, le premier d'abord ***
 begin
-  with fWord do
-  begin
-    Str := StOne + StTwo; // on normalise la concaténation
-    Result := Str; // on la renvoie
-  end;
+  Result := Text + St;
 end;
 
-function TGVWord.Replace(const St, SubSt: string; N: Integer): string;
+function TGVWord.Replace(const N: Integer; const St: string): string;
 // *** remplacement de l'élément N  ***
 begin
-  with fWord do
+  Result := EmptyStr; // chaîne vide par défaut
+  // mot vide ou N hors bornes ?
+  if (Text = EmptyStr) or (N <= 0) or (Count < N) then
+    // [### Erreur : élément inexistant ###]
+    Error.SetError(CE_BadItem, St, N)
+  else
   begin
-    Str := St; // chaîne normalisée
-    if (RawStr = EmptyStr) or (N <= 0) or // mot vide ou N hors bornes ?
-      {$IFDEF Delphi}
-      (Length(RawStr) < N) // vérifie la longueur du mot
-      {$ELSE}
-      (UTF8Length(RawStr) < N)
-      {$ENDIF}
-    then
-      raise EGVWordException.CreateFmt(ME_BadChar, [St, N]); // erreur !
-    {$IFDEF Delphi}
-    if (N = 1) then // premier caractère ?
-      Str := SubSt + AnsiRightStr(RawStr, Length(RawStr) - 1)
-    else
-    if N = Length(RawStr) then // dernier caractère ?
-      Str := AnsiLeftStr(RawStr, Length(RawStr) - 1) + SubSt
-    else
-      Str := AnsiLeftStr(RawStr, N - 1) + SubSt + AnsiMidStr(RawStr, N + 1,
-        Length(RawStr) - N + 1); // autres cas
-    {$ELSE}
+    // on remplace
     if N = 1 then // premier caractère ?
-      Str := SubSt + UTF8RightStr(RawStr, UTF8Length(RawStr) - 1)
+      Result := St + ButFirst
     else
-    if N = UTF8Length(RawStr) then // dernier caractère ?
-      Str := UTF8LeftStr(RawStr, UTF8Length(RawStr) - 1) + SubSt
+    if N = Count then // dernier caractère ?
+      Result := ButLast + St
     else
-      Str := UTF8LeftStr(RawStr, N - 1) + SubSt + UTF8Copy(RawStr, N + 1,
-        UTF8Length(RawStr) - N + 1); // autres cas
-    {$ENDIF}
-    Result := Str; // chaîne normalisée en retour
+      Result := UTF8LeftStr(Text, N - 1) + St + UTF8Copy(Text, N + 1,
+        Count - N + 1); // autres cas
   end;
 end;
 
-function TGVWord.Reverse(const St: string): string;
+function TGVWord.DelItem(const N: Integer): string;
+// *** suppression de l'élément N  ***
+begin
+  Result := EmptyStr; // chaîne vide par défaut
+  // mot vide ou N hors bornes ?
+  if (Text = EmptyStr) or (N <= 0) or (Count < N) then
+    // [### Erreur : élément inexistant ###]
+    Error.SetError(CE_BadItem, Text, N)
+  else
+  begin
+    // on supprime
+    if N = 1 then // premier caractère ?
+      Result := ButFirst
+    else
+    if N = Count then // dernier caractère ?
+      Result := ButLast
+    else
+      Result := UTF8LeftStr(Text, N - 1) + UTF8Copy(Text, N + 1,
+        Count - N + 1); // autres cas
+  end;
+end;
+
+function TGVWord.Reverse: string;
 // *** mot inversé ***
 var
-  I: Integer;
+  Li: Integer;
 begin
-  with fWord do
-  begin
-    Str := St;
-    // on traite la chaîne
-    Result := EmptyStr;
-    {$IFDEF Delphi}
-    for I := 1 to Length(RawStr) do // on balaie la chaîne
-      Result := RawStr[I] + Result; // on ajoute le caractère devant la chaîne
-    {$ELSE}
-    for I := 1 to UTF8Length(RawStr) do // on balaie la chaîne
-      Result := UTF8Copy(RawStr, I, 1) + Result; // idem
-    {$ENDIF}
-    Str := Result; // on normalise la chaîne
-    Result := Str; // puis on la renvoie
-  end;
+  Result := EmptyStr; // chaîne vide par défaut
+  for Li := 1 to Count do // on balaie la chaîne
+    Result := UTF8Copy(Text, Li, 1) + Result; // on reconstruit à l'envers
 end;
 
-function TGVWord.Shuffle(const St: string): string;
+function TGVWord.Shuffle: string;
 // *** mot mélangé ***
 var
-  N: Integer;
-  S: string;
+  Li: Integer;
+  LSt: string;
 begin
-  with fWord do
-  begin Str := St;
-    // chaîne normalisée
-    S := RawStr; // chaîne brute
-    Result := EmptyStr;
-    while (S <> EmptyStr) do
-    begin
-      {$IFDEF Delphi}
-      N := Random(Length(S)) + 1; // emplacement au hasard
-      Result := Result + S[N]; // caractère enregistré
-      Delete(S, N, 1); // caractère utilisé retiré du mot de travail
-      {$ELSE}
-      N := Random(UTF8Length(S)) + 1;
-      Result := Result + UTF8Copy(S, N, 1);
-      UTF8Delete(S, N, 1);
-      {$ENDIF}
-    end; Str := Result; // on normalise la chaîne
-    Result := Str; // puis on la renvoie
+  Result := EmptyStr; // chaîne vide par défaut
+  Lst := Text; // chaîne de travail prête
+  while (LSt <> EmptyStr) do // tant qu'il y a des caractères à traiter
+  begin
+    Li := Random(UTF8Length(LSt)) + 1; // emplacement au hasard
+    Result := Result + UTF8Copy(LSt, Li, 1); // on construit le résultat
+    UTF8Delete(LSt, Li, 1); // on retire le caractère utilisé
   end;
 end;
 
-function TGVWord.Sort(const St: string): string;
+function TGVWord.Sort: string;
 // *** tri des lettres d'un mot (tri à bulles) ***
 var
-  I: Integer;
-  Exchanged: Boolean;
-  {$IFDEF Delphi}
-  Ch: Char;
-  {$ELSE}
-  S: string;
-  {$ENDIF}
+  Li: Integer;
+  LExchanged: Boolean;
+  LSt: string;
 begin
-  with fWord do
-  begin
-    Str := St; // on normalise le mot
-    Result := RawStr; // mot brut de sortie
-    if Result = EmptyStr then // mot vide ?
-      Exit; // rien à trier : on sort
-    repeat
-       Exchanged := False; // pas d'échange
-      {$IFDEF Delphi}
-      for I := 1 to Length(Result) - 1 do // on balaie le mot
-        // placé après ?
-        if AnsiCompareText(Result[I], Result[I + 1]) > 0 then
-        begin
-          Ch := Result[I]; // échange
-          Result[I] := Result[I + 1];
-          Result[I + 1] := Ch;
-          Exchanged := True; // un échange a eu lieu
-        end;
-      {$ELSE}
-      for I := 1 to UTF8Length(Result) - 1 do
-         if UTF8CompareText(UTF8Copy(Result, I, 1), UTF8Copy(Result, I + 1, 1))
-           > 0 then
-        begin
-          S := UTF8Copy(Result, I, 1);
-          UTF8Delete(Result, I, 1);
-          UTF8Insert(S, Result, I + 1);
-          Exchanged := True; // un échange a eu lieu
-        end;
-      {$ENDIF}
-    until not Exchanged; // sortie si pas d'échange (liste triée)
-    Str := Result; // on normalise le mot
-    Result := Str; // et on sort avec le mot trié
-  end;
+  Result := Text; // mot brut de sortie
+  if Result = EmptyStr then // mot vide ?
+    Exit; // rien à trier : on sort
+  repeat
+    LExchanged := False; // pas d'échange
+    // on balaie la chaîne
+    for Li := 1 to Count - 1 do
+      // comparaison de deux éléments contigus
+      if UTF8CompareText(UTF8Copy(Result,Li,1),
+        UTF8Copy(Result,Li + 1,1)) > 0 then
+      begin
+        // on inverse le éléments
+        LSt := UTF8Copy(Result, Li, 1);
+        UTF8Delete(Result, Li, 1);
+        UTF8Insert(LSt, Result, Li + 1);
+        LExchanged := True; // un échange a eu lieu
+      end;
+  until not LExchanged; // sortie si pas d'échange (liste triée)
 end;
 
-function TGVWord.Uppercase(const St: string): string;
+function TGVWord.Uppercase: string;
 // *** mot en majuscules ***
 begin
-  fWord.Str := St; // on normalise le mot
-  {$IFDEF Delphi}
-  Result := AnsiUpperCase(fWord.Str); // renvoie la chaîne en majuscules
-  {$ELSE}
-  Result := UTF8UpperCase(fWord.Str);
-  {$ENDIF}
+  Result := UTF8UpperCase(Text);
 end;
 
-function TGVWord.WithEsc(const St: string): string;
+function TGVWord.WithEsc: string;
 // *** renvoie une chaîne formatée ***
 begin
-  fWord.Str := St; // on transforme la chaîne en mot
-  Result := fWord.Str; // on renvoie le résultat
+  Result := FmtText; // on renvoie le résultat
 end;
 
-function TGVWord.WithoutColon(const St: string): string;
+function TGVWord.WithoutColon: string;
 // *** renvoie le mot sans les deux-points initiaux ***
 begin
-  fWord.Str := St; // on normalise le mot
-  Result := fWord.Str;
-  if (fWord.Str <> EmptyStr) and (fWord.Str[1] = CColon) then  // s'ils existent
+  Result := Text;
+  if (Text <> EmptyStr) and (Text[1] = CColon) then // s'ils existent
     Delete(Result, 1, 1); // on enlève les deux-points
 end;
 
-function TGVWord.WithoutEsc(const St: string): string;
+function TGVWord.WithoutEsc: string;
 // *** renvoie une chaîne brute ***
 begin
-  fWord.Str := St; // on transforme la chaîne en mot
-  Result := fWord.RawStr; // on renvoie le résultat
+  Result := Text; // on renvoie le résultat
 end;
 
-function TGVWord.WithoutQuote(const St: string): string;
+function TGVWord.WithoutQuote: string;
 // *** renvoie le mot sans le guillemet anglais initial ***
 begin
-   fWord.Str := St; // on normalise le mot
-   Result := fWord.Str;
-   if (fWord.Str <> EmptyStr) and (fWord.Str[1] = CQuote) then // s'il existe
-     Delete(Result, 1, 1); // on enlève le guillemet
+  Result := Text;
+  if (Text <> EmptyStr) and (Text[1] = CQuote) then // s'il existe
+    Delete(Result, 1, 1); // on enlève le guillemet
 end;
 
-function TGVWord.AtRandom(const St: string): string;
+function TGVWord.AtRandom: string;
 // *** élément du mot tiré au hasard ***
 begin
-  with fWord do
-  begin
-    Str := St; // mot normalisé
-    {$IFDEF Delphi}
-    // recherche un élément au hasard
-    Str := Item(RawStr, Random(Length(RawStr)) + 1);
-    {$ELSE}
-    Str := Item(RawStr, Random(UTF8Length(RawStr)) + 1);
-    {$ENDIF}
-    Result := Str; // mot normalisé
-  end;
+  Result := EmptyStr; // chaîne vide par défaut
+  if (Text = EmptyStr) then // mot vide interdit
+    // [### Erreur : mot vide ###]
+    Error.SetError(CE_EmptyWord, P_AtRandom)
+  else
+    Result := Item[Random(Count) + 1]; // caractère UTF8
 end;
 
-function TGVWord.ButFirst(const St: string): string;
+function TGVWord.ButFirst: string;
 // *** sauf le premier caractère d'un mot ***
 begin
-  with fWord do
-  begin Str := St; // on traite la chaîne
-    if Str <> EmptyStr then // pas de chaîne vide
-      {$IFDEF Delphi}
-      Str := AnsiRightStr(RawStr, Length(RawStr) - 1) // premier caractère supprimé
-      {$ELSE}
-      Str := UTF8RightStr(RawStr, UTF8Length(RawStr) - 1)
-      {$ENDIF}
-    else
-      raise EGVStringException.CreateFmt(ME_EmptyStr, [P_ButFirst]); // erreur
-    Result := Str; // résultat normalisé
-  end;
+  Result := EmptyStr; // chaîne vide par défaut
+  if Text <> EmptyStr then // pas de chaîne vide
+    // tout sauf le premier caractère UTF8
+    Result := UTF8RightStr(Text, Count - 1)
+  else
+    // [### Erreur : mot vide ###]
+    Error.SetError(CE_EmptyWord, P_ButFirst);
 end;
 
-function TGVWord.ButLast(const St: string): string;
+function TGVWord.ButLast: string;
 // *** sauf le dernier caractère d'un mot ***
 begin
-  with fWord do
-  begin
-    Str := St; // on traite la chaîne
-    if Str <> EmptyStr then // pas de chaîne vide
-      {$IFDEF Delphi}
-      Str := AnsiLeftStr(RawStr, Length(RawStr) - 1) // dernier caractère supprimé
-      {$ELSE}
-      Str := UTF8LeftStr(RawStr, UTF8Length(RawStr) - 1)
-      {$ENDIF}
-    else
-      raise EGVStringException.CreateFmt(ME_EmptyStr, [P_ButLast]); // erreur
-    Result := Str; // résultat normalisé
-  end;
+  Result := EmptyStr; // chaîne vide par défaut
+  if Text <> EmptyStr then // pas de chaîne vide
+    // dernier caractère UTF8 supprimé
+    Result := UTF8LeftStr(Text, Count - 1)
+  else
+    // [### Erreur : mot vide ###]
+    Error.SetError(CE_EmptyWord, P_ButLast);
 end;
 
 { ========================================================== }
@@ -736,26 +701,29 @@ end;
 function TGVNumber.GetInt: Integer;
 // *** renvoie un entier si possible ***
 begin
-  if not TryStrToInt(fSt, Result) then // transformation possible ?
-    raise EGVNumberException.CreateFmt(ME_BadNumber, [fSt]); // signale l'erreur
+  if not TryStrToInt(fSt, Result) then // transformation en entier possible ?
+    // [### Erreur: pas un entier ###]
+    Error.SetError(CE_BadInt, fSt);
 end;
 
 function TGVNumber.GetDouble: Double;
 // *** renvoie un réel si possible ***
 begin
-  if IsValid then
-    Result := fNum
+  if IsValid then // nombre valide ?
+    Result := fNum // on le renvoie
   else
-    raise EGVNumberException.CreateFmt(ME_BadNumber, [fSt]);
+    // [### Erreur: pas un nombre ###]
+    Error.SetError(CE_BadNumber, fSt);
 end;
 
 function TGVNumber.GetStr: string;
 // *** renvoie une chaîne représentant un nombre si possible ***
 begin
-  if IsValid then
-    Result := fSt
+  if IsValid then // nombre valide ?
+    Result := fSt // on le renvoie
   else
-    raise EGVNumberException.CreateFmt(ME_BadNumber, [fSt]);
+    // [### Erreur: pas un nombre ###]
+    Error.SetError(CE_BadNumber, fSt);
 end;
 
 procedure TGVNumber.SetStr(const St: string);
@@ -769,12 +737,14 @@ constructor TGVNumber.Create;
 // *** création ***
 begin
   inherited Create; // on hérite
+  fError := TGVErrors.Create; // création du gestionnaire d'erreurs
   Clear; // mise à zéro
 end;
 
 destructor TGVNumber.Destroy;
 // *** destruction ***
 begin
+  fError.Free; // libération du gestionnaire d'erreurs
   inherited Destroy; // on hérite
 end;
 
@@ -783,6 +753,7 @@ procedure TGVNumber.Clear;
 begin
   fNum := 0; // nombre à O
   fValid := True; // et correct
+  Error.Clear; // pas d'erreur
 end;
 
 function TGVNumber.IsValid: Boolean;
@@ -794,84 +765,92 @@ end;
 function TGVNumber.IsInt: Boolean;
 // *** est-ce un entier ? ***
 var
-  Value: Integer;
+  Li: Integer;
 begin
-  if IsValid then
-    Result := TryStrToInt(fSt, Value) // essai de conversion
+  if IsValid then // nombre valide ?
+    Result := TryStrToInt(fSt, Li) // essai de conversion
   else
-    raise EGVNumberException.CreateFmt(ME_BadInt, [fSt]); // signale l'erreur
+    // [### Erreur: pas un nombre ###]
+    Error.SetError(CE_BadNumber, fSt);
 end;
 
 function TGVNumber.IsZero: Boolean;
 // *** nombre 0 ? ***
 begin
-  if IsValid then
-    Result := Math.IsZero(fNum)
+  if IsValid then // nombre valide ?
+    Result := Math.IsZero(fNum) // vaut 0 ?
   else
-    raise EGVNumberException.CreateFmt(ME_BadNumber, [fSt]); // signale l'erreur
+    // [### Erreur: pas un nombre ###]
+    Error.SetError(CE_BadNumber, fSt); // erreur signalée
+end;
+
+function TGVNumber.IsNegate: Boolean;
+// *** nombre négatif ? ***
+begin
+  if IsValid then // nombre valide ?
+    Result := (Math.Sign(fNum) = NegativeValue) // vaut 0 ?
+  else
+    // [### Erreur: pas un nombre ###]
+    Error.SetError(CE_BadNumber, fSt); // erreur signalée
 end;
 
 { ========================================================== }
 
 { TGVString }
 
-function TGVString.GetRawStr: string;
+function TGVString.GetStr: string;
 // *** renvoie la chaîne brute ***
 begin
-  Result := fRawStr;
+  Result := fStr;
 end;
 
-function TGVString.GetStr: string;
+function TGVString.GetFmtStr: string;
 // *** renvoie la chaîne formatée ***
 begin
-  Result := fStr;
+  Result := fFmtStr;
 end;
 
 procedure TGVString.SetStr(const St: string);
 // *** forme une chaîne formatée ***
 begin
-  fRawStr := WithoutEsc(St); // pas de caractères d'échappement
-  fStr := WithEsc(fRawStr); // caractères d'échappement corrects
+  fRawStr := St; // on sauvegarde la chaîne d'origine
+  fStr := WithoutEsc(St); // pas de caractères d'échappement
+  fFmtStr := WithEsc(fStr); // caractères d'échappement corrects
+  fIsValid := (fRawStr = fFmtStr); // valide telle quelle ?
 end;
 
 function TGVString.WithEsc(const St: string): string;
 // *** normalise un mot en tenant compte du caractère d'échappement ***
 var
-  C: Char;
+  Lch: Char;
 begin
   Result := EmptyStr; // chaîne vide par défaut
-  if (St <> EmptyStr) then
-    for C in St do
-    // balaie une chaîne non vide
-    begin
-      {$IFDEF Delphi}
-      if CharInSet(C, CSeparators + [CLink]) then
-      {$ELSE}
-      if C in CSeparators + [CLink] then
-      {$ENDIF}
-        // si séparateur ou échappement suit, on insère un échappement
-        Result := Result + CLink;
-      Result := Result + C; // caractère en cours traité
-    end;
+  for Lch in St do // balaie la chaîne de départ
+  begin
+    if Lch in CSeparators + [CLink] then
+      // si séparateur ou échappement suit, on insère un échappement
+      Result := Result + CLink;
+    Result := Result + Lch; // caractère en cours ajouté
+  end;
 end;
 
 function TGVString.WithoutEsc(const St: string): string;
 // *** sans caractère d'échappement ***
 var
-  C: Char;
-  Flag: Boolean;
+  LCh: Char;
+  LFlag: Boolean;
 begin
   Result := EmptyStr;
   // chaîne vide par défaut
-  Flag := False; // on n'a pas eu affaire à un caractère d'échappement
-  for C in St do // on balaie la chaîne
-    if (C <> CLink) or Flag then // caractère d'échappement initial ?
+  LFlag := False; // on n'a pas eu affaire à un caractère d'échappement
+  for LCh in St do // on balaie la chaîne
+    if (LCh <> CLink) or LFlag then // caractère d'échappement initial ?
     begin
-      Result := Result + C; // non : on ajoute simplement
-      Flag := False; // on indique ce cas
+      Result := Result + LCh; // non : on ajoute simplement
+      LFlag := False; // on indique ce cas
     end
     else
-      Flag := True; // échappement initial qu'on ignore
+      LFlag := True; // échappement initial qu'on ignore
 end;
 
 constructor TGVString.Create;
@@ -891,7 +870,8 @@ procedure TGVString.Clear;
 // *** remise à zéro de la chaîne ***
 begin
   fStr := EmptyStr;
-  fRawStr := EmptyStr;
+  fFmtStr := EmptyStr;
+  fIsValid := True; // chaîne valide
 end;
 
 end.

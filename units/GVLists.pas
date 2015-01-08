@@ -2,41 +2,42 @@
   |                                                                        |
   |                  G V S O F T                                           |
   |                  Projet : GVLogo                                       |
-  |                  Description : Listes                                  |
+  |                  Description : Traitement des listes                   |
   |                  Unité : GVLists.pas                                   |
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
-  |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    08-08-2014 16:30:23                          |
+  |                  Copyright : © G. VASSEUR 2014-2015                    |
+  |                  Date:    23-12-2014 18:00:00                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
 
-// GVLists - part of GVLOGO
-// Copyright (C) 2014 Gilles VASSEUR
+// HISTORIQUE
+// 23/12/2014 - 1.0.0 - première version opérationnelle
+
+// GVLISTS - part of GVLOGO
+// Copyright (C) 2014-2015 Gilles VASSEUR
 //
-// This program is free software: you can redistribute it and/or modify it under the terms of
-// the GNU General Public License as published by the Free Software Foundation,
-// either version 3 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation, either version 3 of the License,
+// or (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License along with this program.
-//  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU General Public License
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
 
-{$I GVDefines.inc}
-
-{$IFNDEF Delphi}
-{$mode objfpc}{$H+}
-{$ENDIF} 
+{$I GVDefines.inc} // fichier des définitions préalables
 
 unit GVLists;
-
-// Unité pour le traitement des listes
-//
-// ##############################################################
+// L'unité GVLISTS regroupe les classes chargées de traiter les listes
+// du projet GVLOGO.
 //
 // LISTES SIMPLES
 //
@@ -60,8 +61,8 @@ unit GVLists;
 // primitives simples.
 // Les lignes d'un programme en GVLogo sont considérées comme des listes.
 //
-// On notera que les éléments sont numérotés de 0 à Count-1.
-// Cette façon de compter est conforme aux listes de Pascal.
+// On notera que les éléments sont numérotés de 1 à Count.
+// Cette façon de compter est différente de celle des listes en Pascal.
 //
 
 interface
@@ -69,43 +70,44 @@ interface
 uses
   Classes, SysUtils,
   GVConsts, // constantes
-  GVWords; // mots
+  GVWords, // mots
+  GVErrConsts, // constantes d'erreurs
+  GVPrimConsts, // constantes des primitives
+  GVErrors; // traitement des erreurs
 
 type
-   TGVListUtils = class; // pour définition ultérieure
+  // *** utilitaires pour les listes pour définition ultérieure ***
+  TGVListUtils = class;
 
-  { classe des listes }
-
-  { TGVList }
-
-  EGVListException = class(Exception);
-
+  // *** classe des listes ***
   TGVList = class(TStringList)
   strict private
-    fError: TGVError; // erreur
-    fErrorPos: Integer; // position d'une erreur
+    fRawStr: string; // chaîne brute en entrée
+    fError: TGVErrors; // traitement des erreurs
+    fIsValid: Boolean; // validité de la liste
+    fPos: Integer; // position de travail
     fLoading: Boolean; // chargement en cours ?
     fNumLastItem: Integer; // dernier élément trouvé
     fWord: TGVWord; // mot de travail
     fUtil: TGVListUtils; // utilitaire pour liste
-    function GetLastErrorPos: Integer;  // position de la dernière erreur
-    function GetLastError: TGVError; // dernière erreur
   protected
-    procedure Put(Index: Integer; const S: string); override; // assignation
+    procedure Put(Index: Integer; const St: string); override; // assignation
+    function Get(Index: Integer): string; override; // élément choisi
+    function GetTextStr: string; override; // récupération du texte
+    procedure SetTextStr(const AValue: string); override; // validation du texte
   public
     constructor Create; overload; // création
     destructor Destroy; override; // destruction
+    procedure Clear; override; // nettoyage
     function Add(const St: string): Integer; override; // ajout
     procedure LoadFromStream(Stream: TStream); overload; override; // chargement
     procedure Assign(Source: TPersistent); override; // assignation
-    procedure Insert(Index: Integer; const S: string); override; // insertion
+    procedure Insert(Index: Integer; const St: string); override; // insertion
     // nouvelles méthodes (*** ne modifient pas la liste interne ***)
     // renvoie la liste sous forme de chaîne
     function ToStr: string;
     // renvoie la liste sous forme de chaîne sans crochets
     function ToWBStr: string;
-    // la liste est-elle vide ?
-    function IsEmpty: Boolean;
     // la liste est-elle la liste vide ?
     function IsEmptyList: Boolean;
     // renvoie le premier élément de la liste
@@ -141,41 +143,45 @@ type
     // ajout d'une paire
     function TwoAdd(const St1, St2: string): string;
     // suppression d'une paire
-    function TwoDelete(N: Integer): string;
+    function TwoDelete(const N: Integer): string;
     // liste en majuscules
     function UpperCase: string;
     // liste en minuscules
     function LowerCase: string;
     // rotation de la liste
     function Rotate: string;
-    // nouvelles propriétés
-    // dernière erreur
-    property LastError: TGVError read GetLastError default C_None;
-    // position de la dernière erreur
-    property LastErrorPos: Integer read GetLastErrorPos default -1;
+    // élément de la liste choisi au hasard
+    function AtRandom: string;
     // dernier élément traité
     property LastItem: Integer read fNumLastItem default -1;
+    // chaîne brute en entrée
+    property RawStr: string read fRawStr; // chaîne brute en entrée
+    // notification d'une erreur
+    property Error: TGVErrors read fError write fError;
+    // validité de la liste
+    property IsValid: Boolean read fIsValid default False;
+    // acquisition du texte
+    property Text: string read GetTextStr write SetTextStr;
   end;
 
-  { classe des utilitaires pour les listes}
-
-  { TGVListUtils }
-
-  EGVListUtilsException = class(Exception);
-
+  // *** classe des utilitaires pour les listes ***
   TGVListUtils = class
   strict private
+    fError: TGVErrors; // traitement des erreurs
     fWord: TGVWord; // mot de travail
+    fPos: Integer; // position de travail
     fSt: TGVString; // chaîne de travail
   public
     constructor Create; // constructeur
     destructor Destroy; override; // destructeur
+    procedure Clear; // nettoyage
     // conversion d'une liste en mot
     function ListToWord(const St: string): string;
     // conversion d'un mot en liste
     function WordToList(const St: string): string;
     // conversion d'une liste en chaîne
-    function ListToStr(const St: string): string;
+    function ListToStr(const St: string): string; overload;
+    function ListToStr(const St: string; out ASt: string): Boolean; overload;
     // conversion d'une chaîne en liste
     function StrToList(const St: string): string;
     // retourne la liste vide
@@ -183,343 +189,258 @@ type
     // vérifie la validité d'une liste
     function IsValid(const St: string): Boolean;
     // teste la validité d'une valeur (mot ou liste)
-    procedure TestValue(const St: string);
-    // teste la validité d'une valeur (mot ou liste) - sans exception
     function IsValidValue(const St: string): Boolean;
     // liste simple ?
     function IsSimpleList(const St: string): Boolean;
+    // notification d'une erreur
+    property Error: TGVErrors read fError write fError;
   end;
 
 implementation
 
-{$IFNDEF Delphi}
-  uses
-    lazutf8; // traitement des chaînes UTF8
-{$ENDIF}
-
+uses
+  lazutf8; // traitement des chaînes UTF8
 
 { TGVList }
 
 function TGVList.Add(const St: string): Integer;
 // *** ajout d'une chaîne ***
 var
-  S: string;
-  fStrList: TStringList; // liste de travail
+  LSt: string;
+  LStrList: TStringList; // liste de travail
 
-  {$IFDEF Delphi}
-  procedure Parse(const St: string);
+  procedure Parse(const LSt2: string);
   // *** découpe la liste de travail ***
   var
     LW: Integer; // place du caractère examiné
     Lev: Integer; // niveau de travail
     LItem: string; // élément en cours
-  begin
-    fErrorPos := 0; // pas d'erreur
-    fStrList.Clear; // on nettoie la liste de travail
-    if St = EmptyStr then // si chaîne vide, on l'enregistre
+    LStCh: string; // caractère en cours (1 ou 2 places)
+
+    procedure NextChar;
+    // vers le caractère suivant
     begin
-      fStrList.Add(EmptyStr);
-      exit; // ... et on sort
+      Inc(LW); // pointe sur le caractère suivant
+      LStCh := UTF8Copy(LSt2, LW, 1); // nouveau caractère ne cours
     end;
-    LItem := EmptyStr; // élément en cours vide
-    LW := 1; // pointe sur le premier caractère
-    while (fErrorPos = 0) and (LW <= Length(St)) do // on boucle si possible
+
+    procedure DoBlank;
+    // traite un blanc
     begin
-      case St[LW] of // examen du caractère en cours
-        CBlank: // *** blanc ? ***
-          begin
-            Inc(LW); // pointe sur le caractère suivant
-            while (St[LW] = CBlank) and (LW <= Length(St)) do
-               Inc(LW); // saute les blancs
-            if LItem <> EmptyStr then
-            begin
-              fStrList.Add(LItem); // ajoute l'élément si non vide
-              LItem := EmptyStr; // élément à zéro
-            end;
-          end;
-        CBeginList: // *** début d'une sous-liste ? ***
-          begin
-            if LItem <> EmptyStr then // ajoute l'élément si non vide
-              fStrList.Add(LItem);
-            LItem := CBeginList; // élement = [
-            Inc(LW); // pointe sur le caractère suivant
-            Lev := 1; // niveau 1
-            while (Lev <> 0) and (LW <= Length(St)) do // autres niveaux ?
-            begin
-              case St[LW] of
-                CLink: // un lien ?
-                  begin
-                    LItem := LItem + CLink; // dans l'élément
-                    Inc(LW); // pointe sur le caractère suivant
-                  end;
-                CBeginList:
-                  Inc(Lev); // niveau suivant
-                CEndList:
-                  Dec(Lev); // niveau précédent
-              end;
-              if LW <= Length(St) then // si possible
-                LItem := LItem + St[LW]; // sauve l'élément suivant
-              Inc(LW); // pointe sur le caractère suivant
-            end; // fin des niveaux
-            if Lev = 0 then // normalement niveau = 0 à la sortie
-            begin // c'est-à-dire autant de [ que de ]
-              fStrList.Add(LItem); // sauve le dernier élément
-              LItem := EmptyStr; // et le remet à zéro
-            end
-            else // si niveaux incorrects
-              fErrorPos := LW; // note la position de l'erreur
-          end;
-        CBeginPar: // *** début de parenthèse ?
-          begin
-            if LItem <> EmptyStr then // sauve l'élément si non vide
-              fStrList.Add(LItem);
-            LItem := CBeginPar; // élement = (
-            Inc(LW); // pointe sur le caractère suivant
-            Lev := 1; // premier niveau
-            while (Lev <> 0) and (LW <= Length(St)) do // autres niveaux ?
-            begin
-              case St[LW] of
-                CLink: // un lien ?
-                  begin
-                    LItem := LItem + CLink; // dans l'élément
-                    Inc(LW); // pointe sur le caractère suivant
-                  end;
-                CBeginList, CEndList:
-                  fErrorPos := LW; // pas de liste dans une expression
-                CBeginPar:
-                  Inc(Lev); // niveau suivant
-                CEndPar:
-                  Dec(Lev); // niveau précédent
-              end;
-              if LW <= Length(St) then // si possible
-                LItem := LItem + St[LW]; // dans l'élément
-              Inc(LW); // pointe sur le caractère suivant
-            end; // fin des autres niveaux
-            if (Lev = 0) and (fErrorPos = 0) then // nombre correct de niveaux ?
-            begin
-              fStrList.Add(LItem); // sauve le dernier élément
-              LItem := EmptyStr; // remis à zéro
-            end
-            else // si erreur
-              if fErrorPos = 0 then
-                fErrorPos := LW;
-            // note la position de l'erreur si non connue
-          end;
-        CLink: // *** un lien ? ***
-          begin
-            LItem := LItem + CLink; // dans l'élément en cours
-            Inc(LW); // pointe sur le caractère suivant
-            if LW <= Length(St) then // si possible
-            begin
-              LItem := LItem + St[LW]; // dans l'élément en cours
-              Inc(LW); // pointe sur le caractère suivant
-            end;
-          end;
-        CEndList, CEndPar: // *** fin de liste ou parenthèse ? => erreur ***
-          fErrorPos := LW; // position de l'erreur
-      else // autres caractères à ajouter simplement
-        begin
-          LItem := LItem + St[LW]; // dans l'élément en cours
-          Inc(LW); // pointe sur le caractère suivant
-        end;
+      NextChar; // caractère suivant
+      // saute les blancs
+      while (LStCh = CBlank) and (LW <= UTF8Length(LSt2)) do
+        NextChar; // caractère suivant
+      if LItem <> EmptyStr then
+      begin
+        LStrList.Add(LItem); // ajoute l'élément si non vide
+        LItem := EmptyStr; // élément à zéro
       end;
-    end; // fin de la boucle
-    if (fErrorPos = 0) and (LItem <> EmptyStr) then // pas d'erreur ?
-      fStrList.Add(LItem); // on sauve le dernier élément éventuel
-  end;
-  {$ELSE}
-  procedure Parse(const St: string);
-  // *** découpe la liste de travail ***
-  var
-    LW: Integer; // place du caractère examiné
-    Lev: Integer; // niveau de travail
-    LItem: string; // élément en cours
-    S: string; // caractère en cours (1 ou 2)
-  begin
-    fErrorPos := 0; // pas d'erreur
-    fStrList.Clear; // on nettoie la liste de travail
-    if St = EmptyStr then // si chaîne vide, on l'enregistre
-    begin
-      fStrList.Add(EmptyStr);
-      exit; // ... et on sort
     end;
-    LItem := EmptyStr; // élément en cours vide
-    LW := 1; // pointe sur le premier caractère
-    S := UTF8Copy(St, LW, 1);
-    while (fErrorPos = 0) and (LW <= UTF8Length(St)) do // on boucle si possible
+
+    procedure DoBeginList;
+    // traite un début de liste
     begin
-      if S = CBlank then // *** blanc ?
-      begin
-        Inc(LW); // pointe sur le caractère suivant
-        S := UTF8Copy(St, LW, 1);
-        while (S = CBlank) and (LW <= UTF8Length(St)) do
-        begin
-          Inc(LW); // saute les blancs
-          S := UTF8Copy(St, LW, 1);
-        end;
-        if LItem <> EmptyStr then
-        begin
-          fStrList.Add(LItem); // ajoute l'élément si non vide
-          LItem := EmptyStr; // élément à zéro
-        end;
-      end
-      else
-      if S = CBeginList then // *** début d'une sous-liste ? ***
-      begin
         if LItem <> EmptyStr then // ajoute l'élément si non vide
-          fStrList.Add(LItem);
-        LItem := CBeginList; // élement = [
-        Inc(LW); // pointe sur le caractère suivant
-        S := UTF8Copy(St, LW, 1);
+          LStrList.Add(LItem);
+        LItem := CBeginList; // élément = [
+        NextChar; // caractère suivant
         Lev := 1; // niveau 1
-        while (Lev <> 0) and (LW <= UTF8Length(St)) do // autres niveaux ?
+        while (Lev <> 0) and (LW <= UTF8Length(LSt2)) do // autres niveaux ?
         begin
-          if S = CLink then // un lien ?
+          if LStCh = CLink then // un lien ?
           begin
             LItem := LItem + CLink; // dans l'élément
-            Inc(LW); // pointe sur le caractère suivant
-            S := UTF8Copy(St, LW, 1);
+            NextChar; // caractère suivant
           end
           else
-          if S = CBeginList then
+          if LStCh = CBeginList then
             Inc(Lev) // niveau suivant
           else
-          if S = CEndList then
+          if LStCh = CEndList then
             Dec(Lev); // niveau précédent
-          if LW <= UTF8Length(St) then // si possible
-                LItem := LItem + S; // sauve l'élément suivant
-          Inc(LW); // pointe sur le caractère suivant
-          S := UTF8Copy(St, LW, 1);
+          if LW <= UTF8Length(LSt2) then // si possible
+                LItem := LItem + LStCh; // sauve l'élément suivant
+          NextChar; // caractère suivant
        end; // fin des niveaux
        if Lev = 0 then // normalement niveau = 0 à la sortie
        begin // c'est-à-dire autant de [ que de ]
-         fStrList.Add(LItem); // sauve le dernier élément
+         LStrList.Add(LItem); // sauve le dernier élément
          LItem := EmptyStr; // et le remet à zéro
        end
        else // si niveaux incorrects
-         fErrorPos := LW; // note la position de l'erreur
-      end
-      else
-      if S = CBeginPar then // *** début de parenthèse ?
-      begin
+         fPos := LW; // note la position de l'erreur
+    end;
+
+    procedure DoBeginPar;
+    // début de parenthèse
+    begin
         if LItem <> EmptyStr then // sauve l'élément si non vide
-          fStrList.Add(LItem);
-        LItem := CBeginPar; // élement = (
-        Inc(LW); // pointe sur le caractère suivant
-        S := UTF8Copy(St, LW, 1);
+          LStrList.Add(LItem);
+        LItem := CBeginPar; // élément = (
+        NextChar; // caractère suivant
         Lev := 1; // premier niveau
-        while (Lev <> 0) and (LW <= UTF8Length(St)) do // autres niveaux ?
+        while (Lev <> 0) and (LW <= UTF8Length(LSt2)) do // autres niveaux ?
         begin
-          if S = CLink then // un lien ?
+          if LStCh = CLink then // un lien ?
           begin
             LItem := LItem + CLink; // dans l'élément
-            Inc(LW); // pointe sur le caractère suivant
-            S := UTF8Copy(St, LW, 1);
+            NextChar; // caractère suivant
           end
           else
-          if (S = CBeginList) or (S = CEndList) then
-            fErrorPos := LW // pas de liste dans une expression
+          if (LStCh = CBeginList) or (LStCh = CEndList) then
+            fPos := LW // pas de liste dans une expression
           else
-          if S = CBeginPar then
+          if LStCh = CBeginPar then
             Inc(Lev) // niveau suivant
           else
-          if S = CEndPar then
+          if LStCh = CEndPar then
             Dec(Lev); // niveau précédent
-          if LW <= UTF8Length(St) then // si possible
-            LItem := LItem + S; // dans l'élément
-          Inc(LW); // pointe sur le caractère suivant
-          S := UTF8Copy(St, LW, 1);
+          if LW <= UTF8Length(LSt2) then // si possible
+            LItem := LItem + LStCh; // dans l'élément
+          NextChar; // caractère suivant
         end; // fin des autres niveaux
-        if (Lev = 0) and (fErrorPos = 0) then // nombre correct de niveaux ?
+        if (Lev = 0) and (fPos = 0) then // nombre correct de niveaux ?
         begin
-          fStrList.Add(LItem); // sauve le dernier élément
+          LStrList.Add(LItem); // sauve le dernier élément
           LItem := EmptyStr; // remis à zéro
         end
         else // si erreur
-          if fErrorPos = 0 then
-            fErrorPos := LW; // note la position de l'erreur si non connue
-      end
-      else
-      if S = CLink then // *** un lien ? ***
-      begin
+          if fPos = 0 then
+            fPos := LW; // note la position de l'erreur si non connue
+    end;
+
+    procedure DoLink;
+    // début d'un lien
+    begin
         LItem := LItem + CLink; // dans l'élément en cours
-        Inc(LW); // pointe sur le caractère suivant
-        S := UTF8Copy(St, LW, 1);
-        if LW <= UTF8Length(St) then // si possible
+        NextChar; // caractère suivant
+        if LW <= UTF8Length(LSt2) then // si possible
         begin
-          LItem := LItem + S; // dans l'élément en cours
-          Inc(LW); // pointe sur le caractère suivant
-          S := UTF8Copy(St, LW, 1);
+          LItem := LItem + LStCh; // dans l'élément en cours
+          NextChar; // caractère suivant
         end;
-      end
+    end;
+
+  begin { début de PARSE }
+    fPos := 0; // pas d'erreur
+    LStrList.Clear; // on nettoie la liste de travail
+    if LSt2 = EmptyStr then // si chaîne vide
+      Exit; // on sort
+    LItem := EmptyStr; // élément en cours vide
+    LW := 0; // pointe sur le premier caractère
+    NextChar; // caractère suivant
+    while (fPos = 0) and (LW <= UTF8Length(LSt2)) do // on boucle si possible
+    begin
+      if LStCh = CBlank then
+      // *** blanc ? ***
+        DoBlank
       else
-      if (S = CEndList) or (S = CEndPar) then // *** fin de liste ou parenthèse ? => erreur ***
-        fErrorPos := LW // position de l'erreur
-      else // *** autres caractères à ajouter simplement ***
+      if LStCh = CBeginList then
+      // *** début d'une sous-liste ? ***
+        DoBeginList
+      else
+      if LStCh = CBeginPar then
+      // *** début d'une expression ? ***
+        DoBeginPar
+      else
+      if LStCh = CLink then
+      // *** un lien ? ***
+        DoLink
+      else
+      // *** fin de liste ou parenthèse ? => erreur ***
+      if (LStCh = CEndList) or (LStCh = CEndPar) then
+        fPos := LW // position de l'erreur
+      else
+      // *** autres caractères à ajouter simplement ***
       begin
-        LItem := LItem + S; // dans l'élément en cours
-        Inc(LW); // pointe sur le caractère suivant
-        S := UTF8Copy(St, LW, 1);
+        LItem := LItem + LStCh; // dans l'élément en cours
+        NextChar; // caractère suivant
       end;
     end; // fin de la boucle
-    if (fErrorPos = 0) and (LItem <> EmptyStr) then // pas d'erreur ?
-      fStrList.Add(LItem); // on sauve le dernier élément éventuel
-  end;
-  {$ENDIF}
+    if (fPos = 0) and (LItem <> EmptyStr) then // pas d'erreur ?
+      LStrList.Add(LItem); // on sauve le dernier élément éventuel
+  end; { fin de PARSE }
 
-begin
+begin { début de ADD}
   BeginUpdate; // on marque le changement en cours
-  fError := C_BadList; // on suppose une erreur
   Result := -1;
-  fStrList := TStringList.Create; // on crée la liste de travail
+  fPos := 0; // pas d'erreur
+  LStrList := TStringList.Create; // on crée la liste de travail
   try
-    // est-ce un mot ?
-    if fWord.IsValid(St) then
-    begin
-      Result := inherited Add(St); // on l'insère
-      fError := C_None;
-    end
-    {$IFDEF Delphi}
-    else if (Length(St) > 1) and (St[1] = CBeginList)
-      and (St[Length(St)] = CEndList) then // on veut les crochets
-        // recherche des éléments d'une liste
-    begin
-      Parse(Copy(St, 2, Length(St) - 2));
-    {$ELSE}
-    else if (UTF8Length(St) > 1) and (St[1] = CBeginList)
+    // est-ce une liste ?
+    if (Length(St) > 1) and (St[1] = CBeginList)
       and (St[Length(St)] = CEndList) then
     begin
+      // on l'analyse
       Parse(UTF8Copy(St, 2, UTF8Length(St) - 2));
-    {$ENDIF}
-      if fErrorPos = 0 then // pas d'erreur pour le parsing
+      if fPos = 0 then // pas d'erreur pour le parsing
       begin
-        for S in fStrList do // on ajoute tous les éléments de la liste
-          Result := inherited Add(S);
-        fError := C_None;
+        for LSt in LStrList do // on ajoute tous les éléments de la liste
+          Result := inherited Add(LSt);
       end
     end
     else
-      fErrorPos := 1; // erreur dès le départ
+      fPos := 1; // erreur dès le départ
   finally
-    fStrList.Free;
+    LStrList.Free;
+    fIsValid := (fPos = 0); // validité de la liste
+    if not fIsValid then // une erreur ?
+      // [### Erreur: mauvaise liste ###]
+      Error.SetError(CE_BadList, St, fPos);
     EndUpdate; // fin de tout changement
   end;
-end;
+end; { fin de ADD }
 
 function TGVList.ButFirst: string;
 // *** renvoie tout sauf le premier élément de la liste ***
 // BF [mot1 mot2] => [mot2]
 // BF [[sous-liste1] mot2 mot3 [sous-liste2]] => [mot2 mot3 [sous-liste2]]
+var
+  Li: Integer;
 begin
-  Result := DeleteItem(1); // on enlève le dernier élément
+  Result := CBeginList; // crochet ouvrant
+  try
+    if not IsValid then // pas d'analyse si liste erronée
+      Exit; // on sort
+    if IsEmptyList then // l'élément existe-t-il ?
+      // [### Erreur : liste vide ###]
+      Error.SetError(CE_EmptyList, P_ButFirst)
+    else
+    begin
+      for Li := 1 to (Count-1) do // on reconstruit la liste sans l'élément 1
+         Result := Result + Get(Li) + CBlank;
+    end;
+  finally
+    // on termine par le crochet fermant
+    Result := TrimRight(Result) + CEndList;
+  end;
 end;
 
 function TGVList.ButLast: string;
 // *** renvoie tout sauf le dernier élément de la liste ***
 // BL [mot1 mot2] => [mot1]
 // BL [[sous-liste1] mot2 mot3 [sous-liste2]] => [[sous-liste1] mot2 mot3]
+var
+  Li: Integer;
 begin
-  Result := DeleteItem(Count); // on détruit le dernier élément
+  Result := CBeginList; // crochet ouvrant
+  try
+    if not IsValid then // pas d'analyse si liste erronée
+      Exit; // on sort
+    if IsEmptyList then // l'élément existe-t-il ?
+      // [### Erreur : liste vide ###]
+      Error.SetError(CE_EmptyList, P_ButLast)
+    else
+    begin
+      // on reconstruit la liste sans le dernier élément
+      for Li := 0 to (Count - 2) do
+         Result := Result + Get(Li) + CBlank;
+    end;
+  finally
+    // on termine par le crochet fermant
+    Result := TrimRight(Result) + CEndList;
+  end;
 end;
 
 constructor TGVList.Create;
@@ -527,36 +448,52 @@ constructor TGVList.Create;
 begin
   inherited Create; // on hérite
   fNumLastItem := -1; // dernier élément recherché
-  fError := C_None; // dernière erreur
-  fErrorPos := -1; // dernière position d'erreur dans liste
   fWord := TGVWord.Create; // création du mot de travail
   fUtil := TGVListUtils.Create; // utilitaires de travail
+  fError := TGVErrors.Create; // on crée le gestionnaire d'erreurs
+  fIsValid := False; // liste non valide par défaut
 end;
 
 destructor TGVList.Destroy;
 // *** destruction de la liste ***
 begin
+  Error.Free; // on détruit le gestionnaire d'erreurs
   fWord.Free; // libération du mot de travail
   fUtil.Free; // idem pour les utilitaires
   inherited Destroy; // on hérite
 end;
 
+procedure TGVList.Clear;
+// *** nettoyage ***
+begin
+  Error.Clear; // pas d'erreur
+  inherited Clear; // on hérite
+end;
+
 function TGVList.DeleteItem(N: Integer): string;
 // *** détruit l'élément N de la liste ***
-// DL 1 [mot1 mot2] => [mot2]
-// DL 3 [[sous-liste1] mot2 mot3 [sous-liste2]] => [[sous-liste1] mot2 [sous-liste2]]
+// DL 1 [mot1 mot2]
+// => [mot2]
+// DL 3 [[sous-liste1] mot2 mot3 [sous-liste2]]
+// => [[sous-liste1] mot2 [sous-liste2]]
 var
-  I: Integer;
+  Li: Integer;
 begin
   Result := CBeginList; // crochet ouvrant
   try
-    if (N > Count) or (N < 1) then // les éléments existent-ils ?
-      raise EGVListException.CreateFmt(ME_DelItem, [N]); // erreur
-    for I := 1 to Count do // on reconstruit la liste
-      if (I <> N) then // sans l'élément N
-        Result := Result + Get(I-1) + CBlank;
+    // les éléments existent-ils ?
+    if (N > Count) or (N < 1) then
+      // [### Erreur : élément inexistant ###]
+      Error.SetError(CE_BadItem, RawStr, N)
+    else
+    begin
+      for Li := 0 to (Count - 1) do // on reconstruit la liste
+        if (Li <> (N - 1)) then // sans l'élément N
+          Result := Result + Get(Li) + CBlank;
+    end;
   finally
-    Result := TrimRight(Result) + CEndList; // et on termine par le crochet fermant
+    // on termine par le crochet fermant
+    Result := TrimRight(Result) + CEndList;
   end;
 end;
 
@@ -565,14 +502,14 @@ function TGVList.First: string;
 // FL [mot1 mot2] => mot1
 // CL [[sous-liste1] mot2 mot3 [sous-liste2]] => [sous-liste1]
 begin
-  Result := Get(0); // on renvoie le premier élément
-end;
-
-function TGVList.GetLastError: TGVError;
-// *** renvoie la dernière erreur ***
-begin
-  Result := fError; // renvoi de l'erreur
-  fError := C_None; // remise à zéro de l'erreur
+  Result := CEmptyList; // liste vide par défaut
+  if not IsValid then // pas d'analyse si liste erronée
+    Exit; // on sort
+  if IsEmptyList then // l'élément existe-t-il ?
+    // [### Erreur : liste vide ###]
+    Error.SetError(CE_EmptyList, P_First)
+  else
+    Result := Get(0); // on renvoie le premier élément
 end;
 
 function TGVList.InsertAItem(N: Integer; const St: string): string;
@@ -581,35 +518,43 @@ function TGVList.InsertAItem(N: Integer; const St: string): string;
 // II 3 mot0 [[sous-liste1] mot2 mot3 [sous-liste2]] =>
 // [[sous-liste1] mot2 mot0 mot3 [sous-liste2]]
 var
-  I: Integer;
-  S1, S2: string;
+  Li: Integer;
+  LSt1, LSt2: string;
 begin
   Result := CBeginList; // crochet ouvrant
   try
-    fUtil.TestValue(St); // liste ou mot valides ?
-    if (N > (Count + 1 )) or (N < 1) then // les éléments existent-ils ?
-      raise EGVListException.CreateFmt(ME_InsItem, [N]); // erreur
-    for I := 1 to Count + 1 do // on reconstruit la liste
+    if not fUtil.IsValidValue(St) then // liste ou mot valides ?
     begin
-      if (I <= Count) then
-        S1 := Get(I-1)
+      // [### Erreur :  valeur incorrecte ###]
+      Error.SetError(CE_UnknownListWord, St, N);
+      Exit; // on arrête !
+    end;
+    // les éléments existent-ils ?
+    if (N > (Count + 1)) or (N < 1) then
+      // [### Erreur : hors bornes ###]
+      Error.SetError(CE_BadItem, RawStr, N)
+    else
+    for Li := 0 to Count do // on reconstruit la liste
+    begin
+      if (Li < Count) then
+        LSt1 := Get(Li)
       else
-        S1 := EmptyStr;
-      if I = N then // c'est le point d'insertion ?
+        LSt1 := EmptyStr;
+      if Li = (N - 1) then // c'est le point d'insertion ?
       begin
-        S2 := St;
-        if ((Result <> CBeginList) or (S2 <> EmptyStr)) and (S1 <> EmptyStr)
+        LSt2 := St;
+        if ((Result <> CBeginList) or (LSt2 <> EmptyStr)) and (LSt1 <> EmptyStr)
         then
-          S1 := CBlank + S1;
-        if (Result <> CBeginList) and (S2 <> EmptyStr) then
-          S2 := CBlank + S2;
-        Result := Result + S2 + S1; // on insère...
+          LSt1 := CBlank + LSt1;
+        if (Result <> CBeginList) and (LSt2 <> EmptyStr) then
+          LSt2 := CBlank + LSt2;
+        Result := Result + LSt2 + LSt1; // on insère...
       end
       else
       begin
-        if (Result <> CBeginList) and (S1 <> EmptyStr) then
-          S1 := CBlank + S1;
-        Result := Result + S1; // on ajoute l'élément suivant
+        if (Result <> CBeginList) and (LSt1 <> EmptyStr) then
+          LSt1 := CBlank + LSt1;
+        Result := Result + LSt1; // on ajoute l'élément suivant
       end;
     end;
   finally
@@ -617,36 +562,43 @@ begin
   end;
 end;
 
-procedure TGVList.Insert(Index: Integer; const S: string);
+procedure TGVList.Insert(Index: Integer; const St: string);
 // *** insertion d'un objet ***
 begin
   BeginUpdate; // début de changement
   try
-    fUtil.TestValue(S); // mot ou liste ?
-    inherited Insert(Index, S); // on insère la valeur
+    if fUtil.IsValidValue(St) then // mot ou liste ?
+      inherited Insert(Index, St) // on insère la valeur
+    else
+      // [### Erreur: ni une liste ni un mot ###]
+      Error.SetError(CE_UnknownListWord, St);
   finally
     EndUpdate; // fin de changement
   end;
 end;
 
-function TGVList.IsEmpty: Boolean;
-// *** la liste est-elle vide ? ***
-begin
-  Result := (Count = 0);
-end;
-
 function TGVList.IsEmptyList: Boolean;
 // *** la liste est-elle la liste vide ? ***
 begin
-  Result := (Count = 1) and (Get(0) = EmptyStr);
+  Result := (Count = 0);
 end;
 
 function TGVList.IsItem(const St: string): Boolean;
 // *** l'élément donné est-il dans la liste ? ***
 // II? mot0 [mot1 mot2] => faux
 // II? mot2 [[sous-liste1] mot2 mot3 [sous-liste2]] => vrai
+var
+  Li: integer;
 begin
-  fNumLastItem := IndexOf(St);
+  fNumLastItem := -1; // non trouvé
+  for Li := 0 to (Count - 1) do
+  begin
+    if (St = Get(Li)) then // on balaie la liste
+    begin
+      fNumLastItem := Li + 1; // trouvé
+      Break; // on sort de la boucle
+    end;
+  end;
   Result := (fNumLastItem <> -1);
 end;
 
@@ -655,7 +607,14 @@ function TGVList.Last: string;
 // LL [mot1 mot2] => mot2
 // LL [[sous-liste1] mot2 mot3 [sous-liste2]] => [sous-liste2]
 begin
-  Result := Get(Count - 1);
+  Result := CEmptyList; // liste vide par défaut
+  if not IsValid then // pas d'analyse si liste erronée
+    Exit; // on sort
+  if IsEmptyList then // l'élément existe-t-il ?
+    // [### Erreur : liste vide ###]
+    Error.SetError(CE_EmptyList, P_Last)
+  else
+    Result := Get(Count - 1);
 end;
 
 procedure TGVList.LoadFromStream(Stream: TStream);
@@ -689,42 +648,77 @@ end;
 function TGVList.LowerCase: string;
 // *** liste en minuscules ***
 begin
-{$IFDEF Delphi}
-  Result := SysUtils.AnsiLowerCase(ToStr);
-{$ELSE}
-  Result := UTF8LowerCase(ToStr);
-{$ENDIF}
+  Result := UTF8LowerCase(RawStr);
 end;
 
 function TGVList.Rotate: string;
 // *** rotation de la liste ***
 var
-  I: Integer;
+  Li: Integer;
 begin
   Result := CBeginList; // crochet ouvrant
   try
-    for I := 1 to Count - 1 do // on reconstruit la liste
-       Result := Result + Get(I) + CBlank; // on ajoute l'élément suivant
-    Result := Result + Get(0); // premier élément à la fin
+    for Li := 1 to (Count - 1) do // on reconstruit la liste
+      Result := Result + Get(Li) + CBlank; // on ajoute l'élément suivant
+    if Count <> 0 then // au moins un élément ?
+      Result := Result + Get(0); // premier élément à la fin
   finally
     Result := Result + CEndList; // et on termine par le crochet fermant
   end;
 end;
 
-function TGVList.GetLastErrorPos: Integer;
-// *** position de la dernière erreur ***
+function TGVList.AtRandom: string;
+// *** renvoi d'un élément de la liste au hasard ***
 begin
-  Result := fErrorPos;
-  fErrorPos := 0;
+  Result := CEmptyList; // liste vide par défaut
+  if Count > 0 then // si des éléments
+    Result := Get(Random(Count)); // un au hasard
 end;
 
-procedure TGVList.Put(Index: Integer; const S: string);
+function TGVList.GetTextStr: string;
+// *** récupération du texte ***
+begin
+  Result := inherited GetTextStr;
+end;
+
+procedure TGVList.SetTextStr(const AValue: string);
+// *** initialisation du texte ***
+begin
+  fRawStr := AValue; // chaîne brute conservée
+  if AValue <> EmptyStr then
+    inherited SetTextStr(AValue)
+  else
+    // [### Erreur : liste vide ###]
+    Error.SetError(CIE_ListInit, CE_GVLogo);
+end;
+
+procedure TGVList.Put(Index: Integer; const St: string);
 // *** changement direct d'un élément ***
 begin
   BeginUpdate;
   try
-    fUtil.TestValue(S); // mot ou liste ?
-    inherited Put(Index, S); // on change la valeur
+    if fUtil.IsValidValue(St) then // mot ou liste ?
+      inherited Put(Index, St) // on change la valeur
+    else
+      // [### Erreur: ni une liste ni un mot ###]
+      Error.SetError(CE_UnknownListWord, St);
+  finally
+    EndUpdate;
+  end;
+end;
+
+function TGVList.Get(Index: Integer): string;
+// *** choix d'un élément ***
+begin
+  Result := CEmptyList; // liste vide par défaut
+  BeginUpdate;
+  try
+    // dans les bornes ?
+    if (Index >= 0) and (Index < Count) then
+      Result:= inherited Get(Index) // on charge la valeur
+    else
+      // [### Erreur: élément invalide ###]
+      Error.SetError(CE_BadItem, RawStr, Index);
   finally
     EndUpdate;
   end;
@@ -736,16 +730,21 @@ function TGVList.PutFirst(const St: string): string;
 // PF mot0 [[sous-liste1] mot2 mot3 [sous-liste2]] =>
 // [mot0 [sous-liste1] mot2 mot3 [sous-liste2]]
 var
-  S: string;
+  LSt: string;
 begin
   Result := CBeginList;
   try
-    fUtil.TestValue(St); // liste ou mot valides
-    S := ToWBStr; // liste en chaîne
-    if (S <> EmptyStr) and (St <> EmptyStr) then
-      S := CBlank + S;
-    // on construit la liste
-    Result := Result + St + S;
+    if fUtil.IsValidValue(St) then // liste ou mot valides
+    begin
+      LSt := ToWBStr; // liste en chaîne
+      if (LSt <> EmptyStr) and (St <> EmptyStr) then
+        LSt := CBlank + LSt;
+      // on construit la liste
+      Result := Result + St + LSt;
+    end
+    else
+      // [### Erreur: ni une liste ni un mot ###]
+      Error.SetError(CE_UnknownListWord, St);
   finally
     Result := Result + CEndList;
   end;
@@ -757,16 +756,21 @@ function TGVList.PutLast(const St: string): string;
 // PL mot0 [[sous-liste1] mot2 mot3 [sous-liste2]] =>
 // [[sous-liste1] mot2 mot3 [sous-liste2] mot0]
 var
-  S: string;
+  LSt: string;
 begin
   Result := CBeginList;
   try
-    fUtil.TestValue(St); // liste ou mot valides
-    S := ToWBStr; // liste en chaîne
-    if (S <> EmptyStr) and (St <> EmptyStr) then
-      S := S + CBlank;
-    // on construit la liste
-    Result := Result + S + St;
+    if fUtil.IsValidValue(St) then // liste ou mot valides
+    begin
+      LSt := ToWBStr; // liste en chaîne
+      if (LSt <> EmptyStr) and (St <> EmptyStr) then
+        LSt := LSt + CBlank;
+      // on construit la liste
+      Result := Result + LSt + St;
+    end
+     else
+      // [### Erreur: ni une liste ni un mot ###]
+      Error.SetError(CE_UnknownListWord, St);
   finally
     Result := Result + CEndList;
   end;
@@ -778,29 +782,37 @@ function TGVList.ReplaceItem(N: Integer; const St: string): string;
 // RI 2 mot0 [[sous-liste1] mot2 mot3 [sous-liste2]] =>
 // [[sous-liste1] mot2 mot0 [sous-liste2]]
 var
-  I: Integer;
-  S1, S2: string;
+  Li: Integer;
+  LSt1, LSt2: string;
 begin
   Result := CBeginList; // crochet ouvrant
   try
-    fUtil.TestValue(St); // liste ou mot valides ?
-    if (N > Count) or (N < 1) then // les éléments existent-ils ?
-      raise EGVListException.CreateFmt(ME_ReplaceItem, [N]); // erreur
-    for I := 1 to Count do // on reconstruit la liste
+    if not fUtil.IsValidValue(St) then  // liste ou mot valides ?
     begin
-      if I = N then // c'est le point de remplacement ?
+      // [### Erreur: ni une liste ni un mot ###]
+      Error.SetError(CE_UnknownListWord, St);
+      Exit; // on arrête !
+    end;
+    // les éléments existent-ils ?
+    if (N > Count) or (N < 1) then
+      // [### Erreur: hors bornes ###]
+      Error.SetError(CE_BadItem, RawStr, N)
+    else
+    for Li := 0 to (Count - 1) do // on reconstruit la liste
+    begin
+      if Li = (N - 1) then // c'est le point de remplacement ?
       begin
-        S1 := St;
-        if (Result <> CBeginList) and (S1 <> EmptyStr) then
-          S1 := CBlank + S1;
-        Result := Result + S1; // on remplace
+        LSt1 := St;
+        if (Result <> CBeginList) and (LSt1 <> EmptyStr) then
+          LSt1 := CBlank + LSt1;
+        Result := Result + LSt1; // on remplace
       end
       else
       begin
-        S2 := Get(I-1);
-        if (Result <> CBeginList) and (S2 <> EmptyStr) then
-          S2 := CBlank + S2;
-        Result := Result + S2; // on ajoute l'élément suivant
+        LSt2 := Get(Li);
+        if (Result <> CBeginList) and (LSt2 <> EmptyStr) then
+          LSt2 := CBlank + LSt2;
+        Result := Result + LSt2; // on ajoute l'élément suivant
       end;
     end;
   finally
@@ -814,19 +826,22 @@ function TGVList.SentenceLeft(const St: string): string;
 // SL mot0 [[sous-liste1] mot2 mot3 [sous-liste2]] =>
 // [mot0 [sous-liste1] mot2 mot3 [sous-liste2]]
 var
-  S: string;
+  LSt: string;
 begin
   Result := CBeginList;
   try
-    S := ToWBStr;
-    if (S <> EmptyStr) and (St <> EmptyStr) and (St <> CEmptyList) then
-      S := CBlank + S;
-    if fWord.IsValid(St) then // mot valide ?
-      Result := Result + St + S
-    else if fUtil.IsValid(St) then // ou liste valide ?
-      Result := Result + Copy(St, 2, Length(St) - 2) + S
+    LSt := ToWBStr;
+    if (LSt <> EmptyStr) and (St <> EmptyStr) and (St <> CEmptyList) then
+      LSt := CBlank + LSt;
+    fWord.Text := St;
+    if fWord.IsValid then // mot valide ?
+      Result := Result + St + LSt
     else
-      raise EGVListException.CreateFmt(ME_NoListWord, [St]); // erreur
+    if fUtil.IsValid(St) then // ou liste valide ?
+      Result := Result + fUtil.ListToStr(St) + LSt
+    else
+      // [### Erreur: ni une liste ni un mot ###]
+      Error.SetError(CE_UnknownListWord, St);
   finally
     Result := Result + CEndList;
   end;
@@ -838,19 +853,22 @@ function TGVList.SentenceRight(const St: string): string;
 // SR mot0 [[sous-liste1] mot2 mot3 [sous-liste2]] =>
 // [[sous-liste1] mot2 mot3 [sous-liste2] mot0]
 var
-  S: string;
+  LSt1, LSt2: string;
 begin
   Result := CBeginList;
   try
-    S := ToWBStr;
-    if (S <> EmptyStr) and (St <> EmptyStr) and (St <> CEmptyList) then
-      S := S + CBlank;
-    if fWord.IsValid(St) then // mot valide ?
-      Result := Result + S + St
-    else if fUtil.IsValid(St) then // ou liste valide ?
-      Result := Result + S + Copy(St, 2, Length(St) - 2)
+    LSt1 := ToWBStr;
+    if (LSt1 <> EmptyStr) and (St <> EmptyStr) and (St <> CEmptyList) then
+      LSt1 := LSt1 + CBlank;
+    fWord.Text := St;
+    if fWord.IsValid then // mot valide ?
+      Result := Result + LSt1 + St
     else
-      raise EGVListException.CreateFmt(ME_NoListWord, [St]); // erreur
+    if fUtil.ListToStr(St, LSt2) then // liste valide ?
+      Result := Result + LSt1 + LSt2
+    else
+      // [### Erreur: ni une liste ni un mot ###]
+      Error.SetError(CE_UnknownListWord, St);
   finally
     Result := Result + CEndList;
   end;
@@ -859,61 +877,61 @@ end;
 function TGVList.ShuffleItems: string;
 // *** mélange des éléments ***
 var
-  I: Integer;
-  L: TGVList;
+  Li: Integer;
+  LL: TGVList;
 begin
-  L := TGVList.Create; // création de la liste provisoire
+  LL := TGVList.Create; // création de la liste provisoire
   try
-    L.Text := ToStr; // on affecte la liste en cours
-    for I := 1 to Random(L.Count * 4) do
-      L.Exchange(Random(L.Count), Random(L.Count));// on échange
-    Result := L.ToStr; // on renvoie le résultat
+    LL.Text := RawStr; // on affecte la liste en cours
+    for Li := 0 to Random(LL.Count * 4) do
+      LL.Exchange(Random(LL.Count - 1), Random(LL.Count - 1));// on échange
+    Result := LL.ToStr; // on renvoie le résultat
   finally
-    L.Free;
+    LL.Free;
   end;
 end;
 
 function TGVList.SortItems: string;
 // *** tri de la liste ***
 var
-  L: TGVList;
+  LL: TGVList;
 begin
-  L := TGVList.Create; // création de la liste provisoire
+  LL := TGVList.Create; // création de la liste provisoire
   try
-    L.Text := ToStr; // on affecte la liste en cours
-    L.Sort; // on trie
-    Result := L.ToStr; // on renvoie le résultat
+    LL.Text := RawStr; // on affecte la liste en cours
+    LL.Sort; // on trie
+    Result := LL.ToStr; // on renvoie le résultat
   finally
-    L.Free; // libération de la liste provisoire
+    LL.Free; // libération de la liste provisoire
   end;
 end;
 
 function TGVList.ReverseItems: string;
 // *** inversion de la liste ***
 var
-  S: string;
+  Li: Integer;
 begin
   Result := EmptyStr; // chaîne vide
   try
-    for S in Self do
-      Result := S + CBlank + Result; // liste à l'envers
+    for Li := 0 to (Count - 1) do
+      Result := Get(Li) + CBlank + Result; // liste à l'envers
   finally
-    Result := CBeginList + Trim(Result) + CEndList; // on termine par le début !
+    Result := CBeginList + Trim(Result) + CEndList; // on termine par le début
   end;
 end;
 
 function TGVList.ToWBStr: string;
 // *** renvoie la liste sous forme de chaîne sans crochets ***
 var
-  S: string;
+  Li: Integer;
 begin
   BeginUpdate;
   Result := EmptyStr; // chaîne vide par défaut
   try
-    for S in Self do // on construit la liste sans les crochets
-      Result := Result + CBlank + S; // élément par élément
+    for Li := 0 to (Count - 1) do // on construit la liste sans les crochets
+      Result := Result + Get(Li) + CBlank; // élément par élément
   finally
-    Result := Trim(Result); // on nettoie les blancs superflus
+    Result := TrimRight(Result); // on nettoie les blancs superflus
     EndUpdate;
   end;
 end;
@@ -933,38 +951,50 @@ function TGVList.TwoAdd(const St1, St2: string): string;
 // *** ajoute deux valeurs à la liste ***
 // => utile pour les listes de propriétés
 var
-  S: string;
+  LSt: string;
 begin
   Result := CBeginList;
   try
-    fUtil.TestValue(St1); // liste ou mot valides 1
-    fUtil.TestValue(St2); // liste ou mot valides 2
-    S := ToWBStr;
-    if S = EmptyStr then
+    if not fUtil.IsValidValue(St1) then // liste ou mot valides 1
+    begin
+      // [### Erreur: ni une liste ni un mot ###]
+      Error.SetError(CE_UnknownListWord, St1);
+      Exit; // on arrête !
+    end;
+    if not fUtil.IsValidValue(St2) then // liste ou mot valides 2
+    begin
+      // [### Erreur: mot incorrect ###]
+      Error.SetError(CE_UnknownListWord, St2);
+      Exit; // on arrête !
+    end;
+    LSt := ToWBStr;
+    if LSt = EmptyStr then
       Result := Result + St1 + CBlank + St2
     else
       // on ajoute à la fin
-      Result := Result + S + CBlank + St1 + CBlank + St2;
+      Result := Result + LSt + CBlank + St1 + CBlank + St2;
   finally
     Result := Result + CEndList;
   end;
 end;
 
-function TGVList.TwoDelete(N: Integer): string;
+function TGVList.TwoDelete(const N: Integer): string;
 // *** enlève deux valeurs à la liste à partir de N ***
 // => utile pour les listes de propriétés
 var
-  I: Integer;
+  Li: Integer;
 begin
   Result := CBeginList; // début de la liste
   try
-    if (N > (Count - 1)) or (N < 1) then // les éléments existent-ils ?
-      raise EGVListException.CreateFmt(ME_TwoDelete, [N]) // erreur
+    // les éléments existent-ils ?
+    if ((N > (Count - 1)) or (N < 1)) then
+      // [### Erreur: liste trop courte ###]
+      Error.SetError(CIE_TwoDelete, RawStr, N)
     else
     begin
-      for I := 1 to Count do // on reconstruit la liste
-        if (I <> N) and (I <> N + 1) then // sans les deux éléments
-          Result := Result + Get(I - 1) + CBlank; // ajout
+      for Li := 0 to (Count - 1) do // on reconstruit la liste
+        if (Li <> (N - 1)) and (Li <> N) then // sans les deux éléments
+          Result := Result + Get(Li) + CBlank; // ajout
     end;
   finally
     Result := TrimRight(Result) + CEndList;
@@ -974,11 +1004,7 @@ end;
 function TGVList.UpperCase: string;
 // *** liste en majuscules ***
 begin
-{$IFDEF Delphi}
-  Result := SysUtils.AnsiUpperCase(ToStr);
-{$ELSE}
-  Result := UTF8UpperCase(ToStr);
-{$ENDIF}
+  Result := UTF8UpperCase(RawStr);
 end;
 
 { ========================================================== }
@@ -991,14 +1017,24 @@ begin
   inherited Create; // on hérite
   fWord := TGVWord.Create;  // mot de travail
   fSt := TGVString.Create; // chaîne de travail
+  fError := TGVErrors.Create; // gestionnaire d'erreurs créé
 end;
 
 destructor TGVListUtils.Destroy;
 // *** destruction ***
 begin
+  Error.Free; // on détruit le gestionnaire d'erreurs
   fWord.Free; // on libère le mot de travail
   fSt.Free; // idem pour la chaîne de travail
   inherited Destroy; // on hérite
+end;
+
+procedure TGVListUtils.Clear;
+// *** nettoyage ***
+begin
+  Error.Clear; // pas d'erreur
+  fWord.Clear; // mot nettoyé
+  fSt.Clear; // idem chaîne de travail
 end;
 
 function TGVListUtils.EmptyList: string;
@@ -1017,67 +1053,65 @@ end;
 function TGVListUtils.IsValid(const St: string): Boolean;
 // *** teste la validité d'une liste ***
 var
-  StTemp: string; // liste de travail
-  I: Integer; // caractère en cours
-  Lev: Integer; // niveau interne
+  LSt: string; // liste de travail
+  LLevel: Integer; // niveau interne
 begin
-  // on cherche les crochets
-  Result := (St <> EmptyStr) and (St[1] = CBeginList) and
-    (St[Length(St)] = CEndList);
+  // on cherche les crochets d'une chaîne non vide
+  Result := IsSimpleList(St);
+  fPos := 1; // pointe sur le début de la chaîne
   if not Result then
     Exit; // on sort si déjà une erreur
-      StTemp := Copy(St, 2, Length(St) - 2); // on retire les crochets
-  I := 1; // on pointe sur le premier caractère
+  LSt := Copy(St, 2, Length(St) - 2); // on retire les crochets
   // on boucle tant qu'il n'y a pas d'erreur et qu'il reste des caractères
-  while Result and (I <= Length(StTemp)) do
+  while Result and (fPos <= Length(LSt)) do
   begin
-    case StTemp[I] of
+    case LSt[fPos] of
       CBeginList: // *** début d'une sous-liste ? ***
         begin
-          Inc(I); // caractère suivant
-          Lev := 1; // premier niveau
-          while (Lev <> 0) and (I <= Length(StTemp)) do // autres niveaux ?
+          Inc(fPos); // caractère suivant
+          LLevel := 1; // premier niveau
+          while (LLevel <> 0) and (fPos <= Length(LSt)) do // autres niveaux ?
           begin
-            case StTemp[I] of
+            case LSt[fPos] of
               CLink: // un lien ?
-                Inc(I); // on le saute
+                Inc(fPos); // on le saute
               CBeginList:
-                Inc(Lev); // niveau suivant
+                Inc(LLevel); // niveau suivant
               CEndList:
-                Dec(Lev); // niveau précédent
+                Dec(LLevel); // niveau précédent
             end;
-            Inc(I); // caractère suivant
+            Inc(fPos); // caractère suivant
           end; // fin des autres niveaux
-          Result := (Lev = 0); // OK si niveau = 0
+          Result := (LLevel = 0); // OK si niveau = 0
         end;
       CBeginPar: // *** début d'une expression ? ***
         begin
-          Inc(I); // prochaine caractère
-          Lev := 1; // premier niveau
-          while Result and (Lev <> 0) and (I <= Length(StTemp)) do
+          Inc(fPos); // prochaine caractère
+          LLevel := 1; // premier niveau
+          while Result and (LLevel <> 0) and (fPos <= Length(LSt)) do
           // autres niveaux sans erreur ?
           begin
-            case StTemp[I] of
+            case LSt[fPos] of
               CLink: // un lien ?
-                Inc(I); // caractère suivant
+                Inc(fPos); // caractère suivant
               CBeginList, CEndList:
                 Result := False; // pas de liste dans une expression
               CBeginPar:
-                Inc(Lev); // niveau suivant
+                Inc(LLevel); // niveau suivant
               CEndPar:
-                Dec(Lev); // niveau précédent
+                Dec(LLevel); // niveau précédent
             end;
-            Inc(I); // caractère suivant
+            Inc(fPos); // caractère suivant
           end; // fin des autres niveaux
           if Result then
-            Result := (Lev = 0); // OK si niveau = 0 et pas d'erreur en amont
+            Result := (LLevel = 0); // OK si niveau = 0 et pas d'erreur en amont
         end;
       CLink: // *** un lien ? ***
-        Inc(I, 2); // on saute un caractère
+        Inc(fPos, 2); // on saute un caractère
       CEndList, CEndPar: // fin de liste ou de parenthèse ? => erreur
         Result := False; // mauvaise liste
     else // autres caractères
-      Inc(I); // on les ignore
+      Inc(fPos); // on les ignore
     end;
   end; // fin de la boucle
 end;
@@ -1086,7 +1120,8 @@ end;
 function TGVListUtils.IsValidValue(const St: string): Boolean;
 // *** vérifie que la valeur est soit une liste soit un mot corrects ***
 begin
-  Result := fWord.IsValid(St) or IsValid(St);
+  fWord.Text := St;
+  Result := fWord.IsValid or IsValid(St);
 end;
 
 function TGVListUtils.ListToStr(const St: string): string;
@@ -1096,7 +1131,18 @@ begin
   if IsValid(St) then // liste valide ?
     Result := Copy(St, 2, Length(St) - 2) // on enlève les crochets
   else
-    raise EGVListUtilsException.CreateFmt(ME_BadList, [St]); // erreur
+    // [### Erreur: liste invalide ###]
+    Error.SetError(CE_BadList, St, fPos);
+end;
+
+function TGVListUtils.ListToStr(const St: string; out ASt: string): Boolean;
+// *** change une liste en chaîne ***
+begin
+  Result := IsValid(St); // liste valide ?
+  if  Result then // liste valide ?
+    ASt := Copy(St, 2, Length(St) - 2) // on enlève les crochets
+  else
+    ASt := EmptyStr; // vide si erreur
 end;
 
 function TGVListUtils.ListToWord(const St: string): string;
@@ -1104,7 +1150,8 @@ function TGVListUtils.ListToWord(const St: string): string;
 begin
   Result := EmptyStr; // chaîne vide par défaut
   fSt.Str := ListToStr(St); // normalise la conversion de la liste
-  Result := fSt.Str; // résultat récupéré
+  if Error.OK then // pas d'erreur ?
+    Result := fSt.Str; // résultat récupéré;
 end;
 
 function TGVListUtils.StrToList(const St: string): string;
@@ -1112,14 +1159,8 @@ function TGVListUtils.StrToList(const St: string): string;
 begin
   Result := CBeginList + St + CEndList; // on ajoute les crochets
   if not IsValid(Result) then // liste non valide ?
-    raise EGVListUtilsException.CreateFmt(ME_BadList, [Result]); // erreur
-end;
-
-procedure TGVListUtils.TestValue(const St: string);
-// *** test d'une valeur avec exception ***
-begin
-  if not IsValidValue(St) then // mot ou liste ?
-    raise EGVListUtilsException.CreateFmt(ME_NoListWord, [St]); // sinon erreur
+    // [### Erreur: liste invalide ###]
+    Error.SetError(CE_BadList, St, fPos);
 end;
 
 function TGVListUtils.WordToList(const St: string): string;

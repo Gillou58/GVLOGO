@@ -23,23 +23,24 @@ Sommaire :
 
 GVLOGO est un logiciel qui implémente pour Windows (32 et 64 bits) et Linux une version du langage LOGO. Il est par ailleurs fourni avec tous les programmes sources et les utilitaires nécessaires à la compréhension de son fonctionnement.
 
-Le langage utilisé pour son développement est le PASCAL. La réalisation utilise le logiciel libre LAZARUS qui repose lui-même sur FREEPASCAL. Ce sont deux produits suffisamment stables pour intéreser tout programmeur. Qui plus est, ils sont entièrement gratuits.
+Le langage utilisé pour son développement est le PASCAL. La réalisation utilise l’EDI LAZARUS qui repose lui-même sur le compilateur FREEPASCAL. Ce sont deux produits suffisamment stables pour intéresser tout programmeur. Qui plus est, ils sont entièrement gratuits.
 
 Les objectifs sont donc :
-* offrir une version gratuite et opérationnelle d'un dialecte de LOGO.
-* permettre à un programmeur inexpérimenté de prendre conscience des difficultés rencontrées lors de la mise en oeuvre d'un tel projet.
+* d’offrir une version gratuite et opérationnelle d'un dialecte de LOGO.
+* de permettre à un programmeur inexpérimenté de prendre conscience des difficultés rencontrées lors de la mise en oeuvre d'un tel projet.
 
 
 2. LICENCE
 
-Les documents et logiciels du dossier GVLOGO sont protégés selon les termes de la licence GNU GPL qui doit être présente dans le dossier "0- Licence GNU GPL".
+Les documents et logiciels du dossier GVLOGO sont protégés selon les termes de la licence GNU GPL qui doit être présente dans le dossier
+"GNU GPL".
 
 a. Version anglaise valable juridiquement :
 
 GVLOGO - logiciel  de programmation
-Copyright (C) 2014 Gilles VASSEUR — Tous droits réservés.
+Copyright (C) 2014-2015 Gilles VASSEUR — Tous droits réservés.
 
-    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
     This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
@@ -58,32 +59,37 @@ Copyright (C) 2014 Gilles VASSEUR — Tous droits réservés.
 
 3. Contenu des répertoires
 
-a. Répertoire GNU GPL : contient la licence GNU GPL sous plusieurs formats, en anglais et en français.
+a. Le répertoire "3rdparty" contient les bibliothèques nécessaires au fonctionnement de GVLOGO.
 
-b. Répertoire medias : contient les images nécessaires pour les programmes, mais aussi pour la documentation.
+b. Répertoire "docs" : contient la documentation de GVLOGO (programmation et mode d'emploi).
 
-c. Répertoire docs : contient la documentation de GVLOGO (programmation et mode d'emploi.
+c. Répertoire "GNU GPL" : contient la licence GNU GPL sous plusieurs formats, en anglais et en français.
 
-d. Répertoire tests : contient tous les logiciels de tests des unités de GVLOGO.
+d. Répertoire "medias" : contient les images nécessaires pour les programmes, mais aussi pour la documentation.
+
+e. Répertoire "tests" : contient tous les logiciels de tests des unités de GVLOGO.
+
+   => testgverrors : test du traitement des erreurs
+
    => testgvwords : test des mots
 
    => testgvlists : test des listes
 
    => testgvproplists : test des listes de propriétés
 
-   => testgvturtles : test de la tortue graphique (version avec outils de base fournis)
-
-   => testgvturtles2 : test de la tortue graphique (version avec la bibliothèque BGRABITMAP)
+   => testgvturtles : test de la tortue graphique (version avec la bibliothèque BGRABITMAP)
 
    => testeasyturtle : programme de dessin pour enfants (test approfondi de la tortue graphique en version simple)
 
    => testgveval : tests de l’évaluation d’expressions 
 
-   => testkernel : test du noyau
+   => testgvkernel : test du noyau de GVLOGO
+   
+   => testgvlocvars : test des variables locales
 
-⇨ Testinterpreter : test de l’interpréteur (*** travail en cours ***)
+   => testinterpreter : test de l’interpréteur (*** travail en cours ***)
 
-d. Répertoire units : contient toutes les unités nécessaires à GVLOGO.
+f. Répertoire "units" : contient toutes les unités nécessaires à GVLOGO.
 
 
 4. Contact
@@ -94,6 +100,6 @@ Vous pouvez aussi vous rendre sur mon site pour les éventuelles mises à jour :
 
 Les suggestions, modifications, propositions et questions sont les bienvenues.
 
-Gilles VASSEUR, le 1 décembre 2014
+Gilles VASSEUR, le 8 janvier 2015
 
  

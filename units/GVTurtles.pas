@@ -2,41 +2,43 @@
   |                                                                        |
   |                  G V S O F T                                           |
   |                  Projet : GVLogo                                       |
-  |                  Description : Tortue graphique                        |
-  |                  UnitÈ : GVTurtles.pas                                 |
+  |                  Description : Gestion de la tortue graphique          |
+  |                  Unit√© : GVTurtles.pas                                 |
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
-  |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    08-08-2014 12:29:48                          |
+  |                  Copyright : ¬© G. VASSEUR 2014-2015                    |
+  |                  Date:    23-12-2014 18:00:00                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
 
+// HISTORIQUE
+// 23/12/2014 - 1.0.0 - premi√®re version op√©rationnelle
+
 // GVTurtles - part of GVLOGO
-// Copyright (C) 2014 Gilles VASSEUR
+// Copyright (C) 2014-2015 Gilles VASSEUR
 //
-// This program is free software: you can redistribute it and/or modify it under the terms of
-// the GNU General Public License as published by the Free Software Foundation,
-// either version 3 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation, either version 3 of the License,
+// or (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License along with this program.
-//  If not, see <http://www.gnu.org/licenses/>.
-  
-{$I GVDefines.inc}
+// You should have received a copy of the GNU General Public License
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
 
-{$IFNDEF Delphi}
-{$mode objfpc}{$H+}
-{$ENDIF}
+{$I GVDefines.inc} // fichier des d√©finitions pr√©alables
 
 unit GVTurtles;
 
-// UnitÈ de la tortue graphique de GVLOGO
 //
-// ##############################################################
+// Unit√© de la tortue graphique de GVLOGO
 //
 // La tortue graphique permet de dessiner sur une surface
 // en fonction d'ordres simples.
@@ -45,1010 +47,960 @@ unit GVTurtles;
 interface
 
 uses
-  Classes, SysUtils, Graphics, ExtCtrls
-{$IFDEF Delphi}
-    , System.Types, System.UITypes, PNGImage
-{$ENDIF}
-    , GVConsts;
+  Classes, SysUtils, Graphics,
+  BGRABitmap, BGRABitmapTypes, // biblioth√®que graphique
+  GVConsts;
 
 type
   // changement de la tortue
-  TTurtleEvent = procedure(Sender: TObject; cX, cY, cHeading: Integer;
-    cVisible, cDown: Boolean; cColor: TColor) of object;
+  TTurtleEvent = TNotifyEvent;
   // avant le changement de la tortue
   TTurtleBeforeEvent = procedure(Sender: TObject; cHeading: Integer) of object;
-  // changement du fond d'Ècran
-  TTurtleBackGroundEvent = procedure(Sender: TObject; bkColor: TColor)
-    of object;
 
-  // dÈfinition d'une tortue
+  // *** d√©finition d'une tortue ***
   TTurtle = record
     rSaved: Boolean; // drapeau de sauvegarde
     rX: Extended; // abscisse
-    rY: Extended; // ordonnÈe
+    rY: Extended; // ordonn√©e
     rKind: TTurtleKind; // type de tortue
     rSize: Integer; // taille de la tortue
-    rVisible: Boolean; // drapeau de visibilitÈ
+    rVisible: Boolean; // drapeau de visibilit√©
     rHeading: Extended; // direction
-    rPenDown: Boolean; // drapeau de crayon baissÈ
+    rPenDown: Boolean; // drapeau de crayon baiss√©
     rPenRubber: Boolean; // drapeau d'effacement
-    rPenReverse: Boolean; // drapeau d'inversion
-    rScaleX: Integer; // Èchelle des X
-    rScaleY: Integer; // Èchelle des Y
+    rScaleX: Integer; // √©chelle des X
+    rScaleY: Integer; // √©chelle des Y
     rFilled: Boolean; // remplissage
+    rPenWidth: Integer; // largeur de crayon
     rBrush: TBrush; // type de brosse
     rPen: TPen; // type de crayon
     rFont: TFont; // type de fonte
   end;
 
-  { TGVTurtle - la tortue }
-
-  TGVTurtle = class(TImage)
-  private
-    fX: Real; // abscisse de la tortue
-    fY: Real; // ordonnÈe de la tortue
-    fTurtleKind: TTurtleKind; // type de tortue
-    fTurtleVisible: Boolean; // visibilitÈ de la tortue
-    fHeading: Real; // cap de la tortue
-    fSize: Integer; // taille de la tortue
-    fPenDown: Boolean; // crayon levÈ/baissÈ
-    fScreen: TScreenTurtle; // Ècran de la tortue
-    fScaleX: Integer; // Èchelle des X
-    fScaleY: Integer; // Èchelle des Y
-    fPenRubber: Boolean; // gomme du crayon
-    fPenReverse: Boolean; // inversion du crayon
-    fOnchange: TTurtleEvent; // changement notifiÈ
-    fSavedTurtle: TTurtle; // sauvegarde d'une tortue
-    fScreenColor: TColor; // couleur de l'Ècran
-    fFilled: Boolean; // drapeau de remplissage
-    fTempColor: TColor; // sauvegarde provisoire de la couleur (PenRubber)
-{$IFDEF Delphi}
-    fTurtleImg: TPngImage; // image de la tortue
-    fTempImg: TBitmap; // image temporaire
-    fOldImg: TBitmap; // image conservÈe
-{$ELSE}
-    fTurtleImg: TCustomBitmap;
-    fTempImg: TCustomBitmap; // image temporaire
-    fOldImg: TCustomBitmap; // image conservÈe
-{$ENDIF}
-    fOnBeforeChange: TTurtleBeforeEvent; // notification avant cap changÈ
-    fOnBackGroundChange: TTurtleBackGroundEvent; // changement de fond
-    fPenColor: TColor; // couleur du crayon
-    fSpeed: Integer; // vitesse de la tortue
-    function GetCoordX: Integer; // abscisse de la tortue
-    function GetCoordY: Integer; // ordonnÈe de la tortue
-    procedure SetCoordX(const Value: Integer); // abscisse de la tortue
-    procedure SetCoordY(const Value: Integer); // ordonnÈe de la tortue
-    procedure SetTurtleKind(const Value: TTurtleKind); // type de tortue
-    procedure SetTurtleVisible(const Value: Boolean); // visibilitÈ de la tortue
-    procedure SetHeading(const Value: Real); // cap
-    procedure SetSize(const Value: Integer); // taille de la tortue
-    procedure SetPenReverse(const Value: Boolean); // inversion de l'Ècriture
-    procedure SetRubberPen(const Value: Boolean); // la tortue efface
-    procedure SetScreenColor(const Value: TColor); // couleur d'Ècran
-    procedure SetPenDown(const Value: Boolean); // crayon baissÈ ou levÈ
-    procedure SetFilled(const Value: Boolean); // remplissage
-    procedure SetPenColor(const Value: TColor); // couleur du crayon
-    procedure SetSpeed(const Value: Integer); // vitesse de dessin de la tortue
-  protected
-    // change l'ordonnÈe pour le nouveau repËre
-    function cY(Y: Integer): Integer;
-    // effectue un dÈplacement
-    procedure DoGo(const X, Y: Integer);
-    // coordonnÈes dans limites ?
-    function IsWithinLimits(const X, Y: Integer): Boolean;
-    // montre/cache la tortue png
-    procedure ToggleTurtlePNG;
-    // montre/cache la tortue triangle
-    procedure ToggleTurtleTriangle;
-    // gestion du changement
-    procedure Change; dynamic;
-    // gestion de l'action avant le changement
-    procedure BeforeChange; dynamic;
-    // gestion du changement de fond
-    procedure BackGroundChange; dynamic;
-  public
-    // crÈation
-    constructor Create(AOwner: Tcomponent); override;
-    // destruction
-    destructor Destroy; override;
-    // dÈplacement en Ècrivant
-    procedure LineTo(X, Y: Integer);
-    // dÈplacement sans Ècrire
-    procedure MoveTo(X, Y: Integer);
-    // rÈinitialisation de la tortue
-    procedure Reinit;
-    // tortue ‡ l'origine
-    procedure Home;
-    // nettoyage de l'Ècran
-    procedure Wipe;
-    // la tortue se dÈplace
-    procedure Move(const Value: Real);
-    // la tortue tourne
-    procedure Turn(const Value: Real);
-    // fixe les coordonnÈes de la tortue
-    procedure SetPos(const X, Y: Integer);
-    // renvoie le cap vers un point
-    function Towards(const X, Y: Integer): Real;
-    // renvoie la distance de la tortue ‡ un point donnÈ
-    function Distance(const X, Y: Integer): Real;
-    // dessine un rectangle
-    procedure Rectangle(const X1, Y1, X2, Y2: Integer); overload;
-    // dessine un rectangle ‡ l'emplacement de la tortue
-    procedure Rectangle(const X2, Y2: Integer); overload;
-    // dessine un carrÈ
-    procedure Square(const X1, Y1, L: Integer); overload;
-    // dessine un carrÈ ‡ l'emplacement de la tortue
-    procedure Square(const L: Integer); overload;
-    // dessine un rectangle arrondi
-    procedure RoundRect(const X1, Y1, X2, Y2: Integer); overload;
-    // dessine un rectangle arrondi ‡ l'emplacement de la tortue
-    procedure RoundRect(const X2, Y2: Integer); overload;
-    // dessine une ellipse
-    procedure Ellipse(const X1, Y1, X2, Y2: Integer); overload;
-    // dessine une ellipse ‡ l'emplacement de la tortue
-    procedure Ellipse(const X2, Y2: Integer); overload;
-    // dessine un cercle
-    procedure Circle(const X1, Y1, R: Integer); overload;
-    // dessine un cercle ‡ l'emplacement de la tortue
-    procedure Circle(const R: Integer); overload;
-    // dessine un arc d'ellipse
-    procedure Arc(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer); overload;
-    // dessine un arc d'ellipse ‡ l'emplacement de la tortue
-    procedure Arc(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;
-    // dessine une corde d'ellipse
-    procedure Chord(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer); overload;
-    // dessine une corde d'ellipse ‡ l'emplacement de la tortue
-    procedure Chord(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;
-    // dessine une section d'ellipse
-    procedure Pie(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer); overload;
-    // dessine une section d'ellipse ‡ l'emplacement de la tortue
-    procedure Pie(const X2, Y2, X3, Y3, X4, Y4: Integer); overload;
-    // dessine un polygone
-    procedure Polygon(Points: array of TPoint);
-    // dessine un polygone non couvrant
-    procedure PolyLine(Points: array of TPoint);
-    // sauvegarde la tortue
-    procedure SaveTurtle;
-    // rÈcupËre une tortue sauvÈe
-    procedure ReloadTurtle(const Clean: Boolean);
-  published
-    // abscisse de la tortue
-    property CoordX: Integer read GetCoordX write SetCoordX;
-    // ordonnÈe de la tortue
-    property CoordY: Integer read GetCoordY write SetCoordY;
-    // type de tortue
-    property Kind: TTurtleKind read fTurtleKind write SetTurtleKind
-      default tkTriangle;
-    // dessin alternatif de la tortue
-{$IFDEF Delphi}  // image en cours de la tortue PNG
-    property TurtleImg: TPngImage read fTurtleImg write fTurtleImg;
-{$ELSE}
-    property TurtleImg: TCustomBitmap read fTurtleImg write fTurtleImg;
-{$ENDIF}
-    // visibilitÈ de la tortue
-    property TurtleVisible: Boolean read fTurtleVisible write SetTurtleVisible
-      default True;
-    // direction de la tortue
-    property Heading: Real read fHeading write SetHeading;
-    // taille de la tortue
-    property Size: Integer read fSize write SetSize default CDefaultSize;
-    // drapeau d'Ècriture
-    property PenDown: Boolean read fPenDown write SetPenDown default True;
-    // type de zone de dÈplacement
-    property Screen: TScreenTurtle read fScreen write fScreen default teWin;
-    // Èchelle des X
-    property ScaleX: Integer read fScaleX write fScaleX default CDefaultScale;
-    // Èchelle des Y
-    property ScaleY: Integer read fScaleY write fScaleY default CDefaultScale;
-    // Ètat de la gomme
-    property PenRubber: Boolean read fPenRubber write SetRubberPen
-      default False;
-    // Ètat de l'inversion d'Ècriture
-    property PenReverse: Boolean read fPenReverse write SetPenReverse
-      default False;
-    // couleur du crayon
-    property PenColor: TColor read fPenColor write SetPenColor default clRed;
-    // Ètat du remplissage
-    property Filled: Boolean read fFilled write SetFilled default True;
-    // vitesse de dessin de la tortue
-    property Speed: Integer read fSpeed write SetSpeed default CMaxSpeed div 2;
-    // couleur du fond d'Ècran
-    property ScreenColor: TColor read fScreenColor write SetScreenColor;
-    // ÈvÈnement aprËs le changement de la tortue
-    property OnChange: TTurtleEvent read fOnchange write fOnchange;
-    // ÈvÈnement avant le changement de la tortue
-    property OnBeforeChange: TTurtleBeforeEvent read fOnBeforeChange
-      write fOnBeforeChange;
-    // ÈvÈnement de changement du fond
-    property OnBackGroundChange: TTurtleBackGroundEvent read fOnBackGroundChange
-      write fOnBackGroundChange;
+  // *** TGVTurtle - la tortue ***
+  TGVTurtle = class(TObject)
+    strict private
+      fHeight: Integer; // hauteur de la surface d'origine
+      fPNGTurtle: TBGRABitmap; // tortue PNG en cours
+      fWidth: Integer; // largeur de la surface d'origine
+      BckImg: TBGRABitmap; // fond
+      DrwImg: TBGRABitmap; // surface dessin√©e
+      TtlImg: TBGRABitmap; // dessin de la tortue
+      ActualImg: TBGRABitmap; // surface r√©elle
+      fX: Double; // abscisse de la tortue
+      fY: Double; // ordonn√©e de la tortue
+      fOnchange: TTurtleEvent; // changement notifi√©
+      fScreen: TScreenTurtle; // mode de l'√©cran
+      fTurtleKind: TTurtleKind; // type de tortue
+      fTurtleVisible: Boolean; // visibilit√© de la tortue
+      fHeading: Double; // cap de la tortue
+      fSize: Integer; // taille de la tortue
+      fPenDown: Boolean; // crayon lev√©/baiss√©
+      fScaleX: Integer; // √©chelle des X
+      fScaleY: Integer; // √©chelle des Y
+      fSavedTurtle: TTurtle; // sauvegarde d'une tortue
+      fScreenColor: TColor; // couleur de l'√©cran
+      fFilled: Boolean; // drapeau de remplissage
+      fTempColor: TColor; // sauvegarde temporaire de la couleur d'√©criture
+      fPenRubber: Boolean; // gomme du crayon
+      fOnBeforeChange: TTurtleBeforeEvent; // notification avant cap chang√©
+      fPenColor: TColor; // couleur du crayon
+      fPenWidth: Integer; // largeur du crayon
+      fSpeed: Integer; // vitesse de la tortue
+      function GetCoordX: Double;
+      function GetCoordY: Double;
+      function GetImg: TBGRABitmap;
+      procedure SetCoordX(AValue: Double);
+      procedure SetCoordY(AValue: Double);
+      procedure SetFilled(AValue: Boolean);
+      procedure SetHeading(AValue: Double);
+      procedure SetPenColor(AValue: TColor);
+      procedure SetPenDown(AValue: Boolean);
+      procedure SetPenWidth(AValue: Integer);
+      procedure SetScreen(AValue: TScreenTurtle);
+      procedure SetScreenColor(AValue: TColor);
+      procedure SetSize(AValue: Integer);
+      procedure SetSpeed(AValue: Integer);
+      procedure SetTurtleKind(AValue: TTurtleKind);
+      procedure SetTurtleVisible(AValue: Boolean);
+      procedure SetRubberPen(AValue: Boolean); // la tortue efface
+      // coordonn√©es dans limites ?
+      function IsWithinLimits(X, Y: Double): Boolean;
+      // effectue un d√©placement
+      procedure DoGo(X, Y: Double);
+      // d√©placement en √©crivant
+      procedure LineTo(X, Y: Double);
+      // d√©placement sans √©crire
+      procedure MoveTo(X, Y: Double);
+      // arc d'ellipse (b : d√©but, e : fin - en degr√©s)
+      procedure ArcAntialias(x, y, rx, ry: single; b, e: word;
+          c: TBGRAPixel; w: single);
+      // arc d'ellipse rempli (b : d√©but, e : fin - en degr√©s)
+      procedure FillArcAntiAlias(x, y, rx, ry: single; b, e: word;
+        c: TBGRAPixel);
+      // portion d'ellipse (b : d√©but, e : fin - en degr√©s)
+      procedure PieAntialias(x, y, rx, ry: single; b, e: word;
+          c: TBGRAPixel; w: single);
+      // portion d'ellipse remplie (b : d√©but, e : fin - en degr√©s)
+      procedure FillPieAntiAlias(x, y, rx, ry: single; b, e: word;
+        c: TBGRAPixel);
+    protected
+      // change l'ordonn√©e pour le nouveau rep√®re
+      function cY(Y: Integer): Integer; virtual;
+      // on dessine la tortue triangulaire
+      procedure DrawTriangleTurtle; virtual;
+      // tortue PNG
+      procedure DrawPNGTurtle; virtual;
+      // gestion du changement
+      procedure Change; dynamic;
+      // avant le changement
+      procedure BeforeChange; dynamic;
+    public
+      constructor Create(Width, Height: Integer); // cr√©ation
+      destructor Destroy; override; // destructeur
+      procedure ReInit; // r√©initialisation de l'objet
+      // inversion de l'√©criture
+      procedure PenReverse;
+      // la tortue se d√©place
+      procedure Move(Value: Double);
+      // fixe les coordonn√©es de la tortue
+      procedure SetPos(X, Y: Double);
+      // la tortue tourne
+      procedure Turn(Value: Double);
+      // tortue √† l'origine
+      procedure Home;
+      // nettoyage de l'√©cran
+      procedure Wipe;
+      // sauvegarde de la tortue
+      procedure SaveTurtle;
+      // r√©cup√®re une tortue sauv√©e
+      procedure ReloadTurtle(Clean: Boolean);
+      // renvoie le cap vers un point
+      function Towards(X, Y: Integer): Double;
+      // renvoie la distance de la tortue √† un point donn√©
+      function Distance(X, Y: Integer): Double;
+      // dessine un rectangle
+      procedure Rectangle(X1, Y1, X2, Y2: Integer); overload;
+      // dessine un rectangle √† l'emplacement de la tortue
+      procedure Rectangle(X2, Y2: Integer); overload;
+      // dessine un carr√©
+      procedure Square(X1, Y1, L: Integer); overload;
+      // dessine un carr√© √† l'emplacement de la tortue
+      procedure Square(L: Integer); overload;
+      // dessine un rectangle arrondi
+      procedure RoundRect(X1, Y1, X2, Y2: Integer); overload;
+      // dessine un rectangle arrondi √† l'emplacement de la tortue
+      procedure RoundRect(X2, Y2: Integer); overload;
+      // dessine une ellipse
+      procedure Ellipse(X1, Y1, X2, Y2: Integer); overload;
+      // dessine une ellipse √† l'emplacement de la tortue
+      procedure Ellipse(X2, Y2: Integer); overload;
+      // dessine un cercle
+      procedure Circle(X1, Y1, R: Integer); overload;
+      // dessine un cercle √† l'emplacement de la tortue
+      procedure Circle(R: Integer); overload;
+      // dessine un arc d'ellipse
+      procedure Arc(X1, Y1, X2, Y2, X3, Y3: Integer); overload;
+      // dessine un arc d'ellipse √† l'emplacement de la tortue
+      procedure Arc(X2, Y2, X3, Y3: Integer); overload;
+      // dessine une section d'ellipse
+      procedure Pie(X1, Y1, X2, Y2, X3, Y3: Integer); overload;
+      // dessine une section d'ellipse √† l'emplacement de la tortue
+      procedure Pie(X2, Y2, X3, Y3: Integer); overload;
+      // texte affich√© sur l'√©cran de la tortue
+      procedure Text(const St: string; X,Y, Angle: Integer); overload;
+      // texte affich√© √† l'emplacement de la tortue
+      procedure Text(const St: string); overload;
+    published
+      // abscisse de la tortue
+      property CoordX: Double read GetCoordX write SetCoordX;
+      // ordonn√©e de la tortue
+      property CoordY: Double read GetCoordY write SetCoordY;
+      // type de tortue
+      property Kind: TTurtleKind read fTurtleKind write SetTurtleKind
+        default tkTriangle;
+      // visibilit√© de la tortue
+      property TurtleVisible: Boolean read fTurtleVisible write SetTurtleVisible
+        default True;
+      // direction de la tortue
+      property Heading: Double read fHeading write SetHeading;
+      // taille de la tortue
+      property Size: Integer read fSize write SetSize default CDefaultSize;
+      // drapeau d'√©criture
+      property PenDown: Boolean read fPenDown write SetPenDown default True;
+      // type de zone de d√©placement
+      property Screen: TScreenTurtle read fScreen write SetScreen
+        default teWin;
+      // √©chelle des X
+      property ScaleX: Integer read fScaleX write fScaleX default CDefaultScale;
+      // √©chelle des Y
+      property ScaleY: Integer read fScaleY write fScaleY default CDefaultScale;
+      // √©tat de la gomme
+      property PenRubber: Boolean read fPenRubber write SetRubberPen
+        default False;
+     // couleur du crayon
+      property PenColor: TColor read fPenColor write SetPenColor
+        default CDefaultPenColor;
+      // largeur du crayon
+      property PenWidth: Integer read fPenWidth write SetPenWidth default
+        CDefaultPenWidth;
+      // √©tat du remplissage
+      property Filled: Boolean read fFilled write SetFilled default True;
+      // vitesse de dessin de la tortue
+      property Speed: Integer read fSpeed write SetSpeed default CMaxSpeed;
+      // couleur du fond d'√©cran
+      property ScreenColor: TColor read fScreenColor write SetScreenColor
+        default CDefaultBackColor;
+      // √©v√©nement apr√®s le changement de la tortue
+      property OnChange: TTurtleEvent read fOnchange write fOnchange;
+      // √©v√©nement avant le changement de la tortue
+      property OnBeforeChange: TTurtleBeforeEvent read fOnBeforeChange
+        write fOnBeforeChange;
+      // surface de dessin de la tortue
+      property TurtleBitmap: TBGRABitmap read GetImg;
+      // tortue PNG
+      property PNGTurtle: TBGRABitmap read fPNGTurtle write fPNGTurtle;
   end;
+
+  // couleur en couleur locale
+  function RGBToIntColor(N: TColor): Integer;
+  // couleur locale en couleur
+  function IntColorToRGB(N: Integer): TColor;
 
 implementation
 
-uses
-  Math, Controls;
+uses math, BGRAPen;
 
-{ TGVTurtle }
-
-procedure TGVTurtle.Arc(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer);
-// *** dessine un arc de cercle ***
-var
-  TV: Boolean;
+function RGBToIntColor(N: TColor): Integer;
+// *** couleur en couleur locale ***
 begin
-  TV := TurtleVisible; // sauve l'Ètat de la tortue
-  try
-    TurtleVisible := False; // tortue invisible
-    Canvas.Arc(X1, cY(Y1), X2, cY(Y2), X3, cY(Y3), X4, cY(Y4)); // dessine
-  finally
-    TurtleVisible := TV; // rÈtablit la tortue
+  case N of
+    clBlack: Result := 0; // noir
+    clAqua: Result := 1; // Aqua
+    clBlue: Result := 2; // Bleu
+    clCream: Result := 3; // Cr√®me
+    clFuchsia: Result := 4; // Fuchsia
+    clGray: Result := 5; // Gris
+    clGreen: Result := 6; // Vert
+    clLime: Result := 7; // Vert citron
+    clMaroon: Result := 8; // Marron
+    clMedGray: Result := 9; // Gris moyen
+    clMoneyGreen: Result := 10; // Vert menthe
+    clNavy: Result := 11; // Bleu marine
+    clOlive: Result := 12; // Vert olive
+    clPurple: Result := 13; // Violet
+    clRed: Result := 14; // Rouge
+    clSilver: Result := 15; // Argent
+    clSkyBlue: Result := 16; // Bleu ciel
+    clTeal: Result := 17; // Sarcelle
+    clWhite: Result := 18; // Blanc
+    clYellow: Result := 19; // Jaune
+  else
+    Result := 0; // couleur noire par d√©faut
   end;
 end;
 
-procedure TGVTurtle.Arc(const X2, Y2, X3, Y3, X4, Y4: Integer);
-// *** dessine un arc de cercle ‡ l'emplacement de la tortue ***
+function IntColorToRGB(N: Integer): TColor;
+// *** couleur locale en couleur ***
+const
+  CColors: array[0..19] of TColor = (clBlack, clAqua, clBlue, clCream,
+    clFuchsia, clGray, clGreen, clLime, clMaroon, clMedGray,
+    clMoneyGreen, clNavy, clOlive, clPurple, clRed, clSilver, clSkyBlue,
+    clTeal, clWhite, clYellow);
 begin
-  Arc(CoordX, CoordY, CoordX + X2, CoordY - Y2, X3, Y3, X4, Y4);
+  if (N < 0) or (N > 19) then
+    N := 0; // noire si hors bornes
+  Result := CColors[N];
 end;
 
-procedure TGVTurtle.BackGroundChange;
-// *** changement de fond ***
+{ TGVTurtle }
+
+procedure TGVTurtle.SetScreen(AValue: TScreenTurtle);
+// *** changement du mode d'√©cran ***
 begin
-  if Assigned(fOnBackGroundChange) then
-    fOnBackGroundChange(Self, ScreenColor);
+  if fScreen = AValue then // la valeur doit √™tre nouvelle
+    Exit; // sinon sortie
+  fScreen := AValue; // nouvelle valeur pour le mode d'√©cran
+  Change; // changement notifi√©
+end;
+
+function TGVTurtle.GetCoordX: Double;
+// *** renvoie l'abscisse (X) ***
+begin
+  Result := fX;
+end;
+
+function TGVTurtle.GetCoordY: Double;
+// *** renvoie l'ordonn√©e (Y) ***
+begin
+  Result := fY;
+end;
+
+function TGVTurtle.GetImg: TBGRABitmap;
+// *** r√©cup√©ration de l'image ***
+begin
+  with ActualImg do // on proc√®de par couches
+  begin
+    PutImage(0,0,BckImg,dmDrawWithTransparency); // le fond
+    PutImage(0,0,DrwImg,dmDrawWithTransparency); // le dessin
+    if TurtleVisible then // tortue visible ?
+    begin
+      case Kind of
+        tkTriangle: DrawTriangleTurtle; // on dessine la tortue triangulaire
+        tkPNG: DrawPNGTurtle; // tortue PNG
+      end;
+      PutImage(0,0,TtlImg,dmDrawWithTransparency); // on l'affiche
+    end;
+  end;
+  Result := ActualImg; // on renvoie l'image
+end;
+
+procedure TGVTurtle.SetCoordX(AValue: Double);
+// *** fixe l'abscisse de la tortue ***
+begin
+  DoGo(AValue, CoordY); // d√©place la tortue sans changer l'ordonn√©e
+end;
+
+procedure TGVTurtle.SetCoordY(AValue: Double);
+// *** fixe l'ordonn√©e de la tortue ***
+begin
+  DoGo(CoordX, AValue); // d√©place la tortue sans changer l'abscisse
+end;
+
+procedure TGVTurtle.SetFilled(AValue: Boolean);
+// *** remplissage des formes ***
+begin
+  if fFilled = AValue then  // valeur inchang√©e ?
+    Exit; // on sort
+  fFilled := AValue; // nouvelle valeur
+  with DrwImg.Canvas.Brush do // on modifie la brosse
+  begin
+    if fFilled then  // remplissage ?
+      Style := bsSolid // brosse solide
+    else
+      Style := bsClear; // brosse transparente
+  end;
+  Change; // changement notifi√©
+end;
+
+procedure TGVTurtle.SetHeading(AValue: Double);
+// *** fixe le cap de la tortue ***
+begin
+  if fHeading = AValue then // si valeur inchang√©e
+    Exit; // on sort
+  fHeading := Frac(AValue / 360) * 360; // change le cap
+  if fHeading < 0 then // on normalise la valeur de l'orientation [0..360]
+    fHeading := fHeading + 360;
+  BeforeChange; // pour le dessin correct de la tortue
+  Change; // changement notifi√©
+end;
+
+procedure TGVTurtle.SetPenColor(AValue: TColor);
+// *** couleur du crayon ***
+begin
+  if fPenColor = AValue then // valeur inchang√©e ?
+    Exit; // on sort
+  fPenColor := AValue; // nouvelle valeur de la couleur du crayon
+  DrwImg.CanvasBGRA.Pen.Color := fPenColor; // couleur affect√©e
+  DrwImg.Canvas.Pen.Color := fPenColor;
+  Change; // changement notifi√©
+end;
+
+procedure TGVTurtle.SetPenDown(AValue: Boolean);
+// *** crayon baiss√© ou lev√© ***
+begin
+  if fPenDown = AValue then // valeur inchang√©e ?
+    Exit; // on sort
+  fPenDown := AValue; // nouvelle valeur du crayon
+  Change; // changement notifi√©
+end;
+
+procedure TGVTurtle.SetPenWidth(AValue: Integer);
+// *** largeur du crayon ***
+begin
+  if fPenWidth = AValue then // valeur inchang√©e ?
+    Exit; // on sort
+  fPenWidth := AValue;
+  DrwImg.CanvasBGRA.Pen.Width := fPenWidth; // taille chang√©e
+end;
+
+procedure TGVTurtle.SetScreenColor(AValue: TColor);
+// *** couleur du fond de l'√©cran ***
+begin
+  if fScreenColor = AValue then // valeur inchang√©e ?
+    Exit; // on sort
+  fScreenColor := AValue; // nouvelle couleur de fond
+  BckImg.FillRect(0,0,fWidth, fHeight, ColorToBGRA(ColorToRGB(fScreenColor)),
+    dmSet);
+  Change; // on signale le changement
+end;
+
+procedure TGVTurtle.SetSize(AValue: Integer);
+// *** taille de la tortue ***
+begin
+  // valeur inchang√©e ou tortue non triangulaire ?
+  if (fSize = AValue) or (Kind <> tkTriangle) then
+    Exit; // on sort
+  fSize := Min(Abs(AValue), CMaxSize); // on normalise la taille
+  Change; // changement notifi√©
+end;
+
+procedure TGVTurtle.SetSpeed(AValue: Integer);
+// *** vitesse de dessin ***
+begin
+  if fSpeed = AValue then // valeur inchang√©e ?
+    Exit; // on sort
+  fSpeed := Min(AValue, CMaxSpeed); // nouvelle vitesse (maximum = 100)
+  Change; // changement notifi√©
+end;
+
+procedure TGVTurtle.SetTurtleKind(AValue: TTurtleKind);
+// *** type de tortue ***
+begin
+  if fTurtleKind = AValue then // valeur inchang√©e ?
+    Exit; // on sort
+  fTurtleKind := AValue; // nouveau type de tortue
+  Change; // changement notifi√©
+end;
+
+procedure TGVTurtle.SetTurtleVisible(AValue: Boolean);
+// *** visibilit√© de la tortue ***
+begin
+  if fTurtleVisible = AValue then // valeur inchang√©e ?
+    Exit; // on sort
+  fTurtleVisible := AValue; // nouvelle visibilit√© de la tortue
+  Change; // changement notifi√©
+end;
+
+function TGVTurtle.IsWithinLimits(X, Y: Double): Boolean;
+// *** coordonn√©es dans limites ? ***
+begin
+  Result := (X >= 0) and (Y >= 0) and (X <= fWidth) and (Y <= fHeight);
+end;
+
+procedure TGVTurtle.DoGo(X, Y: Double);
+// *** effectue un d√©placement de la tortue ***
+begin
+    // si champ clos et hors limites => erreur
+    if (Screen <> teGate) or IsWithinLimits(X, Y) then
+    begin
+      fX := X; // nouvelle abscisse
+      fY := Y; // nouvelle ordonn√©e
+      // ralentit le dessin
+      Sleep(CMaxSpeed - Speed);
+      // dessine
+      if PenDown then  // crayon baiss√© ?
+        LineTo(X, Y) // en √©crivant
+      else
+        MoveTo(X, Y); // sans √©crire
+      Change; // changement notifi√©
+    end;
+    // on continue si l'√©cran s'enroule
+    if (Screen = teRoll) and not IsWithinLimits(X,Y) then
+    begin
+    // mise √† jour des coordonn√©es apr√®s enroulement
+    // d√©bordement √† droite ?
+    if (X > fWidth) then
+    begin
+      MoveTo(0, Y);
+      X := X - fWidth;
+    end;
+    // d√©bordement en bas ?
+    if (Y > fHeight) then
+    begin
+      MoveTo(X, 0);
+      Y := Y - fHeight;
+    end;
+    // d√©bordement √† gauche ?
+    if (X < 0) then
+    begin
+      MoveTo(fWidth, Y);
+      X := fWidth + X;
+    end;
+    // d√©bordement en haut ?
+    if (Y < 0) then
+    begin
+      MoveTo(X, fHeight);
+      Y := fHeight + Y;
+    end;
+    fX := X; // nouvelle abscisse
+    fY := Y; // nouvelle ordonn√©e
+    // ralentit le dessin
+    Sleep(CMaxSpeed - Speed);
+    // dessine ou d√©place suivant l'√©tat du crayon
+    if PenDown then
+      LineTo(X, Y)
+    else
+      MoveTo(X, Y);
+  end;
+end;
+
+procedure TGVTurtle.LineTo(X, Y: Double);
+// *** d√©placement en √©crivant ***
+begin
+  DrwImg.CanvasBGRA.LineTo(Round(X), cY(Round(Y))); // √©criture effective
+end;
+
+procedure TGVTurtle.MoveTo(X, Y: Double);
+// *** d√©placement sans √©crire ***
+begin
+  DrwImg.CanvasBGRA.MoveTo(Round(X), cY(Round(Y))); // d√©placement effectif
+end;
+
+procedure TGVTurtle.ArcAntialias(x, y, rx, ry: single; b, e: word;
+  c: TBGRAPixel; w: single);
+// *** arc d'ellipse ***
+begin
+  DrwImg.DrawPolygonAntialias(DrwImg.ComputeArcRad(x,y,rx,ry,
+    b * DgToRad,e * DgToRad), c,w);
+end;
+
+procedure TGVTurtle.FillArcAntiAlias(x, y, rx, ry: single; b, e: word;
+  c: TBGRAPixel);
+// *** arc d'ellipse rempli ***
+begin
+  DrwImg.FillPolyAntialias(DrwImg.ComputeArcRad(x,y,rx,ry,b * DgToRad,
+    e * DgToRad), c);
+end;
+
+procedure TGVTurtle.PieAntialias(x, y, rx, ry: single; b, e: word;
+  c: TBGRAPixel; w: single);
+// *** portion d'ellipse ***
+begin
+  DrwImg.DrawPolygonAntialias(DrwImg.ComputePieRad(x,y,rx,ry,b * DgToRad,
+    e * DgToRad), c,w);
+end;
+
+procedure TGVTurtle.FillPieAntiAlias(x, y, rx, ry: single; b, e: word;
+  c: TBGRAPixel);
+// *** portion d'ellipse remplie ***
+begin
+  DrwImg.FillPolyAntialias(DrwImg.ComputePieRad(x,y,rx,ry,b * DgToRad,
+    e * DgToRad), c);
+end;
+
+function TGVTurtle.cY(Y: Integer): Integer;
+// *** change l'ordonn√©e pour le nouveau rep√®re ***
+begin
+  Result := fHeight - Y; // inversion des ordonn√©es
+end;
+
+procedure TGVTurtle.DrawTriangleTurtle;
+// *** dessin de la tortue triangulaire ***
+var
+  LCosT, LSinT: Extended;
+  LX1, LX2, LX3, LY1, LY2, LY3: Integer;
+begin
+  // on efface la surface
+  TtlImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent, dmSet);
+  // calcul des coordonn√©es des points de la tortue
+  SinCos((90 + Heading) * DgToRad, LSinT, LCosT);
+  LX1 := Round(CoordX + Size * LCosT - LSinT);
+  LY1 := cY(Round(CoordY + Size * LSinT + LCosT));
+  LX2 := Round(CoordX - Size * LCosT - LSinT);
+  LY2 := cY(Round(CoordY - Size * LSinT + LCosT));
+  LX3 := Round(CoordX - LCosT + (Size shl 1) * LSinT);
+  LY3 := cY(Round(CoordY - LSinT - (Size shl 1) * LCosT));
+  with TtlImg.CanvasBGRA do
+  begin
+    if PenColor <> BGRAToColor(BGRAPixelTransparent) then
+      Pen.Color := PenColor
+    else
+      Pen.Color := CDefaultPenColor;
+    MoveTo(LX1, LY1); // dessin de la tortue
+    Pen.Width := 2;
+    LineTo(LX2, LY2);
+    Pen.Width := 1;
+    LineTo(LX3, LY3);
+    LineTo(LX1, LY1);
+  end;
+end;
+
+procedure TGVTurtle.DrawPNGTurtle;
+// *** dessin de la tortue PNG ***
+var
+  LCosT, LSinT: Extended;
+  LX, LY: Integer;
+begin
+  // on efface la surface
+  TtlImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent, dmSet);
+  BeforeChange; // r√©cup√®re la bonne image
+  // calcul des coordonn√©es de la tortue
+  SinCos((90 + Heading) * DgToRad, LSinT, LCosT);
+  LX := Round(CoordX + LCosT - LSinT);
+  LY := Round(CoordY + LSinT + LCosT);
+  // copie de la tortue .png
+  TtlImg.CanvasBGRA.Draw(LX - (fPNGTurtle.Width shr 1),
+        cY(LY) - (fPNGTurtle.Height shr 1), fPNGTurtle);
+end;
+
+procedure TGVTurtle.Change;
+// *** notification de changement ***
+begin
+  if Assigned(fOnchange) then // on ex√©cute le gestionnaire s'il existe
+    fOnchange(Self);
 end;
 
 procedure TGVTurtle.BeforeChange;
 // *** gestion avant le changement ***
-// (permet de mettre ‡ jour une image pour la tortue avant de la dessiner)
+// (permet de mettre √† jour une image pour la tortue avant de la dessiner)
 begin
-  if Assigned(fOnBeforeChange) then
-    fOnBeforeChange(Self, Round(Heading));
+  if Assigned(fOnBeforeChange) then  // si le gestionnaire existe
+    fOnBeforeChange(Self, Round(Heading)); // on l'ex√©cute
 end;
 
-procedure TGVTurtle.Change;
-// *** gestion du changement ***
+constructor TGVTurtle.Create(Width, Height: Integer);
+// *** cr√©ation de l'objet ***
 begin
-  if Assigned(fOnchange) then // on exÈcute le gestionnaire s'il existe
-    fOnchange(Self, CoordX, CoordY, Round(Heading), TurtleVisible, PenDown,
-      Canvas.Pen.Color);
-end;
-
-procedure TGVTurtle.Chord(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer);
-// *** dessine une corde ***
-var
-  TV: Boolean;
-begin
-  TV := TurtleVisible;
-  try
-    TurtleVisible := False;
-    Canvas.Chord(X1, cY(Y1), X2, cY(Y2), X3, cY(Y3), X4, cY(Y4));
-  finally
-    TurtleVisible := TV;
-  end;
-end;
-
-procedure TGVTurtle.Chord(const X2, Y2, X3, Y3, X4, Y4: Integer);
-// *** dessine une corde ‡ l'emplacement de la tortue ***
-begin
-  Chord(CoordX, CoordY, CoordX + X2, CoordY - Y2, X3, Y3, X4, Y4);
-end;
-
-procedure TGVTurtle.Circle(const X1, Y1, R: Integer);
-// *** dessine un cercle ***
-begin
-  Ellipse(X1, Y1, X1 + R, Y1 - R);
-end;
-
-procedure TGVTurtle.Circle(const R: Integer);
-// *** dessine un cercle ‡ l'emplacement de la tortue ***
-begin
-  Circle(CoordX, CoordY, R);
-end;
-
-constructor TGVTurtle.Create(AOwner: Tcomponent);
-// *** crÈation de l'objet ***
-begin
-  inherited Create(AOwner);
-{$IFDEF Delphi}
-  Transparent := True;
-{$ENDIF}
-  Height := (AOwner as TControl).Height;
-  Width := (AOwner as TControl).Width;
-  with Picture.Bitmap do
-  begin
-    Height := Self.Height;
-    Width := Self.Width;
-{$IFDEF Delphi}
-    Transparent := True;
-    TransparentColor := clFuchsia;
-    Canvas.Brush.Color := TransparentColor;
-    fScreenColor := TransparentColor; // fond d'Ècran
-{$ELSE}
-    Canvas.Brush.Color := clBlack;
-    fScreenColor := clBlack;
-{$ENDIF}
-    Canvas.FillRect(Rect(0, 0, Width, Height));
-  end;
-  fTurtleVisible := False; // tortue invisible
-{$IFDEF Delphi}
-  fTurtleImg := TPngImage.Create; // tortue PNG alternative
-  fTurtleImg.Transparent := True;
-{$ELSE}
-  fTurtleImg := TPortableNetworkGraphic.Create;
-{$ENDIF}
-  // images de sauvegarde transparentes pour la tortue .png
-  fOldImg := TBitmap.Create;
-  with fOldImg do
-  begin
-    Transparent := True;
-    TransparentMode := tmFixed;
-    Height := Self.Height;
-    Width := Self.Width;
-  end;
-  fTempImg := TBitmap.Create;
-  with fTempImg do
-  begin
-    Transparent := True;
-    TransparentMode := tmFixed;
-    Height := Self.Height;
-    Width := Self.Width;
-  end;
-  fSavedTurtle.rSaved := False; // pas de tortue sauvÈe
-  Reinit; // nettoyage de l'Ècran
-end;
-
-function TGVTurtle.cY(Y: Integer): Integer;
-// *** Y dans le nouveau repËre ***
-begin
-  Result := Canvas.ClipRect.Bottom - Y; // inversion des ordonnÈes
+  inherited Create; // on h√©rite de l'anc√™tre
+  // on m√©morise les dimensions
+  fHeight := Height; // la hauteur
+  fWidth := Width; // la largeur
+  // on cr√©e les images de travail
+  // le fond
+  BckImg := TBGRABitmap.Create(Width, Height,
+    ColorToBGRA(ColorToRGB(CDefaultBackColor)));
+  // la surface de dessin
+  DrwImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
+  // la tortue
+  TtlImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
+  fPNGTurtle := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
+  // surface r√©elle
+  ActualImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
+  // initialisations
+  ReInit;
 end;
 
 destructor TGVTurtle.Destroy;
 // *** destruction de l'objet ***
 begin
-  Canvas.OnChange := nil;
-  Canvas.OnChanging := nil;
-  ReloadTurtle(True); // pour libÈrer les objets sauvegardÈs
-  fTurtleImg.Free;
-  fTempImg.Free;
-  fOldImg.Free;
-  inherited Destroy;
+  BckImg.Free; // on lib√®re les images cr√©√©es
+  DrwImg.Free;
+  TtlImg.Free;
+  fPNGTurtle.Free;
+  ActualImg.Free;
+  inherited Destroy; // on h√©rite
 end;
 
-function TGVTurtle.Distance(const X, Y: Integer): Real;
-// *** renvoie la distance de la tortue ‡ un point donnÈ ***
+procedure TGVTurtle.ReInit;
+// *** r√©initialisation de l'objet ***
 begin
-  Result := Sqrt(Sqr(X - CoordX) + Sqr(Y - CoordY));
+  Screen := teWin; // mode fen√™tre √©tendue
+  Kind := tkTriangle; // forme triangulaire pour la tortue
+  PenRubber := False; // on ne gomme pas
+  ScreenColor := CDefaultBackColor; // couleur de fond par d√©faut
+  PenColor := CDefaultPenColor; // couleur de crayon par d√©faut
+  fTempColor := PenColor; // on se souvient de cette couleur
+  PenWidth := CDefaultPenWidth; // largeur du crayon par d√©faut
+  Heading := CDefaultHeading; // orientation
+  Size := CDefaultSize; // taille de la tortue
+  PenDown := True; // drapeau d'√©criture
+  ScaleX := CDefaultScale; // √©chelle des X
+  ScaleY := CDefaultScale; // √©chelle des Y
+  Filled := True;  // remplissage
+  Speed := CMaxSpeed; // vitesse de dessin de la tortue
+  DoGo(fWidth shr 1, fHeight shr 1); // au centre
+  DrwImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent,
+    dmSet); // on efface la surface
+  TurtleVisible := True; // tortue visible
+  Change; // changement notifi√©
 end;
 
-procedure TGVTurtle.DoGo(const X, Y: Integer);
-// *** effectue un dÈplacement de la tortue ***
+procedure TGVTurtle.Move(Value: Double);
+// *** la tortue se d√©place ***
 var
-  TV: Boolean;
+  LSinT, LCosT: Extended;
+  LTX, LTY: Double;
 begin
-  TV := TurtleVisible; // sauvegarde la tortue
-  try
-    TurtleVisible := False; // la cache
-    // si champ clos et hors limites => erreur
-    if (Screen <> teGate) or IsWithinLimits(X, Y) then
-    begin
-      fX := X;
-      fY := Y;
-      // ralentit le dessin
-      Sleep(CMaxSpeed - Speed);
-      // dessine
-      if PenDown then
-        LineTo(X, Y)
-      else
-        MoveTo(X, Y);
-    end;
-  finally
-    TurtleVisible := TV; // restaure la tortue
-  end;
+  // calcul du cosinus et du sinus du cap
+  SinCos((Heading - 90) * DgToRad, LSinT, LCosT);
+  // calcul des nouvelles coordonn√©es
+  LTX := fX - Value * LSinT * (ScaleX / CDefaultScale);
+  LTY := fY + Value * LCosT * (ScaleY / CDefaultScale);
+  SetPos(LTX, LTY); // d√©placement si possible
 end;
 
-procedure TGVTurtle.Ellipse(const X1, Y1, X2, Y2: Integer);
-// *** dessine une ellipse ***
-var
-  TV: Boolean;
+procedure TGVTurtle.SetPos(X, Y: Double);
+// *** fixe les coordonn√©es de la tortue ***
 begin
-  TV := TurtleVisible;
-  try
-    TurtleVisible := False;
-    Canvas.Ellipse(X1, cY(Y1), X2, cY(Y2));
-  finally
-    TurtleVisible := TV;
-  end;
+  DoGo(X, Y); // d√©placement de la tortue
 end;
 
-procedure TGVTurtle.Ellipse(const X2, Y2: Integer);
-// *** dessine une ellipse ‡ l'emplacement de la tortue ***
+procedure TGVTurtle.Turn(Value: Double);
+// *** la tortue tourne ***
 begin
-  Ellipse(CoordX, CoordY, CoordX + X2, CoordY - Y2);
-end;
-
-function TGVTurtle.GetCoordX: Integer;
-// *** renvoie l'abscisse de la tortue ***
-begin
-  Result := Round(fX);
-end;
-
-function TGVTurtle.GetCoordY: Integer;
-// *** renvoie l'ordonnÈe de la tortue ***
-begin
-  Result := Round(fY);
+  if Value <> 0 then // si valeur effective
+    SetHeading(Heading + Value); // tourne vers la gauche
 end;
 
 procedure TGVTurtle.Home;
-// *** tortue ‡ l'origine ***
+// *** tortue √† l'origine ***
 begin
-  with Canvas.ClipRect do
-    DoGo(Right shr 1, Bottom shr 1); // au centre
-  Heading := CDefaultHeading; // tÍte vers le haut de l'Ècran
+  DoGo(fWidth shr 1, fHeight shr 1); // au centre
+  Heading := CDefaultHeading; // t√™te vers le haut de l'√©cran
 end;
 
-procedure TGVTurtle.Reinit;
-// *** initialisation ***
+procedure TGVTurtle.Wipe;
+// *** on nettoie l'√©cran sans bouger la tortue ***
 begin
-  with Canvas.Pen do
-  begin
-    Style := psSolid; // le crayon Ècrit en trait continu
-    Mode := pmCopy; // copie normale
-    Width := 1; // Èpaisseur de 1
-    Color := clAqua; // couleur rouge
-    fPenColor := clAqua; // qu'on mÈmorise
-  end;
-  fTurtleKind := tkTriangle; // en forme de triangle
-  fScaleX := CDefaultScale; // Èchelle des X
-  fScaleY := CDefaultScale; // Èchelle des Y
-  fScreen := teWin; // type de champ
-  fTurtleVisible := False; // invisible provisoirement
-  fSize := CDefaultSize; // taille par dÈfaut
-  fFilled := True; // remplissage par dÈfaut
-  fSpeed := CMaxSpeed shr 1; // vitesse par dÈfaut
-  Home;
-  fTempImg.Canvas.Draw(0, 0, Picture.Bitmap); // vide l'image temporaire
-  PenDown := True; // Ècrit
-  Canvas.FillRect(Canvas.ClipRect); // vide l'Ècran
-  TurtleVisible := True; // tortue visible
-end;
-
-function TGVTurtle.IsWithinLimits(const X, Y: Integer): Boolean;
-// *** coordonnÈes dans limites ? ***
-begin
-  with Canvas.ClipRect do
-    Result := (X >= Left) and (Y >= Top) and (X <= Right) and (Y <= Bottom);
-end;
-
-procedure TGVTurtle.LineTo(X, Y: Integer);
-// *** dÈplacement en Ècrivant ***
-begin
-  Canvas.LineTo(X, cY(Y));
-end;
-
-procedure TGVTurtle.Move(const Value: Real);
-// *** la tortue se dÈplace ***
-var
-  SinT, CosT: Extended;
-  TX, TY: Real;
-begin
-  // calcul du cosinus et du sinus du cap
-  SinCos((fHeading - 90) * DgToRad, SinT, CosT);
-  // calcul des nouvelles coordonnÈes
-  TX := fX - Value * SinT * (fScaleX / CDefaultScale);
-  TY := fY + Value * CosT * (fScaleY / CDefaultScale);
-  SetPos(Round(TX), Round(TY)); // dÈplacement si possible
-end;
-
-procedure TGVTurtle.MoveTo(X, Y: Integer);
-// *** dÈplacement sans Ècrire ***
-begin
-  Canvas.MoveTo(X, cY(Y));
-end;
-
-procedure TGVTurtle.Pie(const X1, Y1, X2, Y2, X3, Y3, X4, Y4: Integer);
-// *** dessine une section d'ellipse ***
-var
-  TV: Boolean;
-begin
-  TV := TurtleVisible;
-  try
-    TurtleVisible := False;
-    Canvas.Pie(X1, cY(Y1), X2, cY(Y2), X3, cY(Y3), X4, cY(Y4));
-  finally
-    TurtleVisible := TV;
-  end;
-end;
-
-procedure TGVTurtle.Pie(const X2, Y2, X3, Y3, X4, Y4: Integer);
-// *** dessine une section d'ellipse ‡ l'emplacement de la tortue ***
-begin
-  Pie(CoordX, CoordY, CoordX + X2, CoordY - Y2, X3, Y3, X4, Y4);
-end;
-
-procedure TGVTurtle.Polygon(Points: array of TPoint);
-// *** dessine un polygone ***
-var
-  I: Integer;
-  TV: Boolean;
-begin
-  TV := TurtleVisible;
-  try
-    TurtleVisible := False;
-    for I := Low(Points) to High(Points) do // inverse les ordonnÈes
-      Points[I].Y := cY(Points[I].Y);
-    Canvas.Polygon(Points);
-  finally
-    TurtleVisible := TV;
-  end;
-end;
-
-procedure TGVTurtle.PolyLine(Points: array of TPoint);
-// *** dessine un polygone non couvrant ***
-var
-  I: Integer;
-  TV: Boolean;
-begin
-  TV := TurtleVisible;
-  try
-    TurtleVisible := False;
-    for I := Low(Points) to High(Points) do // inverse les ordonnÈes
-      Points[I].Y := cY(Points[I].Y);
-    Canvas.PolyLine(Points);
-  finally
-    TurtleVisible := TV;
-  end;
-end;
-
-procedure TGVTurtle.Rectangle(const X1, Y1, X2, Y2: Integer);
-// *** dessine un rectangle ***
-var
-  TV: Boolean;
-begin
-  TV := TurtleVisible;
-  try
-    TurtleVisible := False;
-    Canvas.Rectangle(X1, cY(Y1), X2, cY(Y2));
-  finally
-    TurtleVisible := TV;
-  end;
-end;
-
-procedure TGVTurtle.Rectangle(const X2, Y2: Integer);
-// *** dessine un rectangle ‡ l'emplacement de la tortue ***
-begin
-  Rectangle(CoordX, CoordY, CoordX + X2, CoordY - Y2);
-end;
-
-procedure TGVTurtle.ReloadTurtle(const Clean: Boolean);
-// *** rÈcupËre une tortue ***
-begin
-  if fSavedTurtle.rSaved then // seulement si une tortue a ÈtÈ sauvegardÈe
-    try
-      TurtleVisible := False; // on cache la tortue
-      PenDown := False; // on n'Ècrit pas !
-      PenRubber := False; // on n'efface pas !
-      PenReverse := False; // on n'inverse pas !
-      with fSavedTurtle do // on recharge la tortue
-      begin
-        fX := rX; // abscisse
-        fY := rY; // ordonnÈe
-        MoveTo(Round(fX), Round(fY)); // on dÈplace la tortue
-        fTurtleKind := rKind; // type de tortue
-        Size := rSize; // taille de la tortue
-        Heading := rHeading; // direction
-        PenRubber := rPenRubber; // drapeau d'effacement
-        PenReverse := rPenReverse; // drapeau d'inversion
-        ScaleX := rScaleX; // Èchelle des X
-        ScaleY := rScaleY; // Èchelle des Y
-        Filled := rFilled; // remplissage
-        Canvas.Brush.Assign(rBrush); // type de brosse
-        Canvas.Pen.Assign(rPen); // type de crayon
-        Canvas.Font.Assign(rFont);
-        TurtleVisible := rVisible; // drapeau de visibilitÈ
-        PenDown := rPenDown; // drapeau de crayon baissÈ
-      end;
-    finally
-      if Clean then
-        with fSavedTurtle do
-        begin
-          rBrush.Free; // on libËre la brosse
-          rPen.Free; // on libËre le crayon
-          rFont.Free; // on libËre la fonte
-          rSaved := False; // libËre la sauvegarde
-        end;
-    end;
-end;
-
-procedure TGVTurtle.ToggleTurtlePNG;
-// *** montre/cache la tortue png ***
-var
-  CosT, SinT: Extended;
-  X, Y: Integer;
-begin
-  if fTurtleVisible then // visible ?
-  begin
-    BeforeChange;
-    // calcul des coordonnÈes de la tortue
-    SinCos((90 + Heading) * DgToRad, SinT, CosT);
-    X := Round(CoordX + CosT - SinT);
-    Y := Round(CoordY + SinT + CosT);
-    // copie de l'Ècran
-    fTempImg.Assign(Picture.Bitmap);
-    // sauvegarde de l'ancienne image
-    fOldImg.Assign(Picture.Bitmap);
-{$IFDEF Delphi}
-    fOldImg.TransparentColor := clWhite;
-{$ENDIF}
-    // copie de la tortue .png
-    with fTempImg do
-    begin
-{$IFDEF Delphi}
-      TransparentColor := clWhite;
-{$ENDIF}
-      Canvas.Draw(X - (fTurtleImg.Width shr 1),
-        cY(Y) - (fTurtleImg.Height shr 1), fTurtleImg);
-    end;
-    // copie vers l'Ècran
-    Canvas.Draw(0, 0, fTempImg);
-  end
-  else
-    // on rÈtablit l'image sans la tortue
-    Canvas.Draw(0, 0, fOldImg);
-end;
-
-procedure TGVTurtle.ToggleTurtleTriangle;
-// *** montre/cache la tortue triangle ***
-var
-  CosT, SinT: Extended;
-  X1, X2, X3, Y1, Y2, Y3: Integer;
-  PenSave: TPen;
-begin
-  // calcul des coordonnÈes des points de la tortue
-  SinCos((90 + Heading) * DgToRad, SinT, CosT);
-  X1 := Round(CoordX + Size * CosT - SinT);
-  Y1 := Round(CoordY + Size * SinT + CosT);
-  X2 := Round(CoordX - Size * CosT - SinT);
-  Y2 := Round(CoordY - Size * SinT + CosT);
-  X3 := Round(CoordX - CosT + (Size shl 1) * SinT);
-  Y3 := Round(CoordY - SinT - (Size shl 1) * CosT);
-  PenSave := TPen.Create; // sauvegarde et modification du crayon
-  try
-    PenSave.Assign(Canvas.Pen);
-    with Canvas.Pen do
-    begin
-      Style := psSolid;
-      Mode := pmXor; // tortue visible en mode ou exclusif
-      MoveTo(X1, Y1); // dessin de la tortue en mode ou exclusif
-      Width := 2;
-      LineTo(X2, Y2);
-      Width := 1;
-      LineTo(X3, Y3);
-      LineTo(X1, Y1);
-      MoveTo(CoordX, CoordY);
-      Assign(PenSave); // rÈcupÈration du crayon
-    end;
-  finally
-    PenSave.Free; // libÈration du crayon provisoire
-  end;
-end;
-
-procedure TGVTurtle.RoundRect(const X1, Y1, X2, Y2: Integer);
-// *** dessine un rectangle arrondi ***
-var
-  TV: Boolean;
-begin
-  TV := TurtleVisible;
-  try
-    TurtleVisible := False;
-    Canvas.RoundRect(X1, cY(Y1), X2, cY(Y2), 15, 15);
-  finally
-    TurtleVisible := TV;
-  end;
-end;
-
-procedure TGVTurtle.RoundRect(const X2, Y2: Integer);
-// *** dessine un rectangle arrondi ‡ l'emplacement de la tortue ***
-begin
-  RoundRect(CoordX, CoordY, CoordX + X2, CoordY - Y2);
+  DrwImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent, dmSet);
+  Change; // on notifie le changement
 end;
 
 procedure TGVTurtle.SaveTurtle;
-// *** sauvegarde de l'Ètat de la tortue ***
+// *** sauvegarde de l'√©tat de la tortue ***
 begin
   with fSavedTurtle do // on sauvegarde la tortue en cours
   begin
     rX := fX; // abscisse
-    rY := fY; // ordonnÈe
+    rY := fY; // ordonn√©e
     rKind := fTurtleKind; // type de tortue
     rSize := fSize; // taille de la tortue
-    rVisible := fTurtleVisible; // drapeau de visibilitÈ
+    rVisible := fTurtleVisible; // drapeau de visibilit√©
     rHeading := fHeading; // direction
-    rPenDown := fPenDown; // drapeau de crayon baissÈ
+    rPenDown := fPenDown; // drapeau de crayon baiss√©
     rPenRubber := fPenRubber; // drapeau d'effacement
-    rPenReverse := fPenReverse; // drapeau d'inversion
-    rScaleX := fScaleX; // Èchelle des X
-    rScaleY := fScaleY; // Èchelle des Y
+    rScaleX := fScaleX; // √©chelle des X
+    rScaleY := fScaleY; // √©chelle des Y
     rFilled := Filled; // remplissage
-    if not rSaved then // crÈation si nÈcessaire
+    rPenWidth := PenWidth; // largeur du crayon
+    if not rSaved then // cr√©ation si n√©cessaire
     begin
       rBrush := TBrush.Create; // type de brosse
       rPen := TPen.Create; // type de crayon
       rFont := TFont.Create; // type de fonte
     end;
-    rBrush.Assign(Canvas.Brush); // sauvegarde brosse
-    rPen.Assign(Canvas.Pen); // sauvegarde crayon
-    rFont.Assign(Canvas.Font); // sauvegarde fonte
-    rSaved := True; // drapeau de sauvegarde activÈ
-  end;
-end;
-
-procedure TGVTurtle.SetHeading(const Value: Real);
-// *** fixe le cap de la tortue ***
-var
-  TV: Boolean;
-begin
-  if (Value <> fHeading) then
-  begin
-    TV := TurtleVisible; // sauvegarde la tortue
-    try
-      TurtleVisible := False; // la cache
-      fHeading := Frac(Value / 360) * 360; // change le cap
-      if fHeading < 0 then
-        fHeading := fHeading + 360;
-      BeforeChange; // pour le dessin de la tortue
-    finally
-      TurtleVisible := TV; // restaure la tortue
-    end;
-  end;
-end;
-
-procedure TGVTurtle.SetCoordX(const Value: Integer);
-// *** fixe l'abscisse de la tortue ***
-begin
-  DoGo(Value, CoordY); // dÈplace la tortue
-end;
-
-procedure TGVTurtle.SetCoordY(const Value: Integer);
-/// *** fixe l'ordonnÈe de la tortue ***
-begin
-  DoGo(CoordX, Value); // dÈplace la tortue
-end;
-
-procedure TGVTurtle.SetFilled(const Value: Boolean);
-// *** fixe le remplissage ***
-var
-  TV: Boolean;
-begin
-  TV := TurtleVisible;
-  try
-    TurtleVisible := False;
-    if Value <> fFilled then
+    with DrwImg.Canvas do
     begin
-      fFilled := Value;
-      if fFilled then
+      rBrush.Assign(Brush); // sauvegarde brosse
+      rPen.Assign(Pen); // sauvegarde crayon
+      rFont.Assign(Font); // sauvegarde fonte
+    end;
+    rSaved := True; // drapeau de sauvegarde activ√©
+  end;
+end;
+
+procedure TGVTurtle.ReloadTurtle(Clean: Boolean);
+// *** r√©cup√®re une tortue ***
+begin
+  if fSavedTurtle.rSaved then // seulement si une tortue a √©t√© sauvegard√©e
+    try
+      TurtleVisible := False; // on cache la tortue
+      PenDown := False; // on n'√©crit pas !
+      PenRubber := False; // on n'efface pas !
+      with fSavedTurtle do // on recharge la tortue
       begin
-        Canvas.Brush.Style := bsSolid;
-        Canvas.Brush.Color := ScreenColor;
-      end
-      else
-        Canvas.Brush.Style := bsClear;
-    end;
-  finally
-    TurtleVisible := TV;
-  end;
-end;
-
-procedure TGVTurtle.SetTurtleKind(const Value: TTurtleKind);
-// *** fixe le type de tortue ***
-var
-  TV: Boolean;
-begin
-  if (Value <> fTurtleKind) then
-  begin
-    TV := TurtleVisible;
-    try
-      TurtleVisible := False;
-      fTurtleKind := Value;
-    finally
-      TurtleVisible := TV;
-    end;
-  end;
-end;
-
-procedure TGVTurtle.SetPenColor(const Value: TColor);
-// *** on change la couleur du crayon ***
-var
-  TV: Boolean;
-begin
-  TV := TurtleVisible;
-  try
-    TurtleVisible := False;
-    PenReverse := False; // pas d'inversion
-    PenRubber := False; // pas d'effacement non plus
-    fPenColor := Value;
-    Canvas.Pen.Color := fPenColor;
-  finally
-    TurtleVisible := TV;
-  end;
-end;
-
-procedure TGVTurtle.SetPenDown(const Value: Boolean);
-// *** gËre l'Ècriture du crayon ***
-begin
-  if (Value <> fPenDown) then
-  begin
-    fPenDown := Value;
-    Change;
-  end;
-end;
-
-procedure TGVTurtle.SetPenReverse(const Value: Boolean);
-// *** inversion du crayon ***
-var
-  TV: Boolean;
-begin
-  if (Value <> fPenReverse) then
-  begin
-    TV := TurtleVisible;
-    try
-      TurtleVisible := False;
-      fPenReverse := Value;
-      if Value then
-        Canvas.Pen.Mode := pmNot // en mode inversion
-      else
-        Canvas.Pen.Mode := pmCopy; // en mode copie
-      Change; // on signale le changement
-    finally
-      TurtleVisible := TV;
-    end;
-  end;
-end;
-
-procedure TGVTurtle.SetPos(const X, Y: Integer);
-// *** fixe les coordonnÈes de la tortue ***
-begin
-  DoGo(X, Y); // dÈplacement de la tortue
-end;
-
-procedure TGVTurtle.SetRubberPen(const Value: Boolean);
-// *** le crayon gomme ***
-var
-  TV: Boolean;
-begin
-  if (Value <> fPenRubber) then
-  begin
-    fPenRubber := Value;
-    TV := TurtleVisible;
-    try
-      TurtleVisible := False;
-      with Canvas.Pen do
-        if Value then
+        fX := rX; // abscisse
+        fY := rY; // ordonn√©e
+        MoveTo(Round(fX), Round(fY)); // on d√©place la tortue
+        fTurtleKind := rKind; // type de tortue
+        Size := rSize; // taille de la tortue
+        Heading := rHeading; // direction
+        PenRubber := rPenRubber; // drapeau d'effacement
+	ScaleX := rScaleX; // √©chelle des X
+        ScaleY := rScaleY; // √©chelle des Y
+        Filled := rFilled; // remplissage
+        PenWidth := rPenWidth; // largeur du crayon
+        with DrwImg.Canvas do
         begin
-          fTempColor := Color; // on se souvient de la couleur
-          Color := fScreenColor; // on dessine avec la couleur de fond
-        end
-        else
-          Color := fTempColor; // on restitue la couleur d'origine
-      Change; // on signale le changement
+          Brush.Assign(rBrush); // type de brosse
+          Pen.Assign(rPen); // type de crayon
+          Font.Assign(rFont);
+        end;
+        TurtleVisible := rVisible; // drapeau de visibilit√©
+        PenDown := rPenDown; // drapeau de crayon baiss√©
+      end;
     finally
-      TurtleVisible := TV;
+      if Clean then
+        with fSavedTurtle do
+        begin
+          rBrush.Free; // on lib√®re la brosse
+          rPen.Free; // on lib√®re le crayon
+          rFont.Free; // on lib√®re la fonte
+          rSaved := False; // lib√®re la sauvegarde
+        end;
     end;
-  end;
 end;
 
-procedure TGVTurtle.SetScreenColor(const Value: TColor);
-// *** change  la couleur de fond ***
-begin
-  if (Value <> fScreenColor) then
-  begin
-    fScreenColor := Value;
-{$IFNDEF Delphi}
-    Canvas.Brush.Color := Value;
-    Reinit;
-{$ENDIF}
-    BackGroundChange;
-  end;
-end;
-
-procedure TGVTurtle.SetSize(const Value: Integer);
-// *** la taille de la tortue change   ***
+function TGVTurtle.Towards(X, Y: Integer): Double;
+// *** renvoie le cap vers un point ***
 var
-  TV: Boolean;
+  LPX, LPY: Integer;
 begin
-  if (Value <> fSize) and (Kind <> tkPng) then // seulement tortue triangulaire
-  begin
-    TV := TurtleVisible;
-    try
-      TurtleVisible := False;
-      fSize := Min(Abs(Value), CMaxSize); // normalise sa taille
-    finally
-      TurtleVisible := TV;
-    end;
-  end;
+  LPX := Round(CoordX) - X; // calcul des diff√©rences entre les points
+  LPY := Y - Round(CoordY);
+  Result := 0; // suppose 0
+  // √©value suivant les calculs
+  if ((LPX = 0) and (LPY < 0)) then
+    Result := 270
+  else if ((LPX = 0) and (LPY > 0)) then
+    Result := 90
+  else if ((LPX > 0) and (LPY >= 0)) then
+    Result := 180 - ArcTan(LPY / LPX) * RadToDg
+  else if ((LPX < 0) and (LPY > 0)) then
+    Result := (ArcTan(LPY / Abs(LPX)) * RadToDg)
+  else if ((LPX < 0) and (LPY <= 0)) then
+    Result := 360 - (ArcTan(LPY / LPX) * RadToDg)
+  else if ((LPX > 0) and (LPY < 0)) then
+    Result := 180 + (ArcTan(Abs(LPY) / LPX) * RadToDg);
 end;
 
-procedure TGVTurtle.SetSpeed(const Value: Integer);
-// *** vitesse de la tortue ***
+function TGVTurtle.Distance(X, Y: Integer): Double;
+// *** renvoie la distance de la tortue √† un point donn√© ***
 begin
-  if fSpeed <> Value then
-  begin
-    fSpeed := Min(Value, CMaxSpeed); // nouvelle vitesse  (maximum = 100)
-  end;
+  Result := Sqrt(Sqr(X - CoordX) + Sqr(Y - CoordY));
 end;
 
-procedure TGVTurtle.SetTurtleVisible(const Value: Boolean);
-// *** change la visibilitÈ de la tortue ***
+procedure TGVTurtle.Rectangle(X1, Y1, X2, Y2: Integer);
+// *** rectangle absolu ***
 begin
-  if (Value <> fTurtleVisible) then
-  begin
-    fTurtleVisible := Value;
-    case fTurtleKind of
-      tkPng:
-        ToggleTurtlePNG; // tortue PNG
-      tkTriangle:
-        ToggleTurtleTriangle; // tortue triangulaire
-    end;
-  end;
-  Change; // signale tout changement
+  if Filled then
+    DrwImg.FillRectAntialias(X1, cY(Y1), X2, cY(Y2),
+      ColorToBGRA(ColorToRGB(PenColor)))
+  else
+    DrwImg.RectangleAntialias(X1, cY(Y1), X2, cY(Y2),
+      ColorToBGRA(ColorToRGB(PenColor)), PenWidth);
+  Change; // on notifie le changement
 end;
 
-procedure TGVTurtle.Square(const L: Integer);
-// *** dessine un carrÈ ‡ l'emplacement de la tortue ***
+procedure TGVTurtle.Rectangle(X2, Y2: Integer);
+// *** rectangle √† l'emplacement de la souris ***
 begin
-  Rectangle(CoordX, CoordY, CoordX + L, CoordY - L);
+  Rectangle(Round(CoordX), Round(CoordY), X2, Y2);
 end;
 
-procedure TGVTurtle.Square(const X1, Y1, L: Integer);
-// *** dessine un carrÈ ***
+procedure TGVTurtle.Square(X1, Y1, L: Integer);
+// *** carr√© absolu ***
 begin
   Rectangle(X1, Y1, X1 + L, Y1 - L);
 end;
 
-function TGVTurtle.Towards(const X, Y: Integer): Real;
-// *** renvoie le cap vers un point ***
-var
-  PX, PY: Integer;
+procedure TGVTurtle.Square(L: Integer);
+// *** carr√© √† l'emplacement de la tortue ***
 begin
-  PX := CoordX - X; // calcul des diffÈrences entre les points
-  PY := Y - CoordY;
-  Result := 0; // suppose 0
-  // Èvalue suivant les calculs
-  if ((PX = 0) and (PY < 0)) then
-    Result := 270
-  else if ((PX = 0) and (PY > 0)) then
-    Result := 90
-  else if ((PX > 0) and (PY >= 0)) then
-    Result := 180 - ArcTan(PY / PX) * RadToDg
-  else if ((PX < 0) and (PY > 0)) then
-    Result := (ArcTan(PY / Abs(PX)) * RadToDg)
-  else if ((PX < 0) and (PY <= 0)) then
-    Result := 360 - (ArcTan(PY / PX) * RadToDg)
-  else if ((PX > 0) and (PY < 0)) then
-    Result := 180 + (ArcTan(Abs(PY) / PX) * RadToDg);
+  Rectangle(Round(CoordX), Round(CoordY), Round(CoordX) + L, Round(CoordY) - L);
 end;
 
-procedure TGVTurtle.Turn(const Value: Real);
-// *** la tortue tourne ***
+procedure TGVTurtle.RoundRect(X1, Y1, X2, Y2: Integer);
+// *** dessine un rectangle arrondi ***
 begin
-  if Value <> 0 then
-    SetHeading(Heading + Value); // tourne vers la gauche
+  if Filled then
+    DrwImg.FillRoundRectAntialias(X1, cY(Y1), X2, cY(Y2), 15, 15,
+      ColorToBGRA(ColorToRGB(PenColor)))
+  else
+    DrwImg.RoundRectAntialias(X1, cY(Y1), X2, cY(Y2), 15, 15,
+      ColorToBGRA(ColorToRGB(PenColor)), PenWidth);
+  Change; // on notifie le changement
 end;
 
-procedure TGVTurtle.Wipe;
-// *** nettoyage de l'Ècran ***
-var
-  TV: Boolean;
+procedure TGVTurtle.RoundRect(X2, Y2: Integer);
+// *** dessine un rectangle arrondi √† l'emplacement de la tortue ***
 begin
-  TV := TurtleVisible;
-  try
-    TurtleVisible := False;
-    Canvas.FillRect(Canvas.ClipRect); // vide l'Ècran
-  finally
-    TurtleVisible := TV;
-  end;
+  RoundRect(Round(CoordX), Round(CoordY), X2, Y2);
 end;
 
-end.
+procedure TGVTurtle.Ellipse(X1, Y1, X2, Y2: Integer);
+// *** dessine une ellipse ***
+begin
+  if Filled then
+    DrwImg.FillEllipseAntialias(X1, cY(Y1), X2, Y2,
+      ColorToBGRA(ColorToRGB(PenColor)))
+  else
+    DrwImg.EllipseAntialias(X1, cY(Y1), X2, Y2,
+      ColorToBGRA(ColorToRGB(PenColor)), PenWidth);
+  Change; // on notifie le changement
+end;
+
+procedure TGVTurtle.Ellipse(X2, Y2: Integer);
+// *** dessine une ellipse √† l'emplacement de la tortue ***
+begin
+  Ellipse(Round(CoordX), Round(CoordY), X2, Y2);
+end;
+
+procedure TGVTurtle.Circle(X1, Y1, R: Integer);
+// *** dessine un cercle ***
+begin
+  Ellipse(X1, Y1, R, R);
+end;
+
+procedure TGVTurtle.Circle(R: Integer);
+// *** dessine un cercle √† l'emplacement de la tortue ***
+begin
+  Circle(Round(CoordX), Round(CoordY), R);
+end;
+
+procedure TGVTurtle.Arc(X1, Y1, X2, Y2, X3, Y3: Integer);
+// *** dessine un arc d'ellipse ***
+begin
+  if Filled then
+    FillArcAntialias(X1, cY(Y1), X2, Y2, X3, Y3,
+      ColorToBGRA(ColorToRGB(PenColor)))
+  else
+    ArcAntiAlias(X1,cY(Y1),X2,Y2,X3,Y3,
+      ColorToBGRA(ColorToRGB(PenColor)),PenWidth);
+  Change; // on notifie le changement
+end;
+
+procedure TGVTurtle.Arc(X2, Y2, X3, Y3: Integer);
+// *** dessine un arc d'ellipse √† l'emplacement de la tortue ***
+begin
+  Arc(Round(CoordX), Round(CoordY), X2, Y2, X3, Y3);
+end;
+
+procedure TGVTurtle.Pie(X1, Y1, X2, Y2, X3, Y3: Integer);
+// *** dessine une section d'ellipse ***
+begin
+   if Filled then
+    FillPieAntialias(X1, cY(Y1), X2, Y2, X3, Y3,
+      ColorToBGRA(ColorToRGB(PenColor)))
+  else
+    PieAntiAlias(X1,cY(Y1),X2,Y2,X3,Y3,
+      ColorToBGRA(ColorToRGB(PenColor)),PenWidth);
+  Change; // on notifie le changement
+end;
+
+procedure TGVTurtle.Pie(X2, Y2, X3, Y3: Integer);
+// *** dessine une section d'ellipse √† l'emplacement de la tortue ***
+begin
+  Pie(Round(CoordX), Round(CoordY), X2, Y2, X3, Y3);
+end;
+
+procedure TGVTurtle.Text(const St: string; X, Y, Angle: Integer);
+// *** affiche un texte sur l'√©cran de la tortue ***
+begin
+  DrwImg.CanvasBGRA.Font.Color := PenColor; // couleur d'√©criture de la tortue
+  DrwImg.TextOutAngle(X, cY(Y), Angle * 10, St,
+    ColorToBGRA(ColorToRGB(PenColor)), taLeftJustify);
+  Change; // on signifie le changement
+end;
+
+procedure TGVTurtle.Text(const St: string);
+// *** affiche un texte √† l'emplacement de la tortue ***
+begin
+  Text(St, Round(CoordX), Round(CoordY), Round(Heading));
+end;
+
+procedure TGVTurtle.PenReverse;
+// *** inversion du crayon ***
+begin
+  PenColor := not PenColor; // couleur invers√©e
+end;
+
+procedure TGVTurtle.SetRubberPen(AValue: Boolean);
+// *** le crayon gomme ***
+begin
+  if AValue = fPenRubber then
+    Exit;
+  fPenRubber := AValue; // nouvelle valeur
+  if fPenRubber then
+  begin
+    fTempColor := PenColor; // on se souvient de la couleur en cours
+    // on dessine avec la couleur transparente
+    PenColor := BGRAToColor(BGRAPixelTransparent);
+  end
+  else
+  if PenColor = BGRAToColor(BGRAPixelTransparent) then
+    PenColor := fTempColor; // on restitue la couleur d'origine
+end;
+
+end.

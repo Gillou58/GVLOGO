@@ -1,5 +1,0 @@
-[GPL100 (c) GV 2014]
-essai|[.PRC [[:a :b][[av 120] [td 90] [av 120] [td 90] [re 120]]]]
-essai2|[.PRC [[][[essai]]]]
-proc1|[.PRC [[] [[av 45]]]]
-proc58|[.PRC [[][[av 45]]]]

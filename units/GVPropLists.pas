@@ -6,37 +6,38 @@
   |                  Unité : GVPropLists.pas                               |
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
-  |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    08-08-2014 21:39:46                          |
+  |                  Copyright : © G. VASSEUR 2014-2015                    |
+  |                  Date:    23-12-2014 18:00:00                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
 
-// GVPropLists - part of GVLOGO
-// Copyright (C) 2014 Gilles VASSEUR
+// HISTORIQUE
+// 23/12/2014 - 1.0.0 - première version opérationnelle
+
+// GVPROPLISTS - part of GVLOGO
+// Copyright (C) 2014-2015 Gilles VASSEUR
 //
-// This program is free software: you can redistribute it and/or modify it under the terms of
-// the GNU General Public License as published by the Free Software Foundation,
-// either version 3 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation, either version 3 of the License,
+// or (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License along with this program.
-//  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU General Public License
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
 
-{$I GVDefines.inc}
-
-{$IFNDEF Delphi}
-{$mode objfpc}{$H+}
-{$ENDIF}
+{$I GVDefines.inc} // fichier des définitions préalables
 
 unit GVPropLists;
-
-// Unité pour le traitement des listes de propriétés
-//
-// ##############################################################
+// L'unité GVLISTS regroupe les classes chargées de traiter les listes
+// de propriétés du projet GVLOGO.
 //
 // Une liste de propriétés associe des valeurs à des caractéristiques
 // choisies pour un objet.
@@ -54,39 +55,36 @@ uses
   SysUtils,
   GVConsts, // pour les constantes
   GVWords, // pour les mots
-  GVLists; // pour les listes
+  GVLists, // pour les listes
+  GVErrConsts, // constantes d'erreurs
+  GVErrors; // pour les erreurs
 
 type
-  // *** classe des listes de propriétés pour GVLOGO
-  EPropException = class(Exception); // exception
-
-  // classe pour énumération
-
-  { TGVPropListEnumerator }
-
+  // *** classe pour énumération ***
   TGVPropListEnumerator = class(TObject)
   private
     fLst: TStringList;
     fIndex: Integer;
   protected
-    function GetCurrent: string; virtual;
+    function GetCurrent: string; virtual; // élément en cours
   public
-    constructor Create(const Value: TStrings);
-    destructor Destroy; override;
-    function MoveNext: Boolean;
-    property Current: string read GetCurrent;
+    constructor Create(const Value: TStrings); // création
+    destructor Destroy; override; // destruction
+    function MoveNext: Boolean; // vers le suivant
+    property Current: string read GetCurrent; // valeur de l'élément courant
   end;
 
-  // classe principale
+  // *** classe des listes de propriétés ***
   TGVPropList = class(TObject)
-  private
+  strict private
+    fError: TGVErrors; // enregistrement d'une erreur
     fNames: TStringList; // listes
     fOnchange: TNotifyEvent; // notification de changement
     function GetLPByNum(N: Integer): string; // liste par numéro
-    function GetLPByName(const Name: string): string; // liste par nom
-    procedure SetLPByName(const Name, AValue: string); // écriture par nom
+    function GetLPByName(const Name: string): string; // renvoie liste par nom
+    procedure SetLPByName(const Name, Value: string); // fixe liste par nom
   protected
-    procedure Change; dynamic; // changement
+    procedure Change; // changement
   public
     // constructeur de la classe
     constructor Create;
@@ -96,9 +94,7 @@ type
     function GetEnumerator: TGVPropListEnumerator;
     // nettoie les listes de propriétés
     procedure Clear;
-
     // *** listes de propriétés ***
-
     // renvoie la liste des listes de propriétés
     function ListP: string;
     // la liste existe-t-elle ?
@@ -121,17 +117,13 @@ type
     procedure LoadFromFile(const FileName: string);
     // sauvegarde des listes
     procedure SaveToFile(const FileName: string);
-
     // *** propriétés
-
     // la propriété existe-t-elle ?
     function IsProp(const Name, Prop: string): Boolean;
     // renvoie le numéro d'une propriété
     function NumProp(const Name, Prop: string): Integer;
     // valeur d'une propriété
-    function ValProp(const Name, Prop: string): string; overload;
-    function ValProp(const Name, Prop: string; out Value: string)
-      : Boolean; overload;
+    function ValProp(const Name, Prop: string): string;
     // destruction d'une propriété
     function RemoveProp(const Name, Prop: string): Boolean;
     // renvoie le nombre de propriétés attachées à une liste
@@ -139,28 +131,27 @@ type
     // valeur d'une propriété par numéro
     function ValNumProp(const Name: string; N: Integer; out Prop: string)
       : Boolean; overload;
-    function ValNumProp(const Name: string; N: Integer): string; overload;
+    function ValNumProp(const Name: string; N: Integer): string;
     // liste des propriétés d'une liste
     function ListOfProps(const Name: string): string;
     // nom d'une propriété par numéro
     function NameOfProp(const Name: string; N: Integer): string; overload;
-    function NameOfProp(const Name: string; N: Integer; out Prop: string)
-      : Boolean; overload;
     // changement dans la liste de propriétés
     property OnChange: TNotifyEvent read fOnchange write fOnchange;
     // liste de propriétés par numéro
     property ListPByNum[N: Integer]: string read GetLPByNum; default;
     // liste de propriétés par nom
-    property LPByName[const Name: string]: string read GetLPByName write SetLPByName;
+    property LPByName[const Name: string]: string read GetLPByName
+       write SetLPByName;
+    // notification d'une erreur
+    property Error: TGVErrors read fError write fError;
   end;
 
 implementation
 
 uses
-  StrUtils
-  {$IFNDEF Delphi}
-  ,lazutf8
-  {$ENDIF};
+  StrUtils,
+  lazutf8; // traitement des chaînes UTF8
 
 { TGVPropListEnumerator }
 
@@ -173,25 +164,25 @@ end;
 constructor TGVPropListEnumerator.Create(const Value: TStrings);
 // *** création de l'énumérateur ***
 begin
-  fIndex := -1;
-  fLst := TStringList.Create;
+  fIndex := -1; // on pointe avant le premier élément
+  fLst := TStringList.Create; // liste interne
   fLst.NameValueSeparator := CSep; // définit le caractère séparateur
-  fLst.AddStrings(Value);
+  fLst.AddStrings(Value); // on intègre les valeurs à énumérer
 end;
 
 destructor TGVPropListEnumerator.Destroy;
 // *** destruction de l'énumérateur ***
 begin
-  fLst.Free;
-  inherited Destroy;
+  fLst.Free; // liste interne libérée
+  inherited Destroy; // on hérite
 end;
 
 function TGVPropListEnumerator.MoveNext: Boolean;
 // *** passe à l'élément suivant ***
 begin
-  Result := fIndex < (fLst.Count - 1);
-  if Result then
-    Inc(fIndex);
+  Result := fIndex < (fLst.Count - 1); // on vérifie la borne supérieure
+  if Result then // si OK
+    Inc(fIndex); // on passe à l'élément suivant
 end;
 
 { ========================================================== }
@@ -205,20 +196,22 @@ begin
   if (N > 0) and (N <= fNames.Count) then // intervalle possible ?
     Result := fNames[N - 1]
   else
-    raise EPropException.CreateFmt(ME_BadListP, [N]);
+    // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownNumListP, IntToStr(N));
 end;
 
 procedure TGVPropList.Change;
 // *** changement dans la liste ***
 begin
-  if Assigned(fOnchange) then
-    fOnchange(Self);
+  if Assigned(fOnchange) then // gestionnaire actif ?
+    fOnchange(Self); // on l'exécute
 end;
 
 procedure TGVPropList.Clear;
 // *** nettoie les listes de propriétés ***
 begin
   fNames.Clear; // pas de noms
+  Error.Clear; // pas d'erreur
   Change; // changement notifié
 end;
 
@@ -231,32 +224,40 @@ end;
 function TGVPropList.CountProps(const Name: string): Integer;
 // *** nombre de propriétés attachées à une liste ***
 var
-  Lst: TGVList;
+  LL: TGVList;
 begin
-  Lst := TGVList.Create;
-  try
-    Lst.Text := fNames.Values[Name]; // création
-    Result := Lst.Count div 2; // compte les éléments
-  finally
-    Lst.Free; // libère la liste de travail
-  end;
+  if IsListP(Name) then // la liste existe-t-elle ?
+  begin
+    LL := TGVList.Create; // création de la liste provisoire
+    try
+      LL.Text := fNames.Values[Name]; // analyse de la liste
+      Result := LL.Count div 2; // compte les éléments (par paires)
+    finally
+      LL.Free; // libération de la liste de travail
+    end;
+  end
+  else
+    // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownListP, Name);
 end;
 
 constructor TGVPropList.Create;
 // *** constructeur de la classe ***
 begin
-  inherited Create; // on hérite !
-  fNames := TStringList.Create; // crée la liste interne
-  fNames.NameValueSeparator := CSep; // définit le caractère séparateur
-  fOnchange := nil;
+  inherited Create; // on hérite
+  fNames := TStringList.Create; // on crée la liste interne
+  fNames.NameValueSeparator := CSep; // on définit le caractère séparateur
+  fOnchange := nil; // on met à nil le gestionnaire de changement
+  fError := TGVErrors.Create; // création du gestionnaire d'erreurs
 end;
 
 destructor TGVPropList.Destroy;
 // *** destructeur de la classe ***
 begin
   fOnchange := nil; // gestionnaire d'événements annulé
-  fNames.Free; // libère les noms
-  inherited Destroy; // on hérite !
+  fNames.Free; // on libère les noms
+  fError.Free; // on libère le gestionnaire d'erreurs
+  inherited Destroy; // on hérite
 end;
 
 function TGVPropList.GetEnumerator: TGVPropListEnumerator;
@@ -268,18 +269,21 @@ end;
 function TGVPropList.GetLPByName(const Name: string): string;
 // *** liste de propriétés par nom ***
 var
-  I: Integer;
+  Li: Integer;
 begin
   Result := EmptyStr; // chaîne vide par défaut
-  I := fNames.IndexOfName(Name); // recherche de l'existence
-  if I <> -1 then // si trouvée
-    Result := fNames[I]; // on renvoie sa valeur
+  Li := fNames.IndexOfName(Name); // recherche de l'existence
+  if Li <> -1 then // si trouvée
+    Result := fNames[Li] // on renvoie sa valeur
+  else
+    // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownListP, Name);
 end;
 
-procedure TGVPropList.SetLPByName(const Name, AValue: string);
+procedure TGVPropList.SetLPByName(const Name, Value: string);
 // *** définit une liste de propriétés directement ***
 begin
-  fNames.Values[Name] := AValue;
+  fNames.Values[Name] := Value;
 end;
 
 function TGVPropList.IsListPByNum(N: Integer): Boolean;
@@ -296,27 +300,55 @@ end;
 
 function TGVPropList.IsProp(const Name, Prop: string): Boolean;
 // *** la propriété existe-t-elle ? ***
+var
+  LL: TGVList;
+  Li: Integer;
 begin
-  Result := (NumProp(Name, Prop) <> -1); // test
+  Result := False; // on suppose l'absence
+  if IsListP(Name) then // la liste existe-t-elle ?
+  begin
+    LL := TGVList.Create;
+    try
+      LL.Text := ValListP(Name); // recherche de la valeur de la liste
+      for Li := 1 to LL.Count do // analyse de la liste
+      begin
+        // cherche les éléments et teste la propriété
+        Result := Odd(Li) and (UTF8CompareText(LL[Li - 1], Prop) = 0);
+        if Result then
+          Break; // on a trouvé, donc on sort
+      end;
+    finally
+      LL.Free; // libération de la liste de travail
+    end;
+  end
+  else
+    // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownListP, Name);
 end;
 
 function TGVPropList.ListOfProps(const Name: string): string;
 // *** liste des propriétés d'une liste ***
 var
-  I: Integer;
-  Lst: TGVList;
+  Li: Integer;
+  LL: TGVList;
 begin
   Result := CBeginList; // début de la liste
   try
-    Lst := TGVList.Create; // création de la liste de travail
-    try
-      Lst.Text := ValListP(Name); // récupère la liste
-      for I := 0 to Lst.Count - 1 do // on balaie les propriétés
-        if not Odd(I) then // propriétés par paires
-          Result := Result + Lst[I] + CBlank; // on ajoute le nom
-    finally
-      Lst.Free; // libération de la liste de travail
-    end;
+    if IsListP(Name) then
+    begin
+      LL := TGVList.Create; // création de la liste de travail
+      try
+        LL.Text := ValListP(Name); // récupère la liste
+        for Li := 1 to LL.Count do // on balaie les propriétés
+          if Odd(Li) then // propriétés par paires
+            Result := Result + LL[Li - 1] + CBlank; // on ajoute le nom
+      finally
+        LL.Free; // libération de la liste de travail
+      end;
+    end
+    else
+      // [### Erreur: liste de propriétés inexistante ###]
+      Error.SetError(CE_UnknownListP, Name);
   finally
     Result := TrimRight(Result) + CEndList; // fin de la liste
   end;
@@ -325,15 +357,15 @@ end;
 function TGVPropList.ListP: string;
 // *** renvoie la liste des listes de propriétés ***
 var
-  S: string;
+  LSt: string;
 begin
   Result := CBeginList;
   try
-    for S in fNames do // on balaie la liste
+    for LSt in fNames do // on balaie la liste
       if (Result <> CBeginList) then
-        Result := Result + CBlank + S // pour construire la chaîne
+        Result := Result + CBlank + LSt // pour construire la chaîne
       else
-        Result := Result + S;
+        Result := Result + LSt;
     // on remplace le caractère séparateur
     Result := AnsiReplaceText(Result, CSep, CBlank);
   finally
@@ -344,342 +376,404 @@ end;
 procedure TGVPropList.LoadFromFile(const FileName: string);
 // ***  chargement depuis un fichier ***
 var
-  L: TStringList;
-  Lst: TGVList;
-  S, GVName: string;
-  I, J: Integer;
+  LLst: TStringList;
+  LL: TGVList;
+  LSt, GVName: string;
+  Li, Lj: Integer;
 begin
-  L := TStringList.Create; // liste de travail
-  L.NameValueSeparator := CSep; // séparateur pour les propriétés
+  LLst := TStringList.Create; // liste de travail
+  LLst.NameValueSeparator := CSep; // séparateur pour les propriétés
   try
     // change l'extension si nécessaire
     if PosEx(CDot, FileName) = 0 then // si aucune extension
-      S := FileName + CExtPl // on en ajoute une (.GPL)
+      LSt := FileName + CExtPl // on en ajoute une (.GPL)
     else
-      S := FileName;
-    L.LoadFromFile(S); // charge le fichier
-    if L[0] <> CHeader then
-      // si fichier dans un mauvais format
-      raise EPropException.CreateFmt(ME_BadFormat, [S, L[0]]);
-    L.Delete(0); // on élimine l'entête
-    Lst := TGVList.Create;
+      LSt := FileName;
+    LLst.LoadFromFile(LSt); // charge le fichier
+    if LLst[0] <> CHeader then
+    begin
+      // [### Erreur: mauvais format de fichier ###]
+      Error.SetError(CE_BadFileFormat, Lst, 1);
+      Exit; // inutile d'aller plus loin
+    end;
+    LLst.Delete(0); // on élimine l'entête
+    LL := TGVList.Create; // liste intermédiaire créée
     try
-      for I := 0 to L.Count - 1 do
+      for Li := 0 to LLst.Count - 1 do // on la balaie
       begin
-        GVName := L.Names[I]; // on a le nom
-        Lst.Text := L.Values[GVName]; // et les propriétés
-        for J := 0 to Lst.Count - 1 do
-          if not Odd(J) then
-            UpDateListP(GVName, Lst[J], Lst[J + 1]); // on met à jour
+        if Error.OK then // on met à jour si pas d'erreur
+        begin
+          GVName := LLst.Names[Li]; // on a le nom
+          LL.Text := LLst.Values[GVName]; // et les propriétés
+          for Lj := 1 to LL.Count do
+            if Odd(Lj) then
+              UpDateListP(GVName, LL[Lj - 1], LL[Lj]); // on met à jour
+        end;
       end;
     finally
-      Lst.Free;
+      LL.Free; // on libère la liste intermédiaire
     end;
   finally
-    L.Free; // libère la liste de travail
+    LLst.Free; // on libère la liste de travail
   end;
 end;
 
 function TGVPropList.NameOfProp(const Name: string; N: Integer): string;
 // *** nom d'une propriété par numéro ***
 var
-  Lst: TGVList;
+  LL: TGVList;
 begin
   Result := EmptyStr; // chaîne vide par défaut
-  Lst := TGVList.Create;
-  try
-    if (N > 0) and (N <= CountProps(Name)) then
-    begin
-      Lst.Text := ValListP(Name); // liste de travail
-      Result := Lst[(N - 1) * 2]; // propriétés par paires
+  if IsListP(Name) then // est-ce une liste de propriétés ?
+  begin
+    LL := TGVList.Create;
+    try
+      if (N > 0) and (N <= CountProps(Name)) then // dans les bornes ?
+      begin
+        LL.Text := ValListP(Name); // liste de travail
+        Result := LL[(N - 1) * 2]; // propriétés par paires
+      end
+      else
+       // [### Erreur: propriété inexistante ###]
+       Error.SetError(CE_UnknownNumProp, IntToStr(N));
+    finally
+      LL.Free; // on libère la liste
     end;
-  finally
-    Lst.Free; // on libère la liste
-  end;
-end;
-
-function TGVPropList.NameOfProp(const Name: string; N: Integer;
-  out Prop: string): Boolean;
-// *** nom d'une propriété par numéro (avec contrôle) ***
-var
-  Lst: TGVList;
-begin
-  Result := False; // suppose une erreur
-  Lst := TGVList.Create;
-  try
-    if (N > 0) and (N <= CountProps(Name)) then
-    begin
-      Lst.Text := ValListP(Name); // liste de travail
-      Prop := Lst[(N - 1) * 2]; // propriétés par paires
-      Result := True; // tout est Ok
-    end;
-  finally
-    Lst.Free; // on libère la liste
-  end;
+  end
+  else
+    // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownListP, Name);
 end;
 
 function TGVPropList.NumListP(const Name: string): Integer;
 // *** recherche d'une liste de propriétés ***
 begin
   Result := fNames.IndexOfName(Name) + 1;
+  if Result = 0 then
+    Result := -1; // non trouvée
 end;
 
 function TGVPropList.NumProp(const Name, Prop: string): Integer;
 // *** recherche du numéro d'une propriété ***
 var
-  Lst: TGVList;
-  I: Integer;
+  LL: TGVList;
+  Li: Integer;
 begin
   Result := -1; // on suppose une erreur
-  Lst := TGVList.Create;
-  try
-    Lst.Text := ValListP(Name); // recherche de la valeur de la liste
-    for I := 0 to Lst.Count - 1 do // analyse de la liste
-      // cherche les éléments pairs et teste la propriété
-{$IFDEF Delphi}
-      if not Odd(I) and AnsiSameText(Lst[I], Prop) then
-{$ELSE}
-      if not Odd(I) and (UTF8CompareText(Lst[I], Prop) = 0) then
-{$ENDIF}
-      begin
-        Result := (I div 2) + 1;
-        break;
-      end;
-  finally
-    Lst.Free; // libération de la liste de travail
-  end;
+  if IsListP(Name) then // la liste existe-t-elle ?
+  begin
+    LL := TGVList.Create;
+    try
+      LL.Text := ValListP(Name); // recherche de la valeur de la liste
+      for Li := 1 to LL.Count do // analyse de la liste
+        // cherche les éléments et teste la propriété
+        if Odd(Li) and (UTF8CompareText(LL[Li - 1], Prop) = 0) then
+        begin
+          Result := ((Li - 1) div 2) + 1; // toujours par paires
+          Break; // on a trouvé, donc on sort
+        end;
+    finally
+      LL.Free; // libération de la liste de travail
+    end;
+    if Result = -1 then // propriété non trouvée
+      // [### Erreur: propriété inexistante ###]
+      Error.SetError(CE_UnknownProp, Prop);
+  end
+  else
+    // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownListP, Name);
 end;
 
 function TGVPropList.RemoveListP(const Name: string): Boolean;
 // *** détruit la liste de propriétés ***
 var
-  N: Integer;
+  Li: Integer;
 begin
   Result := False; // suppose une erreur
-  N := fNames.IndexOfName(Name); // on cherche la liste
-  if (N <> -1) then
+  Li := fNames.IndexOfName(Name); // on cherche la liste
+  if (Li <> -1) then
   begin
-    fNames.Delete(N); // on la détruit
+    fNames.Delete(Li); // on la détruit
     Result := True;
     Change; // on notifie les changements
-  end;
+  end
+  else
+    // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownListP, Name);
 end;
 
 function TGVPropList.RemoveProp(const Name, Prop: string): Boolean;
 // *** détruit une propriété ***
 var
-  Lst: TGVList;
-  fUtil: TGVListUtils;
+  LL: TGVList;
+  LUtil: TGVListUtils;
 begin
   Result := False; // suppose une erreur
-  fUtil := TGVListUtils.Create;
-  try
-    Lst := TGVList.Create;
+  if IsListP(Name) then // la liste existe-t-elle ?
+  begin
+    LUtil := TGVListUtils.Create;
     try
-      if IsListP(Name) then // est-ce une liste existante ?
-      begin
-        Lst.Text := ValListP(Name); // liste temporaire
+      LL := TGVList.Create; // liste temporaire
+      try
+        LL.Text := ValListP(Name); // recherche de la valeur de la liste
         // on retire deux éléments si possible
         if IsProp(Name, Prop) then
         begin
-          fNames.Values[Name] := Lst.TwoDelete(NumProp(Name, Prop) * 2 - 1);
-          if (ValListP(Name) = fUtil.EmptyList) then
+          fNames.Values[Name] := LL.TwoDelete(NumProp(Name, Prop) * 2 - 1);
+          if ValListP(Name) = LUtil.EmptyList then
             // on détruit la liste si vide
-            Result := RemoveListP(Name);
-          Result := True;
+            Result := RemoveListP(Name)
+          else
+            Result := True;
           Change; // on notifie les changements
-        end;
+        end
+        else
+          // [### Erreur: propriété inexistante ###]
+          Error.SetError(CE_UnknownProp, Prop);
+      finally
+        LL.Free; // on libère la liste de travail
       end;
     finally
-      Lst.Free; // on libère la liste de travail
+      LUtil.Free;
     end;
-  finally
-    fUtil.Free;
-  end;
+  end
+  else
+    // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownListP, Name);
 end;
 
 procedure TGVPropList.SaveToFile(const FileName: string);
 // *** sauvegarde des listes de propriétés ***
 var
-  L: TStringList;
-  S: string;
+  LL: TStringList;
+  LSt: string;
 begin
-  L := TStringList.Create; // liste de travail
+  LL := TStringList.Create; // liste de travail
   try
     // change l'extension si nécessaire
     if PosEx(CDot, FileName) = 0 then
-      S := FileName + CExtPl
+      LSt := FileName + CExtPl
     else
-      S := FileName;
-    L.Add(CHeader); // ajoute l'entête
-    L.AddStrings(fNames); // ajoute les listes
-    L.SaveToFile(S); // sauve la liste
+      LSt := FileName;
+    LL.Add(CHeader); // ajoute l'entête
+    LL.AddStrings(fNames); // ajoute les listes
+    try
+      LL.SaveToFile(LSt); // sauve la liste
+    except
+      // [### Erreur: mauvaise sauvegarde ###]
+      Error.SetError(CE_BadSave, LSt);
+    end;
   finally
-    L.Free; // libère la liste de travail
+    LL.Free; // libère la liste de travail
   end;
 end;
 
 function TGVPropList.UpDateListP(const Name, Prop, Value: string): Boolean;
 // *** crée ou met à jour la liste de propriétés ***
 var
-  Lst: TGVList;
-  N: Integer;
-  fWord: TGVWord;
-  fUtil: TGVListUtils;
+  LL: TGVList;
+  Li: Integer;
+  LWord: TGVWord;
+  LUtil: TGVListUtils;
+  LS: string;
 begin
-  fUtil := TGVListUtils.Create;
+  LUtil := TGVListUtils.Create;
   try
-    fWord := TGVWord.Create;
+    LWord := TGVWord.Create;
     try
       // test des valeurs
-      Result := (Name <> EmptyStr) and (Prop <> EmptyStr) and
-        (Value <> EmptyStr) and fWord.IsValid(Name) and fWord.IsValid(Prop) and
-        fUtil.IsValidValue(Value);
-      if Result then // si tout est Ok
+      LWord.Text := Name;
+      Result := (Name <> EmptyStr) and LWord.IsValidIdent;
+      if not Result then // nom incorrect ?
+      begin
+        // [### Erreur: mot incorrect ###]
+        Error.SetError(CE_BadWord, Name);
+        Exit; // on sort
+      end;
+      LWord.Text := Prop;
+      Result := (Prop <> EmptyStr) and LWord.IsValid;
+      if not Result then // nom de propriété incorrect ?
+      begin
+        // [### Erreur: mot incorrect ###]
+        Error.SetError(CE_BadWord, Prop);
+        Exit; // on sort
+      end;
+      Result := LUtil.IsValidValue(Value);
+      if not Result then  // valeur de propriété incorrecte ?
+      begin
+        // [### Erreur: ni une liste ni un mot ###]
+        Error.SetError(CE_UnknownListWord, Value);
+        Exit; // on sort
+      end
+      else // si tout est Ok
+      begin
+        LS := CBeginList + Value + CEndList; // valeur en liste
         if IsListP(Name) then // la liste existe-t-elle déjà ?
         begin // oui
-          Lst := TGVList.Create;
+          LL := TGVList.Create;
           try
-            Lst.Text := ValListP(Name); // cherche les propriétés
-            N := NumProp(Name, Prop) - 1;
-            if N = -2 then // propriété trouvée ?
-              fNames.Values[Name] := Lst.TwoAdd(Prop, Value) // on ajoute
+            LL.Text := ValListP(Name); // cherche les propriétés
+            if IsProp(Name, Prop) then
+            begin
+              Li := NumProp(Name, Prop); // numéro de la propriété
+              // on remplace
+              fNames.Values[Name] := LL.ReplaceItem(2 * Li, LS);
+            end
             else
-              // ou on remplace
-              fNames.Values[Name] := Lst.ReplaceItem(2 * (N + 1), Value);
+              fNames.Values[Name] := LL.TwoAdd(Prop, LS); // on ajoute
             Change; // notifie le changement
           finally
-            Lst.Free; // on libère la liste de travail
+            LL.Free; // on libère la liste de travail
           end;
         end
         else // création de la nouvelle liste
         begin
           fNames.Add(Name + fNames.NameValueSeparator + CBeginList + Prop +
-            CBlank + Value + CEndList); // on crée le nom
+            CBlank + LS + CEndList); // on crée le nom
           Change; // notifie le changement
         end;
+      end;
     finally
-      fWord.Free;
+      LWord.Free; // libération du mot de travail
     end;
   finally
-    fUtil.Free;
+    LUtil.Free; // libération de la chaîne utilitaire
   end;
 end;
 
 function TGVPropList.ValListP(const Name: string): string;
 // *** valeur d'une liste de propriétés ***
 begin
-  Result := fNames.Values[Name]; // retourne les propriétés
+  Result := EmptyStr; // chaîne vide par défaut
+  if IsListP(Name) then // la liste existe-t-elle ?
+    Result := fNames.Values[Name] // retourne les propriétés
+  else
+    // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownListP, Name);
 end;
 
 function TGVPropList.ValNumListP(N: Integer; out Name, Value: string): Boolean;
 // *** valeur d'une liste de propriétés par numéro ***
 begin
   Result := False; // suppose une erreur
-  if (N > 0) and (N <= fNames.Count) then
+  if (N > 0) and (N <= fNames.Count) then // dans les bornes ?
   begin
-    Name := fNames.Names[N - 1]; // d'abord le nom
-    Value := fNames.ValueFromIndex[N - 1]; // puis les propriétés
+    Name := fNames.Names[N-1]; // d'abord le nom
+    Value := fNames.ValueFromIndex[N-1]; // puis les propriétés
     Result := True; // tout va bien
-  end;
+  end
+  else
+    // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownNumListP, IntToStr(N));
 end;
 
 function TGVPropList.ValNumProp(const Name: string; N: Integer): string;
-// *** valeur d'une propriété par numéro ***
+// *** valeur d'une propriété par numéro *** ###
 var
-  Lst: TGVList;
+  LL: TGVList;
+  LU: TGVListUtils;
 begin
   Result := EmptyStr; // chaîne vide par défaut
-  Lst := TGVList.Create;
-  try
-    if (N > 0) and (N <= CountProps(Name)) then
-    begin
-      Lst.Text := ValListP(Name); // liste de travail
-      Result := Lst[(N - 1) * 2 + 1]; // propriétés par paires
+  if IsListP(Name) then // la liste existe-t-elle ?
+  begin
+    LL := TGVList.Create;
+    try
+      LU := TGVListUtils.Create; // utilitaire
+      try
+      if (N > 0) and (N <= CountProps(Name)) then // dans les bornes ?
+      begin
+        LL.Text := ValListP(Name); // liste de travail
+        // propriétés par paires, valeur sans les crochets
+        Result := LU.ListToStr(LL[(N - 1) * 2]);
+      end
+      else
+        // [### Erreur: propriété inexistante ###]
+        Error.SetError(CE_UnknownNumProp, IntToStr(N));
+      finally
+        LU.Free; // utilitaire libéré
+      end;
+    finally
+      LL.Free; // on libère la liste
     end;
-  finally
-    Lst.Free; // on libère la liste
-  end;
-end;
-
-function TGVPropList.ValProp(const Name, Prop: string;
-  out Value: string): Boolean;
-// *** valeur d'une propriété (version avec contrôle) ***
-var
-  Lst: TGVList;
-  I: Integer;
-begin
-  Result := False; // échec par défaut
-  Lst := TGVList.Create;
-  try
-    if IsProp(Name, Prop) then // est-ce une propriété valide ?
-    begin
-      Lst.Text := ValListP(Name); // liste de travail
-      for I := 0 to Lst.Count - 1 do // on examine la liste
-        // si c'est une propriété et qu'elle correspond à celle cherchée
-{$IFDEF Delphi}
-        if (not Odd(I)) and AnsiSameText(Lst[I], Prop) then
-{$ELSE}
-        if (not Odd(I)) and (UTF8CompareText(Lst[I], Prop) = 0) then
-{$ENDIF}
-        begin
-          Value := Lst[I + 1]; // élément trouvé
-          Result := True; // on a trouvé
-          break; // on sort de la boucle
-        end;
-    end;
-  finally
-    Lst.Free; // on libère la liste
-  end;
+  end
+  else
+    // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownListP, Name);
 end;
 
 function TGVPropList.ValNumProp(const Name: string; N: Integer;
   out Prop: string): Boolean;
 // *** valeur d'une propriété par numéro ***
 var
-  Lst: TGVList;
+  LL: TGVList;
+  LU: TGVListUtils;
 begin
   Result := False; // suppose une erreur
-  Lst := TGVList.Create;
-  try
-    if (N > 0) and (N <= CountProps(Name)) then
-    begin
-      Lst.Text := ValListP(Name); // liste de travail
-      Prop := Lst[(N - 1) * 2 + 1]; // propriétés par paires
-      Result := True; // tout est Ok
+  if IsListP(Name) then // la liste existe-t-elle ?
+  begin
+    LL := TGVList.Create;
+    try
+      LU := TGVListUtils.Create; // utilitaire
+      try
+        if (N > 0) and (N <= CountProps(Name)) then // dans les bornes ?
+        begin
+          LL.Text := ValListP(Name); // liste de travail
+          Prop := LU.ListToStr(LL[(N - 1) * 2]); // propriétés par paires
+          Result := True; // tout est Ok
+        end
+        else
+         // [### Erreur: propriété inexistante ###]
+         Error.SetError(CE_UnknownNumProp, IntToStr(N));
+      finally
+        LU.Free; // utilitaire libéré
+      end;
+    finally
+      LL.Free; // on libère la liste
     end;
-  finally
-    Lst.Free; // on libère la liste
-  end;
+  end
+  else
+   // [### Erreur: liste de propriétés inexistante ###]
+    Error.SetError(CE_UnknownListP, Name);
 end;
 
 function TGVPropList.ValProp(const Name, Prop: string): string;
 // *** valeur d'une propriété ***
 var
-  Lst: TGVList;
-  I: Integer;
+  LL: TGVList;
+  Li: Integer;
+  LU: TGVListUtils;
 begin
   Result := EmptyStr; // chaîne vide par défaut
-  Lst := TGVList.Create;
+  if IsListP(Name) then // la liste existe-t-elle ?
+  begin
+  LL := TGVList.Create;
   try
     if IsProp(Name, Prop) then
     begin
-      Lst.Text := ValListP(Name); // liste de travail
-      for I := 0 to Lst.Count - 1 do // on examine la liste
+      LL.Text := ValListP(Name); // liste de travail
+      LU := TGVListUtils.Create; // création de l'utilitaire
+      try
+      for Li := 1 to LL.Count do // on examine la liste
         // si c'est une propriété et qu'elle correspond à celle cherchée
-{$IFDEF Delphi}
-        if (not Odd(I)) and AnsiSameText(Lst[I], Prop) then
-{$ELSE}
-        if (not Odd(I)) and (UTF8CompareText(Lst[I], Prop) = 0) then
-{$ENDIF}
+        if Odd(Li) and (UTF8CompareText(LL[Li - 1], Prop) = 0) then
         begin
-          Result := Lst[I + 1]; // élément trouvé
-          break; // on sort de la boucle
+          Result := Lu.ListToStr(LL[Li]); // élément trouvé
+          Break; // on sort de la boucle
         end;
-    end;
+      finally
+        LU.Free; // libération de l'utilitaire
+      end;
+    end
+    else
+      // [### Erreur: propriété inexistante ###]
+      Error.SetError(CE_UnknownProp, Prop);
   finally
-    Lst.Free; // on libère la liste
+    LL.Free; // on libère la liste
   end;
+  end
+  else
+    // [### Erreur: propriété inexistante ###]
+    Error.SetError(CE_UnknownListP, Name);
 end;
 
 end.

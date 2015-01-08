@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <PathDelim Value="\"/>
+    <General>
+      <SessionStorage Value="InProjectDir"/>
+      <MainUnit Value="0"/>
+      <Title Value="testGVAutomat"/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
+    </General>
+    <i18n>
+      <EnableI18N LFM="False"/>
+    </i18n>
+    <VersionInfo>
+      <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
+      <MajorVersionNr Value="1"/>
+      <BuildNr Value="26"/>
+      <Language Value="040C"/>
+      <StringTable CompanyName="GVSOFT" FileDescription="Test de GVAutomat" LegalCopyright="Gilles Vasseur 2014" LegalTrademarks="GNU GPL" OriginalFilename="TestGVAutomat" ProductName="GVLOGO" ProductVersion="1.0.0"/>
+    </VersionInfo>
+    <BuildModes Count="1">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="2">
+      <Item1>
+        <PackageName Value="BGRABitmapPack"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="LCL"/>
+      </Item2>
+    </RequiredPackages>
+    <Units Count="17">
+      <Unit0>
+        <Filename Value="testGVAutomat.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="testGVAutomat"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="main"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="..\..\units\GVAutomat.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVAutomat"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="..\..\units\GVTurtles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVTurtles"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="..\..\units\GVConsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVConsts"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="..\..\units\GVDefines.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="..\..\units\GVErrConsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVErrConsts"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="..\..\units\GVErrors.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVErrors"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="..\..\units\GVEval.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVEval"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="..\..\units\GVKernel.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVKernel"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="..\..\units\GVLists.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVLists"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="..\..\units\GVLocVars.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVLocVars"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="..\..\units\GVPrimConsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVPrimConsts"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="..\..\units\GVPropLists.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVPropLists"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="..\..\units\GVStacks.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVStacks"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="..\..\units\GVWords.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVWords"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="..\..\units\Prims.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit16>
+    </Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="testGVAutomat"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir);..\..\units"/>
+      <OtherUnitFiles Value="..\..\units"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <CodeGeneration>
+      <SmartLinkUnit Value="True"/>
+      <Optimizations>
+        <OptimizationLevel Value="3"/>
+      </Optimizations>
+    </CodeGeneration>
+    <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="False"/>
+      </Debugging>
+      <LinkSmart Value="True"/>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+    </Linking>
+    <Other>
+      <CompilerMessages>
+        <MsgFileName Value=""/>
+      </CompilerMessages>
+      <CompilerPath Value="$(CompPath)"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
+</CONFIG>
