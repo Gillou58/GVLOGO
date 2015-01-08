@@ -1317,7 +1317,7 @@ begin
                   finally
                     L2.Free; // on libère la liste de travail
                   end;
-                  if (Line >= ToLine) or (not Error.OK) then
+                  if (Line > ToLine) and (not Error.OK) then
                   begin
                     Err := Line;
                     // [### Erreur: mot FIN non rencontré ###]
