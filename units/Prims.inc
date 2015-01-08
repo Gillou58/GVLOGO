@@ -763,7 +763,7 @@ begin
     begin
       fExeStack.Dup; // on duplique la donnée à exécuter
       DoPrimExec; // ligne à exécuter
-      if Stop then // arrêt demandé ?
+      if Stop or Error.Ok then // arrêt demandé ?
         Break; // on sort
     end;
     fExeStack.Pop; // nettoyage de la pile
