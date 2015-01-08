@@ -1604,6 +1604,13 @@ begin
     PushConst(IfThen(not LW.IsNegate, IntToStr(CRTrue), IntToStr(CRFalse)));
 end;
 
+procedure DoPrimClearAll;
+// *** .EFFACE.TOUT ***
+begin
+  fKernel.Clear; // nettoyage du noyau
+  Clear; //... et tout le reste...
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -1729,7 +1736,7 @@ begin
     134: DoPrimSort; // TRIE
     135: DoPrimRotate; // ROTATION
     136: DoPrimItem; // ELEMENT
-    137: ; // ### LIBRE AU.HASARD ###
+    137: DoPrimClearAll; // .EFFACE.TOUT
     138, 139: DoPrimSentence; // PHRASE PH
     140: DoPrimSentenceRight; // PHRASE.FIN
     141: DoPrimLowerP; // PLP?

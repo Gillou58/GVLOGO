@@ -665,7 +665,7 @@ begin
   Result := EmptyStr; // chaîne vide par défaut
   if (Text = EmptyStr) then // mot vide interdit
     // [### Erreur : mot vide ###]
-    Error.SetError(CE_EmptyWord, P_AtRandom)
+    Error.SetError(CE_EmptyWord, MF_DRandom)
   else
     Result := Item[Random(Count) + 1]; // caractère UTF8
 end;

@@ -198,7 +198,7 @@ resourcestring
   P_Sort = 'TRIE';
   P_Rotate = 'ROTATION';
   P_Item = 'ELEMENT';
-  P_AtRandom = 'AU.HASARD';
+  P_ClearAll = '.EFFACE.TOUT';
   P_Sentence = 'PHRASE';
   P_Sentence2 ='PH';
   P_SentenceRight = 'PHRASE.FIN'; // 140
@@ -450,7 +450,7 @@ const
     (Name: P_Sort; NbParams: 1),
     (Name: P_Rotate; NbParams: 1),
     (Name: P_Item; NbParams: 2),
-    (Name: P_AtRandom; NbParams: 1),
+    (Name: P_ClearAll; NbParams: 0),
     (Name: P_Sentence; NbParams: 2),
     (Name: P_Sentence2;  NbParams: 2),
     (Name: P_SentenceRight; NbParams: 2),
