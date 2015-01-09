@@ -1750,6 +1750,24 @@ begin
   PushConst(IntToStr(fTurtle.PenWidth));
 end;
 
+procedure DoPrimPenReverse;
+// *** INVERSE.CRAYON ***
+begin
+  fTurtle.PenReverse;
+end;
+
+procedure DoPrimRubber;
+// *** GOMME ***
+begin
+  fTurtle.PenRubber := True;
+end;
+
+procedure DoPrimNormal;
+// *** NORMAL ***
+begin
+  fTurtle.PenRubber := False;;
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -1817,9 +1835,9 @@ begin
     64, 234: DoPrimPenColor; // COULEUR.CRAYON CC
     65: DoPrimSetPenWidth; // FIXE.TAILLE.CRAYON
     66: DoPrimPenWidth; // TAILLE.CRAYON
-    67:;
-    68:;
-    69:;
+    67: DoPrimPenReverse; // INVERSE.CRAYON
+    68: DoPrimRubber; // GOMME
+    69: DoPrimNormal; // NORMAL
     70:;
     71:;
     72:;
