@@ -2070,6 +2070,61 @@ begin
     SetError(CE_BadList, fWkRec.fItem);
 end;
 
+procedure DoPrimTrunc;
+// *** TRONQUE ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+    PushConst(FloatToStr(Trunc(LW.AsNumber)))
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimRound;
+// *** ARRONDI ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+    PushConst(FloatToStr(Round(LW.AsNumber)))
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimSqr;
+// *** AU.CARRE ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+    PushConst(FloatToStr(LW.AsNumber * LW.AsNumber))
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimExp;
+// *** EXP ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+    PushConst(FloatToStr(Exp(LW.AsNumber)))
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimFrac;
+// *** FRAC ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+    PushConst(FloatToStr(Frac(LW.AsNumber)))
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2239,11 +2294,11 @@ begin
     187, 188: DoPrimSin; // SINUS SIN
     189, 190: DoPrimTan; // TANGENTE TAN
     191, 192: DoPrimSqrt; // RAC RACINE
-    193:;
-    194:;
-    195:;
-    196:;
-    197:;
+    193: DoPrimTrunc; // TRONQUE
+    194: DoPrimRound; // ARRONDI
+    195: DoPrimSqr; // AU.CARRE
+    196: DoPrimExp; // EXP
+    197: DoPrimFrac; // FRAC
     198:;
     199:;
     200:;
