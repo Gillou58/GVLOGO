@@ -1611,6 +1611,117 @@ begin
   Clear; //... et tout le reste...
 end;
 
+procedure DoPrimTurtleState;
+// *** ETAT.TORTUE ***
+// abscisse, ordonnée, cap, taille, vitesse, visibilité et forme
+begin
+  PushConst(fTurtle.State);
+end;
+
+procedure DoPrimSetTurtleState;
+// *** FIXE.ETAT.TORTUE ***
+var
+  Li: Integer;
+begin
+  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
+  // une liste ?
+  if IsList then
+  begin
+    if fWkRec.fItem <> CEmptyList then // liste vide ?
+    begin
+      LL.Text := fWkRec.fItem; // on l'analyse
+      if (LL.IsValid and (LL.Count = 7)) then // liste correcte ?
+      begin
+        for Li := 1 to 7 do // on balaie cette liste
+        // on analyse chaque élément s'il n'y a pas d'erreur
+          if Error.Ok then
+          begin
+            case Li of
+              1: begin
+                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
+                   LW.Text := fWkRec.fItem; // mot normalisé
+                   if LW.IsNumber then // un nombre ?
+                     fTurtle.CoordX := LW.AsNumber // abscisse
+                  else
+                    // [### Erreur: mauvais nombre ###]
+                    SetError(CE_BadNumber, fWkRec.fItem);
+              end;
+              2: begin
+                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
+                   LW.Text := fWkRec.fItem; // mot normalisé
+                   if LW.IsNumber then // un nombre ?
+                     fTurtle.CoordY := LW.AsNumber // ordonnée
+                   else
+                    // [### Erreur: mauvais nombre ###]
+                    SetError(CE_BadNumber, fWkRec.fItem);
+              end;
+              3: begin
+                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
+                   LW.Text := fWkRec.fItem; // mot normalisé
+                   if LW.IsNumber then // un nombre ?
+                     fTurtle.Heading := LW.AsNumber // cap
+                   else
+                    // [### Erreur: mauvais nombre ###]
+                    SetError(CE_BadNumber, fWkRec.fItem);
+              end;
+              4: begin
+                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
+                   LW.Text := fWkRec.fItem; // mot normalisé
+                   if LW.IsInt then // un entier ?
+                     fTurtle.Size := LW.AsInt // taille
+                   else
+                    // [### Erreur: mauvais entier ###]
+                    SetError(CE_BadInt, fWkRec.fItem);
+              end;
+              5: begin
+                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
+                   LW.Text := fWkRec.fItem; // mot normalisé
+                   if LW.IsInt then // un entier ?
+                     fTurtle.Speed := LW.AsInt // vitesse
+                   else
+                    // [### Erreur: mauvais entier ###]
+                    SetError(CE_BadInt, fWkRec.fItem);
+              end;
+              6: begin
+                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
+                   LW.Text := fWkRec.fItem; // mot normalisé
+                   if LW.IsBoolean then // un booléen ?
+                     fTurtle.TurtleVisible := LW.AsBoolean // visibilité
+                   else
+                    // [### Erreur: mauvais boolean ###]
+                    SetError(CE_BadBool, fWkRec.fItem);
+              end;
+              7: begin
+                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
+                   LW.Text := fWkRec.fItem; // mot normalisé
+                   if LW.IsBoolean then // un booléen ?
+                   begin
+                     if LW.AsBoolean then
+                       fTurtle.Kind := tkTRiangle // type
+                     else
+                       fTurtle.Kind := tkPNG;
+                   end
+                   else
+                    // [### Erreur: mauvais nombre ###]
+                    SetError(CE_BadBool, fWkRec.fItem);
+              end;
+          end;
+        end;
+      end
+      else
+        // [### Erreur: mauvaise liste ###]
+        SetError(CE_BadList, fWkRec.fItem);
+    end
+    else
+      // [### Erreur: liste vide ###]
+      SetError(CE_EmptyList, fWkRec.fItem);
+  end
+  else
+    // [### Erreur: pas une liste ###]
+    SetError(CE_UnknownList, fWkRec.fItem);
+end;
+
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -1665,8 +1776,8 @@ begin
     46, 47: DoPrimShowTurtle; // MONTRE.TORTUE MT
     48, 49: DoPrimHideTurtle; // CACHE.TORTUE CT
     50: DoPrimVisibleP; // VISIBLE?
-    51:;
-    52:;
+    51: DoPrimTurtleState; // ETAT.TORTUE
+    52: DoPrimSetTurtleState; // FIXE.ETAT.TORTUE
     53: DoPrimNormalTurtle; // TORTUE.NORMALE
     54: DoPrimGreenTurtle; // TORTUE.VERTE
     55: DoPrimSetTurtleSize; // FIXE.TAILLE.TORTUE

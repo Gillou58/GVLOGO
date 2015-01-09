@@ -78,6 +78,9 @@ type
   end;
 
   // *** TGVTurtle - la tortue ***
+
+  { TGVTurtle }
+
   TGVTurtle = class(TObject)
     strict private
       fHeight: Integer; // hauteur de la surface d'origine
@@ -211,7 +214,8 @@ type
       procedure Text(const St: string; X,Y, Angle: Integer); overload;
       // texte affiché à l'emplacement de la tortue
       procedure Text(const St: string); overload;
-    published
+      // état de la tortue
+      function State: string;
       // abscisse de la tortue
       property CoordX: Double read GetCoordX write SetCoordX;
       // ordonnée de la tortue
@@ -269,7 +273,7 @@ type
 
 implementation
 
-uses math, BGRAPen;
+uses Math, StrUtils, BGRAPen;
 
 function RGBToIntColor(N: TColor): Integer;
 // *** couleur en couleur locale ***
@@ -438,8 +442,8 @@ end;
 procedure TGVTurtle.SetSize(AValue: Integer);
 // *** taille de la tortue ***
 begin
-  // valeur inchangée ou tortue non triangulaire ?
-  if (fSize = AValue) or (Kind <> tkTriangle) then
+  // valeur inchangée
+  if (fSize = AValue) then
     Exit; // on sort
   fSize := Min(Abs(AValue), CMaxSize); // on normalise la taille
   Change; // changement notifié
@@ -978,6 +982,16 @@ procedure TGVTurtle.Text(const St: string);
 // *** affiche un texte à l'emplacement de la tortue ***
 begin
   Text(St, Round(CoordX), Round(CoordY), Round(Heading));
+end;
+
+function TGVTurtle.State: string;
+// *** état de la tortue ***
+begin
+  Result := CBeginList + FloatToStr(CoordX) + CBlank + FloatToStr(CoordY) +
+    CBlank + FloatToStr(Heading) + CBlank + IntToStr(Size) + CBlank +
+    IntToStr(Speed) + CBlank + Ifthen(TurtleVisible, IntToStr(CRTrue),
+    IntToStr(CRFalse)) + CBlank + Ifthen((Kind = tkTriangle), IntToStr(CRTrue),
+    IntToStr(CRFalse)) + CEndList;
 end;
 
 procedure TGVTurtle.PenReverse;

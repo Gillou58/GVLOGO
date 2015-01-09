@@ -199,6 +199,8 @@ type
     function AsNumber: Double;
     // renvoie un entier
     function AsInt: Integer;
+    // renvoie un booléen
+    function AsBoolean: Boolean;
     // nombre négatif ?
     function IsNegate: Boolean;
     // chaîne formatée
@@ -502,7 +504,18 @@ begin
     Result :=  fNum.AsInt // on retrouve le résultat
   else
     // [### Erreur: pas un entier ###]
-   Error.SetError(CE_BadInt, Text);
+    Error.SetError(CE_BadInt, Text);
+end;
+
+function TGVWord.AsBoolean: Boolean;
+// *** renvoie un booléen ***
+begin
+  Result := False;
+  if IsBoolean then // un booléen
+    Result := (StrToInt(Text) = CRTrue)
+  else
+    // [### Erreur: pas un booléen ###]
+    Error.SetError(CE_BadBool, Text);
 end;
 
 function TGVWord.IsNegate: Boolean;
