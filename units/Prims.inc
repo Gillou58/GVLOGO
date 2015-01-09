@@ -1381,12 +1381,12 @@ begin
           // on empile le résultat
           PushConst(FloatToStr((fTurtle.Towards(Li, LW.AsInt))))
         else
-          // [### Erreur: mauvaise liste ###]
-          SetError(CE_BadList, fWkRec.fItem);
+          // [### Erreur: mauvais entier ###]
+          SetError(CE_BadInt, LL.Last);
       end
       else
-        // [### Erreur: mauvaise liste ###]
-        SetError(CE_BadList, fWkRec.fItem);
+        // [### Erreur: mauvais entier ###]
+          SetError(CE_BadInt, LL.First);
     end
     else
       // [### Erreur: mauvaise liste ###]
@@ -2014,6 +2014,62 @@ begin
   fTurtle.Wipe;
 end;
 
+procedure DoPrimSetBackGroundColor;
+// *** FIXE.COULEUR.FOND FCF ***
+begin
+  AWord; // un mot attendu
+  if LW.IsInt then
+  begin
+   // ### transformer la couleur ###
+   fTurtle.ScreenColor := IntColorToRGB(StrToInt(LW.Text));
+  end
+  else
+    // [### Erreur: entier incorrect ###]
+    SetError(CE_BadInt, LW.Text);
+end;
+
+procedure DoPrimBackGroundColor;
+// *** COULEUR.FOND CF ***
+begin
+  PushConst(IntToStr(RGBToIntColor(fTurtle.ScreenColor)));
+end;
+
+procedure DoPrimDistance;
+// *** DISTANCE ***
+var
+  Li: Integer;
+begin
+  fWkRec.fItem := fExeStack.Pop; // donnée récupérée
+  if IsList then
+  begin
+    LL.Text := fWkRec.fItem; // liste analysée
+    if LL.Count = 2 then // deux éléments attendus
+    begin
+      LW.Text := LL.First; // premier élément
+      if LW.IsInt then // un nombre ?
+      begin
+        Li := LW.AsInt; // nombre récupéré
+        LW.Text := LL.Last; // second élément
+        if LW.IsInt then // encore un entier ?
+          // on empile le résultat
+          PushConst(FloatToStr((fTurtle.Distance(Li, LW.AsInt))))
+        else
+          // [### Erreur: mauvais entier ###]
+          SetError(CE_BadInt, LL.Last);
+      end
+      else
+        // [### Erreur: mauvais entier ###]
+        SetError(CE_BadInt, LL.First);
+    end
+    else
+      // [### Erreur: mauvaise liste ###]
+      SetError(CE_BadList, fWkRec.fItem);
+  end
+  else
+    // [### Erreur: mauvaise liste ###]
+    SetError(CE_BadList, fWkRec.fItem);
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2106,11 +2162,9 @@ begin
     94, 95: DoPrimWipeScreen; // VIDE.ECRAN VE
     96: DoPrimHome; // ORIGINE
     97: DoPrimWipe; // NETTOIE
-    98:;
-    99:;
-    100:;
-    101:;
-    102:;
+    98, 99: DoPrimSetBackGroundColor; // FIXE.COULEUR.FOND FCF
+    100, 101: DoPrimBackGroundColor; // COULEUR.FOND CF
+    102: DoPrimDistance; // DISTANCE
     103, 104: DoPrimForward; // AVANCE AV
     105, 106: DoPrimBackward; // RECULE RE
     107, 108: DoPrimLeft; // GAUCHE TG
