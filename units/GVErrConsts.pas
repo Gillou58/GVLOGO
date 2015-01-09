@@ -129,20 +129,20 @@ resourcestring
   ME_EmptyWordOrList = 'La donnée "%s" est incorrecte pour la primitive.';
   ME_UnknownPrim = 'La primitive "%s" est inconnue.';
   ME_CantModifyPrim = 'La primitive "%s" ne peut pas être modifiée.';
-  ME_NorPrimNorProc = 'L''objet "%s" n''est ni une procédure ni une primitive.';
+  ME_NorPrimNorProc = '"%s" n''est ni une procédure ni une primitive.';
   ME_BadElse = 'Le SI accompagnant SINON avec "%s" est introuvable.';
 
   // les variables
   ME_BadVar = 'La variable "%s" est incorrecte.';
   ME_UnknownVar = 'La variable "%s" est inconnue.';
-  ME_NotVar = 'L''objet "%s" n''est pas une variable.';
+  ME_NotVar = '"%s" n''est pas une variable.';
 
   // les paquets
   ME_UnknownPackage = 'Le paquet "%s" est inconnu.';
   ME_PackageForbidden =
     'Le paquet "%s" ne peut pas être placé dans un autre paquet.';
-  ME_AlreadyPackage = 'L''objet "%s" est déjà un paquet.';
-  ME_NotInPackage = 'L''objet "%s" n''appartient à aucun paquet.';
+  ME_AlreadyPackage = '"%s" est déjà un paquet.';
+  ME_NotInPackage = '"%s" n''appartient à aucun paquet.';
 
   // les procédures
   ME_UnknownProc = 'La procédure "%s" est inconnue.';
@@ -155,7 +155,7 @@ resourcestring
   ME_EmptyEdit =
     'L''éditeur pour la procédure en cours est vide (lignes : "%s").';
   ME_NorProcnorList =
-    'L''objet "%s" n''est ni une procédure ni une liste de procédures.';
+    '"%s" n''est ni une procédure ni une liste de procédures.';
   ME_BadTo = 'Le mot POUR est mal placé dans "%s".';
   ME_BadEnd = 'Le mot FIN est mal placé dans "%s".';
   ME_NoName = 'Le mot POUR n''est pas suivi d''un nom dans "%s".';
@@ -163,9 +163,9 @@ resourcestring
   // le noyau
   ME_Protected = 'Opération impossible : l''objet "%s" est protégé.';
   ME_BadName = 'Le nom "%s" est incorrect.';
-  ME_UnknownObject = 'L''objet "%s" n''existe pas.';
+  ME_UnknownObject = '"%s" n''existe pas.';
   ME_BadObj = 'Le nom "%s" est déjà utilisé pour un autre type d''objet.';
-  ME_Burried = 'Opération impossible : l''objet "%s" est enterré.';
+  ME_Burried = 'Opération impossible : "%s" est enterré.';
 
   // interprète
   ME_NotEnoughDatas = 'Pas assez de données pour "%s".';
