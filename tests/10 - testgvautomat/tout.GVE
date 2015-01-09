@@ -1,7 +1,7 @@
 [GPL100 (c) GV 2014]
 petale|[.PRC [[[] [[td 45] [repete 6 [repete 90 [av 2 td 2] td 90]]]]]]
 fleur|[.PRC [[[] [[repete 8 [fcc somme hasard 19 1 petale] ct]]]]]
-tourne_c|[.PRC [[[:nbre :motif :cote] [[// forme qui tourne (dans motif avec couleurs)] [repete :nbre [fcc hasard 21 exec ph :motif :cote tg quotient 360 :nbre av 9]]]]]]
+tourne_c|[.PRC [[[:nbre :motif :cote] [[// forme qui tourne (dans motif avec couleurs)] [repete :nbre [fcc somme hasard 19 1 exec ph :motif :cote tg quotient 360 :nbre av 9]]]]]]
 tourne2|[.PRC [[[:nbre :motif :cote] [[// forme qui tourne (dans motif)] [repete :nbre [exec ph :motif :cote tg quotient 360 :nbre av 9]]]]]]
 Poly12|[.PRC [[[:cote] [[// un polyedre à 12 faces] [polyedre :cote 12 30]]]]]
 polyedre|[.PRC [[[:lcote :nbcotes :angle] [[// un polyedre] [bc] [xpolygone :lcote :nbcotes :angle] [td diff 90 :angle] [av :lcote] [tg diff 90 :angle] [polygone :nbcotes :lcote]]]]]
