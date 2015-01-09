@@ -1768,6 +1768,84 @@ begin
   fTurtle.PenRubber := False;;
 end;
 
+procedure DoPrimPenState;
+// *** ETAT.CRAYON ***
+// couleur, épaisseur, baissé?, gomme?
+begin
+  PushConst(fTurtle.PenState);
+end;
+
+procedure DoPrimSetPenState;
+// *** FIXE.ETAT.CRAYON FEC ***
+var
+  Li: Integer;
+begin
+  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
+  // une liste ?
+  if IsList then
+  begin
+    if fWkRec.fItem <> CEmptyList then // liste vide ?
+    begin
+      LL.Text := fWkRec.fItem; // on l'analyse
+      if (LL.IsValid and (LL.Count = 4)) then // liste correcte ?
+      begin
+        for Li := 1 to 4 do // on balaie cette liste
+        // on analyse chaque élément s'il n'y a pas d'erreur
+          if Error.Ok then
+          begin
+            case Li of
+              1: begin
+                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
+                   LW.Text := fWkRec.fItem; // mot normalisé
+                   if LW.IsInt then // un entier ?
+                     fTurtle.PenColor := IntColorToRGB(LW.AsInt) // couleur
+                  else
+                    // [### Erreur: mauvais entier ###]
+                    SetError(CE_BadInt, fWkRec.fItem);
+              end;
+              2: begin
+                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
+                   LW.Text := fWkRec.fItem; // mot normalisé
+                   if LW.IsInt then // un entier ?
+                     fTurtle.PenWidth := LW.AsInt // taille
+                   else
+                    // [### Erreur: mauvais entier ###]
+                    SetError(CE_BadInt, fWkRec.fItem);
+              end;
+              3: begin
+                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
+                   LW.Text := fWkRec.fItem; // mot normalisé
+                   if LW.IsBoolean then // un booléen ?
+                     fTurtle.PenDown := LW.AsBoolean // état de l'écriture
+                   else
+                    // [### Erreur: mauvais boolean ###]
+                    SetError(CE_BadBool, fWkRec.fItem);
+              end;
+              4: begin
+                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
+                   LW.Text := fWkRec.fItem; // mot normalisé
+                   if LW.IsBoolean then // un booléen ?
+                     fTurtle.PenRubber := LW.AsBoolean // état de la gomme
+                   else
+                    // [### Erreur: mauvais nombre ###]
+                    SetError(CE_BadBool, fWkRec.fItem);
+              end;
+          end;
+        end;
+      end
+      else
+        // [### Erreur: mauvaise liste ###]
+        SetError(CE_BadList, fWkRec.fItem);
+    end
+    else
+      // [### Erreur: liste vide ###]
+      SetError(CE_EmptyList, fWkRec.fItem);
+  end
+  else
+    // [### Erreur: pas une liste ###]
+    SetError(CE_UnknownList, fWkRec.fItem);
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -1838,9 +1916,8 @@ begin
     67: DoPrimPenReverse; // INVERSE.CRAYON
     68: DoPrimRubber; // GOMME
     69: DoPrimNormal; // NORMAL
-    70:;
-    71:;
-    72:;
+    70: DoPrimPenState; // ETAT.CRAYON
+    71, 72: DoPrimSetPenState; // FIXE.ETAT.CRAYON FEC
     73:;
     74:;
     75:;
@@ -1978,7 +2055,7 @@ begin
     227: DoPrimSum; // SOMME
     228, 229: DoPrimMinus; // DIFF DIFFERENCE
     230, 231: DoPrimMul; // PRODUIT MUL
-    232, 233: DoPrimDiv; //DIV QUOTIENT
+    232, 233: DoPrimDiv; // DIV QUOTIENT
   end;
 end;
 

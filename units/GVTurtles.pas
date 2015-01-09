@@ -216,6 +216,8 @@ type
       procedure Text(const St: string); overload;
       // état de la tortue
       function TurtleState: string;
+      // état du crayon
+      function PenState: string;
       // abscisse de la tortue
       property CoordX: Double read GetCoordX write SetCoordX;
       // ordonnée de la tortue
@@ -991,6 +993,15 @@ begin
     CBlank + FloatToStr(Heading) + CBlank + IntToStr(Size) + CBlank +
     IntToStr(Speed) + CBlank + Ifthen(TurtleVisible, IntToStr(CRTrue),
     IntToStr(CRFalse)) + CBlank + Ifthen((Kind = tkTriangle), IntToStr(CRTrue),
+    IntToStr(CRFalse)) + CEndList;
+end;
+
+function TGVTurtle.PenState: string;
+// *** état du crayon ***
+begin
+  Result := CBeginList + IntToStr(RGBToIntColor(PenColor)) + CBlank +
+    IntToStr(PenWidth) + CBlank + Ifthen(PenDown, IntToStr(CRTrue),
+    IntToStr(CRFalse)) + CBlank + Ifthen(PenRubber, IntToStr(CRTrue),
     IntToStr(CRFalse)) + CEndList;
 end;
 

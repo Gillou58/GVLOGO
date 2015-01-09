@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="32"/>
+      <BuildNr Value="34"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Test de GVAutomat" LegalCopyright="Gilles Vasseur 2014" LegalTrademarks="GNU GPL" OriginalFilename="TestGVAutomat" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -148,9 +148,6 @@
       </Optimizations>
     </CodeGeneration>
     <Linking>
-      <Debugging>
-        <GenerateDebugInfo Value="False"/>
-      </Debugging>
       <LinkSmart Value="True"/>
       <Options>
         <Win32>
