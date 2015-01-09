@@ -309,7 +309,7 @@ begin
     finally
       LL.Free; // libération de la liste
     end;
-    if Error.Ok then
+    if fLocVars.Count > 0 then // s'il y a des variables en suspens
       fLocVars.DelLastGroup; // variables locales supprimées
   finally
     State := asProcDone; // état
