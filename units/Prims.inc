@@ -2002,6 +2002,18 @@ begin
   PushConst(fTurtle.ScaleState);
 end;
 
+procedure DoPrimHome;
+// *** ORIGINE ***
+begin
+  fTurtle.Home;
+end;
+
+procedure DoPrimWipe;
+// *** NETTOIE ***
+begin
+  fTurtle.Wipe;
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2092,8 +2104,8 @@ begin
     92: DoPrimSetScaleY; // FIXE.ECHELLEY
     93: DoPrimScale; // ECHELLE
     94, 95: DoPrimWipeScreen; // VIDE.ECRAN VE
-    96:;
-    97:;
+    96: DoPrimHome; // ORIGINE
+    97: DoPrimWipe; // NETTOIE
     98:;
     99:;
     100:;
