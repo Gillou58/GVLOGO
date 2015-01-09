@@ -198,7 +198,7 @@ begin
   btnGo.Enabled:= False; // bouton pendant le travail
   case Automat.State of
     asWord, asList, asVar, asNumber, asCommand, asEval, asPushing, asProc,
-      asPrim, asInserting, asPrimValue: LS := Automat.Datas.fItem;
+    asPrim, asInserting, asPrimValue: LS := Automat.Datas.fItem;
     asExePrim, asPrimDone: LS := Automat.Datas.fPrim;
     asExeProc, asProcDone: LS := Automat.Datas.fProc;
     asWaiting: btnGo.Enabled := True;

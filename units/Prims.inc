@@ -102,9 +102,15 @@ begin
     if fWkRec.fItem <> CEmptyList then // liste vide ?
     begin
       LL.Text := fWkRec.fItem; // on l'analyse
-      for Li := LL.Count downto 1 do // on balaie cette liste à rebours
-        // on empile l'élément dans la liste de travail
-        fWkStack.Push(LL[Li - 1]);
+      if LL.IsValid then // liste valide ?
+      begin
+        for Li := LL.Count downto 1 do // on balaie cette liste à rebours
+          // on empile l'élément dans la liste de travail
+          fWkStack.Push(LL[Li - 1]);
+      end
+      else
+        // [### Erreur: liste incorrecte ###]
+        SetError(CE_BadList, fWkRec.fItem);
     end
     else
       // [### Erreur: liste vide ###]
