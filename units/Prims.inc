@@ -1869,11 +1869,11 @@ begin
             fTurtle.SetPos(LDble, LW.AsNumber) // position fixée
           else
             // [### Erreur: mauvais nombre ###]
-            SetError(CE_BadBool, fWkRec.fItem);
+            SetError(CE_BadNumber, fWkRec.fItem);
         end
         else
           // [### Erreur: mauvais nombre ###]
-          SetError(CE_BadBool, fWkRec.fItem);
+          SetError(CE_BadNumber, fWkRec.fItem);
       end
       else
         // [### Erreur: mauvaise liste ###]
@@ -1938,6 +1938,69 @@ begin
     FloatToStr(fTurtle.CoordY) + CEndList);
 end;
 
+procedure DoPrimScreenState;
+// *** ETAT.ECRAN ***
+begin
+  PushConst(fTurtle.ScreenState);
+end;
+
+procedure DoPrimSetScale;
+// *** FIXE.ECHELLE ***
+begin
+  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
+  // une liste ?
+  if IsList then
+  begin
+    if fWkRec.fItem <> CEmptyList then // liste vide ?
+    begin
+      LL.Text := fWkRec.fItem;
+      if (LL.IsValid and (LL.Count = 2)) then // liste correcte ?
+      begin
+        LW.Text := LL.First; // premier élément
+        if LW.IsInt then // un entier ?
+        begin
+          fTurtle.ScaleX := LW.AsInt; // échelle des X
+          LW.Text := LL.Last; // second élément
+          if LW.IsInt then // encore un entier ?
+            fTurtle.ScaleY := LW.AsInt // échelle des Y
+          else
+            // [### Erreur: mauvais entier ###]
+            SetError(CE_BadInt, fWkRec.fItem);
+        end
+        else
+          // [### Erreur: mauvais entier ###]
+          SetError(CE_BadInt, fWkRec.fItem);
+      end
+      else
+        // [### Erreur: mauvaise liste ###]
+        SetError(CE_BadList, fWkRec.fItem);
+    end
+    else
+      // [### Erreur: liste vide ###]
+      SetError(CE_EmptyList, fWkRec.fItem);
+  end
+  else
+    // [### Erreur: pas une liste ###]
+    SetError(CE_UnknownList, fWkRec.fItem);
+end;
+
+procedure DoPrimSetScaleX;
+// *** FIXE.ECHELLEX ***
+begin
+  PushConst(IntToStr(fTurtle.ScaleX));
+end;
+
+procedure DoPrimSetScaleY;
+// *** FIXE.ECHELLEY ***
+begin
+  PushConst(IntToStr(fTurtle.ScaleY));
+end;
+
+procedure DoPrimScale;
+// *** ECHELLE ***
+begin
+  PushConst(fTurtle.ScaleState);
+end;
 
 // #################################################### //
 
@@ -2023,11 +2086,11 @@ begin
     85: DoPrimGate; // CLOS
     86: DoPrimRoll; // ENROULE
     87, 88: DoPrimWin; // FENETRE FEN
-    89:;
-    90:;
-    91:;
-    92:;
-    93:;
+    89: DoPrimScreenState; // ETAT.ECRAN
+    90: DoPrimSetScale; // FIXE.ECHELLE
+    91: DoPrimSetScaleX; // FIXE.ECHELLEX
+    92: DoPrimSetScaleY; // FIXE.ECHELLEY
+    93: DoPrimScale; // ECHELLE
     94, 95: DoPrimWipeScreen; // VIDE.ECRAN VE
     96:;
     97:;

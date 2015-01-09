@@ -218,6 +218,10 @@ type
       function TurtleState: string;
       // état du crayon
       function PenState: string;
+      // état de l'échelle
+      function ScaleState: string;
+      // état de l'écran
+      function ScreenState: string;
       // abscisse de la tortue
       property CoordX: Double read GetCoordX write SetCoordX;
       // ordonnée de la tortue
@@ -1003,6 +1007,20 @@ begin
     IntToStr(PenWidth) + CBlank + Ifthen(PenDown, IntToStr(CRTrue),
     IntToStr(CRFalse)) + CBlank + Ifthen(PenRubber, IntToStr(CRTrue),
     IntToStr(CRFalse)) + CEndList;
+end;
+
+function TGVTurtle.ScaleState: string;
+// *** état de l'échelle ***
+begin
+  Result := CBeginList + IntToStr(ScaleX) + CBlank +
+    IntToStr(ScaleY) + CEndList;
+end;
+
+function TGVTurtle.ScreenState: string;
+// *** état de l'écran ***
+begin
+  Result := CBeginList + IntToStr(RGBToIntColor(ScreenColor)) + CBlank +
+    IntToStr(fWidth) + CBlank + IntToStr(fHeight) + CEndList;
 end;
 
 procedure TGVTurtle.PenReverse;
