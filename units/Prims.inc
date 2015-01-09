@@ -231,7 +231,7 @@ begin
   PushConst(fLocVars.LocVarsToList);
 end;
 
-procedure DoSetPenColor;
+procedure DoPrimSetPenColor;
 // *** FIXE.COULEUR.CRAYON FCC ***
 begin
   AWord; // un mot attendu
@@ -1791,7 +1791,7 @@ begin
     57, 58: DoPrimPenDown; // BAISSE.CRAYON BC
     59, 60: DoPrimPenUp; // LEVE.CRAYON LC
     61: DoPrimPenDownP; // BAISSE?
-    62, 63: DoSetPenColor; // FIXE.COULEUR.CRAYON FCC
+    62, 63: DoPrimSetPenColor; // FIXE.COULEUR.CRAYON FCC
     64:;
     65:;
     66:;
