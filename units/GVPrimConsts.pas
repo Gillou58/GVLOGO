@@ -550,7 +550,7 @@ const
     (Name: MF_Mul2; NbParams: 2),
     (Name: MF_Div; NbParams: 2),
     (Name: MF_Div2; NbParams: 2),
-    (Name: P_PenColor2; NbParams: 1))
+    (Name: P_PenColor2; NbParams: 0))
     ;
 
 implementation
