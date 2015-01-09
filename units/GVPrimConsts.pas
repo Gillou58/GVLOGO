@@ -50,7 +50,7 @@ const
   // *** longueur maximale du nom d'une primitive ***
   CMaxLengthPrim = 127;
   // *** nombre de primitives ***
-  CPrimCount = 234;
+  CPrimCount = 235;
 
  type
   // *** enregistrement d'une primitive ***
@@ -302,6 +302,7 @@ resourcestring
   MF_Div = 'QUOTIENT';
   MF_DIV2 = 'DIV';
   P_PenColor2 = 'CC';
+  P_SetXY2 = 'FXY';
 
 const
   // tableau du nom des fonctions supportées par l'évaluation
@@ -550,7 +551,8 @@ const
     (Name: MF_Mul2; NbParams: 2),
     (Name: MF_Div; NbParams: 2),
     (Name: MF_Div2; NbParams: 2),
-    (Name: P_PenColor2; NbParams: 0))
+    (Name: P_PenColor2; NbParams: 0),
+    (Name: P_SetXY2; NbParams: 2))
     ;
 
 implementation

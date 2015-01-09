@@ -1846,6 +1846,99 @@ begin
     SetError(CE_UnknownList, fWkRec.fItem);
 end;
 
+procedure DoPrimSetPos;
+// ***  FIXE.POS FPOS ***
+var
+  LDble: Double;
+begin
+  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
+  // une liste ?
+  if IsList then
+  begin
+    if fWkRec.fItem <> CEmptyList then // liste vide ?
+    begin
+      LL.Text := fWkRec.fItem;
+      if (LL.IsValid and (LL.Count = 2)) then // liste correcte ?
+      begin
+        LW.Text := LL.First; // premier élément
+        if LW.IsNumber then // un nombre ?
+        begin
+          LDble := LW.AsNumber; // nombre conservé
+          LW.Text := LL.Last; // second élément
+          if LW.IsNumber then // encore un nombre ?
+            fTurtle.SetPos(LDble, LW.AsNumber) // position fixée
+          else
+            // [### Erreur: mauvais nombre ###]
+            SetError(CE_BadBool, fWkRec.fItem);
+        end
+        else
+          // [### Erreur: mauvais nombre ###]
+          SetError(CE_BadBool, fWkRec.fItem);
+      end
+      else
+        // [### Erreur: mauvaise liste ###]
+        SetError(CE_BadList, fWkRec.fItem);
+    end
+    else
+      // [### Erreur: liste vide ###]
+      SetError(CE_EmptyList, fWkRec.fItem);
+  end
+  else
+    // [### Erreur: pas une liste ###]
+    SetError(CE_UnknownList, fWkRec.fItem);
+end;
+
+procedure DoPrimSetXY;
+// ***  FIXE.XY FXY ***
+var
+  LDble: Double;
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then // un nombre
+  begin
+    LDble := LW.AsNumber; // première donnée conservée
+    AWord; // seconde donnée
+    if LW.IsNumber then // un autre nombre ?
+      fTurtle.SetPos(LDble, LW.AsNumber) // position fixée
+    else
+      // [### Erreur: mauvais nombre ###]
+      SetError(CE_BadNumber, fWkRec.fItem);
+  end
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimSetX;
+// ***  FIXEX FX ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+    fTurtle.CoordX := LW.AsNumber // abscisse
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimSetY;
+// ***  FIXEY FY ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+    fTurtle.CoordY := LW.AsNumber // ordonnée
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimPos;
+// *** POS ***
+begin
+  PushConst(CBeginList + FloatToStr(fTurtle.CoordX) + CBlank +
+    FloatToStr(fTurtle.CoordY) + CEndList);
+end;
+
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -1918,14 +2011,11 @@ begin
     69: DoPrimNormal; // NORMAL
     70: DoPrimPenState; // ETAT.CRAYON
     71, 72: DoPrimSetPenState; // FIXE.ETAT.CRAYON FEC
-    73:;
-    74:;
-    75:;
-    76:;
-    77:;
-    78:;
-    79:;
-    80:;
+    73, 74: DoPrimSetPos; // FIXE.POS FPOS
+    75, 235: DoPrimSetXY; // FIXE.XY
+    76, 77: DoPrimSetX; // FIXEX FX
+    78, 79: DoPrimSetY; // FIXEY FY
+    80: DoPrimPos; // POS
     81: DoPrimX; // XCOOR
     82: DoPrimY; // YCOOR
     83: DoPrimSetSpeed; // FIXE.VITESSE
