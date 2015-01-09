@@ -50,7 +50,7 @@ const
   // *** longueur maximale du nom d'une primitive ***
   CMaxLengthPrim = 127;
   // *** nombre de primitives ***
-  CPrimCount = 233;
+  CPrimCount = 234;
 
  type
   // *** enregistrement d'une primitive ***
@@ -126,8 +126,8 @@ resourcestring
   P_SetPenColor = 'FIXE.COULEUR.CRAYON';
   P_SetPenColor2 = 'FCC';
   P_PenColor = 'COULEUR.CRAYON';
-  P_SetPenWidth = 'FIXE.EPAISSEUR.CRAYON';
-  P_PenWidth = 'EPAISSEUR.CRAYON';
+  P_SetPenWidth = 'FIXE.TAILLE.CRAYON';
+  P_PenWidth = 'TAILLE.CRAYON';
   P_PenReverse = 'INVERSE.CRAYON';
   P_Rubber = 'GOMME';
   P_Normal = 'NORMAL';
@@ -301,6 +301,7 @@ resourcestring
   MF_Mul2 = 'PRODUIT';
   MF_Div = 'QUOTIENT';
   MF_DIV2 = 'DIV';
+  P_PenColor2 = 'CC';
 
 const
   // tableau du nom des fonctions supportées par l'évaluation
@@ -548,7 +549,8 @@ const
     (Name: MF_Mul; NbParams: 2),
     (Name: MF_Mul2; NbParams: 2),
     (Name: MF_Div; NbParams: 2),
-    (Name: MF_Div2; NbParams: 2))
+    (Name: MF_Div2; NbParams: 2),
+    (Name: P_PenColor2; NbParams: 0))
     ;
 
 implementation

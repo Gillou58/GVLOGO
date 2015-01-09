@@ -1727,6 +1727,28 @@ begin
     SetError(CE_UnknownList, fWkRec.fItem);
 end;
 
+procedure DoPrimPenColor;
+// *** COULEUR.CRAYON CC ***
+begin
+  PushConst(IntToStr(RGBToIntColor(fTurtle.PenColor)));
+end;
+
+procedure DoPrimSetPenWidth;
+// *** FIXE.TAILLE.CRAYON ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsInt then // un entier ?
+    fTurtle.PenWidth := LW.AsInt // épaisseur changée
+  else
+    // [### Erreur: mauvais entier ###]
+    SetError(CE_BadInt, fWkRec.fItem);
+end;
+
+procedure DoPrimPenWidth;
+// *** TAILLE.CRAYON ***
+begin
+  PushConst(IntToStr(fTurtle.PenWidth));
+end;
 
 // #################################################### //
 
@@ -1792,9 +1814,9 @@ begin
     59, 60: DoPrimPenUp; // LEVE.CRAYON LC
     61: DoPrimPenDownP; // BAISSE?
     62, 63: DoPrimSetPenColor; // FIXE.COULEUR.CRAYON FCC
-    64:;
-    65:;
-    66:;
+    64, 234: DoPrimPenColor; // COULEUR.CRAYON CC
+    65: DoPrimSetPenWidth; // FIXE.TAILLE.CRAYON
+    66: DoPrimPenWidth; // TAILLE.CRAYON
     67:;
     68:;
     69:;
