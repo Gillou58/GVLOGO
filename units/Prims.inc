@@ -1621,7 +1621,7 @@ procedure DoPrimTurtleState;
 // *** ETAT.TORTUE ***
 // abscisse, ordonnée, cap, taille, vitesse, visibilité et forme
 begin
-  PushConst(fTurtle.State);
+  PushConst(fTurtle.TurtleState);
 end;
 
 procedure DoPrimSetTurtleState;

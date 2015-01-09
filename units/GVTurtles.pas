@@ -215,7 +215,7 @@ type
       // texte affiché à l'emplacement de la tortue
       procedure Text(const St: string); overload;
       // état de la tortue
-      function State: string;
+      function TurtleState: string;
       // abscisse de la tortue
       property CoordX: Double read GetCoordX write SetCoordX;
       // ordonnée de la tortue
@@ -984,7 +984,7 @@ begin
   Text(St, Round(CoordX), Round(CoordY), Round(Heading));
 end;
 
-function TGVTurtle.State: string;
+function TGVTurtle.TurtleState: string;
 // *** état de la tortue ***
 begin
   Result := CBeginList + FloatToStr(CoordX) + CBlank + FloatToStr(CoordY) +
