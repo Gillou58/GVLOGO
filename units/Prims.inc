@@ -2187,6 +2187,57 @@ begin
     SetError(CE_BadNumber, fWkRec.fItem);
 end;
 
+procedure DoPrimLn;
+// *** LN ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+  begin
+    if LW.IsNegate then
+      // [### Erreur: nombre négatif impossible ###]
+      SetError(CE_Ln, fWkRec.fItem)
+    else
+      PushConst(FloatToStr(Ln(LW.AsNumber)));
+  end
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimLog2;
+// *** LOG2 ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+  begin
+    if LW.IsNegate then
+      // [### Erreur: nombre négatif impossible ###]
+      SetError(CE_Ln, fWkRec.fItem)
+    else
+      PushConst(FloatToStr(Log2(LW.AsNumber)));
+  end
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimLog10;
+// *** LOG ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+  begin
+    if LW.IsNegate then
+      // [### Erreur: nombre négatif impossible ###]
+      SetError(CE_Ln, fWkRec.fItem)
+    else
+      PushConst(FloatToStr(Log10(LW.AsNumber)));
+  end
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2360,9 +2411,9 @@ begin
     196: DoPrimExp; // EXP
     197: DoPrimFrac; // FRAC
     198, 199: DoPrimInt; // ENT ENTIER
-    200:;
-    201:;
-    202:;
+    200: DoPrimLn; // LN
+    201: DoPrimLog2; // LOG2
+    202: DoPrimLog10; // LOG
     203:;
     204:;
     205:;

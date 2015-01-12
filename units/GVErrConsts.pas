@@ -90,8 +90,7 @@ resourcestring
   ME_Tan = 'La fonction tangente dans "%s" n''est pas définie '+
      'pour un cosinus nul.';
   ME_Ln =
-    'Les fonctions logarithmiques dans "%s" exigent des paramètres ' +
-      'strictement positifs.';
+    '"%s" est négatif : impossible avec les fonctions logarithmique.';
   ME_CoTan =
     'La fonction cotangente dans "%s" n''est pas définie pour un sinus nul.';
   ME_Arc = 'L''expression "%s" n''est définie que dans l''intervalle [-1,1].';

@@ -224,7 +224,7 @@ end;
 procedure TGVAutomat.ExePrim;
 // *** exécution d'une primitive ***
 var
-  LN, LPrm: Integer;
+  Li, LPrm: Integer;
   LW: TGVWord;
   LL: TGVList;
   LU: TGVListUtils;
@@ -236,7 +236,7 @@ begin
   fWkRec.fPrim := Copy(fCommandsStack.Pop, 2, CMaxLengthPrim);
   State := asExePrim; // état
   try
-    LN := fKernel.NumPrim(fWkRec.fPrim); // numéro retrouvé
+    Li := fKernel.NumPrim(fWkRec.fPrim); // numéro retrouvé
     fParamsStack.Pop; // on libère les paramètres
     LPrm := fParamsStack.Pop; // nombre de paramètres de la primitive récupéré
     while LPrm <> 0 do // tant qu'il y a des paramètres
@@ -251,7 +251,7 @@ begin
       try
         LU := TGVListUtils.Create; // utilitaire de travail
         try
-          DoExePrim(LN); // exécution
+          DoExePrim(Li); // exécution
         finally
           LU.Free; // libération de l'utilitaire de travail
         end;
