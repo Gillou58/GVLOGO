@@ -2144,6 +2144,38 @@ begin
   MessageChange; // changement notifié
 end;
 
+procedure DoPrimWordP;
+// *** MOT? ***
+begin
+  AWord; // récupération d'une donnée
+  // vrai ou faux
+  PushConst(IfThen(IsList, IntToStr(CRFalse), IntToStr(CRTrue)));
+end;
+
+procedure DoPrimPrevious;
+// *** PRECEDENT ***
+var
+  LS: string;
+begin
+  AWord;
+  LS := LW.Text; // première donnée
+  AWord; // seconde donnée
+  // empile le premier par ordre alaphabétique
+  PushConst(LW.Lowest(LS));
+end;
+
+procedure DoPrimNext;
+// *** SUIVANT ***
+var
+  LS: string;
+begin
+  AWord;
+  LS := LW.Text; // première donnée
+  AWord; // seconde donnée
+  // empile le dernier par ordre alaphabétique
+  PushConst(LW.Greatest(LS));
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2273,9 +2305,9 @@ begin
     145: DoPrimIdentP; // IDENTIFICATEUR?
     146: DoPrimMemberP; // MEMBRE?
     147: DoPrimNumberP; // NOMBRE?
-    148:;
-    149:;
-    150:;
+    148: DoPrimWordP;  // MOT?
+    149: DoPrimPrevious; // PRECEDENT
+    150: DoPrimNext; // SUIVANT
     151: DoPrimEmptyP; // VIDE?
     152:;
     153:;
