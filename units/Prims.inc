@@ -1,3 +1,39 @@
+{ |========================================================================|
+  |                                                                        |
+  |                  G V S O F T                                           |
+  |                  Projet : GVLogo                                       |
+  |                  Description : procédures pour les primitives          |
+  |                  Fichier : Prims.inc                                   |
+  |                  Ecrit par  : VASSEUR Gilles                           |
+  |                  e-mail : g.vasseur58@laposte.net                      |
+  |                  Copyright : © G. VASSEUR 2014-2015                    |
+  |                  Date:    23-12-2014 18:00:00                          |
+  |                  Version : 1.0.0                                       |
+  |                                                                        |
+  |========================================================================| }
+
+// HISTORIQUE
+// 23/12/2014 - 1.0.0 - première version opérationnelle
+
+// PRIMS.INC - part of GVLOGO
+// Copyright (C) 2014-2015 Gilles VASSEUR
+//
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation, either version 3 of the License,
+// or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+
+
 function IsList: Boolean;
 // *** est-ce une liste ? ***
 begin
@@ -43,7 +79,7 @@ procedure DoPrimWrite;
 begin
   fWkRec.fItem := fExeStack.Pop; // valeur à afficher
   if IsList then // liste ?
-    fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // enlève les crochets
+    fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // on enlève les crochets
   else
   begin
     LW.Text := fWkRec.fItem; // mot normalisé
@@ -239,7 +275,7 @@ begin
   AWord; // un mot attendu
   if LW.IsInt then
   begin
-   // ### transformer la couleur ###
+   // on transforme la couleur
    fTurtle.PenColor := IntColorToRGB(StrToInt(LW.Text));
   end
   else
@@ -279,8 +315,7 @@ procedure DoPrimRandom;
 // *** HASARD ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then  // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     PushConst(LL.AtRandom); // on renvoie un élément au hasard
@@ -299,8 +334,7 @@ procedure DoPrimEmptyP;
 // *** VIDE? ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     // vrai ou faux
@@ -368,7 +402,8 @@ begin
   else
   begin
     LW.Text := fWkRec.fItem;
-    PushConst(LW.ButFirst); // un mot : on renvoie tout sauf le premier caractère
+    // un mot : on renvoie tout sauf le premier caractère
+    PushConst(LW.ButFirst);
   end;
 end;
 
@@ -393,7 +428,7 @@ procedure DoPrimPutLast;
 // *** METSDERNIER ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donné dépilée
-  if IsList then // liste ?
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.PutLast(fExeStack.Pop)); // met en dernier
@@ -409,7 +444,7 @@ procedure DoPrimPutFirst;
 // *** METSPREMIER ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // liste ?
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.PutFirst(fExeStack.Pop)); // met en premier
@@ -425,8 +460,7 @@ Procedure DoPrimReverse;
 // *** INVERSE ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.ReverseItems); // inversion des éléments
@@ -442,8 +476,7 @@ procedure DoPrimUpperCase;
 // *** MAJUSCULES ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.Uppercase); // en majuscules
@@ -459,8 +492,7 @@ procedure DoPrimLowerCase;
 // *** MINUSCULES ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.Lowercase); // en minuscules
@@ -476,8 +508,7 @@ procedure DoPrimShuffle;
 // *** MELANGE ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then  // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.ShuffleItems); // mélange
@@ -493,11 +524,10 @@ procedure DoPrimSort;
 // *** TRIE ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
-    PushConst(LL.SortItems); // trie
+    PushConst(LL.SortItems); // on trie
   end
   else
   begin
@@ -510,8 +540,7 @@ procedure DoPrimRotate;
 // *** ROTATION ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.Rotate); // rotation
@@ -622,8 +651,7 @@ procedure DoPrimCount;
 // *** COMPTE ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     PushConst(IntToStr(LL.Count)); // on renvoie le compte
@@ -640,8 +668,7 @@ procedure DoPrimSentence;
 begin
   fExeStack.Swap;
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     PushConst(LL.SentenceLeft(fExeStack.Pop)); // on renvoie la phrase
@@ -658,8 +685,7 @@ procedure DoPrimSentenceRight;
 begin
   fExeStack.Swap;
   fWkRec.fItem:= fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     PushConst(LL.SentenceRight(fExeStack.Pop)); // on renvoie la phrase
@@ -711,8 +737,7 @@ begin
   begin
     fWkRec.fItem := fExeStack.Pop; // donnée où supprimer
     Li := StrToInt(LW.Text);
-    // une liste ?
-    if IsList then
+    if IsList then // une liste ?
     begin
       LL.Text := fWkRec.fItem; // analyse
       PushConst(LL.DeleteItem(Li)); // on remplace dans la liste
@@ -735,13 +760,11 @@ var
 begin
   fWkRec.fItem := fExeStack.Pop; // nombre dépilé
   LW.Text := fWkRec.fItem;
-  // entier correct ?
-  if LW.IsInt then
+  if LW.IsInt then // entier correct ?
   begin
     fWkRec.fItem := fExeStack.Pop; // donnée dépilée
     Li := StrToInt(LW.Text);
-    // une liste ?
-    if IsList then
+    if IsList then // une liste ?
     begin
       LL.Text := fWkRec.fItem; // analyse
       PushConst(LL[Li - 1]); // élément
@@ -763,9 +786,8 @@ var
   Li: Integer;
 begin
   fWkRec.fItem := fExeStack.Pop; // nombre dépilé
-  // entier correct ?
   LW.Text := fWkRec.fItem;
-  if LW.IsInt then
+  if LW.IsInt then // entier correct ?
   begin
     for Li := 1 to StrToInt(Lw.Text) do // on boucle
     begin
@@ -785,8 +807,7 @@ procedure DoPrimDelProcs;
 // *** .SUP.PROCS ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
     // on supprime les procédures de la liste
     fKernel.RemoveSomeProcs(fWkRec.fItem)
   else
@@ -800,8 +821,7 @@ procedure DoPrimDelVars;
 // *** .SUP.VARS ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
     // on supprime les variables de la liste
     fKernel.RemoveSomeVars(fWkRec.fItem)
   else
@@ -816,8 +836,7 @@ procedure DoPrimIf;
 begin
   fElse := CTrueState; // "sinon" possible et actif
   AWord; // un mot attendu
-  // booléen ?
-  if LW.IsBoolean then
+  if LW.IsBoolean then // un booléen ?
   begin
     if LW.Text = IntToStr(CRTrue) then // vrai ?
     begin
@@ -1248,8 +1267,7 @@ procedure DoPrimSaveVars;
 begin
   AWord; // mot attendu
   fWkRec.fItem := fExeStack.Pop; // liste dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
     fKernel.SaveVars(LW.Text, fWkRec.fItem) // on sauvegarde
   else
     // [### Erreur: mauvaise liste ###]
@@ -1632,8 +1650,7 @@ var
   Li: Integer;
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     if fWkRec.fItem <> CEmptyList then // liste vide ?
     begin
@@ -1783,8 +1800,7 @@ var
   Li: Integer;
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     if fWkRec.fItem <> CEmptyList then // liste vide ?
     begin
@@ -1854,8 +1870,7 @@ var
   LDble: Double;
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then  // une liste ?
   begin
     if fWkRec.fItem <> CEmptyList then // liste vide ?
     begin
@@ -1950,8 +1965,7 @@ procedure DoPrimSetScale;
 // *** FIXE.ECHELLE ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     if fWkRec.fItem <> CEmptyList then // liste vide ?
     begin
@@ -2022,7 +2036,7 @@ begin
   AWord; // un mot attendu
   if LW.IsInt then
   begin
-   // ### transformer la couleur ###
+   // on transforme la couleur
    fTurtle.ScreenColor := IntColorToRGB(StrToInt(LW.Text));
   end
   else

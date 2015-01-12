@@ -244,8 +244,6 @@ resourcestring
   P_Vars = 'VARIABLES'; // 180
   P_LocVars = 'LOCALES';
   P_Loc = 'LOCALE';
-
-  // *** noms des fonctions mathématiques ***
   MF_Unknown = ''; // fonction non définie
   MF_DAbs = 'ABS'; // valeur absolue
   MF_DAbs2 = 'ABSOLUE';
