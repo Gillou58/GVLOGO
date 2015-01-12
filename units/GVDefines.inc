@@ -41,12 +41,14 @@
 // Lazarus (défini par défaut)
 {$DEFINE CompLazarus }
 
-// Delphi prévu... (non défini par défaut)
-{.$DEFINE CompDelphi}
+// options de compilation
+// Lazarus ou Delphi 
 
-// Lazarus : options de compilation
 {$IFDEF CompLazarus}
-  {$MODE objfpc}{$H+}
+   {$MODE objfpc}{$H+}
+   {$UNDEF CompDelphi}
+ {$ELSE}
+   {$DEFINE CompDelphi}
 {$ENDIF}
 
 // option de débogage (défini par défaut)
