@@ -2176,6 +2176,17 @@ begin
   PushConst(LW.Greatest(LS));
 end;
 
+procedure DoPrimInt;
+// *** ENT ENTIER ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+    PushConst(FloatToStr(Int(LW.AsNumber)))
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2348,8 +2359,7 @@ begin
     195: DoPrimSqr; // AU.CARRE
     196: DoPrimExp; // EXP
     197: DoPrimFrac; // FRAC
-    198:;
-    199:;
+    198, 199: DoPrimInt; // ENT ENTIER
     200:;
     201:;
     202:;
