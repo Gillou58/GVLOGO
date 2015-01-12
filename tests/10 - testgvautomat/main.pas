@@ -243,7 +243,10 @@ end;
 procedure TMainForm.GetMessage(Sender: TObject);
 // gestionnaire des messages
 begin
-  mmoMain.Lines.Add(Automat.Datas.fMessage);
+  case Automat.Message.fCommand of
+    acWrite: mmoMain.Lines.Add(Automat.Message.fMessage);
+    acClear: mmoMain.Lines.Clear;
+  end;
 end;
 
 procedure TMainForm.TurtleState(Sender: TObject);

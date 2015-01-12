@@ -1,4 +1,5 @@
 [GPL100 (c) GV 2014]
+raphael|[.PRC [[[:n] [[repete :n [ lc fx hasard 500 fy hasard 500 bc fcc hasard 20 pentagone hasard 100]]]]]]
 petale|[.PRC [[[] [[td 45] [repete 6 [repete 90 [av 2 td 2] td 90]]]]]]
 fleur|[.PRC [[[] [[repete 8 [fcc somme hasard 19 1 petale] ct]]]]]
 tourne_c|[.PRC [[[:nbre :motif :cote] [[// forme qui tourne (dans motif avec couleurs)] [repete :nbre [fcc somme hasard 19 1 exec ph :motif :cote tg quotient 360 :nbre av 9]]]]]]

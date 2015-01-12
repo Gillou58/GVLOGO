@@ -33,7 +33,8 @@ procedure DoPrimWriteAll;
 // *** ECRIST ***
 begin
   fWkRec.fItem := fExeStack.Pop; // élément en cours
-  fWkRec.fMessage := fWkRec.fItem; // valeur brute enregistrée
+  fWkMess.fMessage := fWkRec.fItem; // valeur brute enregistrée
+  fWkMess.fCommand := acWrite; // demande d'écriture
   MessageChange; // notification de changement
 end;
 
@@ -42,12 +43,13 @@ procedure DoPrimWrite;
 begin
   fWkRec.fItem := fExeStack.Pop; // valeur à afficher
   if IsList then // liste ?
-    fWkRec.fMessage := LU.ListToStr(fWkRec.fItem) // enlève les crochets
+    fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // enlève les crochets
   else
   begin
     LW.Text := fWkRec.fItem; // mot normalisé
-    fWkRec.fMessage := LW.Text; // sans les caractères d'échappement
+    fWkMess.fMessage := LW.Text; // sans les caractères d'échappement
   end;
+  fWkMess.fCommand := acWrite; // demande d'écriture
   MessageChange; // notification de changement
 end;
 
@@ -582,7 +584,7 @@ begin
 end;
 
 procedure DoPrimLowerP;
-// *** AVANT? ***
+// *** PLP? ***
 begin
   AWord; // un mot attendu
   // vrai ou faux
@@ -591,7 +593,7 @@ begin
 end;
 
 procedure DoPrimGreaterP;
-// *** APRES? ***
+// *** PLG? ***
 begin
   AWord; // un mot attendu
   // vrai ou faux
@@ -634,7 +636,7 @@ begin
 end;
 
 procedure DoPrimSentence;
-// *** PHRASE ***
+// *** PHRASE PH ***
 begin
   fExeStack.Swap;
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
@@ -2125,6 +2127,23 @@ begin
     SetError(CE_BadNumber, fWkRec.fItem);
 end;
 
+procedure DoPrimPropList;
+// *** PLISTE ***
+var
+  LS: string;
+begin
+  AWord; // donnée
+  if fKernel.PList(fWkRec.fItem, LS) then
+    PushConst(LS);
+end;
+
+procedure DoPrimClearText;
+// *** VIDE.TEXTE VT ***
+begin
+  fWkMess.fCommand := acClear; // demande d'effacement
+  MessageChange; // changement notifié
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2273,12 +2292,10 @@ begin
     164: DoPrimPrimP;  // PRIMITIVE?
     165: DoPrimNameP;  // NOM?
     166: DoPrimList; // LISTE
-    167:;
-    168:;
-    169:;
-    170:;
-    171:;
-    172:;
+    167, 171: ; // ### LIS.LISTE LL  ###
+    168: ;
+    169, 170: DoPrimClearText; // VIDE.TEXTE VT
+    172: DoPrimPropList; // PLISTE
     173:;
     174: DoPrimExec; // EXEC
     175:;

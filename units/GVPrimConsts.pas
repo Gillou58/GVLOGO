@@ -228,11 +228,11 @@ resourcestring
   P_Prim = 'PRIMITIVE?';
   P_NameP = 'NOM?';
   P_List = 'LISTE';
-  P_LPropByNum = 'LPROP.PAR.NUM';
-  P_LPropByName = 'LPROP.PAR.NOM';
-  P_PropByNum = 'PROP.PAR.NUM';
-  P_PropByName = 'PROP.PAR.NOM'; // 170
-  P_NumProp = 'NUM.PROP';
+  P_ReadList = 'LIS.LISTE';
+  P_ReadChar = 'LIS.CAR';
+  P_ClearText = 'VIDE.TEXTE';
+  P_ClearText2 = 'VT'; // 170
+  P_NumProp = 'LL';
   P_PropList = 'PLISTE';
   P_PropVal = 'VAL.PROP';
   P_Exec = 'EXEC';
@@ -482,10 +482,10 @@ const
     (Name: P_Prim; NbParams: 1),
     (Name: P_NameP; NbParams: 1),
     (Name: P_List; NbParams: 2),
-    (Name: P_LPropByNum; NbParams: 1),
-    (Name: P_LPropByName; NbParams: 1),
-    (Name: P_PropByNum; NbParams: 2),
-    (Name: P_PropByName; NbParams: 2),
+    (Name: P_ReadList; NbParams: 0),
+    (Name: P_ReadChar; NbParams: 0),
+    (Name: P_ClearText; NbParams: 0),
+    (Name: P_ClearText2; NbParams: 0),
     (Name: P_NumProp; NbParams: 2),
     (Name: P_PropList; NbParams: 1),
     (Name: P_PropVal; NbParams: 2),

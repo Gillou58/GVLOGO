@@ -258,8 +258,8 @@ type
     // annulation d'une propriété
     function AnProp(const Name, Prop: string): Boolean;
     // liste associée à une propriété
-    function PListe(const Name: string): string; overload;
-    function PListe(const Name: string; out Value: string): Boolean; overload;
+    function PList(const Name: string): string; overload;
+    function PList(const Name: string; out Value: string): Boolean; overload;
     // liste des objets contenant la propriété
     function GList(const Prop: string): string;
     // la liste de propriétés est-elle la liste vide ?
@@ -2020,7 +2020,7 @@ begin
     Error.SetError(CE_UnknownListP, Name);
 end;
 
-function TGVLogoKernel.PListe(const Name: string): string;
+function TGVLogoKernel.PList(const Name: string): string;
 // *** liste associée à une propriété ***
 begin
   Result := fWorkZone.ValListP(Name); // renvoie la liste
@@ -2029,7 +2029,7 @@ begin
     Error.SetError(CE_UnKnownListP, Name); // pas une propriété
 end;
 
-function TGVLogoKernel.PListe(const Name: string; out Value: string): Boolean;
+function TGVLogoKernel.PList(const Name: string; out Value: string): Boolean;
 // *** liste associée à une propriété ***
 begin
   Result := False; // suppose une erreur

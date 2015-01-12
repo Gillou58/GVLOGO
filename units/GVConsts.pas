@@ -221,7 +221,16 @@ type
     fPrim: string; // primitive en cours
     fProc: string; // procédure en cours
     fLevel: Integer; // niveau en cours
-    fMessage: string; // message
+  end;
+
+  // *** commandes de l'interpréteur ***
+
+  TGVAutomatCmd = (acNone, acClear, acWrite);
+
+  // *** message lors de l'intreprétation ***
+  TGVAutomatMessage = record
+    fCommand: TGVAutomatCmd;
+    fMessage: string;
   end;
 
   // *** état de l'automate ***

@@ -67,6 +67,7 @@ type
       fOnNewLine: TNotifyEvent; // accès à l'éditeur
       fOnStateChange: TNotifyEvent; // événement d'état
       fState: TGVAutomatState; // état de l'automate
+      fWkMess: TGVAutomatMessage; // message de l'interpréteur
       fWkRec: TGVAutomatRec; // espace d'interprétation
       fParamsStack: TGVIntegerStack; // pile des paramètres
       fDatasStack: TGVStringStack; // pile des données
@@ -126,7 +127,8 @@ type
       // notification de changement d'état
       property OnStateChange: TNotifyEvent read fOnStateChange
         write fOnStateChange;
-      property Datas: TGVAutomatRec read fWkRec write fWkRec; // données
+      property Datas: TGVAutomatRec read fWkRec; // données
+      property Message: TGVAutomatMessage read fWkMess; // message
   end;
 
 implementation
@@ -560,7 +562,11 @@ begin
     fPrim := EmptyStr; // primitive en cours
     fProc := EmptyStr; // procédure en cours
     fLevel := 0; // niveau en cours
-    fMessage := EmptyStr; // message
+  end;
+  with fWkMess do
+  begin
+    fCommand := acNone; // aucune commande
+    fMessage := EmptyStr; // chaîne vide
   end;
   fParamsStack.Clear; // pile des paramètres
   fDatasStack.Clear; // pile des données
