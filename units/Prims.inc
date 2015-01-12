@@ -41,7 +41,7 @@ begin
 end;
 
 procedure AWord;
-// *** dépile et normalise un mot
+// *** dépile et normalise un mot ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
   LW.Text := fWkRec.fItem; // mot normalisé
@@ -56,13 +56,13 @@ end;
 procedure DoPrimTrue;
 // *** VRAI ***
 begin
-  PushConst(IntToStr(CRTrue)); // on empile la valeur de VRAI
+  PushConst(CStTrue); // on empile la valeur de VRAI
 end;
 
 procedure DoPrimFalse;
 // *** FAUX ***
 begin
-  PushConst(IntToStr(CRFalse)); // on empile la valeur de FAUX
+  PushConst(CStFalse); // on empile la valeur de FAUX
 end;
 
 procedure DoPrimWriteAll;
@@ -206,7 +206,7 @@ procedure DoPrimForward;
 begin
   AWord; // un mot attendu
   if LW.IsNumber then
-   fTurtle.Move(StrToFloat(LW.Text))
+   fTurtle.Move(LW.AsNumber)
   else
     // [### Erreur: nombre incorrect ###]
     SetError(CE_BadNumber, LW.Text);
@@ -217,7 +217,7 @@ procedure DoPrimBackward;
 begin
   AWord; // un mot attendu
   if LW.IsNumber then
-   fTurtle.Move(- StrToFloat(LW.Text))
+   fTurtle.Move(- LW.AsNumber)
   else
     // [### Erreur: nombre incorrect ###]
     SetError(CE_BadNumber, LW.Text);
@@ -228,7 +228,7 @@ procedure DoPrimLeft;
 begin
   AWord; // un mot attendu
   if LW.IsNumber then
-   fTurtle.Turn(StrToFloat(LW.Text))
+   fTurtle.Turn(LW.AsNumber)
   else
     // [### Erreur: nombre incorrect ###]
     SetError(CE_BadNumber, LW.Text);
@@ -239,7 +239,7 @@ procedure DoPrimRight;
 begin
   AWord; // un mot attendu
   if LW.IsNumber then
-   fTurtle.Turn(- StrToFloat(LW.Text))
+   fTurtle.Turn(- LW.AsNumber)
   else
     // [### Erreur: nombre incorrect ###]
     SetError(CE_BadNumber, LW.Text);
@@ -274,10 +274,8 @@ procedure DoPrimSetPenColor;
 begin
   AWord; // un mot attendu
   if LW.IsInt then
-  begin
-   // on transforme la couleur
-   fTurtle.PenColor := IntColorToRGB(StrToInt(LW.Text));
-  end
+    // on transforme la couleur
+    fTurtle.LocalPenColor := LW.AsInt
   else
     // [### Erreur: entier incorrect ###]
     SetError(CE_BadInt, LW.Text);
@@ -287,12 +285,11 @@ procedure DoPrimNot;
 // *** NON ***
 begin
   AWord; // un mot attendu
-  // booléen ?
-  if LW.IsBoolean then
-    PushConst(IntToStr(not StrToInt(fWkRec.fItem)))
+  if LW.IsInt then // entier ?
+    PushConst(IntToStr(not LW.AsInt))
   else
     // [### Erreur: booléen incorrect ###]
-    SetError(CE_BadBool, LW.Text);
+    SetError(CE_BadInt, LW.Text);
 end;
 
 procedure DoPrimTo;
@@ -324,7 +321,7 @@ begin
   begin
     LW.Text := fWkRec.fItem; // mot normalisé
     if LW.IsInt then
-      PushConst(IntToStr(Random(StrToInt(LW.Text)) + 1)) // nombre au hasard
+      PushConst(IntToStr(Random(LW.AsInt) + 1)) // nombre au hasard
     else
       PushConst(LW.Atrandom); // on renvoie un caractère au hasard
   end;
@@ -338,13 +335,13 @@ begin
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     // vrai ou faux
-    PushConst(IfThen(LL.IsEmptyList, IntToStr(CRTrue), IntToStr(CRFalse)));
+    PushConst(IfThen(LL.IsEmptyList, CStTrue, CStFalse));
   end
   else
   begin
     LW.Text := fWkRec.fItem;
     // vrai ou faux
-    PushConst(IfThen(LW.IsEmptyWord, IntToStr(CRTrue), IntToStr(CRFalse)));
+    PushConst(IfThen(LW.IsEmptyWord, CStTrue, CStFalse));
   end;
 end;
 
@@ -557,7 +554,7 @@ procedure DoPrimNumberP;
 begin
   AWord; // un mot attendu
   // vrai ou faux
-  PushConst(IfThen(LW.IsNumber, IntToStr(CRTrue), IntToStr(CRFalse)));
+  PushConst(IfThen(LW.IsNumber, CStTrue, CStFalse));
 end;
 
 procedure DoPrimMemberP;
@@ -579,7 +576,7 @@ begin
     LB := LW.IsMember(fWkRec.fItem); // élément?
   end;
   // vrai ou faux
-  PushConst(IfThen(LB, IntToStr(CRTrue), IntToStr(CRFalse)));
+  PushConst(IfThen(LB, CStTrue, CStFalse));
 end;
 
 procedure DoPrimInsert;
@@ -618,7 +615,7 @@ begin
   AWord; // un mot attendu
   // vrai ou faux
   PushConst(IfThen(LW.IsLower(fExeStack.Pop),
-    IntToStr(CRTrue), IntToStr(CRFalse)));
+    CStTrue, CStFalse));
 end;
 
 procedure DoPrimGreaterP;
@@ -627,7 +624,7 @@ begin
   AWord; // un mot attendu
   // vrai ou faux
   PushConst(IfThen(LW.IsGreater(fExeStack.Pop),
-    IntToStr(CRTrue), IntToStr(CRFalse)));
+    CStTrue, CStFalse));
 end;
 
 procedure DoPrimEqualP;
@@ -636,7 +633,7 @@ begin
   AWord; // un mot attendu
   // vrai ou faux
   PushConst(IfThen(LW.IsEqual(fExeStack.Pop),
-    IntToStr(CRTrue), IntToStr(CRFalse)));
+    CStTrue, CStFalse));
 end;
 
 procedure DoPrimIdentP;
@@ -644,7 +641,7 @@ procedure DoPrimIdentP;
 begin
   AWord; // un mot attendu
   // vrai ou faux
-  PushConst(IfThen(LW.IsValidIdent, IntToStr(CRTrue), IntToStr(CRFalse)));
+  PushConst(IfThen(LW.IsValidIdent, CStTrue, CStFalse));
 end;
 
 procedure DoPrimCount;
@@ -706,7 +703,7 @@ begin
   AWord; // un mot attendu (emplacement)
   if LW.IsInt then // conversion en entier ?
   begin
-    Li := StrToInt(LW.Text);
+    Li := LW.AsInt;
     AWord; // nouveau mot (donnée à remplacer)
     fWkRec.fItem := fExeStack.Pop; // donnée où remplacer
     if IsList then // une liste ?
@@ -736,7 +733,7 @@ begin
   if LW.IsInt then // conversion en entier ?
   begin
     fWkRec.fItem := fExeStack.Pop; // donnée où supprimer
-    Li := StrToInt(LW.Text);
+    Li := LW.AsInt;
     if IsList then // une liste ?
     begin
       LL.Text := fWkRec.fItem; // analyse
@@ -763,7 +760,7 @@ begin
   if LW.IsInt then // entier correct ?
   begin
     fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-    Li := StrToInt(LW.Text);
+    Li := LW.AsInt;
     if IsList then // une liste ?
     begin
       LL.Text := fWkRec.fItem; // analyse
@@ -789,7 +786,7 @@ begin
   LW.Text := fWkRec.fItem;
   if LW.IsInt then // entier correct ?
   begin
-    for Li := 1 to StrToInt(Lw.Text) do // on boucle
+    for Li := 1 to LW.AsInt do // on boucle
     begin
       fExeStack.Dup; // on duplique la donnée à exécuter
       DoPrimExec; // ligne à exécuter
@@ -838,7 +835,7 @@ begin
   AWord; // un mot attendu
   if LW.IsBoolean then // un booléen ?
   begin
-    if LW.Text = IntToStr(CRTrue) then // vrai ?
+    if LW.Text = CStTrue then // vrai ?
     begin
       DoPrimExec; // exécution
       fElse := CFalseState; // "sinon" possible mais inactif
@@ -1151,7 +1148,7 @@ begin
   AWord; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsProp(fExeStack.Pop, fWkRec.fItem),
-    IntToStr(CRTrue), IntToStr(CRFalse)));
+    CStTrue, CStFalse));
 end;
 
 procedure DoPrimPropListP;
@@ -1160,7 +1157,7 @@ begin
   AWord; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsListP(fWkRec.fItem),
-    IntToStr(CRTrue), IntToStr(CRFalse)));
+    CStTrue, CStFalse));
 end;
 
 procedure DoPrimProcP;
@@ -1169,7 +1166,7 @@ begin
   AWord; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsProc(fWkRec.fItem),
-    IntToStr(CRTrue), IntToStr(CRFalse)));
+    CStTrue, CStFalse));
 end;
 
 procedure DoPrimPrimP;
@@ -1178,7 +1175,7 @@ begin
   AWord; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsPrim(fWkRec.fItem),
-    IntToStr(CRTrue), IntToStr(CRFalse)));
+    CStTrue, CStFalse));
 end;
 
 procedure DoPrimNameP;
@@ -1187,7 +1184,7 @@ begin
   AWord; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsVar(fWkRec.fItem),
-    IntToStr(CRTrue), IntToStr(CRFalse)));
+    CStTrue, CStFalse));
 end;
 
 procedure DoPrimLoadProcs;
@@ -1326,7 +1323,7 @@ begin
   AWord; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsProtected(fWkRec.fItem),
-    IntToStr(CRTrue), IntToStr(CRFalse)));
+    CStTrue, CStFalse));
 end;
 
 procedure DoPrimToPck;
@@ -1350,7 +1347,7 @@ begin
   AWord; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsBurriedPck(fWkRec.fItem),
-    IntToStr(CRTrue), IntToStr(CRFalse)));
+    CStTrue, CStFalse));
 end;
 
 procedure DoPrimPkgCreate;
@@ -1477,7 +1474,7 @@ procedure DoPrimVisibleP;
 // *** VISIBLE? ***
 begin
   // vrai ou faux
-  PushConst(IfThen(fTurtle.TurtleVisible, IntToStr(CRTrue), IntToStr(CRFalse)));
+  PushConst(IfThen(fTurtle.TurtleVisible, CStTrue, CStFalse));
 end;
 
 procedure DoPrimSetTurtleSize;
@@ -1513,7 +1510,7 @@ procedure DoPrimPenDownP;
 // *** BAISSE? ***
 begin
   // vrai ou faux
-  PushConst(IfThen(fTurtle.PenDown, IntToStr(CRTrue), IntToStr(CRFalse)));
+  PushConst(IfThen(fTurtle.PenDown, CStTrue, CStFalse));
 end;
 
 procedure DoPrimX;
@@ -1618,7 +1615,7 @@ begin
   AWord; // un mot attendu
   if LW.IsNumber then // un nombre ?
     // vrai ou faux
-    PushConst(IfThen(LW.IsNegate, IntToStr(CRTrue), IntToStr(CRFalse)));
+    PushConst(IfThen(LW.IsNegate, CStTrue, CStFalse));
 end;
 
 procedure DoPrimPlusP;
@@ -1627,7 +1624,7 @@ begin
   AWord; // un mot attendu
   if LW.IsNumber then // un nombre ?
     // vrai ou faux
-    PushConst(IfThen(not LW.IsNegate, IntToStr(CRTrue), IntToStr(CRFalse)));
+    PushConst(IfThen(not LW.IsNegate, CStTrue, CStFalse));
 end;
 
 procedure DoPrimClearAll;
@@ -1646,110 +1643,15 @@ end;
 
 procedure DoPrimSetTurtleState;
 // *** FIXE.ETAT.TORTUE ***
-var
-  Li: Integer;
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
-  begin
-    if fWkRec.fItem <> CEmptyList then // liste vide ?
-    begin
-      LL.Text := fWkRec.fItem; // on l'analyse
-      if (LL.IsValid and (LL.Count = 7)) then // liste correcte ?
-      begin
-        for Li := 1 to 7 do // on balaie cette liste
-        // on analyse chaque élément s'il n'y a pas d'erreur
-          if Error.Ok then
-          begin
-            case Li of
-              1: begin
-                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
-                   LW.Text := fWkRec.fItem; // mot normalisé
-                   if LW.IsNumber then // un nombre ?
-                     fTurtle.CoordX := LW.AsNumber // abscisse
-                  else
-                    // [### Erreur: mauvais nombre ###]
-                    SetError(CE_BadNumber, fWkRec.fItem);
-              end;
-              2: begin
-                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
-                   LW.Text := fWkRec.fItem; // mot normalisé
-                   if LW.IsNumber then // un nombre ?
-                     fTurtle.CoordY := LW.AsNumber // ordonnée
-                   else
-                    // [### Erreur: mauvais nombre ###]
-                    SetError(CE_BadNumber, fWkRec.fItem);
-              end;
-              3: begin
-                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
-                   LW.Text := fWkRec.fItem; // mot normalisé
-                   if LW.IsNumber then // un nombre ?
-                     fTurtle.Heading := LW.AsNumber // cap
-                   else
-                    // [### Erreur: mauvais nombre ###]
-                    SetError(CE_BadNumber, fWkRec.fItem);
-              end;
-              4: begin
-                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
-                   LW.Text := fWkRec.fItem; // mot normalisé
-                   if LW.IsInt then // un entier ?
-                     fTurtle.Size := LW.AsInt // taille
-                   else
-                    // [### Erreur: mauvais entier ###]
-                    SetError(CE_BadInt, fWkRec.fItem);
-              end;
-              5: begin
-                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
-                   LW.Text := fWkRec.fItem; // mot normalisé
-                   if LW.IsInt then // un entier ?
-                     fTurtle.Speed := LW.AsInt // vitesse
-                   else
-                    // [### Erreur: mauvais entier ###]
-                    SetError(CE_BadInt, fWkRec.fItem);
-              end;
-              6: begin
-                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
-                   LW.Text := fWkRec.fItem; // mot normalisé
-                   if LW.IsBoolean then // un booléen ?
-                     fTurtle.TurtleVisible := LW.AsBoolean // visibilité
-                   else
-                    // [### Erreur: mauvais boolean ###]
-                    SetError(CE_BadBool, fWkRec.fItem);
-              end;
-              7: begin
-                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
-                   LW.Text := fWkRec.fItem; // mot normalisé
-                   if LW.IsBoolean then // un booléen ?
-                   begin
-                     if LW.AsBoolean then
-                       fTurtle.Kind := tkTRiangle // type
-                     else
-                       fTurtle.Kind := tkPNG;
-                   end
-                   else
-                    // [### Erreur: mauvais nombre ###]
-                    SetError(CE_BadBool, fWkRec.fItem);
-              end;
-          end;
-        end;
-      end
-      else
-        // [### Erreur: mauvaise liste ###]
-        SetError(CE_BadList, fWkRec.fItem);
-    end
-    else
-      // [### Erreur: liste vide ###]
-      SetError(CE_EmptyList, fWkRec.fItem);
-  end
-  else
-    // [### Erreur: pas une liste ###]
-    SetError(CE_UnknownList, fWkRec.fItem);
+  AWord; // donnée attendue
+  fTurtle.TurtleState := fWkRec.fItem;
 end;
 
 procedure DoPrimPenColor;
 // *** COULEUR.CRAYON CC ***
 begin
-  PushConst(IntToStr(RGBToIntColor(fTurtle.PenColor)));
+  PushConst(IntToStr(fTurtle.LocalPenColor));
 end;
 
 procedure DoPrimSetPenWidth;
@@ -1796,113 +1698,16 @@ end;
 
 procedure DoPrimSetPenState;
 // *** FIXE.ETAT.CRAYON FEC ***
-var
-  Li: Integer;
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
-  begin
-    if fWkRec.fItem <> CEmptyList then // liste vide ?
-    begin
-      LL.Text := fWkRec.fItem; // on l'analyse
-      if (LL.IsValid and (LL.Count = 4)) then // liste correcte ?
-      begin
-        for Li := 1 to 4 do // on balaie cette liste
-        // on analyse chaque élément s'il n'y a pas d'erreur
-          if Error.Ok then
-          begin
-            case Li of
-              1: begin
-                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
-                   LW.Text := fWkRec.fItem; // mot normalisé
-                   if LW.IsInt then // un entier ?
-                     fTurtle.PenColor := IntColorToRGB(LW.AsInt) // couleur
-                  else
-                    // [### Erreur: mauvais entier ###]
-                    SetError(CE_BadInt, fWkRec.fItem);
-              end;
-              2: begin
-                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
-                   LW.Text := fWkRec.fItem; // mot normalisé
-                   if LW.IsInt then // un entier ?
-                     fTurtle.PenWidth := LW.AsInt // taille
-                   else
-                    // [### Erreur: mauvais entier ###]
-                    SetError(CE_BadInt, fWkRec.fItem);
-              end;
-              3: begin
-                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
-                   LW.Text := fWkRec.fItem; // mot normalisé
-                   if LW.IsBoolean then // un booléen ?
-                     fTurtle.PenDown := LW.AsBoolean // état de l'écriture
-                   else
-                    // [### Erreur: mauvais boolean ###]
-                    SetError(CE_BadBool, fWkRec.fItem);
-              end;
-              4: begin
-                   fWkRec.fItem := LL[Li - 1]; // donnée récupérée
-                   LW.Text := fWkRec.fItem; // mot normalisé
-                   if LW.IsBoolean then // un booléen ?
-                     fTurtle.PenRubber := LW.AsBoolean // état de la gomme
-                   else
-                    // [### Erreur: mauvais nombre ###]
-                    SetError(CE_BadBool, fWkRec.fItem);
-              end;
-          end;
-        end;
-      end
-      else
-        // [### Erreur: mauvaise liste ###]
-        SetError(CE_BadList, fWkRec.fItem);
-    end
-    else
-      // [### Erreur: liste vide ###]
-      SetError(CE_EmptyList, fWkRec.fItem);
-  end
-  else
-    // [### Erreur: pas une liste ###]
-    SetError(CE_UnknownList, fWkRec.fItem);
+  AWord; // donnée récupérée
+  fTurtle.PenState := fWkRec.fItem;
 end;
 
 procedure DoPrimSetPos;
 // ***  FIXE.POS FPOS ***
-var
-  LDble: Double;
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then  // une liste ?
-  begin
-    if fWkRec.fItem <> CEmptyList then // liste vide ?
-    begin
-      LL.Text := fWkRec.fItem;
-      if (LL.IsValid and (LL.Count = 2)) then // liste correcte ?
-      begin
-        LW.Text := LL.First; // premier élément
-        if LW.IsNumber then // un nombre ?
-        begin
-          LDble := LW.AsNumber; // nombre conservé
-          LW.Text := LL.Last; // second élément
-          if LW.IsNumber then // encore un nombre ?
-            fTurtle.SetPos(LDble, LW.AsNumber) // position fixée
-          else
-            // [### Erreur: mauvais nombre ###]
-            SetError(CE_BadNumber, fWkRec.fItem);
-        end
-        else
-          // [### Erreur: mauvais nombre ###]
-          SetError(CE_BadNumber, fWkRec.fItem);
-      end
-      else
-        // [### Erreur: mauvaise liste ###]
-        SetError(CE_BadList, fWkRec.fItem);
-    end
-    else
-      // [### Erreur: liste vide ###]
-      SetError(CE_EmptyList, fWkRec.fItem);
-  end
-  else
-    // [### Erreur: pas une liste ###]
-    SetError(CE_UnknownList, fWkRec.fItem);
+  AWord; // donnée récupérée
+  fTurtle.PosState := fWkRec.fItem;
 end;
 
 procedure DoPrimSetXY;
@@ -1964,40 +1769,8 @@ end;
 procedure DoPrimSetScale;
 // *** FIXE.ECHELLE ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
-  begin
-    if fWkRec.fItem <> CEmptyList then // liste vide ?
-    begin
-      LL.Text := fWkRec.fItem;
-      if (LL.IsValid and (LL.Count = 2)) then // liste correcte ?
-      begin
-        LW.Text := LL.First; // premier élément
-        if LW.IsInt then // un entier ?
-        begin
-          fTurtle.ScaleX := LW.AsInt; // échelle des X
-          LW.Text := LL.Last; // second élément
-          if LW.IsInt then // encore un entier ?
-            fTurtle.ScaleY := LW.AsInt // échelle des Y
-          else
-            // [### Erreur: mauvais entier ###]
-            SetError(CE_BadInt, fWkRec.fItem);
-        end
-        else
-          // [### Erreur: mauvais entier ###]
-          SetError(CE_BadInt, fWkRec.fItem);
-      end
-      else
-        // [### Erreur: mauvaise liste ###]
-        SetError(CE_BadList, fWkRec.fItem);
-    end
-    else
-      // [### Erreur: liste vide ###]
-      SetError(CE_EmptyList, fWkRec.fItem);
-  end
-  else
-    // [### Erreur: pas une liste ###]
-    SetError(CE_UnknownList, fWkRec.fItem);
+  AWord; // donnée récupérée
+  fTurtle.ScreenState := fWkRec.fItem;
 end;
 
 procedure DoPrimSetScaleX;
@@ -2035,10 +1808,8 @@ procedure DoPrimSetBackGroundColor;
 begin
   AWord; // un mot attendu
   if LW.IsInt then
-  begin
-   // on transforme la couleur
-   fTurtle.ScreenColor := IntColorToRGB(StrToInt(LW.Text));
-  end
+    // on transforme la couleur
+    fTurtle.LocalScreenColor := StrToInt(LW.Text)
   else
     // [### Erreur: entier incorrect ###]
     SetError(CE_BadInt, LW.Text);
@@ -2047,7 +1818,7 @@ end;
 procedure DoPrimBackGroundColor;
 // *** COULEUR.FOND CF ***
 begin
-  PushConst(IntToStr(RGBToIntColor(fTurtle.ScreenColor)));
+  PushConst(IntToStr(fTurtle.LocalScreenColor));
 end;
 
 procedure DoPrimDistance;
@@ -2163,7 +1934,7 @@ procedure DoPrimWordP;
 begin
   AWord; // récupération d'une donnée
   // vrai ou faux
-  PushConst(IfThen(IsList, IntToStr(CRFalse), IntToStr(CRTrue)));
+  PushConst(IfThen(IsList, CStFalse, CStTrue));
 end;
 
 procedure DoPrimPrevious;
@@ -2310,7 +2081,7 @@ begin
   // booléen ?
   if LW.IsBoolean then
   begin
-    if (LW.Text = IntToStr(CRTrue)) then  // résultat vrai ?
+    if (LW.Text = CStTrue) then  // résultat vrai ?
       fTest := CTrueState // drapeau adapté
     else
       fTest := CFalseState
@@ -2342,6 +2113,45 @@ begin
     CDisabledState: // [### Erreur: SI.FAUX mal placé ###]
       SetError(CE_BadTest, P_IfFalse);
   end;
+end;
+
+procedure DoPrimSetTurtle;
+// *** FIXE.TORTUE ***
+begin
+  AWord; // donnée récupérée
+  fTurtle.TurtleState := fWkRec.fItem;
+end;
+
+procedure DoPrimSetScreen;
+// *** FIXE.ECRAN ***
+begin
+  AWord; // donnée récupérée
+  fTurtle.ScreenState := fWkRec.fItem;
+end;
+
+procedure DoPrimGetTurtle;
+// *** VALEUR.TORTUE ***
+begin
+  PushConst(fTurtle.TurtleState);
+end;
+
+procedure DoPrimGetScreen;
+// *** VALEUR.ECRAN ***
+begin
+  PushConst(fTurtle.ScreenState);
+end;
+
+procedure DoPrimSetPen;
+// *** FIXE.CRAYON ***
+begin
+  AWord; // donnée récupérée
+  fTurtle.PenState := fWkRec.fItem;
+end;
+
+procedure DoPrimGetPen;
+// *** VALEUR.CRAYON ***
+begin
+  PushConst(fTurtle.PenState);
 end;
 
 // #################################################### //
@@ -2543,6 +2353,12 @@ begin
     228, 229: DoPrimMinus; // DIFF DIFFERENCE
     230, 231: DoPrimMul; // PRODUIT MUL
     232, 233: DoPrimDiv; // DIV QUOTIENT
+    236: DoPrimSetTurtle; // FIXE.TORTUE
+    237: DoPrimSetScreen; // FIXE.ECRAN
+    238: DoPrimGetTurtle; // VALEUR.TORTUE
+    239: DoPrimGetScreen; // VALEUR.ECRAN
+    240: DoPrimSetPen; // FIXE.CRAYON
+    241: DoPrimGetPen; // VALEUR.CRAYON
   end;
 end;
 

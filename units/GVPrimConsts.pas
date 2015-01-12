@@ -50,7 +50,7 @@ const
   // *** longueur maximale du nom d'une primitive ***
   CMaxLengthPrim = 127;
   // *** nombre de primitives ***
-  CPrimCount = 235;
+  CPrimCount = 241;
 
  type
   // *** enregistrement d'une primitive ***
@@ -301,6 +301,12 @@ resourcestring
   MF_DIV2 = 'DIV';
   P_PenColor2 = 'CC';
   P_SetXY2 = 'FXY';
+  P_SetTurtle = 'FIXE.TORTUE';
+  P_SetScreen = 'FIXE.ECRAN';
+  P_GetTurtle = 'VALEUR.TORTUE';
+  P_GetScreen = 'VALEUR.ECRAN';
+  P_SetPen = 'FIXE.CRAYON';
+  P_GetPen = 'VALEUR.CRAYON';
 
 const
   // tableau du nom des fonctions supportées par l'évaluation
@@ -550,7 +556,13 @@ const
     (Name: MF_Div; NbParams: 2),
     (Name: MF_Div2; NbParams: 2),
     (Name: P_PenColor2; NbParams: 0),
-    (Name: P_SetXY2; NbParams: 2))
+    (Name: P_SetXY2; NbParams: 2),
+    (Name: P_SetTurtle; NbParams: 1),
+    (Name: P_SetScreen; NbParams: 1),
+    (Name: P_GetTurtle; NbParams: 0),
+    (Name: P_GetScreen; NbParams: 0),
+    (Name: P_SetPen; NbParams: 1),
+    (Name: P_GetPen; NbParams: 0))
     ;
 
 implementation

@@ -7,7 +7,8 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, bgrabitmappack, MainFormTurtle, GVConsts, GVTurtles;
+  Forms, bgrabitmappack, MainFormTurtle, GVConsts, GVTurtles, GVErrConsts,
+  GVLists;
 
 {$R *.res}
 

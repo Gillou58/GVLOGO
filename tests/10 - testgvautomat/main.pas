@@ -98,7 +98,8 @@ var
 implementation
 
 uses
-  StrUtils;
+  StrUtils,
+  GVErrors; // erreurs
 
 {$R *.lfm}
 
@@ -166,6 +167,7 @@ begin
   Automat.Turtle := GVTurtle; // tortue liée à l'automate
   GVTurtle.OnChange := @TurtleState;  // gestionnaire de changement
   GVTurtle.OnBeforeChange := @TurtleBeforePaint; // idem avant de dessiner
+  GVTurtle.Error.OnError := @GetError; // gestionnaire d'erreurs
   GVTurtle.ReInit; // initialisation
   GVTurtle.Kind := tkPng; // tortue image
 end;
@@ -229,7 +231,7 @@ procedure TMainForm.GetError(Sender: TObject; ErrorRec: TGVErrorRec);
 // gestionnaire d'erreurs
 begin
   // message en toutes lettres
-  mmoMain.Lines.Add('// >>> ' + Automat.Error.ErrorMessage);
+  mmoMain.Lines.Add('// >>> ' + (Sender as TGVErrors).ErrorMessage);
   with mmoMain.Lines, ErrorRec do
   begin
     Add('// Code: ' + IntToStr(Ord(Code))); // code de l'erreur

@@ -113,9 +113,16 @@ const
   CREqual = 0; // résultats de comparaison (égal)
   CRGreater = 1; // résultats de comparaison (plus grand)
   CRTrue = -1; // vrai
+  CStTrue = '-1';
   CRFalse = 0; // faux
+  CStFalse = '0';
 
   // *** tortue graphique ***
+  // couleurs de base
+  CColors: array[0..19] of TColor = (clBlack, clMaroon, clGreen, clOlive,
+    clNavy, clPurple, clTeal, clGray, clSilver, clRed, clLime, clYellow,
+    clBlue, clFuchsia, clAqua, clWhite, clMoneyGreen, clSkyBlue, clCream,
+    clMedGray);
   DgToRad = Pi / 180; // pour les conversions en radians
   RadToDg = 180 / Pi; // pour les conversions en degrés
   CDefaultScale = 100; // échelle par défaut
@@ -151,6 +158,26 @@ type
 
   // *** types de tortue : triangle, dessin ou personnalisée (réservée) ***
   TTurtleKind = (tkTriangle, tkPng, tkOwner);
+
+  // *** définition d'une tortue ***
+  TTurtle = record
+    rSaved: Boolean; // drapeau de sauvegarde
+    rX: Extended; // abscisse
+    rY: Extended; // ordonnée
+    rKind: TTurtleKind; // type de tortue
+    rSize: Integer; // taille de la tortue
+    rVisible: Boolean; // drapeau de visibilité
+    rHeading: Extended; // direction
+    rPenDown: Boolean; // drapeau de crayon baissé
+    rPenRubber: Boolean; // drapeau d'effacement
+    rScaleX: Integer; // échelle des X
+    rScaleY: Integer; // échelle des Y
+    rFilled: Boolean; // remplissage
+    rPenWidth: Integer; // largeur de crayon
+    rBrush: TBrush; // type de brosse
+    rPen: TPen; // type de crayon
+    rFont: TFont; // type de fonte
+  end;
 
   // *** notifications de la pile ***
   // ajout, suppression, changement, effacement
@@ -227,7 +254,7 @@ type
 
   TGVAutomatCmd = (acNone, acClear, acWrite);
 
-  // *** message lors de l'intreprétation ***
+  // *** message lors de l'interprétation ***
   TGVAutomatMessage = record
     fCommand: TGVAutomatCmd;
     fMessage: string;

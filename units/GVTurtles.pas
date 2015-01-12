@@ -36,7 +36,6 @@
 {$I GVDefines.inc} // fichier des définitions préalables
 
 unit GVTurtles;
-
 //
 // Unité de la tortue graphique de GVLOGO
 //
@@ -49,7 +48,9 @@ interface
 uses
   Classes, SysUtils, Graphics,
   BGRABitmap, BGRABitmapTypes, // bibliothèque graphique
-  GVConsts;
+  GVConsts, // constantes générales
+  GVErrConsts, // constantes des erreurs
+  GVErrors; // traitement des erreurs
 
 type
   // changement de la tortue
@@ -57,62 +58,51 @@ type
   // avant le changement de la tortue
   TTurtleBeforeEvent = procedure(Sender: TObject; cHeading: Integer) of object;
 
-  // *** définition d'une tortue ***
-  TTurtle = record
-    rSaved: Boolean; // drapeau de sauvegarde
-    rX: Extended; // abscisse
-    rY: Extended; // ordonnée
-    rKind: TTurtleKind; // type de tortue
-    rSize: Integer; // taille de la tortue
-    rVisible: Boolean; // drapeau de visibilité
-    rHeading: Extended; // direction
-    rPenDown: Boolean; // drapeau de crayon baissé
-    rPenRubber: Boolean; // drapeau d'effacement
-    rScaleX: Integer; // échelle des X
-    rScaleY: Integer; // échelle des Y
-    rFilled: Boolean; // remplissage
-    rPenWidth: Integer; // largeur de crayon
-    rBrush: TBrush; // type de brosse
-    rPen: TPen; // type de crayon
-    rFont: TFont; // type de fonte
-  end;
-
-  // *** TGVTurtle - la tortue ***
+  // *** classe de la tortue ***
 
   { TGVTurtle }
 
   TGVTurtle = class(TObject)
     strict private
-      fHeight: Integer; // hauteur de la surface d'origine
-      fPNGTurtle: TBGRABitmap; // tortue PNG en cours
-      fWidth: Integer; // largeur de la surface d'origine
-      BckImg: TBGRABitmap; // fond
-      DrwImg: TBGRABitmap; // surface dessinée
-      TtlImg: TBGRABitmap; // dessin de la tortue
-      ActualImg: TBGRABitmap; // surface réelle
-      fX: Double; // abscisse de la tortue
-      fY: Double; // ordonnée de la tortue
+      fError: TGVErrors; // gestion des erreurs
+      // *** la tortue ***
+      fX: Double; // abscisse
+      fY: Double; // ordonnée
+      fHeading: Double; // cap
+      fSize: Integer; // taille
+      fTurtleKind: TTurtleKind; // type
+      fTurtleVisible: Boolean; // visibilité
+      fSpeed: Integer; // vitesse
+      fPNGTurtle: TBGRABitmap; // PNG en cours
+      fSavedTurtle: TTurtle; // sauvegarde
       fOnchange: TTurtleEvent; // changement notifié
-      fScreen: TScreenTurtle; // mode de l'écran
-      fTurtleKind: TTurtleKind; // type de tortue
-      fTurtleVisible: Boolean; // visibilité de la tortue
-      fHeading: Double; // cap de la tortue
-      fSize: Integer; // taille de la tortue
-      fPenDown: Boolean; // crayon levé/baissé
+      fOnBeforeChange: TTurtleBeforeEvent; // notification avant cap changé
+      // *** le crayon ***
+      fPenDown: Boolean; // levé/baissé
+      fPenRubber: Boolean; // gomme
+      fPenWidth: Integer; // largeur
+      fPenColor: TColor; // couleur
+      fTempColor: TColor; // sauvegarde temporaire de la couleur d'écriture
+      // *** l'écran ***
+      fScreen: TScreenTurtle; // mode
+      fHeight: Integer; // hauteur de la surface d'origine
+      fWidth: Integer; // largeur de la surface d'origine
       fScaleX: Integer; // échelle des X
       fScaleY: Integer; // échelle des Y
-      fSavedTurtle: TTurtle; // sauvegarde d'une tortue
-      fScreenColor: TColor; // couleur de l'écran
+      fScreenColor: TColor; // couleur
+      fBckImg: TBGRABitmap; // fond
+      fDrwImg: TBGRABitmap; // surface dessinée
+      fTtlImg: TBGRABitmap; // dessin de la tortue
+      fActualImg: TBGRABitmap; // surface réelle
       fFilled: Boolean; // drapeau de remplissage
-      fTempColor: TColor; // sauvegarde temporaire de la couleur d'écriture
-      fPenRubber: Boolean; // gomme du crayon
-      fOnBeforeChange: TTurtleBeforeEvent; // notification avant cap changé
-      fPenColor: TColor; // couleur du crayon
-      fPenWidth: Integer; // largeur du crayon
-      fSpeed: Integer; // vitesse de la tortue
+      // *** méthodes internes des propriétés ***
       function GetCoordX: Double;
       function GetCoordY: Double;
       function GetImg: TBGRABitmap;
+      function GetLocalPenColor: Integer;
+      procedure SetLocalPenColor(AValue: Integer);
+      function GetLocalScreenColor: Integer;
+      procedure SetLocalScreenColor(AValue: Integer);
       procedure SetCoordX(AValue: Double);
       procedure SetCoordY(AValue: Double);
       procedure SetFilled(AValue: Boolean);
@@ -126,62 +116,68 @@ type
       procedure SetSpeed(AValue: Integer);
       procedure SetTurtleKind(AValue: TTurtleKind);
       procedure SetTurtleVisible(AValue: Boolean);
-      procedure SetRubberPen(AValue: Boolean); // la tortue efface
-      // coordonnées dans limites ?
-      function IsWithinLimits(X, Y: Double): Boolean;
-      // effectue un déplacement
-      procedure DoGo(X, Y: Double);
-      // déplacement en écrivant
-      procedure LineTo(X, Y: Double);
-      // déplacement sans écrire
-      procedure MoveTo(X, Y: Double);
+      procedure SetRubberPen(AValue: Boolean);
+      // *** états ***
+      function GetTurtleState: string; // état de la tortue
+      procedure SetTurtleState(const St: string);
+      function GetPenState: string; // état du crayon
+      procedure SetPenState(const St: string);
+      function GetPosState: string; // position du crayon
+      procedure SetPosState(const St:string);
+      function GetScaleState: string; // état de l'échelle
+      procedure SetScaleState(const St: string);
+      function GetScreenState: string; // état de l'écran
+      procedure SetScreenState(const St: string);
+      // *** méthodes internes générales ***
+      function IsWithinLimits(X, Y: Double): Boolean; // dans limites ?
+      procedure DoGo(X, Y: Double); // effectue un déplacement
+      procedure LineTo(X, Y: Double); // déplacement en écrivant
+      procedure MoveTo(X, Y: Double); // déplacement sans écrire
+      // *** figures prédéfinies générales ***
       // arc d'ellipse (b : début, e : fin - en degrés)
       procedure ArcAntialias(x, y, rx, ry: single; b, e: word;
-          c: TBGRAPixel; w: single);
+        c: TBGRAPixel; w: single);
       // arc d'ellipse rempli (b : début, e : fin - en degrés)
       procedure FillArcAntiAlias(x, y, rx, ry: single; b, e: word;
         c: TBGRAPixel);
       // portion d'ellipse (b : début, e : fin - en degrés)
       procedure PieAntialias(x, y, rx, ry: single; b, e: word;
-          c: TBGRAPixel; w: single);
+        c: TBGRAPixel; w: single);
       // portion d'ellipse remplie (b : début, e : fin - en degrés)
       procedure FillPieAntiAlias(x, y, rx, ry: single; b, e: word;
         c: TBGRAPixel);
+      // *** fonctions utiles ***
+      function ColorToIntColor(N: TColor): Integer; // couleur en couleur locale
+      function IntColorToColor(N: Integer): TColor; // couleur locale en couleur
     protected
-      // change l'ordonnée pour le nouveau repère
-      function cY(Y: Integer): Integer; virtual;
-      // on dessine la tortue triangulaire
-      procedure DrawTriangleTurtle; virtual;
-      // tortue PNG
-      procedure DrawPNGTurtle; virtual;
-      // gestion du changement
-      procedure Change; dynamic;
-      // avant le changement
-      procedure BeforeChange; dynamic;
+      function cY(Y: Integer): Integer; virtual; // ordonnée dans nouveau repère
+      procedure DrawTriangleTurtle; virtual; // tortue triangulaire
+      procedure DrawPNGTurtle; virtual; // tortue PNG
+      procedure Change; // gestion du changement
+      procedure BeforeChange; // avant le changement
     public
       constructor Create(Width, Height: Integer); // création
       destructor Destroy; override; // destructeur
       procedure ReInit; // réinitialisation de l'objet
-      // inversion de l'écriture
-      procedure PenReverse;
-      // la tortue se déplace
-      procedure Move(Value: Double);
-      // fixe les coordonnées de la tortue
-      procedure SetPos(X, Y: Double);
-      // la tortue tourne
-      procedure Turn(Value: Double);
-      // tortue à l'origine
-      procedure Home;
-      // nettoyage de l'écran
-      procedure Wipe;
-      // sauvegarde de la tortue
-      procedure SaveTurtle;
-      // récupère une tortue sauvée
-      procedure ReloadTurtle(Clean: Boolean);
+      procedure PenReverse; // inversion de l'écriture
+      procedure Move(Value: Double); // la tortue se déplace
+      procedure SetPos(X, Y: Double); // fixe les coordonnées de la tortue
+      procedure Turn(Value: Double); // la tortue tourne
+      procedure Home; // tortue à l'origine
+      procedure Wipe; // nettoyage de l'écran
+      procedure SaveTurtle; // sauvegarde de la tortue
+      procedure ReloadTurtle(Clean: Boolean); // récupère une tortue sauvée
       // renvoie le cap vers un point
-      function Towards(X, Y: Integer): Double;
+      function Towards(X, Y: Integer): Double; overload;
+      function Towards(const St: string): Double; overload;
       // renvoie la distance de la tortue à un point donné
-      function Distance(X, Y: Integer): Double;
+      function Distance(X, Y: Integer): Double; overload;
+      function Distance(const St: string): Double; overload;
+      // texte affiché sur l'écran de la tortue
+      procedure Text(const St: string; X,Y, Angle: Integer); overload;
+      // texte affiché à l'emplacement de la tortue
+      procedure Text(const St: string); overload;
+      // *** figures prédéfinies ***
       // dessine un rectangle
       procedure Rectangle(X1, Y1, X2, Y2: Integer); overload;
       // dessine un rectangle à l'emplacement de la tortue
@@ -210,18 +206,7 @@ type
       procedure Pie(X1, Y1, X2, Y2, X3, Y3: Integer); overload;
       // dessine une section d'ellipse à l'emplacement de la tortue
       procedure Pie(X2, Y2, X3, Y3: Integer); overload;
-      // texte affiché sur l'écran de la tortue
-      procedure Text(const St: string; X,Y, Angle: Integer); overload;
-      // texte affiché à l'emplacement de la tortue
-      procedure Text(const St: string); overload;
-      // état de la tortue
-      function TurtleState: string;
-      // état du crayon
-      function PenState: string;
-      // état de l'échelle
-      function ScaleState: string;
-      // état de l'écran
-      function ScreenState: string;
+      // *** propriétés ***
       // abscisse de la tortue
       property CoordX: Double read GetCoordX write SetCoordX;
       // ordonnée de la tortue
@@ -245,22 +230,22 @@ type
       property ScaleX: Integer read fScaleX write fScaleX default CDefaultScale;
       // échelle des Y
       property ScaleY: Integer read fScaleY write fScaleY default CDefaultScale;
-      // état de la gomme
       property PenRubber: Boolean read fPenRubber write SetRubberPen
-        default False;
-     // couleur du crayon
+        default False; // état de la gomme
       property PenColor: TColor read fPenColor write SetPenColor
-        default CDefaultPenColor;
-      // largeur du crayon
+        default CDefaultPenColor; // couleur du crayon
+      property LocalPenColor: Integer read GetLocalPenColor
+        write SetLocalPenColor; // couleur du crayon en couleur locale
       property PenWidth: Integer read fPenWidth write SetPenWidth default
-        CDefaultPenWidth;
+        CDefaultPenWidth; // largeur du crayon
       // état du remplissage
       property Filled: Boolean read fFilled write SetFilled default True;
       // vitesse de dessin de la tortue
       property Speed: Integer read fSpeed write SetSpeed default CMaxSpeed;
-      // couleur du fond d'écran
       property ScreenColor: TColor read fScreenColor write SetScreenColor
-        default CDefaultBackColor;
+        default CDefaultBackColor; // couleur du fond d'écran
+      property LocalScreenColor: Integer read GetLocalScreenColor
+        write SetLocalScreenColor; // couleur de l'écran en couleur locale
       // événement après le changement de la tortue
       property OnChange: TTurtleEvent read fOnchange write fOnchange;
       // événement avant le changement de la tortue
@@ -270,16 +255,27 @@ type
       property TurtleBitmap: TBGRABitmap read GetImg;
       // tortue PNG
       property PNGTurtle: TBGRABitmap read fPNGTurtle write fPNGTurtle;
+      // notification d'une erreur
+      property Error: TGVErrors read fError write fError;
+      // état de la tortue
+      property TurtleState: string read GetTurtleState write SetTurtleState;
+      // état du crayon
+      property PenState: string read GetPenState write SetPenState;
+      // position du crayon
+      property PosState: string read GetPosState write SetPosState;
+      // échelle
+      property ScaleState: string read GetScaleState write SetScaleState;
+      // écran
+      property ScreenState: string read GetScreenState write SetScreenState;
   end;
 
-  // couleur en couleur locale
-  function RGBToIntColor(N: TColor): Integer;
-  // couleur locale en couleur
-  function IntColorToRGB(N: Integer): TColor;
 
 implementation
 
-uses Math, StrUtils, BGRAPen;
+uses Math, StrUtils, BGRAPen,
+  GVLists, // listes
+  GVWords, // mots
+  GVPrimConsts; // primitives
 
 function RGBToIntColor(N: TColor): Integer;
 // *** couleur en couleur locale ***
@@ -312,11 +308,6 @@ end;
 
 function IntColorToRGB(N: Integer): TColor;
 // *** couleur locale en couleur ***
-const
-  CColors: array[0..19] of TColor = (clBlack, clAqua, clBlue, clCream,
-    clFuchsia, clGray, clGreen, clLime, clMaroon, clMedGray,
-    clMoneyGreen, clNavy, clOlive, clPurple, clRed, clSilver, clSkyBlue,
-    clTeal, clWhite, clYellow);
 begin
   if (N < 0) or (N > 19) then
     N := 0; // noire si hors bornes
@@ -349,20 +340,32 @@ end;
 function TGVTurtle.GetImg: TBGRABitmap;
 // *** récupération de l'image ***
 begin
-  with ActualImg do // on procède par couches
+  with fActualImg do // on procède par couches
   begin
-    PutImage(0,0,BckImg,dmDrawWithTransparency); // le fond
-    PutImage(0,0,DrwImg,dmDrawWithTransparency); // le dessin
+    PutImage(0,0,fBckImg,dmDrawWithTransparency); // le fond
+    PutImage(0,0,fDrwImg,dmDrawWithTransparency); // le dessin
     if TurtleVisible then // tortue visible ?
     begin
       case Kind of
         tkTriangle: DrawTriangleTurtle; // on dessine la tortue triangulaire
         tkPNG: DrawPNGTurtle; // tortue PNG
       end;
-      PutImage(0,0,TtlImg,dmDrawWithTransparency); // on l'affiche
+      PutImage(0,0,fTtlImg,dmDrawWithTransparency); // on l'affiche
     end;
   end;
-  Result := ActualImg; // on renvoie l'image
+  Result := fActualImg; // on renvoie l'image
+end;
+
+function TGVTurtle.GetLocalPenColor: Integer;
+// *** couleur locale ***
+begin
+  Result := ColorToIntColor(fPenColor);
+end;
+
+function TGVTurtle.GetLocalScreenColor: Integer;
+// *** couleur de l'écran en couleur locale ***
+begin
+  Result := ColorToIntColor(fScreenColor);
 end;
 
 procedure TGVTurtle.SetCoordX(AValue: Double);
@@ -383,7 +386,7 @@ begin
   if fFilled = AValue then  // valeur inchangée ?
     Exit; // on sort
   fFilled := AValue; // nouvelle valeur
-  with DrwImg.Canvas.Brush do // on modifie la brosse
+  with fDrwImg.Canvas.Brush do // on modifie la brosse
   begin
     if fFilled then  // remplissage ?
       Style := bsSolid // brosse solide
@@ -405,14 +408,26 @@ begin
   Change; // changement notifié
 end;
 
+procedure TGVTurtle.SetLocalPenColor(AValue: Integer);
+// *** fixe le crayon selon la couleur locale ***
+begin
+  PenColor := IntColorToColor(AValue);
+end;
+
+procedure TGVTurtle.SetLocalScreenColor(AValue: Integer);
+// *** fixe l'écran selon la couleur locale ***
+begin
+  ScreenColor := IntColorToColor(AValue);
+end;
+
 procedure TGVTurtle.SetPenColor(AValue: TColor);
 // *** couleur du crayon ***
 begin
   if fPenColor = AValue then // valeur inchangée ?
     Exit; // on sort
   fPenColor := AValue; // nouvelle valeur de la couleur du crayon
-  DrwImg.CanvasBGRA.Pen.Color := fPenColor; // couleur affectée
-  DrwImg.Canvas.Pen.Color := fPenColor;
+  fDrwImg.CanvasBGRA.Pen.Color := fPenColor; // couleur affectée
+  fDrwImg.Canvas.Pen.Color := fPenColor;
   Change; // changement notifié
 end;
 
@@ -431,7 +446,7 @@ begin
   if fPenWidth = AValue then // valeur inchangée ?
     Exit; // on sort
   fPenWidth := AValue;
-  DrwImg.CanvasBGRA.Pen.Width := fPenWidth; // taille changée
+  fDrwImg.CanvasBGRA.Pen.Width := fPenWidth; // taille changée
 end;
 
 procedure TGVTurtle.SetScreenColor(AValue: TColor);
@@ -440,7 +455,7 @@ begin
   if fScreenColor = AValue then // valeur inchangée ?
     Exit; // on sort
   fScreenColor := AValue; // nouvelle couleur de fond
-  BckImg.FillRect(0,0,fWidth, fHeight, ColorToBGRA(ColorToRGB(fScreenColor)),
+  fBckImg.FillRect(0,0,fWidth, fHeight, ColorToBGRA(ColorToRGB(fScreenColor)),
     dmSet);
   Change; // on signale le changement
 end;
@@ -548,20 +563,20 @@ end;
 procedure TGVTurtle.LineTo(X, Y: Double);
 // *** déplacement en écrivant ***
 begin
-  DrwImg.CanvasBGRA.LineTo(Round(X), cY(Round(Y))); // écriture effective
+  fDrwImg.CanvasBGRA.LineTo(Round(X), cY(Round(Y))); // écriture effective
 end;
 
 procedure TGVTurtle.MoveTo(X, Y: Double);
 // *** déplacement sans écrire ***
 begin
-  DrwImg.CanvasBGRA.MoveTo(Round(X), cY(Round(Y))); // déplacement effectif
+  fDrwImg.CanvasBGRA.MoveTo(Round(X), cY(Round(Y))); // déplacement effectif
 end;
 
 procedure TGVTurtle.ArcAntialias(x, y, rx, ry: single; b, e: word;
   c: TBGRAPixel; w: single);
 // *** arc d'ellipse ***
 begin
-  DrwImg.DrawPolygonAntialias(DrwImg.ComputeArcRad(x,y,rx,ry,
+  fDrwImg.DrawPolygonAntialias(fDrwImg.ComputeArcRad(x,y,rx,ry,
     b * DgToRad,e * DgToRad), c,w);
 end;
 
@@ -569,7 +584,7 @@ procedure TGVTurtle.FillArcAntiAlias(x, y, rx, ry: single; b, e: word;
   c: TBGRAPixel);
 // *** arc d'ellipse rempli ***
 begin
-  DrwImg.FillPolyAntialias(DrwImg.ComputeArcRad(x,y,rx,ry,b * DgToRad,
+  fDrwImg.FillPolyAntialias(fDrwImg.ComputeArcRad(x,y,rx,ry,b * DgToRad,
     e * DgToRad), c);
 end;
 
@@ -577,7 +592,7 @@ procedure TGVTurtle.PieAntialias(x, y, rx, ry: single; b, e: word;
   c: TBGRAPixel; w: single);
 // *** portion d'ellipse ***
 begin
-  DrwImg.DrawPolygonAntialias(DrwImg.ComputePieRad(x,y,rx,ry,b * DgToRad,
+  fDrwImg.DrawPolygonAntialias(fDrwImg.ComputePieRad(x,y,rx,ry,b * DgToRad,
     e * DgToRad), c,w);
 end;
 
@@ -585,8 +600,52 @@ procedure TGVTurtle.FillPieAntiAlias(x, y, rx, ry: single; b, e: word;
   c: TBGRAPixel);
 // *** portion d'ellipse remplie ***
 begin
-  DrwImg.FillPolyAntialias(DrwImg.ComputePieRad(x,y,rx,ry,b * DgToRad,
+  fDrwImg.FillPolyAntialias(fDrwImg.ComputePieRad(x,y,rx,ry,b * DgToRad,
     e * DgToRad), c);
+end;
+
+function TGVTurtle.ColorToIntColor(N: TColor): Integer;
+// *** couleur en couleur locale ***
+begin
+  case N of
+    clBlack: Result := 0; // Noir
+    clMaroon: Result := 1; // Marron
+    clGreen: Result := 2; // Vert
+    clOlive: Result := 3; // Vert olive
+    clNavy: Result := 4; // Bleu marine
+    clPurple: Result := 5; // Violet
+    clTeal: Result := 6; // Sarcelle
+    clGray: Result := 7; // Gris
+    clSilver: Result := 8; // Argent
+    clRed: Result := 9; // Rouge
+    clLime: Result := 10; // Vert citron
+    clYellow: Result := 11; // Jaune
+    clBlue: Result := 12; // Bleu
+    clFuchsia: Result := 13; // Fuchsia
+    clAqua: Result := 14; // Aqua
+    clWhite: Result := 15; // Blanc
+    clMoneyGreen: Result := 16; // Gris argent
+    clSkyBlue: Result := 17; // Bleu ciel
+    clCream: Result := 18; // Crème
+    clMedGray: Result := 19; // Gris moyen
+  else
+    Result := 0; // couleur noire par défaut
+    // [### Erreur: mauvaise couleur ###]
+    Error.SetError(CE_BadColor, IntToStr(N));
+  end;
+end;
+
+function TGVTurtle.IntColorToColor(N: Integer): TColor;
+// *** couleur locale en couleur ***
+begin
+  if (N < 0) or (N > 19) then
+  begin
+    Result := clBlack; // couleur noire par défaut
+    // [### Erreur: mauvaise couleur ###]
+    Error.SetError(CE_BadColor, IntToStr(N))
+  end
+  else
+    Result := CColors[N]; // renvoi de la couleur
 end;
 
 function TGVTurtle.cY(Y: Integer): Integer;
@@ -602,7 +661,7 @@ var
   LX1, LX2, LX3, LY1, LY2, LY3: Integer;
 begin
   // on efface la surface
-  TtlImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent, dmSet);
+  fTtlImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent, dmSet);
   // calcul des coordonnées des points de la tortue
   SinCos((90 + Heading) * DgToRad, LSinT, LCosT);
   LX1 := Round(CoordX + Size * LCosT - LSinT);
@@ -611,7 +670,7 @@ begin
   LY2 := cY(Round(CoordY - Size * LSinT + LCosT));
   LX3 := Round(CoordX - LCosT + (Size shl 1) * LSinT);
   LY3 := cY(Round(CoordY - LSinT - (Size shl 1) * LCosT));
-  with TtlImg.CanvasBGRA do
+  with fTtlImg.CanvasBGRA do
   begin
     if PenColor <> BGRAToColor(BGRAPixelTransparent) then
       Pen.Color := PenColor
@@ -633,14 +692,14 @@ var
   LX, LY: Integer;
 begin
   // on efface la surface
-  TtlImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent, dmSet);
+  fTtlImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent, dmSet);
   BeforeChange; // récupère la bonne image
   // calcul des coordonnées de la tortue
   SinCos((90 + Heading) * DgToRad, LSinT, LCosT);
   LX := Round(CoordX + LCosT - LSinT);
   LY := Round(CoordY + LSinT + LCosT);
   // copie de la tortue .png
-  TtlImg.CanvasBGRA.Draw(LX - (fPNGTurtle.Width shr 1),
+  fTtlImg.CanvasBGRA.Draw(LX - (fPNGTurtle.Width shr 1),
         cY(LY) - (fPNGTurtle.Height shr 1), fPNGTurtle);
 end;
 
@@ -666,17 +725,19 @@ begin
   // on mémorise les dimensions
   fHeight := Height; // la hauteur
   fWidth := Width; // la largeur
+  // gestionnaire d'erreurs
+  fError := TGVErrors.Create;
   // on crée les images de travail
   // le fond
-  BckImg := TBGRABitmap.Create(Width, Height,
+  fBckImg := TBGRABitmap.Create(Width, Height,
     ColorToBGRA(ColorToRGB(CDefaultBackColor)));
   // la surface de dessin
-  DrwImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
+  fDrwImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
   // la tortue
-  TtlImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
+  fTtlImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
   fPNGTurtle := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
   // surface réelle
-  ActualImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
+  fActualImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
   // initialisations
   ReInit;
 end;
@@ -684,11 +745,12 @@ end;
 destructor TGVTurtle.Destroy;
 // *** destruction de l'objet ***
 begin
-  BckImg.Free; // on libère les images créées
-  DrwImg.Free;
-  TtlImg.Free;
+  fError.Free; // gestionnaire d'erreurs
+  fBckImg.Free; // on libère les images créées
+  fDrwImg.Free;
+  fTtlImg.Free;
   fPNGTurtle.Free;
-  ActualImg.Free;
+  fActualImg.Free;
   inherited Destroy; // on hérite
 end;
 
@@ -710,7 +772,7 @@ begin
   Filled := True;  // remplissage
   Speed := CMaxSpeed; // vitesse de dessin de la tortue
   DoGo(fWidth shr 1, fHeight shr 1); // au centre
-  DrwImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent,
+  fDrwImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent,
     dmSet); // on efface la surface
   TurtleVisible := True; // tortue visible
   Change; // changement notifié
@@ -753,7 +815,7 @@ end;
 procedure TGVTurtle.Wipe;
 // *** on nettoie l'écran sans bouger la tortue ***
 begin
-  DrwImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent, dmSet);
+  fDrwImg.FillRect(0,0,fWidth, fHeight, BGRAPixelTransparent, dmSet);
   Change; // on notifie le changement
 end;
 
@@ -780,7 +842,7 @@ begin
       rPen := TPen.Create; // type de crayon
       rFont := TFont.Create; // type de fonte
     end;
-    with DrwImg.Canvas do
+    with fDrwImg.Canvas do
     begin
       rBrush.Assign(Brush); // sauvegarde brosse
       rPen.Assign(Pen); // sauvegarde crayon
@@ -811,7 +873,7 @@ begin
         ScaleY := rScaleY; // échelle des Y
         Filled := rFilled; // remplissage
         PenWidth := rPenWidth; // largeur du crayon
-        with DrwImg.Canvas do
+        with fDrwImg.Canvas do
         begin
           Brush.Assign(rBrush); // type de brosse
           Pen.Assign(rPen); // type de crayon
@@ -855,20 +917,124 @@ begin
     Result := 180 + (ArcTan(Abs(LPY) / LPX) * RadToDg);
 end;
 
+function TGVTurtle.Towards(const St: string): Double;
+// *** direction vers un point ***
+var
+  LL: TGVList;
+  LW: TGVWord;
+  Li: Integer;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+        if LL.Count = 2 then // liste attendue ?
+        begin
+          LW := TGVWord.Create; // mot de travail créé
+          try
+            LW.Text := LL.First; // premier élément
+            if LW.IsInt then // un entier ?
+            begin
+              Li := LW.AsInt; // entier conservé
+              LW.Text := LL.Last; // second élément
+              if LW.IsNumber then // encore un entier ?
+                Result := Distance(Li, LW.AsInt) // distance fixée
+              else
+                // [### Erreur: mauvais entier ###]
+                Error.SetError(CE_BadInt, LL.Last);
+            end
+            else
+              // [### Erreur: mauvais entier ###]
+              Error.SetError(CE_BadInt, LL.First);
+          finally
+            LW.Free; // mot de travail libéré
+          end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetPos);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // liste de travail libérée
+  end;
+end;
+
 function TGVTurtle.Distance(X, Y: Integer): Double;
 // *** renvoie la distance de la tortue à un point donné ***
 begin
   Result := Sqrt(Sqr(X - CoordX) + Sqr(Y - CoordY));
 end;
 
+function TGVTurtle.Distance(const St: string): Double;
+// *** distance d'un point ***
+var
+  LL: TGVList;
+  LW: TGVWord;
+  Li: Integer;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+        if LL.Count = 2 then // liste attendue ?
+        begin
+          LW := TGVWord.Create; // mot de travail créé
+          try
+            LW.Text := LL.First; // premier élément
+            if LW.IsInt then // un entier ?
+            begin
+              Li := LW.AsInt; // entier conservé
+              LW.Text := LL.Last; // second élément
+              if LW.IsNumber then // encore un entier ?
+                Result := Distance(Li, LW.AsInt) // distance fixée
+              else
+                // [### Erreur: mauvais entier ###]
+                Error.SetError(CE_BadInt, LL.Last);
+            end
+            else
+              // [### Erreur: mauvais entier ###]
+              Error.SetError(CE_BadInt, LL.First);
+          finally
+            LW.Free; // mot de travail libéré
+          end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetPos);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // liste de travail libérée
+  end;
+end;
+
 procedure TGVTurtle.Rectangle(X1, Y1, X2, Y2: Integer);
 // *** rectangle absolu ***
 begin
   if Filled then
-    DrwImg.FillRectAntialias(X1, cY(Y1), X2, cY(Y2),
+    fDrwImg.FillRectAntialias(X1, cY(Y1), X2, cY(Y2),
       ColorToBGRA(ColorToRGB(PenColor)))
   else
-    DrwImg.RectangleAntialias(X1, cY(Y1), X2, cY(Y2),
+    fDrwImg.RectangleAntialias(X1, cY(Y1), X2, cY(Y2),
       ColorToBGRA(ColorToRGB(PenColor)), PenWidth);
   Change; // on notifie le changement
 end;
@@ -895,10 +1061,10 @@ procedure TGVTurtle.RoundRect(X1, Y1, X2, Y2: Integer);
 // *** dessine un rectangle arrondi ***
 begin
   if Filled then
-    DrwImg.FillRoundRectAntialias(X1, cY(Y1), X2, cY(Y2), 15, 15,
+    fDrwImg.FillRoundRectAntialias(X1, cY(Y1), X2, cY(Y2), 15, 15,
       ColorToBGRA(ColorToRGB(PenColor)))
   else
-    DrwImg.RoundRectAntialias(X1, cY(Y1), X2, cY(Y2), 15, 15,
+    fDrwImg.RoundRectAntialias(X1, cY(Y1), X2, cY(Y2), 15, 15,
       ColorToBGRA(ColorToRGB(PenColor)), PenWidth);
   Change; // on notifie le changement
 end;
@@ -913,10 +1079,10 @@ procedure TGVTurtle.Ellipse(X1, Y1, X2, Y2: Integer);
 // *** dessine une ellipse ***
 begin
   if Filled then
-    DrwImg.FillEllipseAntialias(X1, cY(Y1), X2, Y2,
+    fDrwImg.FillEllipseAntialias(X1, cY(Y1), X2, Y2,
       ColorToBGRA(ColorToRGB(PenColor)))
   else
-    DrwImg.EllipseAntialias(X1, cY(Y1), X2, Y2,
+    fDrwImg.EllipseAntialias(X1, cY(Y1), X2, Y2,
       ColorToBGRA(ColorToRGB(PenColor)), PenWidth);
   Change; // on notifie le changement
 end;
@@ -978,8 +1144,8 @@ end;
 procedure TGVTurtle.Text(const St: string; X, Y, Angle: Integer);
 // *** affiche un texte sur l'écran de la tortue ***
 begin
-  DrwImg.CanvasBGRA.Font.Color := PenColor; // couleur d'écriture de la tortue
-  DrwImg.TextOutAngle(X, cY(Y), Angle * 10, St,
+  fDrwImg.CanvasBGRA.Font.Color := PenColor; // couleur d'écriture de la tortue
+  fDrwImg.TextOutAngle(X, cY(Y), Angle * 10, St,
     ColorToBGRA(ColorToRGB(PenColor)), taLeftJustify);
   Change; // on signifie le changement
 end;
@@ -990,7 +1156,7 @@ begin
   Text(St, Round(CoordX), Round(CoordY), Round(Heading));
 end;
 
-function TGVTurtle.TurtleState: string;
+function TGVTurtle.GetTurtleState: string;
 // *** état de la tortue ***
 begin
   Result := CBeginList + FloatToStr(CoordX) + CBlank + FloatToStr(CoordY) +
@@ -1000,7 +1166,107 @@ begin
     IntToStr(CRFalse)) + CEndList;
 end;
 
-function TGVTurtle.PenState: string;
+procedure TGVTurtle.SetTurtleState(const St: string);
+// *** fixe l'état de la tortue ***
+var
+  Li: Integer;
+  LL: TGVList;
+  LW: TGVWord;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+      if LL.Count = 7 then // liste attendue ?
+      begin
+        LW := TGVWord.Create; // mot de travail créé
+        try
+          for Li := 1 to 7 do // on balaie cette liste
+            // on analyse chaque élément s'il n'y a pas d'erreur
+            if Error.Ok then
+            begin
+              LW.Text := LL[Li - 1]; // donnée récupérée
+              case Li of
+                1: begin
+                     if LW.IsNumber then // un nombre ?
+                       CoordX := LW.AsNumber // abscisse
+                      else
+                        // [### Erreur: mauvais nombre ###]
+                        Error.SetError(CE_BadNumber, LL[Li - 1]);
+                end;
+                2: begin
+                     if LW.IsNumber then // un nombre ?
+                       CoordY := LW.AsNumber // ordonnée
+                     else
+                       // [### Erreur: mauvais nombre ###]
+                       Error.SetError(CE_BadNumber, LL[Li - 1]);
+                end;
+                3: begin
+                     if LW.IsNumber then // un nombre ?
+                       Heading := LW.AsNumber // cap
+                     else
+                       // [### Erreur: mauvais nombre ###]
+                       Error.SetError(CE_BadNumber, LL[Li - 1]);
+                end;
+                4: begin
+                     if LW.IsInt then // un entier ?
+                       Size := LW.AsInt // taille
+                     else
+                       // [### Erreur: mauvais entier ###]
+                       Error.SetError(CE_BadInt, LL[Li - 1]);
+                end;
+                5: begin
+                     if LW.IsInt then // un entier ?
+                       Speed := LW.AsInt // vitesse
+                     else
+                       // [### Erreur: mauvais entier ###]
+                       Error.SetError(CE_BadInt, LL[Li - 1]);
+                end;
+                6: begin
+                     if LW.IsBoolean then // un booléen ?
+                       TurtleVisible := LW.AsBoolean // visibilité
+                     else
+                       // [### Erreur: mauvais booléen ###]
+                       Error.SetError(CE_BadBool, LL[Li - 1]);
+                end;
+                7: begin
+                     if LW.IsBoolean then // un booléen ?
+                     begin
+                       if LW.AsBoolean then
+                         Kind := tkTRiangle // type
+                       else
+                         Kind := tkPNG;
+                     end
+                     else
+                       // [### Erreur: mauvais booléen ###]
+                       Error.SetError(CE_BadBool, LL[Li - 1]);
+                end;
+              end;
+            end;
+          finally
+            LW.Free; // mot de travail libéré
+          end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetTurtle);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // liste de travail libérée
+  end;
+end;
+
+function TGVTurtle.GetPenState: string;
 // *** état du crayon ***
 begin
   Result := CBeginList + IntToStr(RGBToIntColor(PenColor)) + CBlank +
@@ -1009,18 +1275,273 @@ begin
     IntToStr(CRFalse)) + CEndList;
 end;
 
-function TGVTurtle.ScaleState: string;
+procedure TGVTurtle.SetPenState(const St: string);
+// *** fixe l'état du crayon de la tortue ***
+var
+  Li: Integer;
+  LL: TGVList;
+  LW: TGVWord;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+        if LL.Count = 4 then // liste attendue ?
+        begin
+          LW := TGVWord.Create; // mot de travail créé
+          try
+            for Li := 1 to 4 do // on balaie cette liste
+              // on analyse chaque élément s'il n'y a pas d'erreur
+              if Error.Ok then
+              begin
+                LW.Text := LL[Li - 1]; // donnée récupérée
+                case Li of
+                  1: begin
+                       if LW.IsInt then // un entier ?
+                         LocalPenColor := LW.AsInt // couleur
+                       else
+                        // [### Erreur: mauvais entier ###]
+                        Error.SetError(CE_BadInt, LL[Li - 1]);
+                  end;
+                  2: begin
+                       if LW.IsInt then // un entier ?
+                         PenWidth := LW.AsInt // taille
+                       else
+                         // [### Erreur: mauvais entier ###]
+                         Error.SetError(CE_BadInt, LL[Li - 1]);
+                  end;
+                  3: begin
+                       if LW.IsBoolean then // un booléen ?
+                         PenDown := LW.AsBoolean // état de l'écriture
+                       else
+                        // [### Erreur: mauvais booléen ###]
+                        Error.SetError(CE_BadBool, LL[Li - 1]);
+                  end;
+                  4: begin
+                       if LW.IsBoolean then // un booléen ?
+                         PenRubber := LW.AsBoolean // état de la gomme
+                       else
+                         // [### Erreur: mauvais booléen ###]
+                         Error.SetError(CE_BadBool, LL[Li - 1]);
+                  end;
+                end;
+              end;
+            finally
+              LW.Free; // mot de travail libéré
+            end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetPen);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // liste de travail libérée
+  end;
+end;
+
+function TGVTurtle.GetPosState: string;
+// *** renvoie la position du crayon ***
+begin
+  Result := CBeginList + FloatToStr(CoordX) + CBlank + FloatToStr(CoordX) +
+    CEndList;
+end;
+
+procedure TGVTurtle.SetPosState(const St: string);
+// *** fixe la position du crayon ***
+var
+  LL: TGVList;
+  LW: TGVWord;
+  LDble: Double;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+        if LL.Count = 2 then // liste attendue ?
+        begin
+          LW := TGVWord.Create; // mot de travail créé
+          try
+            LW.Text := LL.First; // premier élément
+            if LW.IsNumber then // un nombre ?
+            begin
+              LDble := LW.AsNumber; // nombre conservé
+              LW.Text := LL.Last; // second élément
+              if LW.IsNumber then // encore un nombre ?
+                SetPos(LDble, LW.AsNumber) // position fixée
+              else
+                // [### Erreur: mauvais nombre ###]
+                Error.SetError(CE_BadNumber, LL.Last);
+            end
+            else
+              // [### Erreur: mauvais nombre ###]
+              Error.SetError(CE_BadNumber, LL.First);
+          finally
+            LW.Free; // mot de travail libéré
+          end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetPos);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // liste de travail libérée
+  end;
+end;
+
+function TGVTurtle.GetScaleState: string;
 // *** état de l'échelle ***
 begin
   Result := CBeginList + IntToStr(ScaleX) + CBlank +
     IntToStr(ScaleY) + CEndList;
 end;
 
-function TGVTurtle.ScreenState: string;
+procedure TGVTurtle.SetScaleState(const St: string);
+// *** fixe l'échelle ***
+var
+  LL: TGVList;
+  LW: TGVWord;
+  Li: Integer;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+        if LL.Count = 2 then // liste attendue ?
+        begin
+          LW := TGVWord.Create; // mot de travail créé
+          try
+            LW.Text := LL.First; // premier élément
+            if LW.IsInt then // un entier ?
+            begin
+              Li := LW.AsInt; // entier conservé
+              LW.Text := LL.Last; // second élément
+              if LW.IsInt then // encore un entier ?
+              begin
+                ScaleX := Li; // échelles fixées
+                ScaleY := LW.AsInt;
+              end
+              else
+                // [### Erreur: mauvais entier ###]
+                Error.SetError(CE_BadInt, LL.Last);
+            end
+            else
+              // [### Erreur: mauvais entier ###]
+              Error.SetError(CE_BadInt, LL.First);
+          finally
+            LW.Free; // mot de travail libéré
+          end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetScale);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // liste de travail libérée
+  end;
+end;
+
+function TGVTurtle.GetScreenState: string;
 // *** état de l'écran ***
 begin
-  Result := CBeginList + IntToStr(RGBToIntColor(ScreenColor)) + CBlank +
+  Result := CBeginList + IntToStr(LocalScreenColor) + CBlank +
     IntToStr(fWidth) + CBlank + IntToStr(fHeight) + CEndList;
+end;
+
+procedure TGVTurtle.SetScreenState(const St: string);
+// *** fixe l'état de l'écran ***
+var
+  Li: Integer;
+  LL: TGVList;
+  LW: TGVWord;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+        if LL.Count = 3 then // liste attendue ?
+        begin
+          LW := TGVWord.Create; // mot de travail créé
+          try
+            for Li := 1 to 3 do // on balaie cette liste
+              // on analyse chaque élément s'il n'y a pas d'erreur
+              if Error.Ok then
+              begin
+                LW.Text := LL[Li - 1]; // donnée récupérée
+                case Li of
+                  1: begin
+                       if LW.IsInt then // un entier ?
+                         LocalScreenColor := LW.AsInt // couleur
+                       else
+                        // [### Erreur: mauvais entier ###]
+                        Error.SetError(CE_BadInt, LL[Li - 1]);
+                  end;
+                  2: begin
+                       if LW.IsInt then // un entier ?
+                         fHeight := LW.AsInt // hauteur
+                       else
+                         // [### Erreur: mauvais entier ###]
+                         Error.SetError(CE_BadInt, LL[Li - 1]);
+                  end;
+                  3: begin
+                       if LW.IsInt then // un entier ?
+                         fWidth := LW.AsInt // largeur
+                       else
+                        // [### Erreur: mauvais entier ###]
+                        Error.SetError(CE_BadInt, LL[Li - 1]);
+                  end;
+                end;
+              end;
+            finally
+              LW.Free; // mot de travail libéré
+            end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetScreen);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // liste de travail libérée
+  end;
 end;
 
 procedure TGVTurtle.PenReverse;

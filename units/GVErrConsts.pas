@@ -108,6 +108,7 @@ resourcestring
   ME_EmptyWord = '"%s" a besoin d''un mot non vide comme donnée.';
   ME_BadItem = 'La position demandée n''existe pas dans "%s".';
   ME_UnknownList = '"%s" n''est pas une liste.';
+  ME_ListBadLength = 'La longueur de "%s" est incorrecte.';
 
   // les listes de propriétés
   ME_UnknownListP = 'La liste de propriétés "%s" est introuvable.';
@@ -123,6 +124,9 @@ resourcestring
   ME_FileNotFound = 'Le fichier "%s" est introuvable.';
   ME_Version = 'La version du fichier "%s" est incorrecte.';
   ME_BadContent = 'Le contenu du fichier "%s" est incorrect.';
+
+  // la tortue
+  ME_BadColor = 'La couleur "%s" n''existe pas.';
 
   // les primitives
   ME_EmptyWordOrList = 'La donnée "%s" est incorrecte pour la primitive.';
@@ -167,7 +171,7 @@ resourcestring
   ME_BadObj = 'Le nom "%s" est déjà utilisé pour un autre type d''objet.';
   ME_Burried = 'Opération impossible : "%s" est enterré.';
 
-  // interprète
+  // l'interprète
   ME_NotEnoughDatas = 'Pas assez de données pour "%s".';
   ME_WhatAbout = 'Que faut-il faire de "%s" ?';
 
@@ -180,16 +184,16 @@ type
     CE_NeedsInteger, CE_ParMismatch, CE_Tan, CE_Ln, CE_CoTan, CE_Arc,
     CE_BadExp, CE_BadChar, CE_MissClosePar, CE_BadList, CE_BadList2,
     CE_BadWord, CE_UnknownListWord, CE_EmptyList, CE_EmptyWord, CE_BadItem,
-    CE_UnknownList, CE_UnknownListP, CE_UnknownProp, CE_UnknownNumListP,
-    CE_UnknownNumProp, CE_BadProp, CE_BadFileFormat, CE_BadSave, CE_BadFile,
-    CE_FileNotFound, CE_Version, CE_BadContent, CE_EmptyWordOrList,
-    CE_UnknownPrim, CE_CantModifyPrim, CE_NorPrimNorProc, CE_BadElse,
-    CE_BadTest, CE_BadVar, CE_UnknownVar, CE_NotVar, CE_UnknownPackage,
-    CE_PackageForbidden, CE_AlreadyPackage, CE_NotInPackage, CE_UnknownProc,
-    CE_BadParam, CE_DupParam, CE_BadLine, CE_BadDef, CE_NotTo, CE_NotEnd,
-    CE_EmptyEdit, CE_NorProcnorList, CE_BadTo, CE_BadEnd, CE_NoName,
-    CE_Protected, CE_BadName, CE_UnknownObject, CE_BadObj, CE_Burried,
-    CE_NotEnoughDatas, CE_WhatAbout);
+    CE_UnknownList, CE_ListBadLength, CE_UnknownListP, CE_UnknownProp,
+    CE_UnknownNumListP, CE_UnknownNumProp, CE_BadProp, CE_BadFileFormat,
+    CE_BadSave, CE_BadFile, CE_FileNotFound, CE_Version, CE_BadContent,
+    CE_BadColor, CE_EmptyWordOrList, CE_UnknownPrim, CE_CantModifyPrim,
+    CE_NorPrimNorProc, CE_BadElse, CE_BadTest, CE_BadVar, CE_UnknownVar,
+    CE_NotVar, CE_UnknownPackage, CE_PackageForbidden, CE_AlreadyPackage,
+    CE_NotInPackage, CE_UnknownProc, CE_BadParam, CE_DupParam, CE_BadLine,
+    CE_BadDef, CE_NotTo, CE_NotEnd, CE_EmptyEdit, CE_NorProcnorList, CE_BadTo,
+    CE_BadEnd, CE_NoName, CE_Protected, CE_BadName, CE_UnknownObject,
+    CE_BadObj, CE_Burried, CE_NotEnoughDatas, CE_WhatAbout);
 
   // *** enregistrement d'une erreur ***
   TGVErrorRec = record
@@ -210,16 +214,16 @@ const
     ME_FunctionNotSupported, ME_NeedsInteger, ME_ParMismatch, ME_Tan, ME_Ln,
     ME_CoTan, ME_Arc, ME_BadExp, ME_BadChar, ME_MissClosePar, ME_BadList,
     ME_BadList2, ME_BadWord, ME_UnknownListWord, ME_EmptyList, ME_EmptyWord,
-    ME_BadItem, ME_UnknownList, ME_UnknownListP, ME_UnknownProp,
+    ME_BadItem, ME_UnknownList, ME_ListBadLength, ME_UnknownListP, ME_UnknownProp,
     ME_UnknownNumListP, ME_UnknownNumProp, ME_BadProp, ME_BadFileFormat,
     ME_BadSave, ME_BadFile, ME_FileNotFound, ME_Version, ME_BadContent,
-    ME_EmptyWordOrList, ME_UnknownPrim, ME_CantModifyPrim, ME_NorPrimNorProc,
-    ME_BadElse, ME_BadTest, ME_BadVar, ME_UnknownVar, ME_NotVar,
-    ME_UnknownPackage, ME_PackageForbidden, ME_AlreadyPackage, ME_NotInPackage,
-    ME_UnknownProc, ME_BadParam, ME_DupParam, ME_BadLine, ME_BadDef, ME_NotTo,
-    ME_NotEnd, ME_EmptyEdit, ME_NorProcnorList, ME_BadTo, ME_BadEnd, ME_NoName,
-    ME_Protected, ME_BadName, ME_UnknownObject, ME_BadObj, ME_Burried,
-    ME_NotEnoughDatas, ME_WhatAbout);
+    ME_BadColor, ME_EmptyWordOrList, ME_UnknownPrim, ME_CantModifyPrim,
+    ME_NorPrimNorProc, ME_BadElse, ME_BadTest, ME_BadVar, ME_UnknownVar,
+    ME_NotVar, ME_UnknownPackage, ME_PackageForbidden, ME_AlreadyPackage,
+    ME_NotInPackage, ME_UnknownProc, ME_BadParam, ME_DupParam, ME_BadLine,
+    ME_BadDef, ME_NotTo, ME_NotEnd, ME_EmptyEdit, ME_NorProcnorList, ME_BadTo,
+    ME_BadEnd, ME_NoName, ME_Protected, ME_BadName, ME_UnknownObject, ME_BadObj,
+    ME_Burried, ME_NotEnoughDatas, ME_WhatAbout);
 
 implementation
 

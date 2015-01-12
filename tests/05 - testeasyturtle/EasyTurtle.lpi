@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="78"/>
+      <BuildNr Value="79"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Tortue pour les enfants" LegalCopyright="Licence GNU GPL" LegalTrademarks="© Gilles VASSEUR 2014" OriginalFilename="EasyTurtle.pas" ProductName="EasyTurtle" ProductVersion="1.0.0"/>
     </VersionInfo>
