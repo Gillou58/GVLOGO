@@ -130,6 +130,7 @@ resourcestring
   ME_CantModifyPrim = 'La primitive "%s" ne peut pas être modifiée.';
   ME_NorPrimNorProc = '"%s" n''est ni une procédure ni une primitive.';
   ME_BadElse = 'Le SI accompagnant SINON avec "%s" est introuvable.';
+  ME_BadTest = 'Aucun test ne précède "%s".';
 
   // les variables
   ME_BadVar = 'La variable "%s" est incorrecte.';
@@ -183,7 +184,7 @@ type
     CE_UnknownNumProp, CE_BadProp, CE_BadFileFormat, CE_BadSave, CE_BadFile,
     CE_FileNotFound, CE_Version, CE_BadContent, CE_EmptyWordOrList,
     CE_UnknownPrim, CE_CantModifyPrim, CE_NorPrimNorProc, CE_BadElse,
-    CE_BadVar, CE_UnknownVar, CE_NotVar, CE_UnknownPackage,
+    CE_BadTest, CE_BadVar, CE_UnknownVar, CE_NotVar, CE_UnknownPackage,
     CE_PackageForbidden, CE_AlreadyPackage, CE_NotInPackage, CE_UnknownProc,
     CE_BadParam, CE_DupParam, CE_BadLine, CE_BadDef, CE_NotTo, CE_NotEnd,
     CE_EmptyEdit, CE_NorProcnorList, CE_BadTo, CE_BadEnd, CE_NoName,
@@ -213,10 +214,10 @@ const
     ME_UnknownNumListP, ME_UnknownNumProp, ME_BadProp, ME_BadFileFormat,
     ME_BadSave, ME_BadFile, ME_FileNotFound, ME_Version, ME_BadContent,
     ME_EmptyWordOrList, ME_UnknownPrim, ME_CantModifyPrim, ME_NorPrimNorProc,
-    ME_BadElse, ME_BadVar, ME_UnknownVar, ME_NotVar, ME_UnknownPackage,
-    ME_PackageForbidden, ME_AlreadyPackage, ME_NotInPackage, ME_UnknownProc,
-    ME_BadParam, ME_DupParam, ME_BadLine, ME_BadDef, ME_NotTo, ME_NotEnd,
-    ME_EmptyEdit, ME_NorProcnorList, ME_BadTo, ME_BadEnd, ME_NoName,
+    ME_BadElse, ME_BadTest, ME_BadVar, ME_UnknownVar, ME_NotVar,
+    ME_UnknownPackage, ME_PackageForbidden, ME_AlreadyPackage, ME_NotInPackage,
+    ME_UnknownProc, ME_BadParam, ME_DupParam, ME_BadLine, ME_BadDef, ME_NotTo,
+    ME_NotEnd, ME_EmptyEdit, ME_NorProcnorList, ME_BadTo, ME_BadEnd, ME_NoName,
     ME_Protected, ME_BadName, ME_UnknownObject, ME_BadObj, ME_Burried,
     ME_NotEnoughDatas, ME_WhatAbout);
 

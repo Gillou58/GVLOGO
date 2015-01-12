@@ -2238,6 +2238,98 @@ begin
     SetError(CE_BadNumber, fWkRec.fItem);
 end;
 
+procedure DoPrimCoTan;
+// *** COTAN COTANGENTE ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+  begin
+    if (Sin(LW.AsNumber) = 0) then
+      // [### Erreur: ctangente non définie ###]
+      SetError(CE_CoTan, fWkRec.fItem)
+    else
+      PushConst(FloatToStr(CoTan(LW.AsNumber)));
+  end
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimArcCos;
+// *** ARCCOS ARCCOSINUS***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+  begin
+    if (LW.AsNumber < -1) or (LW.AsNumber > 1) then
+      // [### Erreur: hors intervalle [-1,1] ###]
+      SetError(CE_Arc, fWkRec.fItem)
+    else
+      PushConst(FloatToStr(ArcCos(LW.AsNumber)));
+  end
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimArcSin;
+// *** ARCSIN ARSINUS ***
+begin
+  AWord; // donnée récupérée
+  if LW.IsNumber then
+  begin
+    if (LW.AsNumber < -1) or (LW.AsNumber > 1) then
+      // [### Erreur: hors intervalle [-1,1] ###]
+      SetError(CE_Arc, fWkRec.fItem)
+    else
+      PushConst(FloatToStr(ArcSin(LW.AsNumber)));
+  end
+  else
+    // [### Erreur: mauvais nombre ###]
+    SetError(CE_BadNumber, fWkRec.fItem);
+end;
+
+procedure DoPrimTest;
+// *** TESTE ***
+begin
+  AWord; // un mot attendu
+  // booléen ?
+  if LW.IsBoolean then
+  begin
+    if (LW.Text = IntToStr(CRTrue)) then  // résultat vrai ?
+      fTest := CTrueState // drapeau adapté
+    else
+      fTest := CFalseState
+  end
+  else
+    // [### Erreur: booléen incorrect ###]
+    SetError(CE_BadBool, fWkRec.fItem);
+end;
+
+procedure DoPrimIfTrue;
+// *** SI.VRAI ***
+begin
+  fWkRec.fItem := fExeStack.Peek; // donnée enregistrée
+  case fTest of // analyse du drapeau de "sinon"
+    CFalseState: fExeStack.Pop; // on ignore la liste suivante
+    CTrueState: DoPrimExec; // on l'exécute
+    CDisabledState: // [### Erreur: SI.VRAI mal placé ###]
+      SetError(CE_BadTest, P_IfTrue);
+  end;
+end;
+
+procedure DoPrimIfFalse;
+// *** SI.FAUX ***
+begin
+  fWkRec.fItem := fExeStack.Peek; // donnée enregistrée
+  case fTest of // analyse du drapeau de "sinon"
+    CTrueState: fExeStack.Pop; // on ignore la liste suivante
+    CFalseState: DoPrimExec; // on l'exécute
+    CDisabledState: // [### Erreur: SI.FAUX mal placé ###]
+      SetError(CE_BadTest, P_IfFalse);
+  end;
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2392,9 +2484,9 @@ begin
     172: DoPrimPropList; // PLISTE
     173:;
     174: DoPrimExec; // EXEC
-    175:;
-    176:;
-    177:;
+    175: DoPrimTest; // TESTE
+    176: DoPrimIfTrue; // SI.VRAI
+    177: DoPrimIfFalse; // SI.FAUX
     178: DoPrimProcs; // PROCEDURES
     179: DoPrimPrims; // PRIMITIVES
     180: DoPrimVars; // VARIABLES
@@ -2414,12 +2506,9 @@ begin
     200: DoPrimLn; // LN
     201: DoPrimLog2; // LOG2
     202: DoPrimLog10; // LOG
-    203:;
-    204:;
-    205:;
-    206:;
-    207:;
-    208:;
+    203, 204: DoPrimCoTan; // COTAN COTANGENTE
+    205, 206: DoPrimArcCos; // ARCCOS ARCCOSINUS
+    207, 208: DoPrimArcSin; // ARCSIN ARSINUS
     209: DoPrimMinusP; // NEGATIF?
     210: DoPrimPlusP; // POSITIF?
     211: DoPrimNegate; // OPPOSE

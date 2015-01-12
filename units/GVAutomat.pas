@@ -77,6 +77,7 @@ type
       fLocStop: Boolean; // drapeau d'arrêt local
       fStop: Boolean; // drapeau d'arrêt
       fElse: TThreeStates; // drapeau de Sinon
+      fTest: TThreeStates; // drapeau de Test
       fKernel: TGVLogoKernel; // espace de travail
       fEval: TGVEval; // évaluateur
       fTurtle: TGVTurtle; // tortue
@@ -198,6 +199,7 @@ begin
     fWkRec.fLine := St; // on conserve la ligne à analyser
     fWkRec.fNum := 0; // élément dans la ligne
     fElse := CDisabledState; // sinon désactivé
+    fTest := CDisabledState; // test aussi
   end;
 end;
 
