@@ -1934,7 +1934,7 @@ procedure DoPrimWordP;
 begin
   AWord; // récupération d'une donnée
   // vrai ou faux
-  PushConst(IfThen(IsList, CStFalse, CStTrue));
+  PushConst(IfThen(LW.IsValid, CStTrue, CStFalse));
 end;
 
 procedure DoPrimPrevious;
@@ -2154,6 +2154,13 @@ begin
   PushConst(fTurtle.PenState);
 end;
 
+procedure DoPrimListP;
+// *** LISTE? ***
+begin
+  LL.Text := fExeStack.Pop; // donnée récupérée
+  PushConst(IfThen(LL.IsValid, CStTrue, CStFalse)); // vrai ou faux
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2289,7 +2296,7 @@ begin
     151: DoPrimEmptyP; // VIDE?
     152:;
     153:;
-    154:;
+    154: DoPrimListP; // LISTE?
     155:;
     156:;
     157:;
