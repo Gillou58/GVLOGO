@@ -2161,6 +2161,73 @@ begin
   PushConst(IfThen(LL.IsValid, CStTrue, CStFalse)); // vrai ou faux
 end;
 
+procedure DoPrimDProp;
+// *** DPROP ***
+var
+  LName, LProp: string;
+begin
+  AWord; // donnée récupérée
+  if LW.IsValidIdent then // mot valide ?
+  begin
+    LName := LW.Text; // nom conservé
+    AWord; // donnée suivante
+    if LW.IsValidIdent then // mot valide ?
+    begin
+      LProp := LW.Text; // propriété conservée
+      AWord; // dernière donnée
+      fKernel.DProp(LName, LProp, LW.Text); // propriété définie
+    end
+    else
+      // [### Erreur: mauvais nom ###]
+      SetError(CE_BadName, fWkRec.fItem);
+  end
+  else
+    // [### Erreur: mauvais nom ###]
+    SetError(CE_BadName, fWkRec.fItem);
+end;
+
+procedure DoPrimRProp;
+// *** RPROP ***
+var
+  LS: string;
+begin
+  AWord; // donnée récupérée
+  if LW.IsValidIdent then // mot valide ?
+  begin
+    LS := LW.Text; // nom conservé
+    AWord; // donnée suivante
+    if LW.IsValidIdent then // mot valide ?
+      PushConst(fKernel.RProp(LS, LW.Text)) // valeur empilée
+    else
+      // [### Erreur: mauvais nom ###]
+      SetError(CE_BadName, fWkRec.fItem);
+  end
+  else
+    // [### Erreur: mauvais nom ###]
+    SetError(CE_BadName, fWkRec.fItem);
+end;
+
+procedure DoPrimDelProp;
+// *** ANPROP ***
+var
+  LS: string;
+begin
+  AWord; // donnée récupérée
+  if LW.IsValidIdent then // mot valide ?
+  begin
+    LS := LW.Text; // nom conservé
+    AWord; // donnée suivante
+    if LW.IsValidIdent then // mot valide ?
+      fKernel.AnProp(LS, LW.Text) // propriété supprimée
+    else
+      // [### Erreur: mauvais nom ###]
+      SetError(CE_BadName, fWkRec.fItem);
+  end
+  else
+    // [### Erreur: mauvais nom ###]
+    SetError(CE_BadName, fWkRec.fItem);
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2297,9 +2364,9 @@ begin
     152:;
     153:;
     154: DoPrimListP; // LISTE?
-    155:;
-    156:;
-    157:;
+    155: DoPrimDProp; // DPROP
+    156: DoPrimRProp; // RPROP
+    157: DoPrimDelProp; // ANPROP
     158:;
     159:;
     160:;
