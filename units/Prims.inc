@@ -2228,6 +2228,34 @@ begin
     SetError(CE_BadName, fWkRec.fItem);
 end;
 
+procedure DoPrimFirsts;
+// *** PREMS ***
+begin
+  AWord; // donnée récupérée
+  if IsList then
+  begin
+    LL.Text := fWkRec.fItem;
+    PushConst(LL.Firsts);
+  end
+  else
+    // [### Erreur: mauvaise liste ###]
+      SetError(CE_BadList, fWkRec.fItem);
+end;
+
+procedure DoPrimButFirsts;
+// *** SAUF.PREMS ***
+begin
+  AWord; // donnée récupérée
+  if IsList then
+  begin
+    LL.Text := fWkRec.fItem;
+    PushConst(LL.ButFirsts);
+  end
+  else
+    // [### Erreur: mauvaise liste ###]
+      SetError(CE_BadList, fWkRec.fItem);
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2361,8 +2389,8 @@ begin
     149: DoPrimPrevious; // PRECEDENT
     150: DoPrimNext; // SUIVANT
     151: DoPrimEmptyP; // VIDE?
-    152:;
-    153:;
+    152: DoPrimFirsts; // PREMS
+    153: DoPrimButFirsts; // SAUF.PREMS
     154: DoPrimListP; // LISTE?
     155: DoPrimDProp; // DPROP
     156: DoPrimRProp; // RPROP

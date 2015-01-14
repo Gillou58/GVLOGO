@@ -80,6 +80,9 @@ type
   TGVListUtils = class;
 
   // *** classe des listes ***
+
+  { TGVList }
+
   TGVList = class(TStringList)
   strict private
     fRawStr: string; // chaîne brute en entrée
@@ -152,6 +155,10 @@ type
     function Rotate: string;
     // élément de la liste choisi au hasard
     function AtRandom: string;
+    // premier élément de chaque élément d'une liste
+    function Firsts: string;
+    // tout sauf le premier élément de chaque élément d'une liste
+    function ButFirsts: string;
     // dernier élément traité
     property LastItem: Integer read fNumLastItem default -1;
     // chaîne brute en entrée
@@ -673,6 +680,95 @@ begin
   Result := CEmptyList; // liste vide par défaut
   if Count > 0 then // si des éléments
     Result := Get(Random(Count)); // un au hasard
+end;
+
+function TGVList.Firsts: string;
+// *** premier élément de chaque élément d'une liste ***
+var
+  LS: string;
+  LL: TGVList;
+  LW: TGVWord;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  Result := CBeginList; // début de liste
+  try
+    LW := TGVWord.Create; // création du mot de travail
+    try
+    for LS in Self do  // on boucle
+      if Error.Ok then // si pas d'erreur
+      begin
+        if LS[1] = CBeginList then // une liste ?
+        begin
+          LL.Text := LS; // liste récupérée
+          if LL.IsValid then // correcte ?
+            Result := Result + LL.First + CBlank // on ajoute le premier élément
+          else
+            // [### Erreur: mauvaise liste ###]
+            Error.SetError(CE_BadList, LS);
+        end
+        else
+        begin
+          LW.Text := LS; // mot récupéré
+          if LW.IsValid then  // correct ?
+            // on récupère son dernier élément
+            Result := Result + LW.First + CBlank
+          else
+            // [### Erreur: mauvais mot ###]
+            Error.SetError(CE_BadWord, LS);
+        end;
+      end;
+    finally
+      LW.Free; // libération du mot de travail
+    end;
+  finally
+    Result := TrimRight(Result) + CEndList; // fin de liste
+    LL.Free; // libération de la liste de travail
+  end;
+end;
+
+function TGVList.ButFirsts: string;
+// *** tout sauf le premier élément de chaque élément d'une liste ***
+var
+  LS: string;
+  LL: TGVList;
+  LW: TGVWord;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  Result := CBeginList; // début de liste
+  try
+    LW := TGVWord.Create; // création du mot de travail
+    try
+    for LS in Self do  // on boucle
+      if Error.Ok then // si pas d'erreur
+      begin
+        if LS[1] = CBeginList then // une liste ?
+        begin
+          LL.Text := LS; // liste récupérée
+          if LL.IsValid then // correcte ?
+            // on ajoute le dernier élément
+            Result := Result + LL.ButFirst + CBlank
+          else
+            // [### Erreur: mauvaise liste ###]
+            Error.SetError(CE_BadList, LS);
+        end
+        else
+        begin
+          LW.Text := LS; // mot récupéré
+          if LW.IsValid then  // correct ?
+            // on récupère le dernier élément
+            Result := Result + LW.ButFirst + CBlank
+          else
+            // [### Erreur: mauvais mot ###]
+            Error.SetError(CE_BadWord, LS);
+        end;
+      end;
+    finally
+      LW.Free; // libération du mot de travail
+    end;
+  finally
+    Result := TrimRight(Result) + CEndList; // fin de liste
+    LL.Free; // libération de la liste de travail
+  end;
 end;
 
 function TGVList.GetTextStr: string;
