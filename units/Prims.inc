@@ -2256,6 +2256,27 @@ begin
       SetError(CE_BadList, fWkRec.fItem);
 end;
 
+procedure DoPrimProps;
+// *** PROPS ***
+begin
+  AWord; // donnée récupérée
+  PushConst(fKernel.ListOfProps(fWkRec.fItem));
+end;
+
+procedure DoPrimDel;
+// *** ANNULE ***
+begin
+  AWord; // donnée récupérée
+  fKernel.DelPropList(fWkRec.fItem);
+end;
+
+procedure DoPrimCountProps;
+// *** COMPTE.PROPS ***
+begin
+  AWord; // donnée récupérée
+  PushConst(IntToStr(fKernel.CountProps(fWkRec.fItem)));
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2395,9 +2416,9 @@ begin
     155: DoPrimDProp; // DPROP
     156: DoPrimRProp; // RPROP
     157: DoPrimDelProp; // ANPROP
-    158:;
-    159:;
-    160:;
+    158: DoPrimProps; // PROPS
+    159: DoPrimDel; // ANNULE
+    160: DoPrimCountProps; // COMPTE.PROPS
     161: DoPrimPropP; // PROP?
     162: DoPrimPropListP; // LISTE.PROP?
     163: DoPrimProcP; // PROCEDURE?

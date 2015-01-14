@@ -104,7 +104,7 @@ type
     procedure Clear;
     // renvoie le nombre d'objets
     function Count: Integer;
-    // renvoi de tout l'espace de travail
+    // renvoie tout l'espace de travail
     procedure Dump(Lst: TStrings);
     // l'objet existe-t-il ?
     function Exists(const Name: string): Boolean;
@@ -262,6 +262,12 @@ type
     function PList(const Name: string; out Value: string): Boolean; overload;
     // liste des objets contenant la propriété
     function GList(const Prop: string): string;
+    // liste des propriétés d'un objet
+    function ListOfProps(const Name: string): string;
+    // nombre de propriétés d'un objet
+    function CountProps(const Name: string): Integer;
+    // liste de propriétés supprimée ***
+    function DelPropList(const Name: string): Boolean;
     // la liste de propriétés est-elle la liste vide ?
     function IsEmptyPList(const Name: string): Boolean;
     // la propriété est-elle dans la liste de propriétés ?
@@ -2025,8 +2031,8 @@ function TGVLogoKernel.PList(const Name: string): string;
 begin
   Result := fWorkZone.ValListP(Name); // renvoie la liste
   if Result = EmptyStr then // ne peut être une chaîne vide
-    // [### Erreur: chaîne vide ###]
-    Error.SetError(CE_UnKnownListP, Name); // pas une propriété
+    // [### Erreur: liste de propriétés inconnue ###]
+    Error.SetError(CE_UnKnownListP, Name);
 end;
 
 function TGVLogoKernel.PList(const Name: string; out Value: string): Boolean;
@@ -2035,8 +2041,8 @@ begin
   Result := False; // suppose une erreur
   Value := fWorkZone.ValListP(Name); // renvoie la liste
   if Value = EmptyStr then // ne peut être une chaîne vide
-    // [### Erreur: chaîne vide ###]
-    Error.SetError(CE_UnKnownListP, Name) // pas une propriété
+    // [### Erreur: liste de propriétés inconnue ###]
+    Error.SetError(CE_UnKnownListP, Name)
   else
     Result := True; // tout est OK
 end;
@@ -2045,6 +2051,39 @@ function TGVLogoKernel.GList(const Prop: string): string;
 // *** objets ayant une propriété donnée ***
 begin
   Result := ObjsToList(Prop);
+end;
+
+function TGVLogoKernel.ListOfProps(const Name: string): string;
+// liste des propriétés d'un objet
+begin
+  Result := EmptyStr; // rien par défaut
+  if Exists(Name) then // l'objet existe-t-il ?
+    Result := fWorkZone.ListOfProps(Name)
+  else
+    // [### Erreur: liste de propriété inconnue ###]
+    Error.SetError(CE_UnKnownListP, Name);
+end;
+
+function TGVLogoKernel.CountProps(const Name: string): Integer;
+// *** décompte des propriétés d'une liste ***
+begin
+  Result := -1; // erreur par défaut
+  if Exists(Name) then // l'objet existe-t-il ?
+    Result := fWorkZone.CountProps(Name)
+  else
+    // [### Erreur: liste de propriété inconnue ###]
+    Error.SetError(CE_UnKnownListP, Name);
+end;
+
+function TGVLogoKernel.DelPropList(const Name: string): Boolean;
+// *** suppresion d'une liste de propriétés ***
+begin
+  Result := False; // erreur par défaut
+  if Exists(Name) then // l'objet existe-t-il ?
+    Result := fWorkZone.RemoveListP(Name)
+  else
+    // [### Erreur: liste de propriété inconnue ###]
+    Error.SetError(CE_UnKnownListP, Name);
 end;
 
 function TGVLogoKernel.IsEmptyPList(const Name: string): Boolean;
