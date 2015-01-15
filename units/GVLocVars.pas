@@ -79,6 +79,8 @@ type
     procedure Clear;
     // réservation pour N variables locales
     procedure AddLocNumber(N: Integer);
+    // réservation pour une nouvelle variable locale
+    procedure AddNewLocNumber;
     // est-ce une variable locale ?
     function IsLocVar(const Name: string): Boolean;
     // nombre de variables locales
@@ -110,7 +112,8 @@ type
 implementation
 
 uses
-  GVWords; // mots
+  GVWords, // mots
+  GVPrimConsts; // constantes des primitives
 
 { TGVLocVars }
 
@@ -188,6 +191,19 @@ begin
   else
     // [### Erreur: mauvais compteur ###]
     Error.SetError(CIE_MemLocVar, ToString);
+end;
+
+procedure TGVLocVars.AddNewLocNumber;
+// *** nouvelle place pour une variable locale ***
+begin
+  if fStack.IsEmpty then // pas de variables locales en cours ?
+    // [### Erreur: allocation interdite ###]
+    Error.SetError(CE_LocVarForbidden, P_Loc)
+  else
+  begin
+    Count := 1; // place allouée
+    fStack.Push(fStack.Pop + 1); // sommet de pile incrémenté
+  end;
 end;
 
 function TGVLocVars.IsLocVar(const Name: string): Boolean;

@@ -2253,7 +2253,7 @@ begin
   end
   else
     // [### Erreur: mauvaise liste ###]
-      SetError(CE_BadList, fWkRec.fItem);
+    SetError(CE_BadList, fWkRec.fItem);
 end;
 
 procedure DoPrimProps;
@@ -2277,6 +2277,21 @@ begin
   PushConst(IntToStr(fKernel.CountProps(fWkRec.fItem)));
 end;
 
+procedure DoPrimLocal;
+// *** LOCALE ***
+begin
+  AWord; // nom récupéré
+  if fLocVars.IsLocVar(fWkRec.fItem) then // le nom est déjà pris ?
+    // [### Erreur: existe déjà ###]
+    SetError(CE_AlreadyExists, fWkRec.fItem)
+  else
+  begin
+    fLocVars.AddNewLocNumber; // allocation d'un emplacement
+    if Error.Ok then // pas d'erreur ?
+      fLocVars.AddLocVar(fWkRec.fItem, EmptyStr); // variable enregistrée
+  end;
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2289,7 +2304,7 @@ begin
     3: DoPrimStop; // STOP
     4: DoPrimIf; // SI
     5: DoPrimReturn; // RENDS
-    6: ; // TANT.QUE
+    6: ; // ### TANT.QUE ###
     7: DoPrimRepeat; // REPETE
     8:;
     9: DoPrimFor; // BOUCLE
@@ -2426,10 +2441,10 @@ begin
     165: DoPrimNameP;  // NOM?
     166: DoPrimList; // LISTE
     167, 171: ; // ### LIS.LISTE LL  ###
-    168: ;
+    168: ; // ### LIS.CAR ###
     169, 170: DoPrimClearText; // VIDE.TEXTE VT
     172: DoPrimPropList; // PLISTE
-    173:;
+    173:;  // ### libre VAL.PROP ###
     174: DoPrimExec; // EXEC
     175: DoPrimTest; // TESTE
     176: DoPrimIfTrue; // SI.VRAI
@@ -2438,7 +2453,7 @@ begin
     179: DoPrimPrims; // PRIMITIVES
     180: DoPrimVars; // VARIABLES
     181: DoPrimLocalVars; // LOCALES
-    182:;
+    182: DoPrimLocal; // LOCALE
     183, 184: DoPrimAbs; // ABSOLUE ABS
     185, 186: DoPrimCos; // COSINUS COS
     187, 188: DoPrimSin; // SINUS SIN
