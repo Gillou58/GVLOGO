@@ -69,6 +69,8 @@ type
       fState: TGVAutomatState; // état de l'automate
       fWkMess: TGVAutomatMessage; // message de l'interpréteur
       fWkRec: TGVAutomatRec; // espace d'interprétation
+      fReturnFlag: Boolean; // drapeau de retour
+      fReturnVal: string; // valeur de retour
       fParamsStack: TGVIntegerStack; // pile des paramètres
       fDatasStack: TGVStringStack; // pile des données
       fCommandsStack: TGVStringStack; // pile des commandes
@@ -208,7 +210,8 @@ procedure TGVAutomat.DoEnd;
 begin
   State := asEnding; // état
   Dec(fWkRec.fLevel); // niveau précédent
-  if (fCommandsStack.Count <> 0) and Error.Ok then // commandes en attente ?
+  if (not fReturnFlag) and (fCommandsStack.Count <> 0)
+    and Error.Ok then // commandes en attente sans drapeau de valeur rendue ?
   begin
     fWkRec.fItem := fCommandsStack.Pop; // on récupère la commande en suspens
     if fWkRec.fItem[1] = CLink then // une primitive ?
@@ -315,6 +318,11 @@ begin
     end;
     if fLocVars.LocVarsCount > 0 then // s'il y a des variables en suspens
       fLocVars.DelLastGroup; // variables locales supprimées
+    if fReturnFlag then // valeur en attente ?
+    begin
+      fReturnFlag := False; // drapeau baissé
+      PushConst(fReturnVal); // valeur empilée
+    end;
   finally
     State := asProcDone; // état
     fWkRec.fProc := LOldProc; // récupération de l'ancienne procédure
@@ -336,6 +344,8 @@ begin
   fWkRec.fItem := St;
   State := asPushing; // état
   fDatasStack.Push(St); // on empile la constante
+  if fReturnFlag then // si drapeau de valeur retournée
+    Exit; // on sort
   // pas de paramètre ou pas de commande en attente ?
   if (fParamsStack.Count = 0) or
     ((fParamsStack.Peek > 0) and (fCommandsStack.Count = 0)) then
@@ -578,6 +588,7 @@ begin
   Error.Clear; // erreurs
   fEval.Clear; // évaluateur
   fLocVars.Clear; // variables locales
+  fReturnFlag := False; // pas de retour
   State := asWaiting; // état
 end;
 

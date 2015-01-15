@@ -109,6 +109,7 @@ procedure TMainForm.btnClearClick(Sender: TObject);
 // nettoyage de l'éditeur
 begin
   mmoMain.Lines.Clear; // éditeur nettoyé
+  lbledtMain.Text := EmptyStr; // ligne d'édition nettoyée
   GVTurtle.ReInit; // tortue réinitialisée
   GVTurtle.Kind := tkPng; // tortue image
   btnGo.Enabled := True; // bouton go actif
@@ -210,7 +211,6 @@ begin
   if fTrace then
     with mmoMain.Lines do
     begin
-      if Automat.State in [asExeProc, asProcDone] then
       Add(Format('// '+ StateArray[Automat.State] +
         '...', [LS])); // état affiché
       if fDeepTrace and (not (Automat.State in [asWaiting, asPreparing,

@@ -92,7 +92,9 @@ end;
 procedure DoPrimReturn;
 // *** RENDS ***
 begin
-  PushConst(fExeStack.Pop); // valeur renvoyée
+  AWord; // valeur récupérée
+  fReturnVal := fWkRec.fItem; // valeur de retour
+  fReturnFlag := True; // drapeau levé
 end;
 
 procedure DoPrimGive;
@@ -2292,6 +2294,11 @@ begin
   end;
 end;
 
+procedure DoPrimUntil;
+// *** TANT.QUE ***
+begin
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2304,11 +2311,11 @@ begin
     3: DoPrimStop; // STOP
     4: DoPrimIf; // SI
     5: DoPrimReturn; // RENDS
-    6: ; // ### TANT.QUE ###
+    6: DoPrimUntil; // ### TANT.QUE ###
     7: DoPrimRepeat; // REPETE
-    8:;
+    8:; // ### JUSQUA ###
     9: DoPrimFor; // BOUCLE
-    10:;
+    10:; // ### EDITE.VERS.PROC ###
     11: DoPrimLoadProcs; // CHARGE.PROCS
     12: DoPrimSaveProcs; // SAUVE.PROCS
     13: DoPrimProcToEdit; // EDITE.PROC
