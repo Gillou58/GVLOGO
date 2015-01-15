@@ -56,11 +56,7 @@ uses
   GVStacks; // piles
 
 type
-
   // *** automate ***
-
-  { TGVAutomat }
-
   TGVAutomat = class(TObject)
     strict private
       fError: TGVErrors; // traitement des erreurs
@@ -210,8 +206,10 @@ procedure TGVAutomat.DoEnd;
 begin
   State := asEnding; // état
   Dec(fWkRec.fLevel); // niveau précédent
+  // commandes en attente sans drapeau de valeur rendue, sans erreur et
+  // sans arrêt ?
   if (not fReturnFlag) and (fCommandsStack.Count <> 0)
-    and Error.Ok then // commandes en attente sans drapeau de valeur rendue ?
+    and Error.Ok and (not Stop) then
   begin
     fWkRec.fItem := fCommandsStack.Pop; // on récupère la commande en suspens
     if fWkRec.fItem[1] = CLink then // une primitive ?
