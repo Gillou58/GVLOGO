@@ -196,7 +196,8 @@ const
     'La primitive %s a été exécutée', 'STOP demandé %s',
     'Le résultat %s a été obtenu');
 var
-  LS: string;
+  LS, LS2: string;
+  Li: Integer;
 begin
   btnGo.Enabled:= False; // bouton pendant le travail
   case Automat.State of
@@ -208,11 +209,17 @@ begin
   else
     LS := EmptyStr;
   end;
+  LS2 := EmptyStr;
   if fTrace then
     with mmoMain.Lines do
     begin
-      Add(Format('// '+ StateArray[Automat.State] +
-        '...', [LS])); // état affiché
+      if not (Automat.State in [asBeginning, asWorking]) then
+      begin
+        for Li := 1 to Automat.Datas.fLevel do
+          LS2 := LS2 + CBlank;
+        Add(Format('// [%d]'+ StateArray[Automat.State] +
+        '...', [Li, LS])); // état affiché
+      end;
       if fDeepTrace and (not (Automat.State in [asWaiting, asPreparing,
         asEnding, asBeginning]))then  // trace ?
       begin
