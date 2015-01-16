@@ -85,7 +85,6 @@ type
       procedure PushConst(const St: string); // empilement d'une constante
       function DoBegin(const St: string): Boolean; // préparation
       // préparation de l'interpréteur
-      function DoGlobalBegin(const St: string): Boolean;
       procedure DoEnd; // postparation de l'interpréteur
       procedure DoWord; // traitement d'un mot
       procedure DoList; // traitement d'une liste
@@ -163,6 +162,7 @@ var
   LL : TGVList;
   Li: Integer;
 begin
+  State := asBeginning;
   Inc(fWkRec.fLevel); // niveau suivant
   fWkRec.fItem := St; // élément analysé
   State := asPreparing; // état
@@ -177,6 +177,10 @@ begin
       fWkStack.Push(CBreak); // marque de fin
       for Li := LL.Count downto 1 do // on empile à l'envers
         fWkStack.Push(LL[Li - 1]);
+    fWkRec.fLine := St; // on conserve la ligne à analyser
+    fWkRec.fNum := 0; // élément dans la ligne
+    fElse := CDisabledState; // sinon désactivé
+    fTest := CDisabledState; // test aussi
       Result := True; // tout est OK
     end
     else
@@ -187,25 +191,12 @@ begin
   end;
 end;
 
-function TGVAutomat.DoGlobalBegin(const St: string): Boolean;
-// *** préparation initiale de l'automate ***
-begin
-  State := asBeginning;
-  Result := DoBegin(St); // préparation
-  if Result then
-  begin
-    fWkRec.fLine := St; // on conserve la ligne à analyser
-    fWkRec.fNum := 0; // élément dans la ligne
-    fElse := CDisabledState; // sinon désactivé
-    fTest := CDisabledState; // test aussi
-  end;
-end;
-
 procedure TGVAutomat.DoEnd;
 // *** postparation de l'automate ***
 begin
   State := asEnding; // état
   Dec(fWkRec.fLevel); // niveau précédent
+   fLocStop := False; // stop local éventuel annulé
   // commandes en attente sans drapeau de valeur rendue, sans erreur et
   // sans arrêt ?
   if (not fReturnFlag) and (fCommandsStack.Count <> 0)
@@ -310,7 +301,6 @@ begin
       end;
       // exécution de la procédure
       Process(CBeginList + LS + CEndList);
-      fLocStop := False; // stop local éventuel annulé
     finally
       LL.Free; // libération de la liste
     end;
@@ -485,7 +475,7 @@ end;
 procedure TGVAutomat.Process(const St: string);
 // *** lancement de l'automate d'interprétation ***
 begin
-  if DoGlobalBegin(St) then // préparation correcte ?
+  if DoBegin(St) then // préparation correcte ?
   begin
     State := asWorking; // état
     // pile non vide, stop non demandé, pas stop local et pas d'erreur ?
