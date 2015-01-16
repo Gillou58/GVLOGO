@@ -172,15 +172,15 @@ begin
   LL := TGVList.Create; // liste de travail créée
   try
     LL.Text := St; // affectation du texte à la liste
-    if LL.Error.Ok then  // liste OK ?
+    if LL.IsValid then  // liste OK ?
     begin
       fWkStack.Push(CBreak); // marque de fin
       for Li := LL.Count downto 1 do // on empile à l'envers
         fWkStack.Push(LL[Li - 1]);
-    fWkRec.fLine := St; // on conserve la ligne à analyser
-    fWkRec.fNum := 0; // élément dans la ligne
-    fElse := CDisabledState; // sinon désactivé
-    fTest := CDisabledState; // test aussi
+      fWkRec.fLine := St; // on conserve la ligne à analyser
+      fWkRec.fNum := 0; // élément dans la ligne
+      fElse := CDisabledState; // sinon désactivé
+      fTest := CDisabledState; // test aussi
       Result := True; // tout est OK
     end
     else
