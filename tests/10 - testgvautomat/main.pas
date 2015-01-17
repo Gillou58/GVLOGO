@@ -183,55 +183,50 @@ end;
 procedure TMainForm.GetStateChange(Sender: TObject);
 // gestion du changement d'état
 const
-  StateArray: array[TGVAutomatState] of string =  ('Attente %s', 'On commence %s',
+  StateArray: array[TGVAutomatState] of string =  ('Attente %s',
     'On termine', 'Au travail', 'On a rencontré l''erreur : %s',
     'On traite le mot %s', 'On traite la liste %s',
     'On traite la variable %s', 'On traite le nombre %s',
-    'On traite la commande %s',
     'On traite l''expression %s', 'On traite la procédure %s',
     'On traite la primitive %s', 'On empile %s',
     'On s''est arrêté %s', 'On exécute la primitive %s',
-    'On exécute la procédure %s', 'On insère une ligne : %s',
+    'On exécute la procédure %s',
     'On se prépare %s', 'La procédure %s a été exécutée ',
     'La primitive %s a été exécutée', 'STOP demandé %s',
     'Le résultat %s a été obtenu');
 var
-  LS, LS2: string;
+  LS: string;
   Li: Integer;
 begin
   btnGo.Enabled:= False; // bouton pendant le travail
   case Automat.State of
-    asWord, asList, asVar, asNumber, asCommand, asEval, asPushing, asProc,
-    asPrim, asInserting, asPrimValue: LS := Automat.Datas.fItem;
+    asWord, asList, asVar, asNumber, asEval, asPushing, asProc,
+    asPrim, asPrimValue: LS := Automat.Datas.fItem;
     asExePrim, asPrimDone: LS := Automat.Datas.fPrim;
     asExeProc, asProcDone: LS := Automat.Datas.fProc;
     asWaiting: btnGo.Enabled := True;
   else
     LS := EmptyStr;
   end;
-  LS2 := EmptyStr;
   if fTrace then
     with mmoMain.Lines do
     begin
-      if not (Automat.State in [asBeginning, asWorking]) then
-      begin
-        for Li := 1 to Automat.Datas.fLevel do
-          LS2 := LS2 + CBlank;
+      for Li := 1 to Automat.Datas.fLevel do
         Add(Format('// [%d]'+ StateArray[Automat.State] +
-        '...', [Li, LS])); // état affiché
-      end;
-      if fDeepTrace and (not (Automat.State in [asWaiting, asPreparing,
-        asEnding, asBeginning]))then  // trace ?
-      begin
-        Add('// Ligne : ' + Automat.Datas.fLine);
-        Add('// Donnée : ' + Automat.Datas.fItem);
-        Add('// Numéro : ' + IntToStr(Automat.Datas.fNum));
-        Add('// Primitive : ' + Automat.Datas.fPrim);
-        Add('// Procédure : ' + Automat.Datas.fProc);
-        Add('// Niveau : ' + IntToStr(Automat.Datas.fLevel));
-        Add('');
-      end;
+          '...', [Li, LS])); // état affiché
     end;
+   if fDeepTrace and (not (Automat.State in [asWaiting, asPreparing,
+        asEnding]))then  // trace ?
+     with mmoMain.Lines do
+       begin
+         Add('// Ligne : ' + Automat.Datas.fLine);
+         Add('// Donnée : ' + Automat.Datas.fItem);
+         Add('// Numéro : ' + IntToStr(Automat.Datas.fNum));
+         Add('// Primitive : ' + Automat.Datas.fPrim);
+         Add('// Procédure : ' + Automat.Datas.fProc);
+         Add('// Niveau : ' + IntToStr(Automat.Datas.fLevel));
+         Add('');
+       end;
 end;
 
 procedure TMainForm.GetError(Sender: TObject; ErrorRec: TGVErrorRec);

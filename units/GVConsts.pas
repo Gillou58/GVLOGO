@@ -261,9 +261,9 @@ type
   end;
 
   // *** état de l'automate ***
-  TGVAutomatState = (asWaiting, asBeginning, asEnding, asWorking, asError,
-    asWord, asList, asVar, asNumber, asCommand, asEval, asProc, asPrim,
-    asPushing, asStopped, asExePrim, asExeProc, asInserting, asPreparing,
+  TGVAutomatState = (asWaiting, asEnding, asWorking, asError,
+    asWord, asList, asVar, asNumber, asEval, asProc, asPrim,
+    asPushing, asStopped, asExePrim, asExeProc, asPreparing,
     asProcDone, asPrimDone, asPrimStop, asPrimValue);
 
 const

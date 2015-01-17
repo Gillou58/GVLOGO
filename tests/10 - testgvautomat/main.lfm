@@ -107,6 +107,18 @@ object MainForm: TMainForm
       '  td 45'
       '  repete 6 [repete 90 [av 2 td 2] td 90]'
       'fin'
+      ''
+      'pour Morceau :cote'
+      'td 150 av produit :cote rac 3'
+      'td 150 av :cote'
+      'td 180'
+      'fin'
+      ''
+      'pour Tetraedre :cote :niveau'
+      'si egal? :niveau 0 [Stop]'
+      'repete 3 [av :cote tetraedre div :cote 1,9 diff :niveau 1 morceau :cote]'
+      'fin'
+      ''
     )
     ParentShowHint = False
     ScrollBars = ssAutoBoth

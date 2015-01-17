@@ -104,7 +104,6 @@ type
       destructor Destroy; override; // destructeur
       procedure Clear; // nettoyage
       procedure Process(const St: string); // lancement de l'automate
-      procedure AddToProcess(const St: string); // ajout à la ligne d'exécution
       procedure SetError(const Code: TGVError; ErrItem: string;
         ErrPos: Integer = CE_NoErr); // gestion des erreurs
       // noyau de travail
@@ -161,8 +160,6 @@ var
   LL : TGVList;
   Li: Integer;
 begin
-  State := asBeginning;
-  Inc(fWkRec.fLevel); // niveau suivant
   fWkRec.fItem := St; // élément analysé
   State := asPreparing; // état
   Result := False; // suppose une erreur
@@ -194,7 +191,6 @@ procedure TGVAutomat.DoEnd;
 // *** postparation de l'automate ***
 begin
   State := asEnding; // état
-  Dec(fWkRec.fLevel); // niveau précédent
   // commandes en attente sans drapeau de valeur rendue, sans erreur et
   // sans arrêt ?
   if (not fReturnFlag) and (fCommandsStack.Count <> 0)
@@ -268,6 +264,7 @@ var
   LOldProc: string;
 begin
   LOldProc := fWkRec.fProc; // on conserve l'ancienne procédure
+  Inc(fWkRec.fLevel); // niveau suivant
   fWkRec.fProc := fCommandsStack.Pop; // nom de la procédure en cours
   fWkRec.fItem := fWkRec.fProc; // élément en cours actualisé
   State := asExeProc; // état
@@ -311,6 +308,7 @@ begin
     end;
   finally
     State := asProcDone; // état
+    Dec(fWkRec.fLevel); // niveau précédent
     fWkRec.fProc := LOldProc; // récupération de l'ancienne procédure
   end;
 end;
@@ -459,7 +457,6 @@ end;
 procedure TGVAutomat.DoCommand;
 // *** répartit les commandes ***
 begin
-  State := asCommand; // état
   if fKernel.IsPrim(fWkRec.fItem) then // une primitive ?
     DoPrim // on la traite
   else
@@ -476,7 +473,7 @@ begin
   if DoBegin(St) then // préparation correcte ?
   begin
     State := asWorking; // état
-    // pile non vide, stop non demandé, pas stop local et pas d'erreur ?
+    // pile non vide, stop non demandé et pas d'erreur ?
     // => on boucle
     while not (fWkStack.IsEmpty or Stop or (not Error.Ok)) do
     begin
@@ -575,14 +572,6 @@ begin
   fLocVars.Clear; // variables locales
   fReturnFlag := False; // pas de retour
   State := asWaiting; // état
-end;
-
-procedure TGVAutomat.AddToProcess(const St: string);
-// *** ajout d'éléments à la ligne d'exécution ***
-begin
-  fWkRec.fItem := St; // élément analysé
-  State := asInserting; // état
-  DoBegin(St); // on ajoute
 end;
 
 procedure TGVAutomat.SetError(const Code: TGVError; ErrItem: string;
