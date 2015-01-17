@@ -127,7 +127,8 @@ end;
 procedure DoPrimStop;
 // *** STOP ***
 begin
-  fLocStop := True; // drapeau levé
+  while (not fWkStack.IsEmpty) and (fWkStack.Peek <> CBreak) do
+    FWkStack.Pop; // on supprime les commandes en attente
 end;
 
 procedure DoPrimExec;

@@ -72,7 +72,6 @@ type
       fCommandsStack: TGVStringStack; // pile des commandes
       fExeStack: TGVStringStack; // pile d'exécution
       fWkStack: TGVStringStack; // pile de travail
-      fLocStop: Boolean; // drapeau d'arrêt local
       fStop: Boolean; // drapeau d'arrêt
       fElse: TThreeStates; // drapeau de Sinon
       fTest: TThreeStates; // drapeau de Test
@@ -196,7 +195,6 @@ procedure TGVAutomat.DoEnd;
 begin
   State := asEnding; // état
   Dec(fWkRec.fLevel); // niveau précédent
-   fLocStop := False; // stop local éventuel annulé
   // commandes en attente sans drapeau de valeur rendue, sans erreur et
   // sans arrêt ?
   if (not fReturnFlag) and (fCommandsStack.Count <> 0)
@@ -289,7 +287,7 @@ begin
       LS := EmptyStr; // définition vide
       for Li := 1 to fKernel.ProcLinesCount(fWkRec.fProc) do
       begin
-        if not (Stop or fLocStop) then
+        if not Stop then
         begin
           LL.Text := fKernel.ProcLine(fWkRec.fProc, Li);
           for Lj := 1 to LL.Count do // on balaie la ligne
@@ -480,7 +478,7 @@ begin
     State := asWorking; // état
     // pile non vide, stop non demandé, pas stop local et pas d'erreur ?
     // => on boucle
-    while not (fWkStack.IsEmpty or Stop or fLocStop or (not Error.Ok)) do
+    while not (fWkStack.IsEmpty or Stop or (not Error.Ok)) do
     begin
       fWkRec.fItem := fWkStack.Pop; // élément dépilé
       Inc(fWkRec.fNum); // numéro conservé
@@ -522,7 +520,6 @@ begin
   fCommandsStack := TGVStringStack.Create; // pile des commandes
   fExeStack := TGVStringStack.Create; // pile d'exécution
   Stop := False; // pas d'arrêt
-  fLocStop := False; // pas d'arrêt
   Error := TGVErrors.Create; // traitement des erreurs
   fKernel:= TGVLogoKernel.Create; // noyau
   fKernel.Error.OnError := @Error.GetError; // gestionnaire centralisé d'erreurs
