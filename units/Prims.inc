@@ -2336,6 +2336,12 @@ begin
       SetError(CE_BadBool, fWkRec.fItem)
 end;
 
+procedure DoPrimFollow;
+// *** TRACE ***
+begin
+  fFollow := not fFollow; // trace inversée
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2488,7 +2494,7 @@ begin
     168: ; // ### LIS.CAR ###
     169, 170: DoPrimClearText; // VIDE.TEXTE VT
     172: DoPrimPropList; // PLISTE
-    173:;  // ### TRACE ###
+    173: DoPrimFollow;  // TRACE
     174: DoPrimExec; // EXEC
     175: DoPrimTest; // TESTE
     176: DoPrimIfTrue; // SI.VRAI

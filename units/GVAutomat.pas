@@ -57,9 +57,13 @@ uses
 
 type
   // *** automate ***
+
+  { TGVAutomat }
+
   TGVAutomat = class(TObject)
     strict private
       fError: TGVErrors; // traitement des erreurs
+      fFollow: Boolean;
       fOnNewLine: TNotifyEvent; // accès à l'éditeur
       fOnStateChange: TNotifyEvent; // événement d'état
       fState: TGVAutomatState; // état de l'automate
@@ -79,6 +83,7 @@ type
       fEval: TGVEval; // évaluateur
       fTurtle: TGVTurtle; // tortue
       fLocVars: TGVLocVars; // variables locales
+      procedure SetFollow(AValue: Boolean);
       procedure SetState(AValue: TGVAutomatState); // définition de l'état
       procedure SetStop(AValue: Boolean); // stop ?
       procedure PushConst(const St: string); // empilement d'une constante
@@ -125,6 +130,8 @@ type
         write fOnStateChange;
       property Datas: TGVAutomatRec read fWkRec; // données
       property Message: TGVAutomatMessage read fWkMess; // message
+      // trace de l'exécution
+      property Follow: Boolean read fFollow write SetFollow default False;
   end;
 
 implementation
@@ -151,7 +158,16 @@ begin
   if fState = AValue then // pas de changement ?
     Exit; // on sort
   fState := AValue; // nouvel état
-  StateChange; // changement notifié
+  if Follow then // trace d'exécution ?
+    StateChange; // changement notifié
+end;
+
+procedure TGVAutomat.SetFollow(AValue: Boolean);
+// *** trace de l'exécution ***
+begin
+  if fFollow = AValue then // pas de changement ?
+    Exit; // on sort
+  fFollow := AValue; // nouvelle valeur de la trace
 end;
 
 function TGVAutomat.DoBegin(const St: string): Boolean;

@@ -75,7 +75,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
-    fTrace: Boolean; // drapeau de trace
     fDeepTrace: Boolean; // trace approfondie
   public
     Automat: TGVAutomat; // automate
@@ -112,21 +111,25 @@ begin
   lbledtMain.Text := EmptyStr; // ligne d'édition nettoyée
   GVTurtle.ReInit; // tortue réinitialisée
   GVTurtle.Kind := tkPng; // tortue image
-  btnGo.Enabled := True; // bouton go actif
 end;
 
 procedure TMainForm.btnDeepTraceClick(Sender: TObject);
 // trace approfondie
 begin
   fDeepTrace := not fDeepTrace;
-  fTrace := fDeepTrace;
+  Automat.Follow := fDeepTrace;
 end;
 
 procedure TMainForm.btnGoClick(Sender: TObject);
 // interprétation
 begin
   Automat.Clear; // nettoyage
-  Automat.Process(CBeginList + lbledtMain.Text + CEndList); // ligne à exécuter
+  btnGo.Enabled := False; // bouton go inactif
+  try
+    Automat.Process(CBeginList + lbledtMain.Text + CEndList); // ligne à exécuter
+  finally
+    btnGo.Enabled := True; // bouton go actif
+  end;
 end;
 
 procedure TMainForm.btnStopClick(Sender: TObject);
@@ -149,8 +152,8 @@ end;
 procedure TMainForm.btnTraceClick(Sender: TObject);
 // trace active/inactive
 begin
-  fTrace := not fTrace;
-  if not fTrace then
+  Automat.Follow := not Automat.Follow;
+  if not Automat.Follow then
     fDeepTrace := False;
 end;
 
@@ -161,7 +164,7 @@ begin
   Automat.OnStateChange := @GetStateChange; // état changé
   Automat.Error.OnError := @GetError; // gestionnaire d'erreurs
   Automat.OnNewLine := @GetMessage; // gestionnaire de messages
-  fTrace := False; // pas de trace par défaut
+  Automat.Follow := False; // pas de trace par défaut
   fDeepTrace := False;
   // on crée la tortue
   GVTurtle := TGVTurtle.Create(imgTurtle.Width, imgTurtle.Height);
@@ -198,7 +201,6 @@ var
   LS: string;
   Li: Integer;
 begin
-  btnGo.Enabled:= False; // bouton pendant le travail
   case Automat.State of
     asWord, asList, asVar, asNumber, asEval, asPushing, asProc,
     asPrim, asPrimValue: LS := Automat.Datas.fItem;
@@ -208,7 +210,7 @@ begin
   else
     LS := EmptyStr;
   end;
-  if fTrace then
+  if Automat.Follow then
     with mmoMain.Lines do
     begin
       for Li := 1 to Automat.Datas.fLevel do
