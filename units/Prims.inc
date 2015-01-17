@@ -2315,31 +2315,64 @@ procedure DoPrimUntil;
 var
   LSC, LSE: string;
 begin
-  fExeStack.Swap;
-  AWord; // donnée récupérée
-  LSE := fWkRec.fItem;
-  AWord;
-  LSC := fWkRec.fItem; // conservée
-  fExeStack.Push(LSE); // donnée rempilée
-  if LW.IsBoolean then
-  begin
-    if LW.AsBoolean and (not Stop) then
-    begin
-      DoPrimExec; // exécution
-      fExeStack.Push(LSE); // donnée rempilée
-      fExeStack.Push(LSC); // donnée rempilée
-      DoPrimUntil;
-    end;
-  end
-  else
-    // [### Erreur: pas un booléen ###]
-      SetError(CE_BadBool, fWkRec.fItem)
+  //fExeStack.Swap;
+  //AWord; // donnée récupérée
+  //LSE := fWkRec.fItem;
+  //AWord;
+  //LSC := fWkRec.fItem; // conservée
+  //fExeStack.Push(LSE); // donnée rempilée
+  //if LW.IsBoolean then
+  //begin
+  //  if LW.AsBoolean and (not Stop) then
+  //  begin
+  //    DoPrimExec; // exécution
+  //    fExeStack.Push(LSE); // donnée rempilée
+  //    fExeStack.Push(LSC); // donnée rempilée
+  //    DoPrimUntil;
+  //  end;
+  //end
+  //else
+  //  // [### Erreur: pas un booléen ###]
+  //    SetError(CE_BadBool, fWkRec.fItem);
 end;
 
 procedure DoPrimFollow;
 // *** TRACE ***
 begin
   fFollow := not fFollow; // trace inversée
+end;
+
+procedure DoPrimReadList;
+// *** LIS.LISTE LL ***
+begin
+  fWkMess.fCommand := acReadList; // demande de lecture
+  MessageChange; // notification de changement
+  fWkRec.fItem := fWkMess.fMessage; // on récupère le message de retour
+  LL.Text := CBeginList + fWkRec.fItem + CEndList; // contrôle de la liste
+  if LL.IsValid then // liste correcte ?
+    PushConst(fWkRec.fItem) // résultat empilé
+  else
+    // [### Erreur: pas une liste ###]
+    SetError(CE_BadList, fWkRec.fItem);
+end;
+
+procedure DoPrimConfirm;
+// *** CONFIRME ***
+begin
+  AWord; // récupère le message
+  if IsList then // une liste ?
+    fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // message affecté
+  else
+    fWkMess.fMessage := fWkRec.fItem;
+  fWkMess.fCommand := acConfirm; // demande de réponse O/N
+  MessageChange; // notification de changement
+  fWkRec.fItem := fWkMess.fMessage; // on récupère le message de retour
+  LW.Text := fWkRec.fItem; // analyse du résultat
+  if LW.IsBoolean then // un booléen ?
+    PushConst(fWkRec.fItem) // résultat empilé
+  else
+    // [### Erreur: pas un booléen ###]
+    SetError(CE_BadBool, fWkRec.fItem);
 end;
 
 // #################################################### //
@@ -2490,7 +2523,7 @@ begin
     164: DoPrimPrimP;  // PRIMITIVE?
     165: DoPrimNameP;  // NOM?
     166: DoPrimList; // LISTE
-    167, 171: ; // ### LIS.LISTE LL  ###
+    167, 171: DoPrimReadList; // LIS.LISTE LL
     168: ; // ### LIS.CAR ###
     169, 170: DoPrimClearText; // VIDE.TEXTE VT
     172: DoPrimPropList; // PLISTE
@@ -2547,6 +2580,7 @@ begin
     239: DoPrimGetScreen; // VALEUR.ECRAN
     240: DoPrimSetPen; // FIXE.CRAYON
     241: DoPrimGetPen; // VALEUR.CRAYON
+    242: DoPrimConfirm; // CONFIRME
   end;
 end;
 

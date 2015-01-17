@@ -76,6 +76,8 @@ type
     procedure FormDestroy(Sender: TObject);
   private
     fDeepTrace: Boolean; // trace approfondie
+    function GetValue: TGVAutomatMessage; // saisie d'une valeur
+    function GetBool: TGVAutomatMessage; // saisie de vrai/faux
   public
     Automat: TGVAutomat; // automate
     GVTurtle: TGVTurtle; // tortue
@@ -183,6 +185,23 @@ begin
   GVTurtle.Free;
 end;
 
+function TMainForm.GetValue: TGVAutomatMessage;
+// *** saisie d'une valeur ***
+begin
+  Result.fMessage := InputBox('TestGVAutomat',
+    'Entrez la valeur demandée ici :', EmptyStr);
+end;
+
+function TMainForm.GetBool: TGVAutomatMessage;
+// saisie d'une valeur vrai/faux
+begin
+  if MessageDlg(Automat.Message.fMessage , mtConfirmation, mbYesNo, 0) = mrYes
+  then
+    Result.fMessage := CStTrue
+  else
+    Result.fMessage := CStFalse;
+end;
+
 procedure TMainForm.GetStateChange(Sender: TObject);
 // gestion du changement d'état
 const
@@ -252,6 +271,8 @@ begin
   case Automat.Message.fCommand of
     acWrite: mmoMain.Lines.Add(Automat.Message.fMessage);
     acClear: mmoMain.Lines.Clear;
+    acReadList: Automat.Message := GetValue;
+    acConfirm: Automat.Message := GetBool;
   end;
 end;
 

@@ -129,7 +129,7 @@ type
       property OnStateChange: TNotifyEvent read fOnStateChange
         write fOnStateChange;
       property Datas: TGVAutomatRec read fWkRec; // données
-      property Message: TGVAutomatMessage read fWkMess; // message
+      property Message: TGVAutomatMessage read fWkMess write fWkMess; // message
       // trace de l'exécution
       property Follow: Boolean read fFollow write SetFollow default False;
   end;

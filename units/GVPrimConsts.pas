@@ -50,7 +50,7 @@ const
   // *** longueur maximale du nom d'une primitive ***
   CMaxLengthPrim = 127;
   // *** nombre de primitives ***
-  CPrimCount = 241;
+  CPrimCount = 242;
 
  type
   // *** enregistrement d'une primitive ***
@@ -232,7 +232,7 @@ resourcestring
   P_ReadChar = 'LIS.CAR';
   P_ClearText = 'VIDE.TEXTE';
   P_ClearText2 = 'VT'; // 170
-  P_NumProp = 'LL';
+  P_ReadList2 = 'LL';
   P_PropList = 'PLISTE';
   P_Follow = 'TRACE';
   P_Exec = 'EXEC';
@@ -307,6 +307,7 @@ resourcestring
   P_GetScreen = 'VALEUR.ECRAN';
   P_SetPen = 'FIXE.CRAYON';
   P_GetPen = 'VALEUR.CRAYON';
+  P_Confirm = 'CONFIRME';
 
 const
   // tableau du nom des fonctions supportées par l'évaluation
@@ -490,7 +491,7 @@ const
     (Name: P_ReadChar; NbParams: 0),
     (Name: P_ClearText; NbParams: 0),
     (Name: P_ClearText2; NbParams: 0),
-    (Name: P_NumProp; NbParams: 2),
+    (Name: P_ReadList2; NbParams: 0),
     (Name: P_PropList; NbParams: 1),
     (Name: P_Follow; NbParams: 0),
     (Name: P_Exec; NbParams: 1),
@@ -562,7 +563,8 @@ const
     (Name: P_GetTurtle; NbParams: 0),
     (Name: P_GetScreen; NbParams: 0),
     (Name: P_SetPen; NbParams: 1),
-    (Name: P_GetPen; NbParams: 0))
+    (Name: P_GetPen; NbParams: 0),
+    (Name: P_Confirm; NbParams: 1))
     ;
 
 implementation

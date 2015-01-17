@@ -252,7 +252,7 @@ type
 
   // *** commandes de l'interpréteur ***
 
-  TGVAutomatCmd = (acNone, acClear, acWrite);
+  TGVAutomatCmd = (acNone, acClear, acWrite, acReadList, acConfirm);
 
   // *** message lors de l'interprétation ***
   TGVAutomatMessage = record
