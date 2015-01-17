@@ -2452,7 +2452,7 @@ begin
     168: ; // ### LIS.CAR ###
     169, 170: DoPrimClearText; // VIDE.TEXTE VT
     172: DoPrimPropList; // PLISTE
-    173:;  // ### libre VAL.PROP ###
+    173:;  // ### TRACE ###
     174: DoPrimExec; // EXEC
     175: DoPrimTest; // TESTE
     176: DoPrimIfTrue; // SI.VRAI

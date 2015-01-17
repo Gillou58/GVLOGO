@@ -126,7 +126,7 @@ procedure TMainForm.btnGoClick(Sender: TObject);
 // interprétation
 begin
   Automat.Clear; // nettoyage
-  Automat.Process(CBeginList + lbledtMain.Text + CEndList);
+  Automat.Process(CBeginList + lbledtMain.Text + CEndList); // ligne à exécuter
 end;
 
 procedure TMainForm.btnStopClick(Sender: TObject);

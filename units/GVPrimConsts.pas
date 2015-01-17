@@ -234,7 +234,7 @@ resourcestring
   P_ClearText2 = 'VT'; // 170
   P_NumProp = 'LL';
   P_PropList = 'PLISTE';
-  P_PropVal = 'VAL.PROP';
+  P_Follow = 'TRACE';
   P_Exec = 'EXEC';
   P_Test = 'TESTE';
   P_IfTrue = 'SI.VRAI';
@@ -492,7 +492,7 @@ const
     (Name: P_ClearText2; NbParams: 0),
     (Name: P_NumProp; NbParams: 2),
     (Name: P_PropList; NbParams: 1),
-    (Name: P_PropVal; NbParams: 2),
+    (Name: P_Follow; NbParams: 0),
     (Name: P_Exec; NbParams: 1),
     (Name: P_Test; NbParams: 1),
     (Name: P_IfTrue; NbParams: 1),
