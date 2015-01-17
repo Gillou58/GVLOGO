@@ -350,9 +350,24 @@ end;
 
 procedure DoPrimProcToEdit;
 // *** EDITE.PROC ***
+var
+  LLst: TStringList;
+  LS: string;
 begin
   AWord; // un mot attendu
-  // fKernel.ProcToEdit(LW.Text, fLines); // procédure éditée ### TODO ###
+  LLst := TStringList.Create; // création de la liste de travail
+  try
+    // procédure récupérée
+    if (fKernel.ProcToEdit(LW.Text, LLst) and (LLst.Count > 0)) then
+      for LS in LLst do  // on balaie la définition
+      begin
+        fWkMess.fMessage := LS; // le message
+        fWkMess.fCommand := acWrite; // demande d'écriture
+        MessageChange; // changement notifié
+      end;
+  finally
+    LLst.Free; // libération de la liste de travail
+  end;
 end;
 
 procedure DoPrimLast;
@@ -2297,7 +2312,28 @@ end;
 
 procedure DoPrimUntil;
 // *** TANT.QUE ***
+var
+  LSC, LSE: string;
 begin
+  fExeStack.Swap;
+  AWord; // donnée récupérée
+  LSE := fWkRec.fItem;
+  AWord;
+  LSC := fWkRec.fItem; // conservée
+  fExeStack.Push(LSE); // donnée rempilée
+  if LW.IsBoolean then
+  begin
+    if LW.AsBoolean and (not Stop) then
+    begin
+      DoPrimExec; // exécution
+      fExeStack.Push(LSE); // donnée rempilée
+      fExeStack.Push(LSC); // donnée rempilée
+      DoPrimUntil;
+    end;
+  end
+  else
+    // [### Erreur: pas un booléen ###]
+      SetError(CE_BadBool, fWkRec.fItem)
 end;
 
 // #################################################### //
