@@ -331,7 +331,7 @@ const
     (Name: P_Repeat; NbParams: 2),
     (Name: P_Until; NbParams: 2),
     (Name: P_Loop; NbParams: 4),
-    (Name: P_EditAllProcs; NbParams: 0),
+    (Name: P_EditAllProcs; NbParams: 0), // 10
     (Name: P_LoadProcs; NbParams: 1),
     (Name: P_SaveProcs; NbParams: 2),
     (Name: P_ProcToEdit; NbParams: 1),
@@ -341,7 +341,7 @@ const
     (Name: P_CopyProc; NbParams: 2),
     (Name: P_SaveAll; NbParams: 1),
     (Name: P_LoadAll; NbParams: 1),
-    (Name: P_SaveVars; NbParams: 1),
+    (Name: P_SaveVars; NbParams: 1), // 20
     (Name: P_LoadVars; NbParams: 1),
     (Name: P_PckToEdit; NbParams: 1),
     (Name: P_SavePck; NbParams: 1),
@@ -351,7 +351,7 @@ const
     (Name: P_PckToList; NbParams: 1),
     (Name: P_ProtectedP; NbParams: 1),
     (Name: P_ToPck; NbParams: 2),
-    (Name: P_PckUnBurry; NbParams: 1),
+    (Name: P_PckUnBurry; NbParams: 1), // 30
     (Name: P_IsBurriedPck; NbParams: 1),
     (Name: P_DelProcs; NbParams: 1),
     (Name: P_DelVars; NbParams: 1),
@@ -361,7 +361,7 @@ const
     (Name: P_PkgItemsCount; NbParams: 1),
     (Name: P_PckBurry; NbParams: 1),
     (Name: P_BelongsTo; NbParams: 2),
-    (Name: P_Give; NbParams: 2),
+    (Name: P_Give; NbParams: 2), // 40
     (Name: P_Thing; NbParams: 1),
     (Name: P_SetHeading; NbParams: 1),
     (Name: P_SetHeading2; NbParams: 1),
@@ -371,7 +371,7 @@ const
     (Name: P_ShowTurtle2; NbParams: 0),
     (Name: P_HideTurtle; NbParams: 0),
     (Name: P_HideTurtle2; NbParams: 0),
-    (Name: P_VisibleP; NbParams: 0),
+    (Name: P_VisibleP; NbParams: 0), // 50
     (Name: P_TurtleState; NbParams: 0),
     (Name: P_SetTurtleState; NbParams: 1),
     (Name: P_NormalTurtle; NbParams: 0),
@@ -381,7 +381,7 @@ const
     (Name: P_PenDown; NbParams: 0),
     (Name: P_PenDown2; NbParams: 0),
     (Name: P_PenUp; NbParams: 0),
-    (Name: P_PenUp2; NbParams: 0),
+    (Name: P_PenUp2; NbParams: 0), // 60
     (Name: P_DownP; NbParams: 0),
     (Name: P_SetPenColor; NbParams: 1),
     (Name: P_SetPenColor2; NbParams: 1),
@@ -391,7 +391,7 @@ const
     (Name: P_PenReverse; NbParams: 0),
     (Name: P_Rubber; NbParams: 0),
     (Name: P_Normal; NbParams: 0),
-    (Name: P_PenState; NbParams: 0),
+    (Name: P_PenState; NbParams: 0), // 70
     (Name: P_SetPenState; NbParams: 1),
     (Name: P_SetPenState2; NbParams: 1),
     (Name: P_SetPos; NbParams: 1),
@@ -401,7 +401,7 @@ const
     (Name: P_SetX2; NbParams: 1),
     (Name: P_SetY; NbParams: 1),
     (Name: P_SetY2; NbParams: 1),
-    (Name: P_Pos; NbParams: 0),
+    (Name: P_Pos; NbParams: 0), // 80
     (Name: P_X; NbParams: 0),
     (Name: P_Y; NbParams: 0),
     (Name: P_SetSpeed; NbParams: 1),
@@ -411,7 +411,7 @@ const
     (Name: P_Window; NbParams: 0),
     (Name: P_Window2; NbParams: 0),
     (Name: P_ScreenState; NbParams: 0),
-    (Name: P_SetScale; NbParams: 1),
+    (Name: P_SetScale; NbParams: 1), // 90
     (Name: P_SetScaleX; NbParams: 1),
     (Name: P_SetScaleY; NbParams: 1),
     (Name: P_Scale; NbParams: 0),
@@ -421,7 +421,7 @@ const
     (Name: P_Wipe; NbParams: 0),
     (Name: P_SetBackGroundColor; NbParams: 1),
     (Name: P_SetBackGroundColor2; NbParams: 1),
-    (Name: P_BackGroundColor; NbParams: 0),
+    (Name: P_BackGroundColor; NbParams: 0), // 100
     (Name: P_BackGroundColor2; NbParams: 0),
     (Name: P_Distance; NbParams: 1),
     (Name: P_Forward; NbParams: 1),
@@ -431,7 +431,7 @@ const
     (Name: P_Left; NbParams: 1),
     (Name: P_Left2; NbParams: 1),
     (Name: P_Right; NbParams: 1),
-    (Name: P_Right2; NbParams: 1),
+    (Name: P_Right2; NbParams: 1), // 110
     (Name: P_To; NbParams: 0),
     (Name: P_End; NbParams: 0),
     (Name: P_First; NbParams: 1),
@@ -441,7 +441,7 @@ const
     (Name: P_ButFirst; NbParams: 1),
     (Name: P_ButFirst2; NbParams: 1),
     (Name: P_ButLast; NbParams: 1),
-    (Name: P_ButLast2; NbParams: 1),
+    (Name: P_ButLast2; NbParams: 1), // 120
     (Name: P_Write; NbParams: 1),
     (Name: P_WriteA; NbParams: 1),
     (Name: P_PutFirst; NbParams: 1),
@@ -451,7 +451,7 @@ const
     (Name: P_Insert; NbParams: 3),
     (Name: P_Reverse; NbParams: 1),
     (Name: P_Uppercase; NbParams: 1),
-    (Name: P_Lowercase; NbParams: 1),
+    (Name: P_Lowercase; NbParams: 1), // 130
     (Name: P_Shuffle; NbParams: 1),
     (Name: P_Replace; NbParams: 3),
     (Name: P_Delete; NbParams: 2),
@@ -461,7 +461,7 @@ const
     (Name: P_ClearAll; NbParams: 0),
     (Name: P_Sentence; NbParams: 2),
     (Name: P_Sentence2;  NbParams: 2),
-    (Name: P_SentenceRight; NbParams: 2),
+    (Name: P_SentenceRight; NbParams: 2), // 140
     (Name: P_BeforeP; NbParams: 2),
     (Name: P_AfterP; NbParams: 2),
     (Name: P_Count; NbParams: 1),
@@ -471,7 +471,7 @@ const
     (Name: P_NumberP; NbParams: 1),
     (Name: P_WordP; NbParams: 1),
     (Name: P_Previous; NbParams: 2),
-    (Name: P_Next; NbParams: 2),
+    (Name: P_Next; NbParams: 2), // 150
     (Name: P_EmptyP; NbParams: 1),
     (Name: P_Firsts; NbParams: 1),
     (Name: P_ButFirsts; NbParams: 1),
@@ -481,7 +481,7 @@ const
     (Name: P_DelProp; NbParams: 2),
     (Name: P_Props; NbParams: 1),
     (Name: P_Del; NbParams: 1),
-    (Name: P_CountProps; NbParams: 1),
+    (Name: P_CountProps; NbParams: 1), // 160
     (Name: P_PropP; NbParams: 2),
     (Name: P_PropListP; NbParams: 0),
     (Name: P_ProcedureP; NbParams: 1),
@@ -491,7 +491,7 @@ const
     (Name: P_ReadList; NbParams: 0),
     (Name: P_ReadChar; NbParams: 0),
     (Name: P_ClearText; NbParams: 0),
-    (Name: P_ClearText2; NbParams: 0),
+    (Name: P_ClearText2; NbParams: 0), // 170
     (Name: P_ReadList2; NbParams: 0),
     (Name: P_PropList; NbParams: 1),
     (Name: P_Follow; NbParams: 0),
@@ -501,7 +501,7 @@ const
     (Name: P_IfFalse; NbParams: 1),
     (Name: P_Procs; NbParams: 0),
     (Name: P_Prims; NbParams: 0),
-    (Name: P_Vars; NbParams: 0),
+    (Name: P_Vars; NbParams: 0), // 180
     (Name: P_LocVars; NbParams: 0),
     (Name: P_Loc; NbParams: 1),
     // fonctions
@@ -512,7 +512,7 @@ const
     (Name: MF_DSin; NbParams: 1),
     (Name: MF_DSin2; NbParams: 1),
     (Name: MF_DTan; NbParams: 1),
-    (Name: MF_DTan2; NbParams: 1),
+    (Name: MF_DTan2; NbParams: 1), // 190
     (Name: MF_DSqrt; NbParams: 1),
     (Name: MF_DSqrt2; NbParams: 1),
     (Name: MF_DTrunc; NbParams: 1),
@@ -522,7 +522,7 @@ const
     (Name: MF_DFrac; NbParams: 1),
     (Name: MF_DInt; NbParams: 1),
     (Name: MF_DInt2; NbParams: 1),
-    (Name: MF_DLn; NbParams: 1),
+    (Name: MF_DLn; NbParams: 1), // 200
     (Name: MF_DLog2; NbParams: 1),
     (Name: MF_DLog10; NbParams: 1),
     (Name: MF_DCoTan; NbParams: 1),
@@ -532,7 +532,7 @@ const
     (Name: MF_DArcSin; NbParams: 1),
     (Name: MF_DArcSin2; NbParams: 1),
     (Name: MF_DMinus; NbParams: 1),
-    (Name: MF_DPLus; NbParams: 1),
+    (Name: MF_DPLus; NbParams: 1), // 210
     (Name: MF_DNegate; NbParams: 1),
     (Name: MF_DSign; NbParams: 1),
     (Name: MF_DRandom; NbParams: 1),
@@ -542,7 +542,7 @@ const
     (Name: MF_False; NbParams: 0),
     (Name: MF_Or; NbParams: 2),
     (Name: MF_And; NbParams: 2),
-    (Name: MF_Mod; NbParams: 2),
+    (Name: MF_Mod; NbParams: 2), // 220
     (Name: MF_DPower; NbParams: 2),
     (Name: MF_DMax; NbParams: 2),
     (Name: MF_DMax; NbParams: 2),
@@ -553,7 +553,7 @@ const
     (Name: MF_Sum; NbParams: 2),
     (Name: MF_Minus; NbParams: 2),
     (Name: MF_Minus2; NbParams: 2),
-    (Name: MF_Mul; NbParams: 2),
+    (Name: MF_Mul; NbParams: 2),  // 230
     (Name: MF_Mul2; NbParams: 2),
     (Name: MF_Div; NbParams: 2),
     (Name: MF_Div2; NbParams: 2),
@@ -563,7 +563,7 @@ const
     (Name: P_SetScreen; NbParams: 1),
     (Name: P_GetTurtle; NbParams: 0),
     (Name: P_GetScreen; NbParams: 0),
-    (Name: P_SetPen; NbParams: 1),
+    (Name: P_SetPen; NbParams: 1),  // 240
     (Name: P_GetPen; NbParams: 0),
     (Name: P_Confirm; NbParams: 1),
     (Name: P_ProcToEdit2; NbParams: 1))

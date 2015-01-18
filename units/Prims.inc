@@ -40,11 +40,18 @@ begin
   Result := (fWkRec.fItem <> EmptyStr) and (fWkRec.fItem[1] = CBeginList);
 end;
 
-procedure AWord;
+procedure AData;
 // *** dépile et normalise un mot ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
   LW.Text := fWkRec.fItem; // mot normalisé
+end;
+
+function IsListPop: Boolean;
+// *** dépilement et test si liste ***
+begin
+  AData; // donnée dépilée
+  Result := IsList; // test
 end;
 
 procedure DoPrimGVLogo;
@@ -77,8 +84,7 @@ end;
 procedure DoPrimWrite;
 // *** ECRIS ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // valeur à afficher
-  if IsList then // liste ?
+  if IsListPop then // liste ?
     fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // on enlève les crochets
   else
   begin
@@ -92,7 +98,7 @@ end;
 procedure DoPrimReturn;
 // *** RENDS ***
 begin
-  AWord; // valeur récupérée
+  AData; // valeur récupérée
   fReturnVal := fWkRec.fItem; // valeur de retour
   fReturnFlag := True; // drapeau levé
 end;
@@ -100,7 +106,7 @@ end;
 procedure DoPrimGive;
 // *** DONNE ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if fLocVars.IsLocVar(LW.Text) then
     fLocVars.DirectUpdateLocVar(fExeStack.Pop) // variable locale
   else
@@ -110,7 +116,7 @@ end;
 procedure DoPrimThing;
 // *** CHOSE ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if fLocVars.IsLocVar(LW.Text) then
     PushConst(fLocVars.DirectValLocVar) // variable locale
   else
@@ -136,9 +142,7 @@ procedure DoPrimExec;
 var
   Li: Integer;
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsListPop then // une liste ?
   begin
     if fWkRec.fItem <> CEmptyList then // liste vide ?
     begin
@@ -207,7 +211,7 @@ end;
 procedure DoPrimForward;
 // *** AVANCE AV ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
    fTurtle.Move(LW.AsNumber)
   else
@@ -218,7 +222,7 @@ end;
 procedure DoPrimBackward;
 // *** RECULE RE ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
    fTurtle.Move(- LW.AsNumber)
   else
@@ -229,7 +233,7 @@ end;
 procedure DoPrimLeft;
 // *** GAUCHE TG ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
    fTurtle.Turn(LW.AsNumber)
   else
@@ -240,7 +244,7 @@ end;
 procedure DoPrimRight;
 // *** DROITE TD ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
    fTurtle.Turn(- LW.AsNumber)
   else
@@ -275,7 +279,7 @@ end;
 procedure DoPrimSetPenColor;
 // *** FIXE.COULEUR.CRAYON FCC ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsInt then
     // on transforme la couleur
     fTurtle.LocalPenColor := LW.AsInt
@@ -287,7 +291,7 @@ end;
 procedure DoPrimNot;
 // *** NON ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsInt then // entier ?
     PushConst(IntToStr(not LW.AsInt))
   else
@@ -314,8 +318,7 @@ end;
 procedure DoPrimRandom;
 // *** HASARD ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then  // une liste ?
+  if IsListPop then  // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     PushConst(LL.AtRandom); // on renvoie un élément au hasard
@@ -333,8 +336,7 @@ end;
 procedure DoPrimEmptyP;
 // *** VIDE? ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     // vrai ou faux
@@ -354,7 +356,7 @@ var
   LLst: TStringList;
   LS: string;
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   LLst := TStringList.Create; // création de la liste de travail
   try
     // procédure récupérée
@@ -373,9 +375,7 @@ end;
 procedure DoPrimLast;
 // *** DERNIER DER ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     PushConst(LL.Last); // on renvoie le dernier élément
@@ -390,9 +390,7 @@ end;
 procedure DoPrimFirst;
 // *** PREMIER PREM ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     PushConst(LL.First); // on renvoie le premier élément
@@ -407,9 +405,7 @@ end;
 procedure DoPrimButFirst;
 // *** SAUF.PREMIER SP ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     PushConst(LL.ButFirst); // on renvoie tout sauf le premier élément
@@ -425,9 +421,7 @@ end;
 procedure DoPrimButLast;
 // *** SAUF.DERNIER SD ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  // une liste ?
-  if IsList then
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     PushConst(LL.ButLast); // on renvoie tout sauf le dernier élément
@@ -444,11 +438,10 @@ procedure DoPrimPutFirst;
 var
   LS: string;
 begin
-  fWkRec.fItem := fExeStack.Pop; // donné dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
-    AWord; // seconde donnée
+    AData; // seconde donnée
     if LW.IsValid then // un mot ?
       fWkRec.fItem := LW.Text; // mot brut
     PushConst(LL.PutFirst(fWkRec.fItem)); // met en dernier
@@ -458,8 +451,7 @@ begin
     // c'est un mot
     LW.Text := fWkRec.fItem; // analyse
     LS := LW.Text; // mot brut conservé
-    AWord; // seconde donnée
-    if not IsList then // pas une liste ?
+    if not IsListPop then // pas une liste ?
       PushConst(LW.PutLast(LS))
     else
       // [### Erreur: liste interdite ###]
@@ -472,11 +464,10 @@ procedure DoPrimPutLast;
 var
   LS: string;
 begin
-  fWkRec.fItem := fExeStack.Pop; // donné dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
-    AWord; // seconde donnée
+    AData; // seconde donnée
     if LW.IsValid then // un mot ?
       fWkRec.fItem := LW.Text; // mot brut
     PushConst(LL.PutLast(fWkRec.fItem)); // met en dernier
@@ -486,8 +477,7 @@ begin
     // c'est un mot
     LW.Text := fWkRec.fItem; // analyse
     LS := LW.Text; // mot brut conservé
-    AWord; // seconde donnée
-    if not IsList then // pas une liste ?
+    if not IsListPop then // pas une liste ?
       PushConst(LW.PutFirst(LS))
     else
       // [### Erreur: liste interdite ###]
@@ -498,8 +488,7 @@ end;
 Procedure DoPrimReverse;
 // *** INVERSE ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.ReverseItems); // inversion des éléments
@@ -514,8 +503,7 @@ end;
 procedure DoPrimUpperCase;
 // *** MAJUSCULES ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.Uppercase); // en majuscules
@@ -530,8 +518,7 @@ end;
 procedure DoPrimLowerCase;
 // *** MINUSCULES ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.Lowercase); // en minuscules
@@ -546,8 +533,7 @@ end;
 procedure DoPrimShuffle;
 // *** MELANGE ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then  // une liste ?
+  if IsListPop then  // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.ShuffleItems); // mélange
@@ -562,8 +548,7 @@ end;
 procedure DoPrimSort;
 // *** TRIE ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.SortItems); // on trie
@@ -578,8 +563,7 @@ end;
 procedure DoPrimRotate;
 // *** ROTATION ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
     PushConst(LL.Rotate); // rotation
@@ -594,7 +578,7 @@ end;
 procedure DoPrimNumberP;
 // *** NOMBRE? ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   // vrai ou faux
   PushConst(IfThen(LW.IsNumber, CStTrue, CStFalse));
 end;
@@ -627,13 +611,12 @@ var
   LS: string;
   Li: Integer;
 begin
-  AWord; // un mot attendu (emplacement)
+  AData; // un mot attendu (emplacement)
   if LW.IsInt then // conversion en entier ?
   begin
     Li := StrToInt(LW.Text); // nombre récupéré
     LS := fExeStack.Pop; // donnée à insérer
-    fWkRec.fItem := fExeStack.Pop; // donnée où insérer
-    if IsList then // une liste ?
+    if IsListPop then // une liste ?
     begin
       LL.Text := fWkRec.fItem; // analyse
       // on insère dans la liste
@@ -654,7 +637,7 @@ end;
 procedure DoPrimLowerP;
 // *** PLP? ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   // vrai ou faux
   PushConst(IfThen(LW.IsLower(fExeStack.Pop),
     CStTrue, CStFalse));
@@ -663,7 +646,7 @@ end;
 procedure DoPrimGreaterP;
 // *** PLG? ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   // vrai ou faux
   PushConst(IfThen(LW.IsGreater(fExeStack.Pop),
     CStTrue, CStFalse));
@@ -672,7 +655,7 @@ end;
 procedure DoPrimEqualP;
 // *** EGAL? ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   // vrai ou faux
   PushConst(IfThen(LW.IsEqual(fExeStack.Pop),
     CStTrue, CStFalse));
@@ -681,7 +664,7 @@ end;
 procedure DoPrimIdentP;
 // *** IDENTIFICATEUR? ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   // vrai ou faux
   PushConst(IfThen(LW.IsValidIdent, CStTrue, CStFalse));
 end;
@@ -689,8 +672,7 @@ end;
 procedure DoPrimCount;
 // *** COMPTE ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // on l'analyse
     PushConst(IntToStr(LL.Count)); // on renvoie le compte
@@ -707,11 +689,10 @@ procedure DoPrimSentenceRight;
 var
   LS: string;
 begin
-  AWord; // donnée récupérée
-  LS := FwkRec.fItem; // donnée conservée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
   begin
-    AWord; // seconde donnée
+    LS := fWkRec.fItem; // donnée conservée
+    AData; // seconde donnée
     LL.Text := LS; // liste analysée
     LW.Text := fWkRec.fItem;
     if LW.IsValid then // mot valide ?
@@ -721,10 +702,9 @@ begin
   else
   begin
     // le premier élément est un mot
-    LW.Text := LS;
+    LW.Text := fWkRec.fItem; // donnée analysée
     LS := LW.Text; // texte brut dans la liste
-    AWord; // seconde donnée
-    if IsList then // une liste ?
+    if IsListPop then // une liste ?
     begin
       LL.Text := LU.StrToList(LS); // on analyse le premier élément
       PushConst(LL.SentenceLeft(fWkRec.fItem)); // le second est placé après
@@ -752,11 +732,11 @@ var
   LS: string;
   Li: Integer;
 begin
-  AWord; // un mot attendu (emplacement)
+  AData; // un mot attendu (emplacement)
   if LW.IsInt then // conversion en entier ?
   begin
     Li := LW.AsInt;
-    AWord; // nouveau mot (donnée à remplacer)
+    AData; // nouveau mot (donnée à remplacer)
     fWkRec.fItem := fExeStack.Pop; // donnée où remplacer
     if IsList then // une liste ?
     begin
@@ -781,7 +761,7 @@ procedure DoPrimDelete;
 var
   Li: Integer;
 begin
-  AWord; // un mot attendu (emplacement)
+  AData; // un mot attendu (emplacement)
   if LW.IsInt then // conversion en entier ?
   begin
     fWkRec.fItem := fExeStack.Pop; // donnée où supprimer
@@ -855,8 +835,7 @@ end;
 procedure DoPrimDelProcs;
 // *** .SUP.PROCS ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
     // on supprime les procédures de la liste
     fKernel.RemoveSomeProcs(fWkRec.fItem)
   else
@@ -869,8 +848,7 @@ end;
 procedure DoPrimDelVars;
 // *** .SUP.VARS ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
     // on supprime les variables de la liste
     fKernel.RemoveSomeVars(fWkRec.fItem)
   else
@@ -884,7 +862,7 @@ procedure DoPrimIf;
 // *** SI ***
 begin
   fElse := CTrueState; // "sinon" possible et actif
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsBoolean then // un booléen ?
   begin
     if LW.Text = CStTrue then // vrai ?
@@ -916,7 +894,7 @@ end;
 procedure DoPrimAbs;
 // *** ABSOLUE ABS ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
     PushConst(FloatToStr(Abs(LW.AsNumber)))
   else
@@ -927,7 +905,7 @@ end;
 procedure DoPrimCos;
 // *** COSINUS COS ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
     PushConst(FloatToStr(Cos(DegToRad(LW.AsNumber))))
   else
@@ -938,7 +916,7 @@ end;
 procedure DoPrimSin;
 // *** SINUS SIN ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
     PushConst(FloatToStr(Sin(DegToRad(LW.AsNumber))))
   else
@@ -949,7 +927,7 @@ end;
 procedure DoPrimTan;
 // *** TANGENTE TAN ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
   begin
     if not IsZero(Cos(DegToRad(LW.AsNumber))) then
@@ -968,11 +946,11 @@ procedure DoPrimSum;
 var
   LDble1, LDble2: Double;
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
   begin
     LDble1 := LW.AsNumber; // nombre conservé
-    AWord; // encore un nombre
+    AData; // encore un nombre
     if LW.IsNumber then
     begin
       LDble2 := LW.AsNumber; // nombre conservé
@@ -992,11 +970,11 @@ procedure DoPrimMinus;
 var
   LDble1, LDble2: Double;
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
   begin
     LDble1 := LW.AsNumber; // nombre conservé
-    AWord; // encore un nombre
+    AData; // encore un nombre
     if LW.IsNumber then
     begin
       LDble2 := LW.AsNumber; // nombre conservé
@@ -1016,11 +994,11 @@ procedure DoPrimMul;
 var
   LDble1, LDble2: Double;
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
   begin
     LDble1 := LW.AsNumber; // nombre conservé
-    AWord; // encore un nombre
+    AData; // encore un nombre
     if LW.IsNumber then
     begin
       LDble2 := LW.AsNumber; // nombre conservé
@@ -1040,11 +1018,11 @@ procedure DoPrimDiv;
 var
   LDble1, LDble2: Double;
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
   begin
     LDble1 := LW.AsNumber; // nombre conservé
-    AWord; // encore un nombre
+    AData; // encore un nombre
     if LW.IsNumber then
     begin
       LDble2 := LW.AsNumber; // nombre conservé
@@ -1066,7 +1044,7 @@ end;
 procedure DoPrimSqrt;
 // *** RAC RACINE ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
   begin
     if LW.AsNumber >= 0 then  // nombre positif ?
@@ -1091,11 +1069,11 @@ procedure DoPrimOr;
 var
   Li, Lj: Integer;
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsInt then
   begin
     Li := LW.AsInt; // entier conservé
-    AWord; // encore un nombre
+    AData; // encore un nombre
     if LW.IsInt then
     begin
       Lj := LW.AsInt; // nombre conservé
@@ -1115,11 +1093,11 @@ procedure DoPrimAnd;
 var
   Li, Lj: Integer;
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsInt then
   begin
     Li := LW.AsInt; // entier conservé
-    AWord; // encore un nombre
+    AData; // encore un nombre
     if LW.IsInt then
     begin
       Lj := LW.AsInt; // nombre conservé
@@ -1139,11 +1117,11 @@ procedure DoPrimMod;
 var
   Li, Lj: Integer;
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsInt then
   begin
     Li := LW.AsInt; // entier conservé
-    AWord; // encore un nombre
+    AData; // encore un nombre
     if LW.IsInt then
     begin
       Lj := LW.AsInt; // nombre conservé
@@ -1161,7 +1139,7 @@ end;
 procedure DoPrimNegate;
 // *** OPPOSE ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
     PushConst(FloatToStr(-LW.AsNumber)) // valeur renvoyée
   else
@@ -1172,7 +1150,7 @@ end;
 procedure DoPrimSetHeading;
 // *** FIXE.CAP FCAP ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then
     fTurtle.Heading := LW.AsNumber // cap fixé
   else
@@ -1197,7 +1175,7 @@ end;
 procedure DoPrimPropP;
 // *** PROP? ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsProp(fExeStack.Pop, fWkRec.fItem),
     CStTrue, CStFalse));
@@ -1206,7 +1184,7 @@ end;
 procedure DoPrimPropListP;
 // *** LISTE.PROP? ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsListP(fWkRec.fItem),
     CStTrue, CStFalse));
@@ -1215,7 +1193,7 @@ end;
 procedure DoPrimProcP;
 // *** PROCEDURE? ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsProc(fWkRec.fItem),
     CStTrue, CStFalse));
@@ -1224,7 +1202,7 @@ end;
 procedure DoPrimPrimP;
 // *** PRIMITIVE? ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsPrim(fWkRec.fItem),
     CStTrue, CStFalse));
@@ -1233,7 +1211,7 @@ end;
 procedure DoPrimNameP;
 // *** NOM? ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsVar(fWkRec.fItem),
     CStTrue, CStFalse));
@@ -1242,7 +1220,7 @@ end;
 procedure DoPrimLoadProcs;
 // *** CHARGE.PROCS ***
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   fKernel.LoadProcs(fWkRec.fItem); // on charge
 end;
 
@@ -1251,11 +1229,9 @@ procedure DoPrimSaveProcs;
 var
   LS: string;
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   LS := LW.WithoutQuote; // nom récupéré
-  fWkRec.fItem := fExeStack.Pop; // liste dépilée
-  // une liste ?
-  if IsList then
+  if IsListPop then // une liste ?
     fKernel.SaveProcs(LS, fWkRec.fItem) // on sauvegarde
   else
     // [### Erreur: mauvaise liste ###]
@@ -1267,7 +1243,7 @@ procedure DoPrimParamLineProc;
 var
   LS: string;
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   if fKernel.ParamsLine(fWkRec.fItem, LS) then // ligne ?
     PushConst(LS); // on l'empile
 end;
@@ -1277,7 +1253,7 @@ procedure DoPrimDefListProc;
 var
   LS: string;
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   if fKernel.ProcListDef(fWkRec.fItem, LS) then // définition ?
     PushConst(LS); // on l'empile
 end;
@@ -1285,14 +1261,14 @@ end;
 procedure DoPrimParamsCount;
 // *** NB.PARAMS.PROC ***
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   PushConst(IntToStr(fKernel.NumParamsPrim(fWkRec.fItem))); // nombre empilé
 end;
 
 procedure DoPrimCopyProc;
 // *** COPIE.PROC ***
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   fWkRec.fItem := fExeStack.Pop; // où copier ?
   fKernel.CopyDef(LW.Text, fWkRec.fItem); // on copie
 end;
@@ -1300,23 +1276,21 @@ end;
 procedure DoPrimSaveAll;
 // *** SAUVE ***
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   fKernel.SaveAll(fWkRec.fItem); // on sauvegarde
 end;
 
 procedure DoPrimLoadAll;
 // *** CHARGE ***
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   fKernel.LoadAll(fWkRec.fItem); // on charge
 end;
 
 procedure DoPrimSaveVars;
 // *** SAUVE.VARS ***
 begin
-  AWord; // mot attendu
-  fWkRec.fItem := fExeStack.Pop; // liste dépilée
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
     fKernel.SaveVars(LW.Text, fWkRec.fItem) // on sauvegarde
   else
     // [### Erreur: mauvaise liste ###]
@@ -1326,40 +1300,40 @@ end;
 procedure DoPrimLoadVars;
 // *** CHARGE.VARS ***
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   fKernel.LoadVars(fWkRec.fItem); // on charge
 end;
 
 procedure DoPrimPckToEdit;
 // *** EDITE.PAQUET ***
 begin
-  AWord; // mot attendu ######
+  AData; // mot attendu ######
 end;
 
 procedure DoPrimSavePck;
 // *** SAUVE.PAQUET ***
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   fKernel.SavePck(fWkRec.fItem); // on sauvegarde
 end;
 
 procedure DoPrimListToPck;
 // *** LISTE.VERS.PAQUET ***
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
 end;
 
 procedure DoPrimDelPck;
 // *** SUPPRIME.PAQUET ***
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   fKernel.RemovePck(fWkRec.fItem);
 end;
 
 procedure DoPrimUnPackObj;
 // *** DEPAQUETTE ***
 begin
-  AWord; // mot attendu
+  AData; // mot attendu
   fKernel.UnPackObj(fWkRec.fItem); // objet dépaqueté
 end;
 
@@ -1372,7 +1346,7 @@ end;
 procedure DoPrimProtectedP;
 // *** PROTEGE? ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsProtected(fWkRec.fItem),
     CStTrue, CStFalse));
@@ -1381,7 +1355,7 @@ end;
 procedure DoPrimToPck;
 // *** VERS.PAQUET ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   fWkRec.fItem := fExeStack.Pop; // objet récupéré
   fKernel.ToPck(LW.Text, fWkRec.fItem); // dans paquet
 end;
@@ -1389,14 +1363,14 @@ end;
 procedure DoPrimPckUnBurry;
 // *** DETERRE ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   fKernel.UnBurryPck(fWkRec.fItem); // paquet déterré
 end;
 
 procedure DoPrimIsBurriedPck;
 // *** ENTERRE? ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   // vrai ou faux
   PushConst(IfThen(fKernel.IsBurriedPck(fWkRec.fItem),
     CStTrue, CStFalse));
@@ -1405,28 +1379,28 @@ end;
 procedure DoPrimPkgCreate;
 // *** PAQUET ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   fKernel.CreatePck(fWkRec.fItem); // paquet créé
 end;
 
 procedure DoPrimPkgItemsCount;
 // *** ELEMENTS.PAQUET ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   PushConst(IntToStr(fKernel.CountItemsPck((fWkRec.fItem)))); // nombre empilé
 end;
 
 procedure DoPrimPckBurry;
 // *** ENTERRE ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   fKernel.BurryPck(fWkRec.fItem); // on enterre
 end;
 
 procedure DoPrimBelongsTo;
 // *** APPARTIENT.A ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   PushConst(fKernel.BelongsTo(fWkRec.fItem)); // résultat empilé
 end;
 
@@ -1435,8 +1409,7 @@ procedure DoPrimTowards;
 var
   Li: Integer;
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée récupérée
-  if IsList then
+  if IsListPop then
   begin
     LL.Text := fWkRec.fItem; // liste analysée
     if LL.Count = 2 then // deux éléments attendus
@@ -1478,20 +1451,19 @@ var
   LS, LLst: string;
   Li, Lj: Integer;
 begin
-  AWord; // premier paramètre récupéré
+  AData; // premier paramètre récupéré
   if LW.IsValidIdent then // nom de variable possible ?
   begin
     LS := LW.Text; // on conserve sa valeur
-    AWord; // deuxième paramètre
+    AData; // deuxième paramètre
     if LW.IsInt then // un entier ?
     begin
       Li := LW.AsInt; // entier conservé
-      AWord; // troisième paramètre
+      AData; // troisième paramètre
       if LW.IsInt then // un entier ?
       begin
         Lj := LW.AsInt; // le conserver
-        AWord; // quatrième paramètre
-        if IsList then // une liste ?
+        if IsListPop then // une liste ?
         begin
           LLst := FWkRec.fItem; // liste conservée
           // le premier paramètre est-il le nom d'une variable locale ?
@@ -1532,7 +1504,7 @@ end;
 procedure DoPrimSetTurtleSize;
 // *** FIXE.TAILLE ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   if LW.IsInt then // un entier ?
     fTurtle.Size := LW.AsInt // taille de la tortue ajustée
   else
@@ -1580,7 +1552,7 @@ end;
 procedure DoPrimSetSpeed;
 // *** FIXE.VITESSE ***
 begin
-  AWord; // mot récupéré
+  AData; // mot récupéré
   if LW.IsInt then // un entier ?
     fTurtle.Speed := LW.AsInt // vitesse fixée
   else
@@ -1597,14 +1569,14 @@ end;
 procedure DoPrimMax;
 // *** MAX ***
 begin
-  AWord; // donnée dépilée
+  AData; // donnée dépilée
   PushConst(LW.Greatest(fExeStack.Pop)); // le plus grand
 end;
 
 procedure DoPrimMin;
 // *** MIN ***
 begin
-  AWord; // donnée dépilée
+  AData; // donnée dépilée
   PushConst(LW.Lowest(fExeStack.Pop)); // le plus petit
 end;
 
@@ -1613,11 +1585,11 @@ procedure DoPrimHypot;
 var
   LDble: Double;
 begin
-  AWord; // donnée empilée
+  AData; // donnée empilée
   if LW.IsNumber then // un nombre ?
   begin
     LDble := LW.AsNumber; // nombre conservé
-    AWord; // second paramètre
+    AData; // second paramètre
     if LW.IsNumber then // un nombre ?
       PushConst(FloatToStr(Hypot(LDble, LW.AsNumber)))
     else
@@ -1634,11 +1606,11 @@ procedure DoPrimPower;
 var
   LDble: Double;
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then // un nombre ?
   begin
     LDble := LW.AsNumber; // nombre conservé
-    AWord; // second paramètre
+    AData; // second paramètre
     if LW.IsNumber then // un nombre ?
       PushConst(FloatToStr(Power(LDble, LW.AsNumber)))
     else
@@ -1653,7 +1625,7 @@ end;
 procedure DoPrimSign;
 // *** SIGNE ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then // un nombre ?
     PushConst(IntToStr(Sign(LW.AsNumber))) // valeur du signe -1 0 +1
   else
@@ -1664,7 +1636,7 @@ end;
 procedure DoPrimMinusP;
 // *** NEGATIF? ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then // un nombre ?
     // vrai ou faux
     PushConst(IfThen(LW.IsNegate, CStTrue, CStFalse));
@@ -1673,7 +1645,7 @@ end;
 procedure DoPrimPlusP;
 // *** POSITIF? ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsNumber then // un nombre ?
     // vrai ou faux
     PushConst(IfThen(not LW.IsNegate, CStTrue, CStFalse));
@@ -1696,7 +1668,7 @@ end;
 procedure DoPrimSetTurtleState;
 // *** FIXE.ETAT.TORTUE ***
 begin
-  AWord; // donnée attendue
+  AData; // donnée attendue
   fTurtle.TurtleState := fWkRec.fItem;
 end;
 
@@ -1709,7 +1681,7 @@ end;
 procedure DoPrimSetPenWidth;
 // *** FIXE.TAILLE.CRAYON ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsInt then // un entier ?
     fTurtle.PenWidth := LW.AsInt // épaisseur changée
   else
@@ -1751,14 +1723,14 @@ end;
 procedure DoPrimSetPenState;
 // *** FIXE.ETAT.CRAYON FEC ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   fTurtle.PenState := fWkRec.fItem;
 end;
 
 procedure DoPrimSetPos;
 // ***  FIXE.POS FPOS ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   fTurtle.PosState := fWkRec.fItem;
 end;
 
@@ -1767,11 +1739,11 @@ procedure DoPrimSetXY;
 var
   LDble: Double;
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then // un nombre
   begin
     LDble := LW.AsNumber; // première donnée conservée
-    AWord; // seconde donnée
+    AData; // seconde donnée
     if LW.IsNumber then // un autre nombre ?
       fTurtle.SetPos(LDble, LW.AsNumber) // position fixée
     else
@@ -1786,7 +1758,7 @@ end;
 procedure DoPrimSetX;
 // ***  FIXEX FX ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
     fTurtle.CoordX := LW.AsNumber // abscisse
   else
@@ -1797,7 +1769,7 @@ end;
 procedure DoPrimSetY;
 // ***  FIXEY FY ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
     fTurtle.CoordY := LW.AsNumber // ordonnée
   else
@@ -1821,7 +1793,7 @@ end;
 procedure DoPrimSetScale;
 // *** FIXE.ECHELLE ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   fTurtle.ScreenState := fWkRec.fItem;
 end;
 
@@ -1858,7 +1830,7 @@ end;
 procedure DoPrimSetBackGroundColor;
 // *** FIXE.COULEUR.FOND FCF ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   if LW.IsInt then
     // on transforme la couleur
     fTurtle.LocalScreenColor := StrToInt(LW.Text)
@@ -1878,8 +1850,7 @@ procedure DoPrimDistance;
 var
   Li: Integer;
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée récupérée
-  if IsList then
+  if IsListPop then
   begin
     LL.Text := fWkRec.fItem; // liste analysée
     if LL.Count = 2 then // deux éléments attendus
@@ -1912,7 +1883,7 @@ end;
 procedure DoPrimTrunc;
 // *** TRONQUE ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
     PushConst(FloatToStr(Trunc(LW.AsNumber)))
   else
@@ -1923,7 +1894,7 @@ end;
 procedure DoPrimRound;
 // *** ARRONDI ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
     PushConst(FloatToStr(Round(LW.AsNumber)))
   else
@@ -1934,7 +1905,7 @@ end;
 procedure DoPrimSqr;
 // *** AU.CARRE ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
     PushConst(FloatToStr(LW.AsNumber * LW.AsNumber))
   else
@@ -1945,7 +1916,7 @@ end;
 procedure DoPrimExp;
 // *** EXP ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
     PushConst(FloatToStr(Exp(LW.AsNumber)))
   else
@@ -1956,7 +1927,7 @@ end;
 procedure DoPrimFrac;
 // *** FRAC ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
     PushConst(FloatToStr(Frac(LW.AsNumber)))
   else
@@ -1969,7 +1940,7 @@ procedure DoPrimPropList;
 var
   LS: string;
 begin
-  AWord; // donnée
+  AData; // donnée
   if fKernel.PList(fWkRec.fItem, LS) then
     PushConst(LS);
 end;
@@ -1984,7 +1955,7 @@ end;
 procedure DoPrimWordP;
 // *** MOT? ***
 begin
-  AWord; // récupération d'une donnée
+  AData; // récupération d'une donnée
   // vrai ou faux
   PushConst(IfThen(LW.IsValid, CStTrue, CStFalse));
 end;
@@ -1994,9 +1965,9 @@ procedure DoPrimPrevious;
 var
   LS: string;
 begin
-  AWord;
+  AData;
   LS := LW.Text; // première donnée
-  AWord; // seconde donnée
+  AData; // seconde donnée
   // empile le premier par ordre alaphabétique
   PushConst(LW.Lowest(LS));
 end;
@@ -2006,9 +1977,9 @@ procedure DoPrimNext;
 var
   LS: string;
 begin
-  AWord;
+  AData;
   LS := LW.Text; // première donnée
-  AWord; // seconde donnée
+  AData; // seconde donnée
   // empile le dernier par ordre alaphabétique
   PushConst(LW.Greatest(LS));
 end;
@@ -2016,7 +1987,7 @@ end;
 procedure DoPrimInt;
 // *** ENT ENTIER ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
     PushConst(FloatToStr(Int(LW.AsNumber)))
   else
@@ -2027,7 +1998,7 @@ end;
 procedure DoPrimLn;
 // *** LN ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
   begin
     if LW.IsNegate then
@@ -2044,7 +2015,7 @@ end;
 procedure DoPrimLog2;
 // *** LOG2 ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
   begin
     if LW.IsNegate then
@@ -2061,7 +2032,7 @@ end;
 procedure DoPrimLog10;
 // *** LOG ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
   begin
     if LW.IsNegate then
@@ -2078,7 +2049,7 @@ end;
 procedure DoPrimCoTan;
 // *** COTAN COTANGENTE ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
   begin
     if (Sin(LW.AsNumber) = 0) then
@@ -2095,7 +2066,7 @@ end;
 procedure DoPrimArcCos;
 // *** ARCCOS ARCCOSINUS***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
   begin
     if (LW.AsNumber < -1) or (LW.AsNumber > 1) then
@@ -2112,7 +2083,7 @@ end;
 procedure DoPrimArcSin;
 // *** ARCSIN ARSINUS ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsNumber then
   begin
     if (LW.AsNumber < -1) or (LW.AsNumber > 1) then
@@ -2129,14 +2100,14 @@ end;
 procedure DoPrimTest;
 // *** TESTE ***
 begin
-  AWord; // un mot attendu
+  AData; // un mot attendu
   // booléen ?
   if LW.IsBoolean then
   begin
     if (LW.Text = CStTrue) then  // résultat vrai ?
       fTest := CTrueState // drapeau adapté
     else
-      fTest := CFalseState
+      fTest := CFalseState;
   end
   else
     // [### Erreur: booléen incorrect ###]
@@ -2170,14 +2141,14 @@ end;
 procedure DoPrimSetTurtle;
 // *** FIXE.TORTUE ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   fTurtle.TurtleState := fWkRec.fItem;
 end;
 
 procedure DoPrimSetScreen;
 // *** FIXE.ECRAN ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   fTurtle.ScreenState := fWkRec.fItem;
 end;
 
@@ -2196,7 +2167,7 @@ end;
 procedure DoPrimSetPen;
 // *** FIXE.CRAYON ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   fTurtle.PenState := fWkRec.fItem;
 end;
 
@@ -2218,15 +2189,15 @@ procedure DoPrimDProp;
 var
   LName, LProp: string;
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsValidIdent then // mot valide ?
   begin
     LName := LW.Text; // nom conservé
-    AWord; // donnée suivante
+    AData; // donnée suivante
     if LW.IsValidIdent then // mot valide ?
     begin
       LProp := LW.Text; // propriété conservée
-      AWord; // dernière donnée
+      AData; // dernière donnée
       fKernel.DProp(LName, LProp, LW.Text); // propriété définie
     end
     else
@@ -2243,11 +2214,11 @@ procedure DoPrimRProp;
 var
   LS: string;
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsValidIdent then // mot valide ?
   begin
     LS := LW.Text; // nom conservé
-    AWord; // donnée suivante
+    AData; // donnée suivante
     if LW.IsValidIdent then // mot valide ?
       PushConst(fKernel.RProp(LS, LW.Text)) // valeur empilée
     else
@@ -2264,11 +2235,11 @@ procedure DoPrimDelProp;
 var
   LS: string;
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsValidIdent then // mot valide ?
   begin
     LS := LW.Text; // nom conservé
-    AWord; // donnée suivante
+    AData; // donnée suivante
     if LW.IsValidIdent then // mot valide ?
       fKernel.AnProp(LS, LW.Text) // propriété supprimée
     else
@@ -2283,8 +2254,7 @@ end;
 procedure DoPrimFirsts;
 // *** PREMS ***
 begin
-  AWord; // donnée récupérée
-  if IsList then
+  if IsListPop then
   begin
     LL.Text := fWkRec.fItem;
     PushConst(LL.Firsts);
@@ -2297,8 +2267,7 @@ end;
 procedure DoPrimButFirsts;
 // *** SAUF.PREMS ***
 begin
-  AWord; // donnée récupérée
-  if IsList then
+  if IsListPop then
   begin
     LL.Text := fWkRec.fItem;
     PushConst(LL.ButFirsts);
@@ -2311,28 +2280,28 @@ end;
 procedure DoPrimProps;
 // *** PROPS ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   PushConst(fKernel.ListOfProps(fWkRec.fItem));
 end;
 
 procedure DoPrimDel;
 // *** ANNULE ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   fKernel.DelPropList(fWkRec.fItem);
 end;
 
 procedure DoPrimCountProps;
 // *** COMPTE.PROPS ***
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   PushConst(IntToStr(fKernel.CountProps(fWkRec.fItem)));
 end;
 
 procedure DoPrimLocal;
 // *** LOCALE ***
 begin
-  AWord; // nom récupéré
+  AData; // nom récupéré
   if fLocVars.IsLocVar(fWkRec.fItem) then // le nom est déjà pris ?
     // [### Erreur: existe déjà ###]
     SetError(CE_AlreadyExists, fWkRec.fItem)
@@ -2367,8 +2336,7 @@ end;
 procedure DoPrimConfirm;
 // *** CONFIRME ***
 begin
-  AWord; // récupère le message
-  if IsList then // une liste ?
+  if IsListPop then // une liste ?
     fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // message affecté
   else
     fWkMess.fMessage := fWkRec.fItem;
@@ -2409,11 +2377,11 @@ procedure DoPrimWord;
 var
   LS: string;
 begin
-  AWord; // donnée récupérée
+  AData; // donnée récupérée
   if LW.IsValid then // mot correct ?
   begin
     LS := fWkRec.fItem; // mot conservé
-    AWord; // nouvelle donnée
+    AData; // nouvelle donnée
     if LW.IsValid then // correcte aussi ?
       PushConst(LW.PutFirst(LS)) // mot construit
     else
