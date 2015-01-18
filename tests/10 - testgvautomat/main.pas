@@ -273,6 +273,8 @@ begin
     acClear: mmoMain.Lines.Clear;
     acReadList: Automat.Message := GetValue;
     acConfirm: Automat.Message := GetBool;
+    acType: with mmoMain do
+      Lines[Lines.Count-1] := Lines[Lines.Count-1] + Automat.Message.fMessage;
   end;
 end;
 

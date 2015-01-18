@@ -99,6 +99,20 @@ begin
   MessageChange; // notification de changement
 end;
 
+procedure DoPrimType;
+// *** TAPE ***
+begin
+  if IsListPop then // liste ?
+    fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // on enlève les crochets
+  else
+  begin
+    LW.Text := fWkRec.fItem; // mot normalisé
+    fWkMess.fMessage := LW.Text; // sans les caractères d'échappement
+  end;
+  fWkMess.fCommand := acType; // demande d'écriture sans retour chariot
+  MessageChange; // notification de changement
+end;
+
 procedure DoPrimGive;
 // *** DONNE ***
 begin
@@ -2603,5 +2617,6 @@ begin
     240: DoPrimSetPen; // FIXE.CRAYON
     241: DoPrimGetPen; // VALEUR.CRAYON
     242: DoPrimConfirm; // CONFIRME
+    244: DoPrimType; // TAPE
   end;
 end;
