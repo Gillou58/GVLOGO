@@ -371,7 +371,7 @@ begin
 end;
 
 procedure DoPrimLast;
-// *** DERNIER ***
+// *** DERNIER DER ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
   // une liste ?
@@ -388,7 +388,7 @@ begin
 end;
 
 procedure DoPrimFirst;
-// *** PREMIER ***
+// *** PREMIER PREM ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
   // une liste ?
@@ -405,7 +405,7 @@ begin
 end;
 
 procedure DoPrimButFirst;
-// *** SAUFPREMIER ***
+// *** SAUF.PREMIER SP ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
   // une liste ?
@@ -423,7 +423,7 @@ begin
 end;
 
 procedure DoPrimButLast;
-// *** SAUFDERNIER ***
+// *** SAUF.DERNIER SD ***
 begin
   fWkRec.fItem := fExeStack.Pop; // donnée dépilée
   // une liste ?
@@ -439,35 +439,59 @@ begin
   end;
 end;
 
-procedure DoPrimPutLast;
-// *** METSDERNIER ***
+procedure DoPrimPutFirst;
+// *** METS.PREMIER MP ***
+var
+  LS: string;
 begin
   fWkRec.fItem := fExeStack.Pop; // donné dépilée
   if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
-    PushConst(LL.PutLast(fExeStack.Pop)); // met en dernier
+    AWord; // seconde donnée
+    if LW.IsValid then // un mot ?
+      fWkRec.fItem := LW.Text; // mot brut
+    PushConst(LL.PutFirst(fWkRec.fItem)); // met en dernier
   end
   else
   begin
-    LW.Text := fWkRec.fItem;
-    PushConst(LW.PutLast(fExeStack.Pop)); // donnée à la fin du mot
+    // c'est un mot
+    LW.Text := fWkRec.fItem; // analyse
+    LS := LW.Text; // mot brut conservé
+    AWord; // seconde donnée
+    if not IsList then // pas une liste ?
+      PushConst(LW.PutLast(LS))
+    else
+      // [### Erreur: liste interdite ###]
+      SetError(CE_BadWord, fWkRec.fItem);
   end;
 end;
 
-procedure DoPrimPutFirst;
-// *** METSPREMIER ***
+procedure DoPrimPutLast;
+// *** METS.DERNIER MD ***
+var
+  LS: string;
 begin
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
+  fWkRec.fItem := fExeStack.Pop; // donné dépilée
   if IsList then // une liste ?
   begin
     LL.Text := fWkRec.fItem; // analyse
-    PushConst(LL.PutFirst(fExeStack.Pop)); // met en premier
+    AWord; // seconde donnée
+    if LW.IsValid then // un mot ?
+      fWkRec.fItem := LW.Text; // mot brut
+    PushConst(LL.PutLast(fWkRec.fItem)); // met en dernier
   end
   else
   begin
-    LW.Text := fWkRec.fItem;
-    PushConst(LW.PutFirst(fExeStack.Pop)); // donnée au début du mot
+    // c'est un mot
+    LW.Text := fWkRec.fItem; // analyse
+    LS := LW.Text; // mot brut conservé
+    AWord; // seconde donnée
+    if not IsList then // pas une liste ?
+      PushConst(LW.PutFirst(LS))
+    else
+      // [### Erreur: liste interdite ###]
+      SetError(CE_BadWord, fWkRec.fItem);
   end;
 end;
 
@@ -678,23 +702,27 @@ begin
   end;
 end;
 
-procedure DoPrimSentence;
-// *** PHRASE PH ***
+procedure DoPrimSentenceRight;
+// *** PHRASE.FIN ***
 var
   LS: string;
 begin
-  fExeStack.Swap; // inversion sur la pile
   AWord; // donnée récupérée
   LS := FwkRec.fItem; // donnée conservée
   if IsList then // une liste ?
   begin
     AWord; // seconde donnée
     LL.Text := LS; // liste analysée
+    LW.Text := fWkRec.fItem;
+    if LW.IsValid then // mot valide ?
+      fWkRec.fItem := LU.StrToList(LW.Text); // on élimine les liens
     PushConst(LL.SentenceLeft(fWkRec.fItem)); // résultat empilé (second après)
   end
   else
   begin
     // le premier élément est un mot
+    LW.Text := LS;
+    LS := LW.Text; // texte brut dans la liste
     AWord; // seconde donnée
     if IsList then // une liste ?
     begin
@@ -702,38 +730,20 @@ begin
       PushConst(LL.SentenceLeft(fWkRec.fItem)); // le second est placé après
     end
     else
+    begin
+      LW.Text := fWkRec.fItem;
+      fWkRec.fItem := LW.Text; // texte brut dans la liste
       // le second élément est aussi un mot
-      PushConst(CBeginList + fWkRec.fItem + CBlank + LS + CEndList);
+      PushConst(CBeginList + LW.Text + CBlank + LS + CEndList);
+    end;
   end;
 end;
 
-procedure DoPrimSentenceRight;
-// *** PHRASE.FIN ***
-var
-  LS: string;
+procedure DoPrimSentence;
+// *** PHRASE PH ***
 begin
   fExeStack.Swap; // inversion sur la pile
-  AWord; // donnée récupérée
-  LS := FwkRec.fItem; // donnée conservée
-  if IsList then // une liste ?
-  begin
-    AWord; // seconde donnée
-    LL.Text := LS; // liste analysée
-    PushConst(LL.SentenceRight(fWkRec.fItem)); // résultat empilé (second après)
-  end
-  else
-  begin
-    // le premier élément est un mot
-    AWord; // seconde donnée
-    if IsList then // une liste ?
-    begin
-      LL.Text := LU.StrToList(LS); // on analyse le premier élément
-      PushConst(LL.SentenceRight(fWkRec.fItem)); // le second est placé après
-    end
-    else
-      // le second élément est aussi un mot
-      PushConst(CBeginList + LS + CBlank + fWkRec.fItem + CEndList);
-  end;
+  DoPrimSentenceRight; // comme PHRASE.FIN
 end;
 
 procedure DoPrimReplace;

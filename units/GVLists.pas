@@ -830,17 +830,11 @@ var
 begin
   Result := CBeginList;
   try
-    if fUtil.IsValidValue(St) then // liste ou mot valides
-    begin
-      LSt := ToWBStr; // liste en chaîne
-      if (LSt <> EmptyStr) and (St <> EmptyStr) then
-        LSt := CBlank + LSt;
-      // on construit la liste
-      Result := Result + St + LSt;
-    end
-    else
-      // [### Erreur: ni une liste ni un mot ###]
-      Error.SetError(CE_UnknownListWord, St);
+    LSt := ToWBStr; // liste en chaîne
+    if (LSt <> EmptyStr) and (St <> EmptyStr) then
+      LSt := CBlank + LSt;
+    // on construit la liste
+    Result := Result + St + LSt;
   finally
     Result := Result + CEndList;
   end;
@@ -856,17 +850,11 @@ var
 begin
   Result := CBeginList;
   try
-    if fUtil.IsValidValue(St) then // liste ou mot valides
-    begin
-      LSt := ToWBStr; // liste en chaîne
-      if (LSt <> EmptyStr) and (St <> EmptyStr) then
-        LSt := LSt + CBlank;
-      // on construit la liste
-      Result := Result + LSt + St;
-    end
-     else
-      // [### Erreur: ni une liste ni un mot ###]
-      Error.SetError(CE_UnknownListWord, St);
+    LSt := ToWBStr; // liste en chaîne
+    if (LSt <> EmptyStr) and (St <> EmptyStr) then
+      LSt := LSt + CBlank;
+    // on construit la liste
+    Result := Result + LSt + St;
   finally
     Result := Result + CEndList;
   end;
