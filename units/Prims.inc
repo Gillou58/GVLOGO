@@ -163,8 +163,7 @@ begin
         SetError(CE_BadList, fWkRec.fItem);
     end
     else
-      // [### Erreur: liste vide ###]
-      SetError(CE_EmptyList, fWkRec.fItem);
+      Exit; // on sort
   end
   else
     // [### Erreur: pas une liste ###]
@@ -2332,7 +2331,7 @@ begin
   fWkRec.fItem := fWkMess.fMessage; // on récupère le message de retour
   LL.Text := CBeginList + fWkRec.fItem + CEndList; // contrôle de la liste
   if LL.IsValid then // liste correcte ?
-    PushConst(fWkRec.fItem) // résultat empilé
+    PushConst(LL.ToStr) // résultat empilé
   else
     // [### Erreur: pas une liste ###]
     SetError(CE_BadList, fWkRec.fItem);
