@@ -75,7 +75,11 @@ end;
 procedure DoPrimWriteAll;
 // *** ECRIST ***
 begin
-  fWkRec.fItem := fExeStack.Pop; // élément en cours
+  if not IsListPop then // pas une liste ?
+  begin
+    LW.Text := fWkRec.fItem;
+    fWkRec.fItem := LW.WithEsc;
+  end;
   fWkMess.fMessage := fWkRec.fItem; // valeur brute enregistrée
   fWkMess.fCommand := acWrite; // demande d'écriture
   MessageChange; // notification de changement
