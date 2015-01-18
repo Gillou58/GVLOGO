@@ -99,14 +99,6 @@ begin
   MessageChange; // notification de changement
 end;
 
-procedure DoPrimReturn;
-// *** RENDS ***
-begin
-  AData; // valeur récupérée
-  fReturnVal := fWkRec.fItem; // valeur de retour
-  fReturnFlag := True; // drapeau levé
-end;
-
 procedure DoPrimGive;
 // *** DONNE ***
 begin
@@ -139,6 +131,15 @@ procedure DoPrimStop;
 begin
   while (not fWkStack.IsEmpty) and (fWkStack.Peek <> CBreak) do
     FWkStack.Pop; // on supprime les commandes en attente
+end;
+
+procedure DoPrimReturn;
+// *** RENDS ***
+begin
+  AData; // valeur récupérée
+  fReturnVal := fWkRec.fItem; // valeur de retour
+  fReturnFlag := True; // drapeau levé
+  DoPrimStop; // on arrête
 end;
 
 procedure DoPrimExec;
@@ -2111,7 +2112,7 @@ begin
     if (LW.Text = CStTrue) then  // résultat vrai ?
       fTest := CTrueState // drapeau adapté
     else
-      fTest := CFalseState;
+      fTest := CFalseState; // idem
   end
   else
     // [### Erreur: booléen incorrect ###]
@@ -2135,8 +2136,8 @@ procedure DoPrimIfFalse;
 begin
   fWkRec.fItem := fExeStack.Peek; // donnée enregistrée
   case fTest of // analyse du drapeau de "sinon"
-    CTrueState: fExeStack.Pop; // on ignore la liste suivante
     CFalseState: DoPrimExec; // on l'exécute
+    CTrueState: fExeStack.Pop; // on ignore la liste suivante
     CDisabledState: // [### Erreur: SI.FAUX mal placé ###]
       SetError(CE_BadTest, P_IfFalse);
   end;
