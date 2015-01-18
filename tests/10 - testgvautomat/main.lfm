@@ -263,6 +263,8 @@ object MainForm: TMainForm
     Caption = 'Vers procédures'
     Kind = bkHelp
     OnClick = btnToProcClick
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 3
   end
   object btnStop: TBitBtn
