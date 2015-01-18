@@ -680,35 +680,59 @@ end;
 
 procedure DoPrimSentence;
 // *** PHRASE PH ***
+var
+  LS: string;
 begin
-  fExeStack.Swap;
-  fWkRec.fItem := fExeStack.Pop; // donnée dépilée
+  fExeStack.Swap; // inversion sur la pile
+  AWord; // donnée récupérée
+  LS := FwkRec.fItem; // donnée conservée
   if IsList then // une liste ?
   begin
-    LL.Text := fWkRec.fItem; // on l'analyse
-    PushConst(LL.SentenceLeft(fExeStack.Pop)); // on renvoie la phrase
+    AWord; // seconde donnée
+    LL.Text := LS; // liste analysée
+    PushConst(LL.SentenceLeft(fWkRec.fItem)); // résultat empilé (second après)
   end
   else
   begin
-    LW.Text := CBeginList + fExeStack.Pop + CBlank + fWkRec.fItem + CEndList;
-    PushConst(LW.Text); // on renvoie la liste
+    // le premier élément est un mot
+    AWord; // seconde donnée
+    if IsList then // une liste ?
+    begin
+      LL.Text := LU.StrToList(LS); // on analyse le premier élément
+      PushConst(LL.SentenceLeft(fWkRec.fItem)); // le second est placé après
+    end
+    else
+      // le second élément est aussi un mot
+      PushConst(CBeginList + fWkRec.fItem + CBlank + LS + CEndList);
   end;
 end;
 
 procedure DoPrimSentenceRight;
 // *** PHRASE.FIN ***
+var
+  LS: string;
 begin
-  fExeStack.Swap;
-  fWkRec.fItem:= fExeStack.Pop; // donnée dépilée
+  fExeStack.Swap; // inversion sur la pile
+  AWord; // donnée récupérée
+  LS := FwkRec.fItem; // donnée conservée
   if IsList then // une liste ?
   begin
-    LL.Text := fWkRec.fItem; // on l'analyse
-    PushConst(LL.SentenceRight(fExeStack.Pop)); // on renvoie la phrase
+    AWord; // seconde donnée
+    LL.Text := LS; // liste analysée
+    PushConst(LL.SentenceRight(fWkRec.fItem)); // résultat empilé (second après)
   end
   else
   begin
-    LW.Text := CBeginList + fWkRec.fItem  + CBlank + fExeStack.Pop + CEndList;
-    PushConst(LW.Text); // on renvoie la liste
+    // le premier élément est un mot
+    AWord; // seconde donnée
+    if IsList then // une liste ?
+    begin
+      LL.Text := LU.StrToList(LS); // on analyse le premier élément
+      PushConst(LL.SentenceRight(fWkRec.fItem)); // le second est placé après
+    end
+    else
+      // le second élément est aussi un mot
+      PushConst(CBeginList + LS + CBlank + fWkRec.fItem + CEndList);
   end;
 end;
 
