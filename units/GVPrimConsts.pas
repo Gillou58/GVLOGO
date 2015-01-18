@@ -71,7 +71,7 @@ resourcestring
   P_Repeat = 'REPETE';
   P_Until = 'JUSQUA';
   P_Loop = 'BOUCLE';
-  P_EditToProc = 'EDITE.VERS.PROC'; // 10
+  P_EditAllProcs = 'EDITE.TOUT'; // 10
   P_LoadProcs = 'CHARGE.PROCS';
   P_SaveProcs = 'SAUVE.PROCS';
   P_ProcToEdit = 'EDITE.PROC';
@@ -330,7 +330,7 @@ const
     (Name: P_Repeat; NbParams: 2),
     (Name: P_Until; NbParams: 2),
     (Name: P_Loop; NbParams: 4),
-    (Name: P_EditToProc; NbParams: 3),
+    (Name: P_EditAllProcs; NbParams: 0),
     (Name: P_LoadProcs; NbParams: 1),
     (Name: P_SaveProcs; NbParams: 2),
     (Name: P_ProcToEdit; NbParams: 1),

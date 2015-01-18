@@ -2375,6 +2375,27 @@ begin
     SetError(CE_BadBool, fWkRec.fItem);
 end;
 
+procedure DoPrimAllProcsEdit;
+// *** EDITE.TOUT ***
+var
+  LLst: TStringList;
+  LS: string;
+begin
+  LLst := TStringList.Create; // création de la liste de travail
+  try
+    // procédures récupérées
+    if (fKernel.AllProcsToEdit(LLst) and (LLst.Count > 0)) then
+      for LS in LLst do  // on balaie la définition
+      begin
+        fWkMess.fMessage := LS; // le message
+        fWkMess.fCommand := acWrite; // demande d'écriture
+        MessageChange; // changement notifié
+      end;
+  finally
+    LLst.Free; // libération de la liste de travail
+  end;
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2391,7 +2412,7 @@ begin
     7: DoPrimRepeat; // REPETE
     8:; // ### JUSQUA ###
     9: DoPrimFor; // BOUCLE
-    10:; // ### EDITE.VERS.PROC ###
+    10: DoPrimAllProcsEdit; // EDITE.TOUT
     11: DoPrimLoadProcs; // CHARGE.PROCS
     12: DoPrimSaveProcs; // SAUVE.PROCS
     13: DoPrimProcToEdit; // EDITE.PROC
@@ -2583,16 +2604,3 @@ begin
     242: DoPrimConfirm; // CONFIRME
   end;
 end;
-
-
-{
-
-procedure ProcEdit;
-// *** EDITE.PROC ***
-begin
-  ActualItem := fExeStack.Pop; // donnée dépilée
-  LW.Text := ActualItem;
-  fKernel.ProcToEdit(LW.Text, fLines); // procédure éditée
-end;
-
-}
