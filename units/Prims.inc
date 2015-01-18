@@ -801,7 +801,7 @@ begin
 end;
 
 procedure DoPrimItem;
-// *** ELEMENT ***
+// *** ELEMENT ITEM ***
 var
   Li: Integer;
 begin
@@ -2425,7 +2425,6 @@ begin
     5: DoPrimReturn; // RENDS
     6: DoPrimWord; // MOT
     7: DoPrimRepeat; // REPETE
-    8:; // ### JUSQUA ###
     9: DoPrimFor; // BOUCLE
     10: DoPrimAllProcsEdit; // EDITE.TOUT
     11: DoPrimLoadProcs; // CHARGE.PROCS
@@ -2529,7 +2528,7 @@ begin
     133: DoPrimDelete; // SUPPRIME
     134: DoPrimSort; // TRIE
     135: DoPrimRotate; // ROTATION
-    136: DoPrimItem; // ELEMENT
+    136, 8: DoPrimItem; // ELEMENT ITEM
     137: DoPrimClearAll; // .EFFACE.TOUT
     138, 139: DoPrimSentence; // PHRASE PH
     140: DoPrimSentenceRight; // PHRASE.FIN

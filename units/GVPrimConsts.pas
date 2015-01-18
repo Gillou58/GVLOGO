@@ -69,7 +69,7 @@ resourcestring
   P_Return = 'RENDS';
   P_Word = 'MOT';
   P_Repeat = 'REPETE';
-  P_Until = 'JUSQUA';
+  P_Item2 = 'ITEM';
   P_Loop = 'BOUCLE';
   P_EditAllProcs = 'EDITE.TOUT'; // 10
   P_LoadProcs = 'CHARGE.PROCS';
@@ -330,7 +330,7 @@ const
     (Name: P_Return; NbParams: 1),
     (Name: P_Word; NbParams: 2),
     (Name: P_Repeat; NbParams: 2),
-    (Name: P_Until; NbParams: 2),
+    (Name: P_Item2; NbParams: 2),
     (Name: P_Loop; NbParams: 4),
     (Name: P_EditAllProcs; NbParams: 0), // 10
     (Name: P_LoadProcs; NbParams: 1),
