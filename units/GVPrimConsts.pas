@@ -50,7 +50,7 @@ const
   // *** longueur maximale du nom d'une primitive ***
   CMaxLengthPrim = 127;
   // *** nombre de primitives ***
-  CPrimCount = 242;
+  CPrimCount = 243;
 
  type
   // *** enregistrement d'une primitive ***
@@ -308,6 +308,7 @@ resourcestring
   P_SetPen = 'FIXE.CRAYON';
   P_GetPen = 'VALEUR.CRAYON';
   P_Confirm = 'CONFIRME';
+  P_ProcToEdit2 = 'ED';
 
 const
   // tableau du nom des fonctions supportées par l'évaluation
@@ -564,7 +565,8 @@ const
     (Name: P_GetScreen; NbParams: 0),
     (Name: P_SetPen; NbParams: 1),
     (Name: P_GetPen; NbParams: 0),
-    (Name: P_Confirm; NbParams: 1))
+    (Name: P_Confirm; NbParams: 1),
+    (Name: P_ProcToEdit2; NbParams: 1))
     ;
 
 implementation

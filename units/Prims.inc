@@ -2415,7 +2415,7 @@ begin
     10: DoPrimAllProcsEdit; // EDITE.TOUT
     11: DoPrimLoadProcs; // CHARGE.PROCS
     12: DoPrimSaveProcs; // SAUVE.PROCS
-    13: DoPrimProcToEdit; // EDITE.PROC
+    13, 243: DoPrimProcToEdit; // EDITE.PROC
     14: DoPrimParamLineProc;  // PARAMS.PROC
     15: DoPrimDefListProc; // DEF.PROC
     16: DoPrimParamsCount; // NB.PARAMS.PROC
