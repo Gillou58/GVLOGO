@@ -2310,32 +2310,6 @@ begin
   end;
 end;
 
-procedure DoPrimUntil;
-// *** TANT.QUE ***
-var
-  LSC, LSE: string;
-begin
-  //fExeStack.Swap;
-  //AWord; // donnée récupérée
-  //LSE := fWkRec.fItem;
-  //AWord;
-  //LSC := fWkRec.fItem; // conservée
-  //fExeStack.Push(LSE); // donnée rempilée
-  //if LW.IsBoolean then
-  //begin
-  //  if LW.AsBoolean and (not Stop) then
-  //  begin
-  //    DoPrimExec; // exécution
-  //    fExeStack.Push(LSE); // donnée rempilée
-  //    fExeStack.Push(LSC); // donnée rempilée
-  //    DoPrimUntil;
-  //  end;
-  //end
-  //else
-  //  // [### Erreur: pas un booléen ###]
-  //    SetError(CE_BadBool, fWkRec.fItem);
-end;
-
 procedure DoPrimFollow;
 // *** TRACE ***
 begin
@@ -2396,6 +2370,27 @@ begin
   end;
 end;
 
+procedure DoPrimWord;
+// *** MOT ***
+var
+  LS: string;
+begin
+  AWord; // donnée récupérée
+  if LW.IsValid then // mot correct ?
+  begin
+    LS := fWkRec.fItem; // mot conservé
+    AWord; // nouvelle donnée
+    if LW.IsValid then // correcte aussi ?
+      PushConst(LW.PutFirst(LS)) // mot construit
+    else
+      // [### Erreur: pas un mot ###]
+      SetError(CE_BadWord, fWkRec.fItem);
+  end
+  else
+    // [### Erreur: pas un mot ###]
+    SetError(CE_BadWord, fWkRec.fItem);
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2408,7 +2403,7 @@ begin
     3: DoPrimStop; // STOP
     4: DoPrimIf; // SI
     5: DoPrimReturn; // RENDS
-    6: DoPrimUntil; // ### TANT.QUE ###
+    6: DoPrimWord; // MOT
     7: DoPrimRepeat; // REPETE
     8:; // ### JUSQUA ###
     9: DoPrimFor; // BOUCLE

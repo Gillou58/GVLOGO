@@ -67,7 +67,7 @@ resourcestring
   P_Break = 'STOP';
   P_If = 'SI';
   P_Return = 'RENDS';
-  P_While = 'TANT.QUE';
+  P_Word = 'MOT';
   P_Repeat = 'REPETE';
   P_Until = 'JUSQUA';
   P_Loop = 'BOUCLE';
@@ -209,7 +209,7 @@ resourcestring
   P_Ident = 'IDENTIFICATEUR?';
   P_MemberP = 'MEMBRE?';
   P_NumberP = 'NOMBRE?';
-  P_Word = 'MOT?';
+  P_WordP = 'MOT?';
   P_Previous = 'PRECEDENT';
   P_Next = 'SUIVANT'; // 150
   P_EmptyP = 'VIDE?';
@@ -327,7 +327,7 @@ const
     (Name: P_Break; NbParams: 0),
     (Name: P_If; NbParams: 2),
     (Name: P_Return; NbParams: 1),
-    (Name: P_While; NbParams: 2),
+    (Name: P_Word; NbParams: 2),
     (Name: P_Repeat; NbParams: 2),
     (Name: P_Until; NbParams: 2),
     (Name: P_Loop; NbParams: 4),
@@ -469,7 +469,7 @@ const
     (Name: P_Ident; NbParams: 1),
     (Name: P_MemberP; NbParams: 2),
     (Name: P_NumberP; NbParams: 1),
-    (Name: P_Word; NbParams: 1),
+    (Name: P_WordP; NbParams: 1),
     (Name: P_Previous; NbParams: 2),
     (Name: P_Next; NbParams: 2),
     (Name: P_EmptyP; NbParams: 1),
