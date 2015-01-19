@@ -138,6 +138,7 @@ begin
 end;
 
 procedure TMainForm.btnStopClick(Sender: TObject);
+// bouton stop
 begin
   Automat.Stop := True; // arrêt demandé
 end;
@@ -199,7 +200,7 @@ begin
 end;
 
 function TMainForm.GetValue: TGVAutomatMessage;
-// *** saisie d'une valeur ***
+// saisie d'une valeur
 begin
   Result.fMessage := InputBox('TestGVAutomat',
     'Entrez la valeur demandée ici :', EmptyStr);

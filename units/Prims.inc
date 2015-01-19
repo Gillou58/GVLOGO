@@ -2572,7 +2572,7 @@ begin
     169, 170: DoPrimClearText; // VIDE.TEXTE VT
     172: DoPrimPropList; // PLISTE
     173: DoPrimFollow;  // TRACE
-    174: DoPrimExec; // EXEC
+    174, 245: DoPrimExec; // EXEC EXECUTE
     175: DoPrimTest; // TESTE
     176: DoPrimIfTrue; // SI.VRAI
     177: DoPrimIfFalse; // SI.FAUX

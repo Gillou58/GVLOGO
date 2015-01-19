@@ -57,13 +57,10 @@ uses
 
 type
   // *** automate ***
-
-  { TGVAutomat }
-
   TGVAutomat = class(TObject)
     strict private
       fError: TGVErrors; // traitement des erreurs
-      fFollow: Boolean;
+      fFollow: Boolean; // drapeau de suivi
       fOnNewLine: TNotifyEvent; // accès à l'éditeur
       fOnStateChange: TNotifyEvent; // événement d'état
       fState: TGVAutomatState; // état de l'automate
@@ -411,7 +408,7 @@ var
   LW: TGVWord;
 begin
   State := asVar; // état
-  LW := TGVWord.Create;
+  LW := TGVWord.Create; // mot de travail créé
   try
     LW.Text := fWkRec.fItem; // nom analysé
     LW.Text := LW.WithoutColon; // : retirés
@@ -424,7 +421,7 @@ begin
       // [### Erreur: variable inconnue ###]
       SetError(CE_UnknownVar, LW.Text);
   finally
-    LW.Free;
+    LW.Free; // libération du mot de travail
   end;
 end;
 
@@ -489,8 +486,7 @@ begin
   if DoBegin(St) then // préparation correcte ?
   begin
     State := asWorking; // état
-    // pile non vide, stop non demandé et pas d'erreur ?
-    // => on boucle
+    // on boucle si pile non vide, stop non demandé et pas d'erreur
     while not (fWkStack.IsEmpty or Stop or (not Error.Ok)) do
     begin
       fWkRec.fItem := fWkStack.Pop; // élément dépilé
@@ -537,7 +533,8 @@ begin
   fKernel:= TGVLogoKernel.Create; // noyau
   fKernel.Error.OnError := @Error.GetError; // gestionnaire centralisé d'erreurs
   fLocVars := TGVLocVars.Create; // variables locales
-  fLocVars.Error.OnError := @Error.GetError; // gestionnaire centralisé d'erreurs
+  // gestionnaire centralisé d'erreurs
+  fLocVars.Error.OnError := @Error.GetError;
   fEval := TGVEval.Create; // évaluateur
   fEval.Kernel := fKernel; // noyau et évaluateur liés
   fEval.LocVars := fLocVars; // idem pour les variables locales
