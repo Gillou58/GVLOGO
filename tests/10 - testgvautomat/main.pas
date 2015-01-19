@@ -300,6 +300,12 @@ begin
                   while fWaitForKey do
                     Application.ProcessMessages;
     end;
+    acBold: mmoMain.Font.Style := mmoMain.Font.Style + [fsBold];
+    acUnderline: mmoMain.Font.Style := mmoMain.Font.Style + [fsUnderline];
+    acItalic: mmoMain.Font.Style := mmoMain.Font.Style + [fsItalic];
+    acNoBold: mmoMain.Font.Style := mmoMain.Font.Style - [fsBold];
+    acNoUnderline: mmoMain.Font.Style := mmoMain.Font.Style - [fsUnderline];
+    acNoItalic: mmoMain.Font.Style := mmoMain.Font.Style - [fsItalic];
   end;
 end;
 

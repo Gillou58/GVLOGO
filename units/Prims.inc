@@ -157,7 +157,7 @@ begin
 end;
 
 procedure DoPrimExec;
-// *** EXEC ***
+// *** EXEC EXECUTE ***
 var
   Li: Integer;
 begin
@@ -2420,6 +2420,57 @@ begin
     SetError(CE_BadWord, fWkRec.fItem);
 end;
 
+procedure DoPrimBold;
+// *** GRAS ***
+begin
+  AData; // donnée récupérée
+  if LW.IsBoolean then // un booléen ?
+  begin
+    if LW.AsBoolean then // valeur vraie ?
+      fWkMess.fCommand := acBold // en gras
+    else
+      fWkMess.fCommand := acNoBold; // pas en gras
+    MessageChange; // changement notifié
+  end
+  else
+    // [### Erreur: pas un booléen ###]
+    SetError(CE_BadBool, fWkRec.fItem);
+end;
+
+procedure DoPrimUnderline;
+// *** SOULIGNE ***
+begin
+  AData; // donnée récupérée
+  if LW.IsBoolean then // un booléen ?
+  begin
+    if LW.AsBoolean then // valeur vraie ?
+      fWkMess.fCommand := acUnderline // souligné
+    else
+      fWkMess.fCommand := acNoUnderLine; // pas souligné
+    MessageChange; // changement notifié
+  end
+  else
+    // [### Erreur: pas un booléen ###]
+    SetError(CE_BadBool, fWkRec.fItem);
+end;
+
+procedure DoPrimItalic;
+// *** ITALIQUE ***
+begin
+  AData; // donnée récupérée
+  if LW.IsBoolean then // un booléen ?
+  begin
+    if LW.AsBoolean then // valeur vraie ?
+      fWkMess.fCommand := acItalic // en italiques
+    else
+      fWkMess.fCommand := acNoItalic; // pas en italiques
+    MessageChange; // changement notifié
+  end
+  else
+    // [### Erreur: pas un booléen ###]
+    SetError(CE_BadBool, fWkRec.fItem);
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2626,5 +2677,8 @@ begin
     241: DoPrimGetPen; // VALEUR.CRAYON
     242: DoPrimConfirm; // CONFIRME
     244: DoPrimType; // TAPE
+    246: DoPrimBold; // GRAS
+    247: DoPrimUnderline; // SOULIGNE
+    248: DoPrimItalic; // ITALIQUE
   end;
 end;

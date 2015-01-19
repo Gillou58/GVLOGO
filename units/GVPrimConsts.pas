@@ -50,7 +50,7 @@ const
   // *** longueur maximale du nom d'une primitive ***
   CMaxLengthPrim = 127;
   // *** nombre de primitives ***
-  CPrimCount = 245;
+  CPrimCount = 248;
 
  type
   // *** enregistrement d'une primitive ***
@@ -311,6 +311,9 @@ resourcestring
   P_ProcToEdit2 = 'ED';
   P_Type = 'TAPE';
   P_Exec2 = 'EXECUTE';
+  P_Bold = 'GRAS';
+  P_Underline = 'SOULIGNE';
+  P_Italic = 'ITALIQUE';
 
 const
   // tableau du nom des fonctions supportées par l'évaluation
@@ -570,7 +573,10 @@ const
     (Name: P_Confirm; NbParams: 1),
     (Name: P_ProcToEdit2; NbParams: 1),
     (Name: P_Type; NbParams: 1),
-    (Name: P_Exec2; NbParams: 1))
+    (Name: P_Exec2; NbParams: 1),
+    (Name: P_Bold; NbParams: 1),
+    (Name: P_Underline; NbParams: 1),
+    (Name: P_Italic; NbParams: 1))
     ;
 
 implementation
