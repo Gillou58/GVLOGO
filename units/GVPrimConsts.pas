@@ -115,7 +115,7 @@ resourcestring
   P_TurtleState = 'ETAT.TORTUE';
   P_SetTurtleState = 'FIXE.ETAT.TORTUE';
   P_NormalTurtle = 'TORTUE.NORMALE';
-  P_GreenTurtle = ' TORTUE.VERTE';
+  P_GreenTurtle = 'TORTUE.DESSIN';
   P_SetTurtleSize = 'FIXE.TAILLE';
   P_TurtleSize = 'TAILLE';
   P_PenDown = 'BAISSE.CRAYON';
