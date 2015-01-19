@@ -9,8 +9,10 @@ object MainForm: TMainForm
   Caption = 'TestGVAutomat - Gilles Vasseur 2014 - V1.0.0 - GVLOGO'
   ClientHeight = 678
   ClientWidth = 981
+  KeyPreview = True
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
   Position = poScreenCenter
   LCLVersion = '1.2.6.0'
   object mmoMain: TMemo

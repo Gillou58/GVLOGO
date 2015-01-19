@@ -2351,6 +2351,15 @@ begin
     SetError(CE_BadList, fWkRec.fItem);
 end;
 
+procedure DoPrimReadChar;
+// *** LIS.CAR ***
+begin
+  fWkMess.fCommand := acReadChar; // demande de lecture
+  MessageChange; // notification de changement
+  fWkRec.fItem := fWkMess.fMessage; // on récupère le message de retour
+  PushConst(fWkRec.fItem); // résultat empilé
+end;
+
 procedure DoPrimConfirm;
 // *** CONFIRME ***
 begin
@@ -2559,7 +2568,7 @@ begin
     165: DoPrimNameP;  // NOM?
     166: DoPrimList; // LISTE
     167, 171: DoPrimReadList; // LIS.LISTE LL
-    168: ; // ### LIS.CAR ###
+    168: DoPrimReadChar; // LIS.CAR
     169, 170: DoPrimClearText; // VIDE.TEXTE VT
     172: DoPrimPropList; // PLISTE
     173: DoPrimFollow;  // TRACE

@@ -74,10 +74,13 @@ type
     procedure btnTraceClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: char);
   private
     fDeepTrace: Boolean; // trace approfondie
+    fWaitForKey: Boolean; // attente d'une touche
     function GetValue: TGVAutomatMessage; // saisie d'une valeur
     function GetBool: TGVAutomatMessage; // saisie de vrai/faux
+    function GetKey(const Ch: Char): TGVAutomatMessage; // un caractère
   public
     Automat: TGVAutomat; // automate
     GVTurtle: TGVTurtle; // tortue
@@ -185,6 +188,16 @@ begin
   GVTurtle.Free;
 end;
 
+procedure TMainForm.FormKeyPress(Sender: TObject; var Key: char);
+// frappe d'une touche
+begin
+  if fWaitForKey then
+  begin
+    Automat.Message := GetKey(Key);
+    fWaitForKey := False;
+  end;
+end;
+
 function TMainForm.GetValue: TGVAutomatMessage;
 // *** saisie d'une valeur ***
 begin
@@ -200,6 +213,12 @@ begin
     Result.fMessage := CStTrue
   else
     Result.fMessage := CStFalse;
+end;
+
+function TMainForm.GetKey(const Ch: Char): TGVAutomatMessage;
+// saisie d'un caractère
+begin
+  Result.fMessage := Ch;
 end;
 
 procedure TMainForm.GetStateChange(Sender: TObject);
@@ -275,6 +294,11 @@ begin
     acConfirm: Automat.Message := GetBool;
     acType: with mmoMain do
       Lines[Lines.Count-1] := Lines[Lines.Count-1] + Automat.Message.fMessage;
+    acReadChar: begin
+                  fWaitForKey := True;
+                  while fWaitForKey do
+                    Application.ProcessMessages;
+    end;
   end;
 end;
 
