@@ -81,6 +81,9 @@ type
     function GetValue: TGVAutomatMessage; // saisie d'une valeur
     function GetBool: TGVAutomatMessage; // saisie de vrai/faux
     function GetKey(const Ch: Char): TGVAutomatMessage; // un caractère
+    function GetColor: TGVAutomatMessage; // couleur caractères
+    function GetBackColor: TGVAutomatMessage; // couleur fond caractères
+    function SetAColor(const St: string): TColor; // couleur convertie
   public
     Automat: TGVAutomat; // automate
     GVTurtle: TGVTurtle; // tortue
@@ -223,6 +226,50 @@ begin
   Result.fMessage := Ch;
 end;
 
+function TMainForm.GetColor: TGVAutomatMessage;
+// couleur caractères
+var
+  Li: Integer;
+  Lr: Integer;
+begin
+  Lr := -1;
+  for Li := 0 to 19 do
+    if CColors[Li] = mmoMain.Font.Color then // trouvée ?
+    begin
+      Lr := Li; // couleur enregistrée
+      Break; // on arrête de boucler
+    end;
+  Result.fMessage := IntToStr(Lr);
+end;
+
+function TMainForm.GetBackColor: TGVAutomatMessage;
+// couleur de fond du texte
+var
+  Li: Integer;
+  Lr: Integer;
+begin
+  Lr := -1;
+  for Li := 0 to 19 do
+    if CColors[Li] = mmoMain.Color then // trouvée ?
+    begin
+      Lr := Li; // couleur enregistrée
+      Break; // on arrête de boucler
+    end;
+  Result.fMessage := IntToStr(Lr);
+end;
+
+function TMainForm.SetAColor(const St: string): TColor;
+// conversion d'une couleur
+var
+  N: Integer;
+begin
+  N := StrToInt(St);
+  if (N < 0) or (N > 19) then
+    Result := clBlack // couleur noire par défaut
+  else
+    Result := CColors[N]; // renvoi de la couleur
+end;
+
 procedure TMainForm.GetStateChange(Sender: TObject);
 // gestion du changement d'état
 var
@@ -295,6 +342,10 @@ begin
     acNoBold: mmoMain.Font.Style := mmoMain.Font.Style - [fsBold];
     acNoUnderline: mmoMain.Font.Style := mmoMain.Font.Style - [fsUnderline];
     acNoItalic: mmoMain.Font.Style := mmoMain.Font.Style - [fsItalic];
+    acColor: Automat.Message := GetColor;
+    acBackColor: Automat.Message := GetBackColor;
+    acSetColor: mmoMain.Font.Color := SetAColor(Automat.Message.fMessage);
+    acSetBackColor: mmoMain.Color := SetAColor(Automat.Message.fMessage);
   end;
 end;
 

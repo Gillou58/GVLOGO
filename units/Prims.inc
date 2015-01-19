@@ -2476,6 +2476,52 @@ begin
     SetError(CE_BadBool, fWkRec.fItem);
 end;
 
+procedure DoPrimTextColor;
+// *** COULEUR.TEXTE ***
+begin
+  fWkMess.fCommand := acColor; // demande de la couleur du texte
+  MessageChange; // exécution
+  PushConst(fWkMess.fMessage); // réponse empilée
+end;
+
+procedure DoPrimSetTextColor;
+// *** FIXE.COULEUR.TEXTE FCT ***
+begin
+  AData; // un mot attendu
+  if LW.IsInt then
+  begin
+    fWkMess.fCommand := acSetColor; // fixe la couleur du texte
+    fWkMess.fMessage := fWkRec.fItem;
+    MessageChange; // exécution
+  end
+  else
+    // [### Erreur: entier incorrect ###]
+    SetError(CE_BadInt, fWkRec.fItem);
+end;
+
+procedure DoPrimBackTextColor;
+// *** COULEUR.FOND.TEXTE ***
+begin
+  fWkMess.fCommand := acBackColor; // demande de la couleur de fond du texte
+  MessageChange; // exécution
+  PushConst(fWkMess.fMessage); // réponse empilée
+end;
+
+procedure DoPrimSetBackTextColor;
+// *** FIXE.COULEUR.FOND.TEXTE FCFT ***
+begin
+  AData; // un mot attendu
+  if LW.IsInt then
+  begin
+    fWkMess.fCommand := acSetBackColor; // fixe la couleur de fond du texte
+    fWkMess.fMessage := fWkRec.fItem;
+    MessageChange; // exécution
+  end
+  else
+    // [### Erreur: entier incorrect ###]
+    SetError(CE_BadInt, fWkRec.fItem);
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2685,5 +2731,9 @@ begin
     246: DoPrimBold; // GRAS
     247: DoPrimUnderline; // SOULIGNE
     248: DoPrimItalic; // ITALIQUE
+    249: DoPrimTextColor; // COULEUR.TEXTE
+    250, 251: DoPrimSetTextColor; // FIXE.COULEUR.TEXTE FCT
+    252: DoPrimBackTextColor; // COULEUR.FOND.TEXTE
+    253, 254: DoPrimSetBackTextColor; // FIXE.COULEUR.FOND.TEXTE FCFT
   end;
 end;

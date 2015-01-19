@@ -50,7 +50,7 @@ const
   // *** longueur maximale du nom d'une primitive ***
   CMaxLengthPrim = 127;
   // *** nombre de primitives ***
-  CPrimCount = 248;
+  CPrimCount = 254;
 
  type
   // *** enregistrement d'une primitive ***
@@ -314,6 +314,12 @@ resourcestring
   P_Bold = 'GRAS';
   P_Underline = 'SOULIGNE';
   P_Italic = 'ITALIQUE';
+  P_TextColor = 'COULEUR.TEXTE';
+  P_SetTextColor = 'FIXE.COULEUR.TEXTE';
+  P_SetTextColor2 = 'FCT';
+  P_BackTextColor = 'COULEUR.FOND.TEXTE';
+  P_SetBackTextColor = 'FIXE.COULEUR.FOND.TEXTE';
+  P_SetBackTextColor2 = 'FCFT';
 
 const
   // tableau du nom des fonctions supportées par l'évaluation
@@ -576,7 +582,13 @@ const
     (Name: P_Exec2; NbParams: 1),
     (Name: P_Bold; NbParams: 1),
     (Name: P_Underline; NbParams: 1),
-    (Name: P_Italic; NbParams: 1))
+    (Name: P_Italic; NbParams: 1),
+    (Name: P_TextColor; NbParams: 0),
+    (Name: P_SetTextColor; NbParams: 1),
+    (Name: P_SetTextColor2; NbParams: 1),
+    (Name: P_BackTextColor; NbParams: 0),
+    (Name: P_SetBackTextColor; NbParams: 1),
+    (Name: P_SetBackTextColor2; NbParams: 1))
     ;
 
 implementation

@@ -606,33 +606,19 @@ end;
 
 function TGVTurtle.ColorToIntColor(N: TColor): Integer;
 // *** couleur en couleur locale ***
+var
+  Li: Integer;
 begin
-  case N of
-    clBlack: Result := 0; // Noir
-    clMaroon: Result := 1; // Marron
-    clGreen: Result := 2; // Vert
-    clOlive: Result := 3; // Vert olive
-    clNavy: Result := 4; // Bleu marine
-    clPurple: Result := 5; // Violet
-    clTeal: Result := 6; // Sarcelle
-    clGray: Result := 7; // Gris
-    clSilver: Result := 8; // Argent
-    clRed: Result := 9; // Rouge
-    clLime: Result := 10; // Vert citron
-    clYellow: Result := 11; // Jaune
-    clBlue: Result := 12; // Bleu
-    clFuchsia: Result := 13; // Fuchsia
-    clAqua: Result := 14; // Aqua
-    clWhite: Result := 15; // Blanc
-    clMoneyGreen: Result := 16; // Gris argent
-    clSkyBlue: Result := 17; // Bleu ciel
-    clCream: Result := 18; // Crème
-    clMedGray: Result := 19; // Gris moyen
-  else
-    Result := 0; // couleur noire par défaut
+  Result := -1;
+  for Li := 0 to 19 do
+    if CColors[Li] = N then // trouvée ?
+    begin
+      Result := Li; // couleur enregistrée
+      Break; // on arrête de boucler
+    end;
+  if Result = -1 then // non trouvée ?
     // [### Erreur: mauvaise couleur ###]
     Error.SetError(CE_BadColor, IntToStr(N));
-  end;
 end;
 
 function TGVTurtle.IntColorToColor(N: Integer): TColor;
