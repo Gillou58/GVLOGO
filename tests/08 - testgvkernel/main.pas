@@ -723,7 +723,7 @@ var
   LS: string;
 begin
   LS := EmptyStr; // initialisation
-  if GVKer.PListe(LabEditKerName.Text,LS) then
+  if GVKer.PList(LabEditKerName.Text,LS) then
     mmoGVKer.Lines.Add(fmtMess('PLISTE') + LS);
 end;
 

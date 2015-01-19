@@ -5,7 +5,7 @@ object MainFormGVLists: TMainFormGVLists
   Width = 1212
   ActiveControl = edtList
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsSingle
+  BorderStyle = bsDialog
   Caption = 'Test de GVLists - Gilles Vasseur 2014 - V1.0.0 - GVLOGO'
   ClientHeight = 599
   ClientWidth = 1212

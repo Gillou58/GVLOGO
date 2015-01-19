@@ -684,7 +684,7 @@ begin
       begin
         LL.Text := ValListP(Name); // liste de travail
         // propriétés par paires, valeur sans les crochets
-        Result := LU.ListToStr(LL[(N - 1) * 2]);
+        Result := LU.ListToStr(LL[(N - 1) * 2 + 1]);
       end
       else
         // [### Erreur: propriété inexistante ###]
@@ -718,7 +718,7 @@ begin
         if (N > 0) and (N <= CountProps(Name)) then // dans les bornes ?
         begin
           LL.Text := ValListP(Name); // liste de travail
-          Prop := LU.ListToStr(LL[(N - 1) * 2]); // propriétés par paires
+          Prop := LU.ListToStr(LL[(N - 1) * 2 + 1]); // propriétés par paires
           Result := True; // tout est Ok
         end
         else

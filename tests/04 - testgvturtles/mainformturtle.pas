@@ -192,7 +192,6 @@ begin
   GVTurtle.OnChange := @TurtleState;  // gestionnaire de changement
   GVTurtle.OnBeforeChange := @TurtleBeforePaint; // idem avant de dessiner
   GVTurtle.ReInit; // initialisation
-  // mise à jour des boutons
   seSetPosX.Value := imgTurtle.Width shr 1; // position au centre
   seSetPosY.Value := imgTurtle.Height shr 1;
 end;
@@ -206,20 +205,20 @@ end;
 procedure TMainForm.KindClick(Sender: TObject);
 // test de KIND
 var
-  S: string;
+  LS: string;
 begin
   with GVTurtle do
     if Kind = tkTriangle then
     begin
       Kind := tkPng;
-      S := 'Image PNG';
+      LS := 'Image PNG';
     end
     else
     begin
       Kind := tkTriangle;
-      S := 'Triangle';
+      LS := 'Triangle';
     end;
-  mmoTurtle.Lines.Add('KIND - ' + S);
+  mmoTurtle.Lines.Add('KIND - ' + LS);
 end;
 
 procedure TMainForm.rbteGateClick(Sender: TObject);
@@ -282,7 +281,7 @@ end;
 procedure TMainForm.btnTextExClick(Sender: TObject);
 // exemple de dessin de texte
 var
-  I: Integer;
+  Li: Integer;
 
   procedure Wait;
   // permet le dessin pas à pas
@@ -292,7 +291,7 @@ var
 
 begin
   with GVTurtle do
-    for I := 1 to 36 do
+    for Li := 1 to 36 do
     begin
       PenColor := RGBToColor(random(255),random(255),random(255));
       Text(Txt);
@@ -379,7 +378,7 @@ end;
 procedure TMainForm.btnRectangleClick(Sender: TObject);
 // dessin de formes
 const
-  St: array[1..14] of string =
+  LCSt: array[1..14] of string =
     ('Rectangle','Rectangle tortue','Carré','Carré tortue','Rectangle arrondi',
     'Rectangle arrondi tortue', 'Ellipse', 'Ellipse tortue', 'Cercle',
     'Cercle tortue', 'Arc d''ellipse', 'Arc d''ellipse tortue', 'Section d''ellipse',
@@ -402,7 +401,7 @@ begin
     13: Pie(seX1.Value,seY1.Value,seX2.Value,seY2.Value,seX3.Value,seY3.Value);
     14: Pie(seX2.Value,seY2.Value,seX3.Value,seY3.Value);
   end;
-  mmoTurtle.Lines.Add('Forme dessinée : ' + St[(Sender as TButton).Tag]);
+  mmoTurtle.Lines.Add('Forme dessinée : ' + LCSt[(Sender as TButton).Tag]);
 end;
 
 procedure TMainForm.btnReInitClick(Sender: TObject);
@@ -438,7 +437,7 @@ end;
 procedure TMainForm.btnDessinClick(Sender: TObject);
 // test d'une suite d'ordres pour GVTurtle
 var
-  I: Integer;
+  Li: Integer;
 
   procedure Wait;
   // permet le dessin pas à pas
@@ -448,7 +447,7 @@ var
 
 begin
   with GVTurtle do
-    for I := 1 to 36 do
+    for Li := 1 to 36 do
     begin
       PenColor := RGBToColor(random(255),random(255),random(255));
       Move(80);
@@ -533,17 +532,17 @@ end;
 procedure TMainForm.TurtleBeforePaint(Sender: TObject; cHeading: Integer);
 // image associée à la tortue
 var
-  BitM: TBitmap;
+  LBitM: TBitmap;
 begin
   // charge l'image de la tortue
-  BitM := TBitmap.Create;
+  LBitM := TBitmap.Create;
   try
     // les images de la tortue sont proposées tous les 5 degrés
-    iTurtle.GetBitmap(Round(cHeading) div 5, BitM);
+    iTurtle.GetBitmap(Round(cHeading) div 5, LBitM);
     // celle qui correspond est assignée au bitmap
-    GVTurtle.PNGTurtle.Assign(BitM);
+    GVTurtle.PNGTurtle.Assign(LBitM);
   finally
-    BitM.Free;
+    LBitM.Free;
   end;
 end;
 
