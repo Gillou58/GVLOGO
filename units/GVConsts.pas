@@ -269,21 +269,41 @@ type
     asProcDone, asPrimDone, asPrimStop, asPrimValue, asFollowing,
     asEndFollowing);
 
+resourcestring
+  // *** chaînes des états de l'automate  
+  MasWaiting = 'Attente %s';
+  MasEnding = 'Travail terminé';
+  MasWorking = 'Au travail';
+  MasError = '===> Erreur : %s <===';
+  MasWord = 'Mot "%s" traité';
+  MasList = 'Liste "%s" traitée';
+  MasVar = 'Variable "%s" traitée';
+  MasNumber = 'Nombre "%s" traité';
+  MasEval = 'Expression "%s" traitée';
+  MasProc = 'Procédure "%s" traitée';
+  MasPrim = 'Primitive "%s" traitée';
+  MasPushing = 'On empile "%s"';
+  MasStopped = 'On s''est arrêté %s';
+  MasExePrim = 'On exécute la primitive "%s"';
+  MasExeProc = 'On exécute la procédure "%s"';
+  MasPreparing = 'Préparation %s';
+  MasProcDone = 'La procédure "%s" a été exécutée';
+  MasPrimDone = 'La primitive "%s" a été exécutée';
+  MasPrimStop = 'STOP demandé %s';
+  MasPrimValue = 'Résultat obtenu : %s';
+  MasFollowing = 'Début de suivi %s';
+  MasEndFollowing = 'Fin de suivi %s';
+	
 const
   // ** messages pour l'état de l'automate ***
-  CStatesArray: array[TGVAutomatState] of string =  ('Attente %s',
-    'On termine', 'Au travail', '===> On a rencontré l''erreur : %s <===',
-    'On traite le mot %s', 'On traite la liste %s',
-    'On traite la variable %s', 'On traite le nombre %s',
-    'On traite l''expression %s', 'On traite la procédure %s',
-    'On traite la primitive %s', 'On empile %s',
-    'On s''est arrêté %s', 'On exécute la primitive %s',
-    'On exécute la procédure %s',
-    'On se prépare %s', 'La procédure %s a été exécutée ',
-    'La primitive %s a été exécutée', 'STOP demandé %s',
-    'Le résultat %s a été obtenu', 'Début de suivi %s', 'Fin de suivi %s');
+  CStatesArray: array[TGVAutomatState] of string = 
+   (MasWaiting, MasEnding,	MasWorking,	MasError, MasWord,	MasList,
+	MasVar,	MasNumber, MasEval,	MasProc, MasPrim, MasPushing,
+	MasStopped,	MasExePrim,	MasExeProc,	MasPreparing,  MasProcDone,
+	MasPrimDone, MasPrimStop, MasPrimValue,	MasFollowing,
+	MasEndFollowing );
 
-  // priorité des éléments d'une expression
+  // *** priorité des éléments d'une expression ***
   // nombre le plus élevé = priorité la moins élevée
   // -1 : ne s'applique pas
   // 0: (unaires) - +
@@ -304,9 +324,6 @@ const
   // 1 = droite - 0 = gauche  - -1 = ne s'applique pas
   CTokenAssociation: array [CTokensEnum] of Integer = (-1, -1, -1, -1, -1, -1,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0);
-
-
-
 
 implementation
 
