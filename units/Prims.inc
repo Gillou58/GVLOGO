@@ -2334,7 +2334,12 @@ end;
 procedure DoPrimFollow;
 // *** TRACE ***
 begin
-  fFollow := not fFollow; // trace inversée
+  AData; // donnée récupérée
+  if LW.IsBoolean then // un booléen ?
+    Follow := LW.AsBoolean // trace adaptée
+  else
+    // [### Erreur: pas un booléen ###]
+    SetError(CE_BadBool, fWkRec.fItem);
 end;
 
 procedure DoPrimReadList;

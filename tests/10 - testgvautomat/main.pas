@@ -151,7 +151,8 @@ begin
   if Automat.Kernel.EditToProc(mmoMain.Lines, 0, 0, Err) then
   begin
     mmoMain.Lines.Add('// Editeur analysé...');
-    mmoMain.Lines.Add('// A présent, je connais : ' + Automat.Kernel.ProcsToList);
+    mmoMain.Lines.Add('// A présent, je connais : ' +
+      Automat.Kernel.ProcsToList);
   end;
 end;
 
@@ -224,18 +225,6 @@ end;
 
 procedure TMainForm.GetStateChange(Sender: TObject);
 // gestion du changement d'état
-const
-  StateArray: array[TGVAutomatState] of string =  ('Attente %s',
-    'On termine', 'Au travail', 'On a rencontré l''erreur : %s',
-    'On traite le mot %s', 'On traite la liste %s',
-    'On traite la variable %s', 'On traite le nombre %s',
-    'On traite l''expression %s', 'On traite la procédure %s',
-    'On traite la primitive %s', 'On empile %s',
-    'On s''est arrêté %s', 'On exécute la primitive %s',
-    'On exécute la procédure %s',
-    'On se prépare %s', 'La procédure %s a été exécutée ',
-    'La primitive %s a été exécutée', 'STOP demandé %s',
-    'Le résultat %s a été obtenu');
 var
   LS: string;
   Li: Integer;
@@ -253,7 +242,7 @@ begin
     with mmoMain.Lines do
     begin
       for Li := 1 to Automat.Datas.fLevel do
-        Add(Format('// [%d]'+ StateArray[Automat.State] +
+        Add(Format('// [%d]'+ CStatesArray[Automat.State] +
           '...', [Li, LS])); // état affiché
     end;
    if fDeepTrace and (not (Automat.State in [asWaiting, asPreparing,

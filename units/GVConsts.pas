@@ -266,9 +266,23 @@ type
   TGVAutomatState = (asWaiting, asEnding, asWorking, asError,
     asWord, asList, asVar, asNumber, asEval, asProc, asPrim,
     asPushing, asStopped, asExePrim, asExeProc, asPreparing,
-    asProcDone, asPrimDone, asPrimStop, asPrimValue);
+    asProcDone, asPrimDone, asPrimStop, asPrimValue, asFollowing,
+    asEndFollowing);
 
 const
+  // ** messages pour l'état de l'automate ***
+  CStatesArray: array[TGVAutomatState] of string =  ('Attente %s',
+    'On termine', 'Au travail', '===> On a rencontré l''erreur : %s <===',
+    'On traite le mot %s', 'On traite la liste %s',
+    'On traite la variable %s', 'On traite le nombre %s',
+    'On traite l''expression %s', 'On traite la procédure %s',
+    'On traite la primitive %s', 'On empile %s',
+    'On s''est arrêté %s', 'On exécute la primitive %s',
+    'On exécute la procédure %s',
+    'On se prépare %s', 'La procédure %s a été exécutée ',
+    'La primitive %s a été exécutée', 'STOP demandé %s',
+    'Le résultat %s a été obtenu', 'Début de suivi %s', 'Fin de suivi %s');
+
   // priorité des éléments d'une expression
   // nombre le plus élevé = priorité la moins élevée
   // -1 : ne s'applique pas

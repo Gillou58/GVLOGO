@@ -155,8 +155,7 @@ begin
   if fState = AValue then // pas de changement ?
     Exit; // on sort
   fState := AValue; // nouvel état
-  if Follow then // trace d'exécution ?
-    StateChange; // changement notifié
+  StateChange; // changement notifié
 end;
 
 procedure TGVAutomat.SetFollow(AValue: Boolean);
@@ -165,6 +164,10 @@ begin
   if fFollow = AValue then // pas de changement ?
     Exit; // on sort
   fFollow := AValue; // nouvelle valeur de la trace
+  if fFollow then
+    State := asFollowing  // état adapté
+  else
+    State := asEndFollowing;
 end;
 
 function TGVAutomat.DoBegin(const St: string): Boolean;
@@ -529,6 +532,7 @@ begin
   fCommandsStack := TGVStringStack.Create; // pile des commandes
   fExeStack := TGVStringStack.Create; // pile d'exécution
   Stop := False; // pas d'arrêt
+  Follow := False; // pas de suivi
   Error := TGVErrors.Create; // traitement des erreurs
   fKernel:= TGVLogoKernel.Create; // noyau
   fKernel.Error.OnError := @Error.GetError; // gestionnaire centralisé d'erreurs
@@ -584,6 +588,7 @@ begin
   fEval.Clear; // évaluateur
   fLocVars.Clear; // variables locales
   fReturnFlag := False; // pas de retour
+  fFollow := False; // pas de suivi
   State := asWaiting; // état
 end;
 

@@ -499,7 +499,7 @@ const
     (Name: P_ClearText2; NbParams: 0), // 170
     (Name: P_ReadList2; NbParams: 0),
     (Name: P_PropList; NbParams: 1),
-    (Name: P_Follow; NbParams: 0),
+    (Name: P_Follow; NbParams: 1),
     (Name: P_Exec; NbParams: 1),
     (Name: P_Test; NbParams: 1),
     (Name: P_IfTrue; NbParams: 1),
