@@ -2,18 +2,18 @@
   |                                                                        |
   |                  G V S O F T                                           |
   |                  Projet : GVLogo                                       |
-  |                  Description : Définitions                             |
+  |                  Description : DÃ©finitions                             |
   |                  Fichier : GVDefines.inc                               |
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
-  |                  Copyright : © G. VASSEUR                              |
+  |                  Copyright : Â© G. VASSEUR                              |
   |                  Date:    23-12-2014 18:00:00                          |
   |                  Version : 1.0.0                                       |
   |                                                                        |
   |========================================================================| }
 
 // HISTORIQUE
-// 23/12/2014 - 1.0.0 - première version opérationnelle
+// 23/12/2014 - 1.0.0 - premiÃ¨re version opÃ©rationnelle
 
 // GVDEFINES.INC - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -33,21 +33,27 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 
-// Ce fichier contient les définitions nécessaires
-// à la compilation de GVLOGO.
-// Il est compris dans toutes les unités du projet.
+// Ce fichier contient les dÃ©finitions nÃ©cessaires
+// Ã  la compilation de GVLOGO.
+// Il est compris dans toutes les unitÃ©s du projet.
 
 
-// Lazarus (défini par défaut)
+// Lazarus (dÃ©fini par dÃ©faut)
 {$DEFINE CompLazarus }
 
-// Delphi prévu... (non défini par défaut)
+// Delphi prÃ©vu... (non dÃ©fini par dÃ©faut)
 {.$DEFINE CompDelphi}
 
 // Lazarus : options de compilation
 {$IFDEF CompLazarus}
+  {$UNDEF CompDelphi}
   {$MODE objfpc}{$H+}
 {$ENDIF}
 
-// option de débogage (défini par défaut)
-{$DEFINE Debug}
+// Delphi : options de compilation
+{$IFDEF CompDelphi}
+  ImplÃ©mentation prÃ©vue...
+{$ENDIF}
+
+// option de dÃ©bogage (non dÃ©fini par dÃ©faut)
+{.$DEFINE Debug}
