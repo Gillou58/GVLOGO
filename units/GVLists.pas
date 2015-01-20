@@ -80,9 +80,6 @@ type
   TGVListUtils = class;
 
   // *** classe des listes ***
-
-  { TGVList }
-
   TGVList = class(TStringList)
   strict private
     fRawStr: string; // chaîne brute en entrée
