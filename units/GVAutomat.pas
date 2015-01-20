@@ -68,6 +68,7 @@ type
       fWkRec: TGVAutomatRec; // espace d'interprétation
       fReturnFlag: Boolean; // drapeau de retour
       fReturnVal: string; // valeur de retour
+      fTurtleOutput: Boolean; // sortie vers l'écran de la tortue
       fParamsStack: TGVIntegerStack; // pile des paramètres
       fDatasStack: TGVStringStack; // pile des données
       fCommandsStack: TGVStringStack; // pile des commandes
@@ -533,6 +534,7 @@ begin
   fExeStack := TGVStringStack.Create; // pile d'exécution
   Stop := False; // pas d'arrêt
   Follow := False; // pas de suivi
+  fTurtleOutPut:= False; // écriture sur l'écran normal
   Error := TGVErrors.Create; // traitement des erreurs
   fKernel:= TGVLogoKernel.Create; // noyau
   fKernel.Error.OnError := @Error.GetError; // gestionnaire centralisé d'erreurs
@@ -588,7 +590,8 @@ begin
   fEval.Clear; // évaluateur
   fLocVars.Clear; // variables locales
   fReturnFlag := False; // pas de retour
-  fFollow := False; // pas de suivi
+  Follow := False; // pas de suivi
+  fTurtleOutPut:= False; // écriture sur l'écran normal
   State := asWaiting; // état
 end;
 

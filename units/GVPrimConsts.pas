@@ -50,7 +50,7 @@ const
   // *** longueur maximale du nom d'une primitive ***
   CMaxLengthPrim = 127;
   // *** nombre de primitives ***
-  CPrimCount = 254;
+  CPrimCount = 255;
 
  type
   // *** enregistrement d'une primitive ***
@@ -320,6 +320,7 @@ resourcestring
   P_BackTextColor = 'COULEUR.FOND.TEXTE';
   P_SetBackTextColor = 'FIXE.COULEUR.FOND.TEXTE';
   P_SetBackTextColor2 = 'FCFT';
+  P_TurtleOutPut = 'SORTIE.TORTUE';
 
 const
   // tableau du nom des fonctions supportées par l'évaluation
@@ -588,7 +589,8 @@ const
     (Name: P_SetTextColor2; NbParams: 1),
     (Name: P_BackTextColor; NbParams: 0),
     (Name: P_SetBackTextColor; NbParams: 1),
-    (Name: P_SetBackTextColor2; NbParams: 1))
+    (Name: P_SetBackTextColor2; NbParams: 1),
+    (Name: P_TurtleOutPut; NbParams: 1))
     ;
 
 implementation

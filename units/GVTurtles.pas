@@ -173,6 +173,7 @@ type
       // renvoie la distance de la tortue à un point donné
       function Distance(X, Y: Integer): Double; overload;
       function Distance(const St: string): Double; overload;
+      // *** gestion du texte ***
       // texte affiché sur l'écran de la tortue
       procedure Text(const St: string; X,Y, Angle: Integer); overload;
       // texte affiché à l'emplacement de la tortue
@@ -719,11 +720,13 @@ begin
     ColorToBGRA(ColorToRGB(CDefaultBackColor)));
   // la surface de dessin
   fDrwImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
+  fDrwImg.CanvasBGRA.AntialiasingMode:= amOn; // antialiasing actif
   // la tortue
   fTtlImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
   fPNGTurtle := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
   // surface réelle
   fActualImg := TBGRABitmap.Create(Width, Height, BGRAPixelTransparent);
+  fActualImg.CanvasBGRA.AntialiasingMode:= amOn; // antialiasing actif
   // initialisations
   ReInit;
 end;
@@ -1130,7 +1133,6 @@ end;
 procedure TGVTurtle.Text(const St: string; X, Y, Angle: Integer);
 // *** affiche un texte sur l'écran de la tortue ***
 begin
-  fDrwImg.CanvasBGRA.Font.Color := PenColor; // couleur d'écriture de la tortue
   fDrwImg.TextOutAngle(X, cY(Y), Angle * 10, St,
     ColorToBGRA(ColorToRGB(PenColor)), taLeftJustify);
   Change; // on signifie le changement

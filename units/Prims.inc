@@ -77,40 +77,57 @@ procedure DoPrimWriteAll;
 begin
   if not IsListPop then // pas une liste ?
   begin
-    LW.Text := fWkRec.fItem;
-    fWkRec.fItem := LW.WithEsc;
+    LW.Text := fWkRec.fItem; // valeur récupérée
+    fWkRec.fItem := LW.WithEsc; // avec le caractère d'échappement
   end;
-  fWkMess.fMessage := fWkRec.fItem; // valeur brute enregistrée
-  fWkMess.fCommand := acWrite; // demande d'écriture
-  MessageChange; // notification de changement
+  if fTurtleOutput then
+    fTurtle.Text(fWkRec.fItem)
+  else
+  begin
+    fWkMess.fMessage := fWkRec.fItem; // valeur brute enregistrée
+    fWkMess.fCommand := acWrite; // demande d'écriture
+    MessageChange; // notification de changement
+  end;
 end;
 
 procedure DoPrimWrite;
 // *** ECRIS ***
 begin
   if IsListPop then // liste ?
-    fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // on enlève les crochets
+    fWkRec.fItem := LU.ListToStr(fWkRec.fItem) // on enlève les crochets
   else
   begin
     LW.Text := fWkRec.fItem; // mot normalisé
-    fWkMess.fMessage := LW.Text; // sans les caractères d'échappement
+    fWkRec.fItem := LW.Text; // sans les caractères d'échappement
   end;
-  fWkMess.fCommand := acWrite; // demande d'écriture
-  MessageChange; // notification de changement
+  if fTurtleOutput then
+    fTurtle.Text(fWkRec.fItem)
+  else
+  begin
+    fWkMess.fMessage := fWkRec.fItem; // message récupéré
+    fWkMess.fCommand := acWrite; // demande d'écriture
+    MessageChange; // notification de changement
+  end;
 end;
 
 procedure DoPrimType;
 // *** TAPE ***
 begin
   if IsListPop then // liste ?
-    fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // on enlève les crochets
+    fWkRec.fItem := LU.ListToStr(fWkRec.fItem) // on enlève les crochets
   else
   begin
     LW.Text := fWkRec.fItem; // mot normalisé
-    fWkMess.fMessage := LW.Text; // sans les caractères d'échappement
+    fWkRec.fItem := LW.Text; // sans les caractères d'échappement
   end;
-  fWkMess.fCommand := acType; // demande d'écriture sans retour chariot
-  MessageChange; // notification de changement
+  if fTurtleOutput then
+    fTurtle.Text(fWkRec.fItem)
+  else
+  begin
+    fWkMess.fMessage := fWkRec.fItem; // message récupéré
+    fWkMess.fCommand := acType; // demande d'écriture
+    MessageChange; // notification de changement
+  end;
 end;
 
 procedure DoPrimGive;
@@ -2522,6 +2539,17 @@ begin
     SetError(CE_BadInt, fWkRec.fItem);
 end;
 
+procedure DoPrimTurtleOutPut;
+// *** SORTIE.TORTUE ***
+begin
+  AData; // donnée récupérée
+  if LW.IsBoolean then // un booléen ?
+    fTurtleOutPut := LW.AsBoolean // valeur affectée
+  else
+    // [### Erreur: pas un booléen ###]
+    SetError(CE_BadBool, fWkRec.fItem);
+end;
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2735,5 +2763,6 @@ begin
     250, 251: DoPrimSetTextColor; // FIXE.COULEUR.TEXTE FCT
     252: DoPrimBackTextColor; // COULEUR.FOND.TEXTE
     253, 254: DoPrimSetBackTextColor; // FIXE.COULEUR.FOND.TEXTE FCFT
+    255: DoPrimTurtleOutPut; // SORTIE.TORTUE
   end;
 end;
