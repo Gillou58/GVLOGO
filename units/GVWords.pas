@@ -121,20 +121,15 @@ type
     function GetText: string; // texte brut
     procedure SetText(const St: string); // établit le texte
   protected
-    // comparaison de deux mots
-    function Compare(const St: string): Integer;
+    function Compare(const St: string): Integer; // comparaison de deux mots
   public
     constructor Create; // constructeur
     destructor Destroy; override; // destructeur
     procedure Clear; // nettoyage
-    // premier caractère d'un mot
-    function First: string;
-    // dernier caractère d'un mot
-    function Last: string;
-    // sauf le premier caractère d'un mot
-    function ButFirst: string;
-    // sauf le dernier caractère d'un mot
-    function ButLast: string;
+    function First: string; // premier caractère d'un mot
+    function Last: string; // dernier caractère d'un mot
+    function ButFirst: string; // sauf le premier caractère d'un mot
+    function ButLast: string; // sauf le dernier caractère d'un mot
     // concatène les deux mots, le second en premier
     function PutFirst(const St: string): string;
     // concatène les deux mots, le premier d'abord
@@ -143,8 +138,7 @@ type
     function WithoutQuote: string;
     // supprime si nécessaire le : initial d'un mot
     function WithoutColon: string;
-    // est-ce un identificateur valide ?
-    function IsValidIdent: Boolean;
+    function IsValidIdent: Boolean; // est-ce un identificateur valide ?
     // les deux mots sont-ils égaux ?
     function IsEqual(const St: string): Boolean;
     // le premier mot est-il à placer avant le second par ordre alphabétique ?
@@ -155,62 +149,38 @@ type
     function IsGreater(const St: string): Boolean;
     // renvoie le mot qui vient après par ordre alphabétique
     function Greatest(const St: string): string;
-    // le mot est-il vide ?
-    function IsEmptyWord: Boolean;
+    function IsEmptyWord: Boolean; // le mot est-il vide ?
     // le mot est-il compris dans un autre ?
     function IsMember(const St: string): Boolean;
-    // longueur du mot
-    function Count: Integer;
-    // longueur de mot en chaîne
-    function StrCount: string;
-    // élément N d'un mot
-    function GetItem(const N: Integer): string;
+    function Count: Integer; // longueur du mot
+    function StrCount: string; // longueur de mot en chaîne
+    function GetItem(const N: Integer): string; // élément N d'un mot
     // remplacement de l'élément N d'un mot
     function Replace(const N: Integer; const St: string): string;
     // suppression de l'élément N d'un mot
     function DelItem(const N: Integer): string;
-    // mot inversé
-    function Reverse: string;
-    // mot mélangé
-    function Shuffle: string;
-    // lettre au hasard
-    function AtRandom: string;
-    // mot en majuscules
-    function Uppercase: string;
-    // mot en minuscules
-    function Lowercase: string;
+    function Reverse: string; // mot inversé
+    function Shuffle: string; // mot mélangé
+    function AtRandom: string; // lettre au hasard
+    function Uppercase: string; // mot en majuscules
+    function Lowercase: string; // mot en minuscules
     // insertion en position N
     function Insert(const N: Integer; const St: string): string;
-    // tri des lettres du mot
-    function Sort: string;
-    // est-ce un nombre ?
-    function IsNumber: Boolean;
-    // est-ce un entier ?
-    function IsInt: Boolean;
-    // est-ce un booléen ?
-    function IsBoolean: Boolean;
-    // renvoie un nombre
-    function AsNumber: Double;
-    // renvoie un entier
-    function AsInt: Integer;
-    // renvoie un booléen
-    function AsBoolean: Boolean;
-    // nombre négatif ?
-    function IsNegate: Boolean;
-    // chaîne formatée
-    function WithEsc: string;
-    // chaîne brute
-    function WithoutEsc: string;
-    // le mot est-il valide sans traitement ?
-    function IsValid: Boolean;
-    // rotation des caractères d'un mot
-    function Rotate: string;
-    // élément N
-    property Item[N: Integer]: string read GetItem; default;
-    // mot à traiter
-    property Text: string read GetText write SetText;
-    // mot à traiter formaté
-    property FmtText: string read GetFmtText;
+    function Sort: string; // tri des lettres du mot
+    function IsNumber: Boolean; // est-ce un nombre ?
+    function IsInt: Boolean; // est-ce un entier ?
+    function IsBoolean: Boolean; // est-ce un booléen ?
+    function AsNumber: Double; // renvoie un nombre
+    function AsInt: Integer; // renvoie un entier
+    function AsBoolean: Boolean; // renvoie un booléen
+    function IsNegate: Boolean; // nombre négatif ?
+    function WithEsc: string; // chaîne formatée
+    function WithoutEsc: string; // chaîne brute
+    function IsValid: Boolean; // le mot est-il valide sans traitement ?
+    function Rotate: string; // rotation des caractères d'un mot
+    property Item[N: Integer]: string read GetItem; default; // élément N
+    property Text: string read GetText write SetText; // mot à traiter
+    property FmtText: string read GetFmtText; // mot à traiter formaté
     // notification d'une erreur
     property Error: TGVErrors read fError write fError;
   end;
