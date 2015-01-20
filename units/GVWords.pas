@@ -85,9 +85,6 @@ type
   end;
 
   // *** classe des nombres ***
-
-  { TGVNumber }
-
   TGVNumber = class(TObject)
   strict private
     fError: TGVErrors; // traitement des erreurs
@@ -114,9 +111,6 @@ type
   end;
 
   // *** classe des mots ***
-
-  { TGVWord }
-
   TGVWord = class(TObject)
   strict private
     fError: TGVErrors; // traitement des erreurs
