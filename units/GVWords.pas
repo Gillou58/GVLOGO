@@ -187,7 +187,7 @@ type
 
 implementation
 
-uses StrUtils,
+uses {%H-}StrUtils,
   // *** BUG Lazarus : un conseil ("hint") indique que cette unité n'est pas
   // utilisée alors que la compilation échouera si elle est omise.
   // En effet, elle est indispensable pour le traitement de IFTHEN

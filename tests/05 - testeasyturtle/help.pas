@@ -105,15 +105,14 @@ type
     TabSheetTurtle: TTabSheet;
     TabSheetColors: TTabSheet;
     TabSheetStatements: TTabSheet;
-    procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure FormMouseMove(Sender: TObject; {%H-}Shift: TShiftState;
+      X, {%H-}Y: Integer);
     procedure ImageArrowsMouseEnter(Sender: TObject);
     procedure lblTForwardMouseEnter(Sender: TObject);
     procedure lblTForwardMouseLeave(Sender: TObject);
   private
-    { private declarations }
     procedure TagChange(tg: Integer); // changement suivant tag
   public
-    { public declarations }
   end;
 
 var

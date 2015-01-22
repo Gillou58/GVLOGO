@@ -135,7 +135,7 @@ type
 implementation
 
 uses
-  StrUtils,
+  {%H-}StrUtils, // directive nécessaire pour IFTHEN (voir TGVWORDS)
   Math;
 
 { TGVAutomat }
