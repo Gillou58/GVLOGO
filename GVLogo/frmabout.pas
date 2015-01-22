@@ -52,20 +52,30 @@ type
     blblVersion: TBCLabel;
     blblDate: TBCLabel;
     blblSupport: TBCLabel;
+    ilTurtle: TImageList;
     imgPowered: TImage;
     Label1: TLabel;
+    lblLES: TLabel;
+    lblURL: TLabel;
+    lblAuthor: TLabel;
+    lblGVLOGO: TLabel;
     lblTarget: TLabel;
     lblDate: TLabel;
     lblVersion: TLabel;
     lblTitle: TBCLabel;
-    LblAuthor: TBCLabel;
+    blblAuthor: TBCLabel;
     imgAbout: TImage;
+    mmoAbout: TMemo;
     procedure BCBtnCloseClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure imgAboutMouseEnter(Sender: TObject);
+    procedure imgAboutMouseLeave(Sender: TObject);
+    procedure lblLESMouseDown(Sender: TObject; {%H-}Button: TMouseButton;
+      {%H-}Shift: TShiftState; {%H-}X, {%H-}Y: Integer);
+    procedure lblLESMouseEnter(Sender: TObject);
+    procedure lblLESMouseLeave(Sender: TObject);
   private
-    { private declarations }
   public
-    { public declarations }
   end;
 
 function ShowAboutForm: TModalResult;
@@ -75,7 +85,8 @@ implementation
 {$R *.lfm}
 
 uses
-  DefineTemplates, // pour la version
+  DefineTemplates, // pour le support
+  LCLIntf, // pour les URL
   GVConsts; // constantes
 
 function ShowAboutForm: TModalResult;
@@ -94,7 +105,7 @@ end;
 { TAboutForm }
 
 procedure TAboutForm.BCBtnCloseClick(Sender: TObject);
-// *** demande fermeture de la fenêtre ***
+// *** demande de fermeture de la fenêtre ***
 begin
   Close; // on ferme la fenêtre
 end;
@@ -102,11 +113,53 @@ end;
 procedure TAboutForm.FormCreate(Sender: TObject);
 // *** création de la fiche ***
 begin
-  blblVersion.Caption := CE_GVVersion; // version mise à jour
+  // auteur mis à jour
+  blblAuthor.Caption := TrimLeft(Copy(CE_GVAuthor, 3, Length(CE_GVAuthor)));
+  blblVersion.Caption := CE_GVVersion; // idem pour la version
   blblDate.Caption := CE_GVDate; // idem pour la date
   // idem pour la plateforme
   blblSupport.Caption := GetCompiledTargetCPU + CBlank + GetCompiledTargetOS;
+  // idem pour la présentation
+  lblGVLOGO.Caption := CE_GVTitle + CBlank + CE_GVVersion + CBlank +
+    CE_GVAuthor + CBlank + CE_GVDate;
 end;
+
+procedure TAboutForm.imgAboutMouseEnter(Sender: TObject);
+// *** image changée ***
+begin
+  ilTurtle.GetBitmap(random(ilTurtle.Count - 1) + 1,imgAbout.Picture.Bitmap);
+end;
+
+procedure TAboutForm.imgAboutMouseLeave(Sender: TObject);
+// *** image par défaut ***
+begin
+  ilTurtle.GetBitmap(0,imgAbout.Picture.Bitmap);
+end;
+
+procedure TAboutForm.lblLESMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+// *** lien URL cliqué ***
+begin
+  OpenURL((Sender as TLabel).Caption); // on charge la page
+end;
+
+procedure TAboutForm.lblLESMouseEnter(Sender: TObject);
+// *** souris sur une URL ***
+begin
+  (Sender as TLabel).Font.Style := [fsUnderline]; // soulignement
+  (Sender as TLabel).Font.Color := clRed; // couleur rouge
+  (Sender as TLabel).Cursor := crHandPoint; // pointeur sous forme de main
+end;
+
+procedure TAboutForm.lblLESMouseLeave(Sender: TObject);
+// *** souris quittant une URL ***
+begin
+  (Sender as TLabel).Font.Style := []; // pas de style
+  (Sender as TLabel).Font.Color := clBlue; // couleur bleue
+  (Sender as TLabel).Cursor := crDefault; // pointeur par défaut
+end;
+
+
 
 end.
 

@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 268
+  Left = 5
   Height = 91
-  Top = 149
+  Top = 6
   Width = 1141
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'GVLOGO - Gilles VASSEUR 2015 - v1.0.0'
