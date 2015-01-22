@@ -41,7 +41,9 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, Menus,
-  ActnList, StdActns;
+  ActnList, StdActns,
+  GVErrConsts, // constantes des erreurs
+  GVAutomat; // interpréteur
 
 type
 
@@ -171,11 +173,14 @@ type
     procedure FileQuitExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure HelpAboutExecute(Sender: TObject);
     procedure ShowTurtleExecute(Sender: TObject);
   private
     fModified: Boolean; // drapeau de modification
+    fGVAutomat: TGVAutomat; // interprèteur
   public
+    procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
   end;
 
 var
@@ -186,7 +191,9 @@ implementation
 {$R *.lfm}
 uses
   GVConsts, // constantes
+  GVErrors, // constantes des erreurs
   FrmTurtle, // fiche de la tortue
+  FrmError, // fiche des erreurs
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -215,6 +222,13 @@ begin
   fModified := False; // pas de modification
   Caption :=  CE_GVTitle + ' ' + CE_GVVersion + ' ' + CE_GVAuthor +
     ' ' + CE_GVDate;  // entête
+  fGVAutomat := TGVAutomat.Create; // création de l'interpréteur
+end;
+
+procedure TMainForm.FormDestroy(Sender: TObject);
+// *** destruction de la fiche ***
+begin
+  fGVaUtomat.Free; // libération de l'interpréteur
 end;
 
 procedure TMainForm.HelpAboutExecute(Sender: TObject);
@@ -228,6 +242,17 @@ procedure TMainForm.ShowTurtleExecute(Sender: TObject);
 begin
   TurtleForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   TurtleForm.Show; // on la voit
+end;
+
+procedure TMainForm.GetError(Sender: TObject; ErrorRec: TGVErrorRec);
+// *** gestion des erreurs ***
+begin
+  // préparation des données
+  with fGVAUtomat.Datas do
+    ErrorForm.SetError((Sender as TGVErrors).ErrorMessage, ErrorRec.ErrItem,
+      fLine, fItem, fPrim, fProc, fNum, fLevel, ErrorRec.ErrPos);
+  // affichage de la fenêtre appropriée
+  ErrorForm.ShowModal;
 end;
 
 end.

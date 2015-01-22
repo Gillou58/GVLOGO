@@ -9,8 +9,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, bgrabitmappack, main, FrmTurtle, GVAutomat, GVConsts, GVErrConsts,
   GVErrors, GVEval, GVKernel, GVLists, GVLocVars, GVPrimConsts, GVPropLists,
-  GVStacks, GVTurtles, GVWords, frmAbout
-  { you can add units after this };
+  GVStacks, GVTurtles, GVWords, FrmAbout, FrmError;
 
 {$R *.res}
 
@@ -19,6 +18,7 @@ begin
   Application.Initialize;
   Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TTurtleForm, TurtleForm);
+  Application.CreateForm(TErrorForm, ErrorForm);
   Application.Run;
 end.
 

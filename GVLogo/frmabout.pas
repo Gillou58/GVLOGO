@@ -35,7 +35,7 @@
 
 {$I GVDefines.inc} // fichier des définitions préalables
 
-unit frmAbout;
+unit FrmAbout;
 
 interface
 

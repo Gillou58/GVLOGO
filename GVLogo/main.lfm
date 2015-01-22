@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 5
+  Left = 47
   Height = 91
-  Top = 6
+  Top = 102
   Width = 1141
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'GVLOGO - Gilles VASSEUR 2015 - v1.0.0'
@@ -9,6 +9,7 @@ object MainForm: TMainForm
   Menu = MainMenu
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   LCLVersion = '1.2.6.0'
   object MainMenu: TMainMenu
     Images = ImageListMenu

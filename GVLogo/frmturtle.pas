@@ -41,7 +41,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls, GVTurtles // unité de la tortue
+  ComCtrls,
+  GVTurtles // unité de la tortue
   ;
 
 type
@@ -72,7 +73,8 @@ implementation
 uses
   StrUtils, // utilitaires pour les chaînes de caractères
   GVConsts, // constantes générales
-  GVPrimConsts // constantes pour VRAI et FAUX
+  GVPrimConsts, // constantes pour VRAI et FAUX
+  Main // fiche principale
   ;
 
 { TTurtleForm }
@@ -84,7 +86,7 @@ begin
   GVTurtle := TGVTurtle.Create(imgTurtle.Width, imgTurtle.Height);
   GVTurtle.OnChange := @TurtleState;  // gestionnaire de changement
   GVTurtle.OnBeforeChange := @TurtleBeforePaint; // idem avant de dessiner
-  //GVTurtle.Error.OnError := @GetError; // gestionnaire d'erreurs
+  GVTurtle.Error.OnError := @MainForm.GetError; // gestionnaire d'erreurs
   GVTurtle.ReInit; // initialisation
   GVTurtle.Kind := tkPng; // tortue image
 end;
