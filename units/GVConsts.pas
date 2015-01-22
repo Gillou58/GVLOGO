@@ -46,6 +46,13 @@ interface
 uses
   Graphics; // unité pour la tortue
 
+resourcestring
+  // *** messages d'identification ***
+  CE_GVTitle = 'GVLOGO';
+  CE_GVVersion = 'v1.0.0';
+  CE_GVAuthor = '© Gilles Vasseur';
+  CE_GVDate = '23/12/2014';
+
 const
   // *** listes ***
   CBlank = ' '; // espace
