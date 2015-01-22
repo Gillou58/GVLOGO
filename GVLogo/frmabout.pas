@@ -75,6 +75,7 @@ implementation
 {$R *.lfm}
 
 uses
+  DefineTemplates, // pour la version
   GVConsts; // constantes
 
 function ShowAboutForm: TModalResult;
@@ -103,7 +104,8 @@ procedure TAboutForm.FormCreate(Sender: TObject);
 begin
   blblVersion.Caption := CE_GVVersion; // version mise à jour
   blblDate.Caption := CE_GVDate; // idem pour la date
-  //blblSupport.Caption := GetCompiledTargetCPU;
+  // idem pour la plateforme
+  blblSupport.Caption := GetCompiledTargetCPU + CBlank + GetCompiledTargetOS;
 end;
 
 end.
