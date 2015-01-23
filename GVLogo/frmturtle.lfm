@@ -178,6 +178,7 @@ object TurtleForm: TTurtleForm
     Height = 23
     Top = 677
     Width = 700
+    AutoHint = True
     Panels = <    
       item
         Width = 350
