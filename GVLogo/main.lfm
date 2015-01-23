@@ -1,19 +1,258 @@
 object MainForm: TMainForm
   Left = 47
-  Height = 91
+  Height = 117
   Top = 102
-  Width = 1141
+  Width = 809
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'GVLOGO - Gilles VASSEUR 2015 - v1.0.0'
+  ClientHeight = 97
+  ClientWidth = 809
   FormStyle = fsStayOnTop
   Menu = MainMenu
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   LCLVersion = '1.2.6.0'
+  object CoolBarMain: TCoolBar
+    Left = 0
+    Height = 97
+    Top = 0
+    Width = 809
+    Align = alClient
+    Bands = <    
+      item
+        Control = tbFile
+        Width = 181
+      end    
+      item
+        Control = tbExec
+        Width = 181
+      end    
+      item
+        Control = tbEdit
+        Width = 181
+      end>
+    Images = ImageListMenu
+    ParentShowHint = False
+    ShowHint = True
+    object tbFile: TToolBar
+      AnchorSideLeft.Control = CoolBarMain
+      AnchorSideTop.Control = CoolBarMain
+      Left = 21
+      Height = 24
+      Top = 5
+      Width = 139
+      Align = alNone
+      AutoSize = True
+      BorderSpacing.Left = 19
+      BorderSpacing.Top = 3
+      Caption = 'tbFile'
+      Images = ImageListMenu
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      object tbFileNew: TToolButton
+        Left = 1
+        Top = 2
+        Action = FileNew
+      end
+      object tbFileNewProc: TToolButton
+        Left = 24
+        Top = 2
+        Action = FileNewProc
+      end
+      object tbFileSave: TToolButton
+        Left = 70
+        Top = 2
+        Action = FileSave
+      end
+      object tbFilePrint: TToolButton
+        Left = 93
+        Top = 2
+        Action = FilePrint
+      end
+      object tbFileOpen: TToolButton
+        Left = 47
+        Top = 2
+        Action = FileOpen
+      end
+      object tbFileQuit: TToolButton
+        Left = 116
+        Top = 2
+        Action = FileQuit
+      end
+    end
+    object tbExec: TToolBar
+      AnchorSideLeft.Control = CoolBarMain
+      AnchorSideTop.Control = CoolBarMain
+      Left = 21
+      Height = 24
+      Top = 37
+      Width = 389
+      Align = alNone
+      AutoSize = True
+      BorderSpacing.Left = 19
+      BorderSpacing.Top = 35
+      Caption = 'tbExec'
+      Images = ImageListMenu
+      TabOrder = 1
+      object tbExecInter: TToolButton
+        Left = 1
+        Top = 2
+        Action = ExecInterpret
+      end
+      object tbExecExec: TToolButton
+        Left = 24
+        Top = 2
+        Action = ExecExecute
+      end
+      object tbExecWait: TToolButton
+        Left = 47
+        Top = 2
+        Action = ExecWait
+      end
+      object tbExecStop: TToolButton
+        Left = 70
+        Top = 2
+        Action = ExeStop
+      end
+      object tbExecClear: TToolButton
+        Left = 93
+        Top = 2
+        Action = ExecClear
+      end
+      object tbDiv2: TToolButton
+        Left = 116
+        Top = 2
+        Width = 5
+        Caption = 'tbDiv2'
+        Style = tbsDivider
+      end
+      object tbExecFollow: TToolButton
+        Left = 121
+        Top = 2
+        Action = ExecFollow
+      end
+      object tbDeepFollow: TToolButton
+        Left = 144
+        Top = 2
+        Action = ExecDeepFollow
+      end
+      object tbShowCmdLine: TToolButton
+        Left = 177
+        Top = 2
+        Action = ShowCmdLine
+      end
+      object tbShowEdit: TToolButton
+        Left = 200
+        Top = 2
+        Action = ShowEdit
+      end
+      object tbShowTurtle: TToolButton
+        Left = 223
+        Top = 2
+        Action = ShowTurtle
+      end
+      object tbShowText: TToolButton
+        Left = 246
+        Top = 2
+        Action = ShowText
+      end
+      object tbDiv4: TToolButton
+        Left = 269
+        Top = 2
+        Width = 5
+        Caption = 'tbDiv4'
+        Style = tbsDivider
+      end
+      object tbDiv3: TToolButton
+        Left = 167
+        Top = 2
+        Width = 10
+        Caption = 'tbDiv3'
+        Style = tbsSeparator
+      end
+      object tbShowVars: TToolButton
+        Left = 274
+        Top = 2
+        Action = ShowVars
+      end
+      object tbShowLocVars: TToolButton
+        Left = 297
+        Top = 2
+        Action = ShowLovVars
+      end
+      object tbShowProcs: TToolButton
+        Left = 320
+        Top = 2
+        Action = ShowProcs
+      end
+      object tbShowPcks: TToolButton
+        Left = 343
+        Top = 2
+        Action = ShowPcks
+      end
+      object tbShowAll: TToolButton
+        Left = 366
+        Top = 2
+        Action = ShowAll
+      end
+    end
+    object tbEdit: TToolBar
+      AnchorSideLeft.Control = CoolBarMain
+      AnchorSideTop.Control = CoolBarMain
+      Left = 21
+      Height = 26
+      Top = 69
+      Width = 153
+      Align = alNone
+      BorderSpacing.Left = 19
+      BorderSpacing.Top = 67
+      Caption = 'tbEdit'
+      Images = ImageListMenu
+      TabOrder = 2
+      object tbEditCut: TToolButton
+        Left = 1
+        Top = 2
+        Action = EditCut
+      end
+      object tbEditCopy: TToolButton
+        Left = 24
+        Top = 2
+        Action = EditCopy
+      end
+      object tbEditPaste: TToolButton
+        Left = 47
+        Top = 2
+        Action = EditPaste
+      end
+      object tbDiv5: TToolButton
+        Left = 93
+        Top = 2
+        Width = 10
+        Caption = 'tbDiv5'
+        Style = tbsSeparator
+      end
+      object tbSearch: TToolButton
+        Left = 103
+        Top = 2
+        Action = SearchFind
+      end
+      object tbReplace: TToolButton
+        Left = 126
+        Top = 2
+        Action = SearchReplace
+      end
+      object tbSelectAll: TToolButton
+        Left = 70
+        Top = 2
+        Action = EditSelectAll
+      end
+    end
+  end
   object MainMenu: TMainMenu
     Images = ImageListMenu
-    left = 1072
+    left = 592
     top = 8
     object MenuFIle: TMenuItem
       Caption = 'Fichier'
@@ -1599,7 +1838,7 @@ object MainForm: TMainForm
   end
   object ActionList: TActionList
     Images = ImageListMenu
-    left = 1008
+    left = 536
     top = 8
     object EditCut: TEditCut
       Category = 'Edit'
@@ -1724,7 +1963,7 @@ object MainForm: TMainForm
       Caption = 'Imprimer...'
       Hint = 'Imprimer l''éditeur en cours'
       ImageIndex = 30
-      ShortCut = 16457
+      ShortCut = 16464
     end
     object EditRedo: TAction
       Category = 'Edit'
@@ -1738,12 +1977,14 @@ object MainForm: TMainForm
       Caption = 'Indenter la sélection'
       Hint = 'Indenter la sélection'
       ImageIndex = 8
+      ShortCut = 16457
     end
     object EditUnIndent: TAction
       Category = 'Edit'
       Caption = 'Désindente la sélection'
       Hint = 'Désindente la sélection'
       ImageIndex = 34
+      ShortCut = 16469
     end
     object EditLineSelect: TAction
       Category = 'Edit'
@@ -1913,7 +2154,7 @@ object MainForm: TMainForm
     end
   end
   object ImageListMenu: TImageList
-    left = 936
+    left = 480
     top = 8
     Bitmap = {
       4C694E0000001000000010000000000000000000000000000000000000000000

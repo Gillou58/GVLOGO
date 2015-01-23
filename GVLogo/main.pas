@@ -41,7 +41,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, Menus,
-  ActnList, StdActns,
+  ActnList, StdActns, ComCtrls,
   GVErrConsts, // constantes des erreurs
   GVAutomat; // interpréteur
 
@@ -50,6 +50,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    CoolBarMain: TCoolBar;
     ShowAll: TAction;
     ShowPcks: TAction;
     ShowProcs: TAction;
@@ -170,6 +171,41 @@ type
     SearchFind: TSearchFind;
     SearchFindNext: TSearchFindNext;
     SearchReplace: TSearchReplace;
+    tbFile: TToolBar;
+    tbFileNew: TToolButton;
+    tbFileNewProc: TToolButton;
+    tbFileSave: TToolButton;
+    tbFilePrint: TToolButton;
+    tbFileOpen: TToolButton;
+    tbFileQuit: TToolButton;
+    tbExec: TToolBar;
+    tbExecInter: TToolButton;
+    tbExecExec: TToolButton;
+    tbExecWait: TToolButton;
+    tbExecStop: TToolButton;
+    tbExecClear: TToolButton;
+    tbDiv2: TToolButton;
+    tbExecFollow: TToolButton;
+    tbDeepFollow: TToolButton;
+    tbShowLocVars: TToolButton;
+    tbShowProcs: TToolButton;
+    tbShowPcks: TToolButton;
+    tbShowCmdLine: TToolButton;
+    tbShowEdit: TToolButton;
+    tbShowTurtle: TToolButton;
+    tbShowText: TToolButton;
+    tbShowAll: TToolButton;
+    tbDiv4: TToolButton;
+    tbDiv3: TToolButton;
+    tbShowVars: TToolButton;
+    tbEdit: TToolBar;
+    tbEditCut: TToolButton;
+    tbEditCopy: TToolButton;
+    tbEditPaste: TToolButton;
+    tbDiv5: TToolButton;
+    tbSearch: TToolButton;
+    tbReplace: TToolButton;
+    tbSelectAll: TToolButton;
     procedure FileQuitExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -203,6 +239,8 @@ procedure TMainForm.FileQuitExecute(Sender: TObject);
 begin
   Close; // on tente de fermer la fenêtre principale
 end;
+
+
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 // *** travail avant la fermeture du logiciel ***
