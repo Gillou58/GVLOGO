@@ -1914,6 +1914,7 @@ object MainForm: TMainForm
       Hint = 'Ouvrir un fichier de procédures'
       ImageIndex = 27
       ShortCut = 16463
+      OnAccept = FileOpenAccept
     end
     object FileSaveAs: TFileSaveAs
       Category = 'File'

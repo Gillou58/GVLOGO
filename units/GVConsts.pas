@@ -332,6 +332,10 @@ const
   CTokenAssociation: array [CTokensEnum] of Integer = (-1, -1, -1, -1, -1, -1,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0);
 
+  resourcestring
+    // *** chaînes du projet final ***
+    GVM_Load = 'Les procédures du fichier "%s" ont été chargées.';
+
 implementation
 
 end.

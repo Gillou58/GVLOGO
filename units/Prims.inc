@@ -1255,7 +1255,8 @@ end;
 procedure DoPrimLoadProcs;
 // *** CHARGE.PROCS ***
 begin
-  AData; // mot attendu
+  if IsListPop then // une liste ?
+    fWkRec.fItem := LU.ListToStr(fWkRec.fItem); // on la transforme en mot
   fKernel.LoadProcs(fWkRec.fItem); // on charge
 end;
 

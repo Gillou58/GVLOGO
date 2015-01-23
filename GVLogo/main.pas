@@ -210,6 +210,7 @@ type
     procedure ExecExecuteExecute(Sender: TObject);
     procedure ExecFollowExecute(Sender: TObject);
     procedure ExeStopExecute(Sender: TObject);
+    procedure FileOpenAccept(Sender: TObject);
     procedure FileQuitExecute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -236,11 +237,13 @@ implementation
 {$R *.lfm}
 uses
   GVConsts, // constantes
+  GVPrimConsts, // primitives
   GVErrors, // constantes des erreurs
   FrmTurtle, // fiche de la tortue
   FrmText, // fiche du texte
   FrmEdit, // ligne de commande
   FrmError, // fiche des erreurs
+  FrmInfo, // information
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -267,6 +270,17 @@ procedure TMainForm.ExeStopExecute(Sender: TObject);
 // *** stop ***
 begin
   fGVAutomat.Stop := True; // arrêt demandé
+end;
+
+procedure TMainForm.FileOpenAccept(Sender: TObject);
+// *** ouverture d'un fichier ***
+begin
+  // exécute le chargement du fichier choisi
+  fGVAutomat.Process(CBeginList + P_LoadAll + CBlank + CQuote +
+    FileOpen.Dialog.FileName + CEndList);
+  // pas d'erreur et interpréteur en attente ?
+  if (fGVAutomat.Error.Ok) and (fGVAutomat.State = asWaiting) then
+    FrmInfo.ShowInfoForm(Format(GVM_Load, [FileOpen.Dialog.FileName]));
 end;
 
 procedure TMainForm.ExecDeepFollowExecute(Sender: TObject);
