@@ -54,6 +54,7 @@ type
     imgTurtle: TImage;
     sbTurtle: TStatusBar;
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
     // gestionnaire de tortue
@@ -89,6 +90,12 @@ begin
   GVTurtle.Error.OnError := @MainForm.GetError; // gestionnaire d'erreurs
   GVTurtle.ReInit; // initialisation
   GVTurtle.Kind := tkPng; // tortue image
+end;
+
+procedure TTurtleForm.FormDeactivate(Sender: TObject);
+// *** désactivation de la fiche ***
+begin
+  sbTurtle.Panels[0].Text := EmptyStr;
 end;
 
 procedure TTurtleForm.FormDestroy(Sender: TObject);

@@ -7,9 +7,9 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, bgrabitmappack, main, FrmTurtle, GVAutomat, GVConsts, GVErrConsts,
-  GVErrors, GVEval, GVKernel, GVLists, GVLocVars, GVPrimConsts, GVPropLists,
-  GVStacks, GVTurtles, GVWords, FrmAbout, FrmError;
+  Forms, bgrabitmappack, richmemopackage, main, FrmTurtle, GVAutomat, GVConsts,
+  GVErrConsts, GVErrors, GVEval, GVKernel, GVLists, GVLocVars, GVPrimConsts,
+  GVPropLists, GVStacks, GVTurtles, GVWords, FrmAbout, FrmError, FrmText;
 
 {$R *.res}
 
@@ -19,6 +19,7 @@ begin
   Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TTurtleForm, TurtleForm);
   Application.CreateForm(TErrorForm, ErrorForm);
+  Application.CreateForm(TTextForm, TextForm);
   Application.Run;
 end.
 

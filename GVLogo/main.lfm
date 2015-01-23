@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 47
+  Left = 6
   Height = 117
-  Top = 102
+  Top = 3
   Width = 809
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'GVLOGO - Gilles VASSEUR 2015 - v1.0.0'
@@ -9,6 +9,7 @@ object MainForm: TMainForm
   ClientWidth = 809
   FormStyle = fsStayOnTop
   Menu = MainMenu
+  OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -2043,6 +2044,7 @@ object MainForm: TMainForm
       Caption = '&Arrêter'
       Hint = 'Arrêter l''exécution'
       ImageIndex = 22
+      OnExecute = ExeStopExecute
       ShortCut = 115
     end
     object ExecWait: TAction
@@ -2071,6 +2073,7 @@ object MainForm: TMainForm
       Caption = '&Trace'
       Hint = 'Trace du programme en cours'
       ImageIndex = 25
+      OnExecute = ExecFollowExecute
       ShortCut = 119
     end
     object ExecDeepFollow: TAction
@@ -2078,6 +2081,7 @@ object MainForm: TMainForm
       Caption = '&Suivi en profondeur'
       Hint = 'Suivi en profondeur'
       ImageIndex = 12
+      OnExecute = ExecDeepFollowExecute
       ShortCut = 118
     end
     object HelpPrims: TAction
@@ -2120,6 +2124,7 @@ object MainForm: TMainForm
       Caption = '&Fenêtre de texte'
       Hint = 'Voir la fenêtre de texte'
       ImageIndex = 48
+      OnExecute = ShowTextExecute
       ShortCut = 24646
     end
     object ShowVars: TAction

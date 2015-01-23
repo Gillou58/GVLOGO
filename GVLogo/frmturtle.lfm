@@ -1,10 +1,9 @@
 object TurtleForm: TTurtleForm
-  Left = 532
+  Left = 857
   Height = 700
-  Top = 285
+  Top = 200
   Width = 700
   BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
   Caption = 'Zone de la tortue'
   ClientHeight = 700
   ClientWidth = 700
@@ -159,8 +158,8 @@ object TurtleForm: TTurtleForm
     FFF8FFFFFFFFFFFFFFFF
   }
   OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
   OnDestroy = FormDestroy
-  Position = poScreenCenter
   LCLVersion = '1.2.6.0'
   object imgTurtle: TImage
     Cursor = crNo

@@ -206,14 +206,20 @@ type
     tbSearch: TToolButton;
     tbReplace: TToolButton;
     tbSelectAll: TToolButton;
+    procedure ExecDeepFollowExecute(Sender: TObject);
+    procedure ExecFollowExecute(Sender: TObject);
+    procedure ExeStopExecute(Sender: TObject);
     procedure FileQuitExecute(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure HelpAboutExecute(Sender: TObject);
+    procedure ShowTextExecute(Sender: TObject);
     procedure ShowTurtleExecute(Sender: TObject);
   private
     fModified: Boolean; // drapeau de modification
+    fDeepFollow: Boolean; // drapeau de trace approfondie
     fGVAutomat: TGVAutomat; // interprèteur
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
@@ -229,6 +235,7 @@ uses
   GVConsts, // constantes
   GVErrors, // constantes des erreurs
   FrmTurtle, // fiche de la tortue
+  FrmText, // fiche du texte
   FrmError, // fiche des erreurs
   FrmAbout; // boîte à propos
 
@@ -240,7 +247,30 @@ begin
   Close; // on tente de fermer la fenêtre principale
 end;
 
+procedure TMainForm.FormActivate(Sender: TObject);
+// *** activation de la fenêtre principale ***
+begin
+  fGVAutomat.Turtle := TurtleForm.GVTurtle; // tortue liée à l'automate
+end;
 
+procedure TMainForm.ExecFollowExecute(Sender: TObject);
+// *** trace ***
+begin
+  fGVAutomat.Follow := fGVAutomat.Follow; // on inverse sa valeur
+end;
+
+procedure TMainForm.ExeStopExecute(Sender: TObject);
+// *** stop ***
+begin
+  fGVAutomat.Stop := True; // arrêt demandé
+end;
+
+procedure TMainForm.ExecDeepFollowExecute(Sender: TObject);
+// *** trace approfondie ***
+begin
+  fDeepFollow := not fDeepFollow; // on inverse le drapeau
+  fGVAutomat.Follow := fDeepFollow; // interpréteur à jour
+end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 // *** travail avant la fermeture du logiciel ***
@@ -258,21 +288,30 @@ procedure TMainForm.FormCreate(Sender: TObject);
 // *** création de la fiche principale ***
 begin
   fModified := False; // pas de modification
+  fDeepFollow := False; // pas de trace approfondie
   Caption :=  CE_GVTitle + ' ' + CE_GVVersion + ' ' + CE_GVAuthor +
     ' ' + CE_GVDate;  // entête
   fGVAutomat := TGVAutomat.Create; // création de l'interpréteur
+  fGVAutomat.Error.OnError := @GetError; // gestionnaire d'erreurs
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 // *** destruction de la fiche ***
 begin
-  fGVaUtomat.Free; // libération de l'interpréteur
+  fGVAutomat.Free; // libération de l'interpréteur
 end;
 
 procedure TMainForm.HelpAboutExecute(Sender: TObject);
 // *** affichage de la boîte à propos ***
 begin
   ShowAboutForm; // on montre la fiche
+end;
+
+procedure TMainForm.ShowTextExecute(Sender: TObject);
+// *** affichage de la fenêtre de texte ***
+begin
+  TextForm.WindowState := wsNormal; // la fenêtre est redimensionnée
+  TextForm.Show; // on la voit
 end;
 
 procedure TMainForm.ShowTurtleExecute(Sender: TObject);

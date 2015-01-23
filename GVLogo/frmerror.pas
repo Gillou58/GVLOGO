@@ -34,6 +34,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 
 {$I GVDefines.inc} // fichier des définitions préalables
+
 unit FrmError;
 
 interface
