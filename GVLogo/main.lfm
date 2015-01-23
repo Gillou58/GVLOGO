@@ -2037,6 +2037,7 @@ object MainForm: TMainForm
       Caption = '&Exécuter'
       Hint = 'Exécuter la ligne d''édition'
       ImageIndex = 14
+      OnExecute = ExecExecuteExecute
       ShortCut = 120
     end
     object ExeStop: TAction
@@ -2102,6 +2103,7 @@ object MainForm: TMainForm
       Caption = '&Ligne de commande'
       Hint = 'Voir la ligne de commande'
       ImageIndex = 75
+      OnExecute = ShowCmdLineExecute
       ShortCut = 24643
     end
     object ShowEdit: TAction

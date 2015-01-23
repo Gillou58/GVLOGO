@@ -207,6 +207,7 @@ type
     tbReplace: TToolButton;
     tbSelectAll: TToolButton;
     procedure ExecDeepFollowExecute(Sender: TObject);
+    procedure ExecExecuteExecute(Sender: TObject);
     procedure ExecFollowExecute(Sender: TObject);
     procedure ExeStopExecute(Sender: TObject);
     procedure FileQuitExecute(Sender: TObject);
@@ -215,6 +216,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure HelpAboutExecute(Sender: TObject);
+    procedure ShowCmdLineExecute(Sender: TObject);
     procedure ShowTextExecute(Sender: TObject);
     procedure ShowTurtleExecute(Sender: TObject);
   private
@@ -223,6 +225,7 @@ type
     fGVAutomat: TGVAutomat; // interprèteur
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
+    procedure GetMessage(Sender: TObject); // messages
   end;
 
 var
@@ -236,6 +239,7 @@ uses
   GVErrors, // constantes des erreurs
   FrmTurtle, // fiche de la tortue
   FrmText, // fiche du texte
+  FrmEdit, // ligne de commande
   FrmError, // fiche des erreurs
   FrmAbout; // boîte à propos
 
@@ -272,6 +276,19 @@ begin
   fGVAutomat.Follow := fDeepFollow; // interpréteur à jour
 end;
 
+procedure TMainForm.ExecExecuteExecute(Sender: TObject);
+// *** interprétation ***
+begin
+  fGVAutomat.Clear; // nettoyage
+  ExecExecute.Enabled := False; // action inactive
+  try
+    fGVAutomat.Process(CBeginList + FrmEdit.EditForm.EditCmdLine.Text +
+      CEndList); // ligne à exécuter
+  finally
+    ExecExecute.Enabled := True; // action active
+  end;
+end;
+
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 // *** travail avant la fermeture du logiciel ***
 begin
@@ -293,6 +310,7 @@ begin
     ' ' + CE_GVDate;  // entête
   fGVAutomat := TGVAutomat.Create; // création de l'interpréteur
   fGVAutomat.Error.OnError := @GetError; // gestionnaire d'erreurs
+  fGVAutomat.OnNewLine := @GetMessage; // gestionnaire de messages
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -305,6 +323,13 @@ procedure TMainForm.HelpAboutExecute(Sender: TObject);
 // *** affichage de la boîte à propos ***
 begin
   ShowAboutForm; // on montre la fiche
+end;
+
+procedure TMainForm.ShowCmdLineExecute(Sender: TObject);
+// *** montre la ligne de commande ***
+begin
+  EditForm.WindowState := wsNormal; // la fenêtre est redimensionnée
+  EditForm.Show; // on la voit
 end;
 
 procedure TMainForm.ShowTextExecute(Sender: TObject);
@@ -325,11 +350,36 @@ procedure TMainForm.GetError(Sender: TObject; ErrorRec: TGVErrorRec);
 // *** gestion des erreurs ***
 begin
   // préparation des données
-  with fGVAUtomat.Datas do
+  with fGVAutomat.Datas do
     ErrorForm.SetError((Sender as TGVErrors).ErrorMessage, ErrorRec.ErrItem,
       fLine, fItem, fPrim, fProc, fNum, fLevel, ErrorRec.ErrPos);
   // affichage de la fenêtre appropriée
   ErrorForm.ShowModal;
+end;
+
+procedure TMainForm.GetMessage(Sender: TObject);
+// *** gestionnaire des messages ***
+begin
+  case fGVAutomat.Message.fCommand of
+    acWrite: TextForm.rmmoText.Lines.Add(fGVAutomat.Message.fMessage);
+    acClear: TextForm.rmmoText.Lines.Clear;
+    acReadList: ; // fGVAutomat.Message := GetValue;
+    acConfirm: ; // fGVAutomat.Message := GetBool;
+    acType: with TextForm.rmmoText do
+      Lines[Lines.Count-1] := Lines[Lines.Count-1] +
+        fGVAutomat.Message.fMessage;
+    acReadChar: ; // ### TODO ###
+    acBold: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style + [fsBold];
+    acUnderline: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style + [fsUnderline];
+    acItalic: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style + [fsItalic];
+    acNoBold: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style - [fsBold];
+    acNoUnderline: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style - [fsUnderline];
+    acNoItalic: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style - [fsItalic];
+    acColor: ; //fGVAutomat.Message := GetColor;
+    acBackColor: ; // fGVAutomat.Message := GetBackColor;
+    acSetColor: ; //TextForm.rmmoText.Font.Color := SetAColor(fGVAutomat.Message.fMessage);
+    acSetBackColor: ; //TextForm.rmmoText.Color := SetAColor(fGVAutomat.Message.fMessage);
+  end;
 end;
 
 end.

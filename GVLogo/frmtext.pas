@@ -52,9 +52,7 @@ type
     sbText: TStatusBar;
     procedure FormDeactivate(Sender: TObject);
   private
-    { private declarations }
   public
-    { public declarations }
   end;
 
 var

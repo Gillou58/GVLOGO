@@ -1,0 +1,27 @@
+object EditForm: TEditForm
+  Left = 699
+  Height = 34
+  Top = 318
+  Width = 573
+  BorderIcons = [biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Ligne de commande'
+  ClientHeight = 34
+  ClientWidth = 573
+  FormStyle = fsSystemStayOnTop
+  Position = poScreenCenter
+  LCLVersion = '1.2.6.0'
+  object EditCmdLine: TEdit
+    Cursor = crHandPoint
+    Left = 0
+    Height = 34
+    Hint = 'Tapez le texte ici'
+    Top = 0
+    Width = 573
+    Align = alClient
+    OnKeyPress = EditCmdLineKeyPress
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 0
+  end
+end

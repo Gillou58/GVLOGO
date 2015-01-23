@@ -7,6 +7,7 @@ object ErrorForm: TErrorForm
   Caption = 'Erreur'
   ClientHeight = 375
   ClientWidth = 552
+  KeyPreview = True
   Position = poScreenCenter
   LCLVersion = '1.2.6.0'
   object btnClose: TBCButton
@@ -910,9 +911,9 @@ object ErrorForm: TErrorForm
   end
   object blblMess: TBCLabel
     Left = 112
-    Height = 35
+    Height = 39
     Top = 63
-    Width = 64
+    Width = 73
     Background.Color = clBlack
     Background.ColorOpacity = 255
     Background.Gradient1.StartColor = clWhite
@@ -952,7 +953,7 @@ object ErrorForm: TErrorForm
     FontEx.Color = clDefault
     FontEx.EndEllipsis = False
     FontEx.FontQuality = fqSystemClearType
-    FontEx.Height = 0
+    FontEx.Height = 14
     FontEx.SingleLine = True
     FontEx.Shadow = True
     FontEx.ShadowColor = clBlack

@@ -94,17 +94,23 @@ procedure TErrorForm.SetError(const Err, ErrItem, Line, Data, Prim,
 // *** affichage de l'erreur ***
 begin
   blblMess.Caption := Err; // message en toutes lettres
-  blblErrItem.Caption := blblErrItem.Caption + ErrItem;
+  blblErrItem.Caption := ErrItem;
   blblLine.Caption := Line;
   blblData.Caption := Data;
-  blblPrim.Caption := Prim;
-  blblProc.Caption := Proc;
+  if Prim <> EmptyStr then
+    blblPrim.Caption := Prim
+  else
+    blblPrim.Caption := ME_Nothing;
+  if Proc <> EmptyStr then
+    blblProc.Caption := Proc
+  else
+    blblProc.Caption := ME_Nothing;
   blblNum.Caption := IntToStr(Num);
   blblLevel.Caption := IntToStr(Level);
   if Pos <> CE_NoErr then
     blblPos.Caption := IntToStr(Pos)
   else
-    blblPos.Caption := EmptyStr;
+    blblPos.Caption := ME_Nothing;
 end;
 
 end.

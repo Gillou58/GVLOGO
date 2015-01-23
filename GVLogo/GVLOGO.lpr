@@ -9,7 +9,8 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, bgrabitmappack, richmemopackage, main, FrmTurtle, GVAutomat, GVConsts,
   GVErrConsts, GVErrors, GVEval, GVKernel, GVLists, GVLocVars, GVPrimConsts,
-  GVPropLists, GVStacks, GVTurtles, GVWords, FrmAbout, FrmError, FrmText;
+  GVPropLists, GVStacks, GVTurtles, GVWords, FrmAbout, FrmError, FrmText, 
+FrmEdit;
 
 {$R *.res}
 
@@ -20,6 +21,7 @@ begin
   Application.CreateForm(TTurtleForm, TurtleForm);
   Application.CreateForm(TErrorForm, ErrorForm);
   Application.CreateForm(TTextForm, TextForm);
+  Application.CreateForm(TEditForm, EditForm);
   Application.Run;
 end.
 
