@@ -61,6 +61,7 @@ type
     fFontColor: TColor;
     fFontSize: Integer;
     function GetSelStart(const Len: Integer): Integer;
+    procedure SetBackColor(AValue: TColor);
   public
     procedure Clear;
     procedure WriteText(const St: string);
@@ -70,7 +71,8 @@ type
     property UnderLine: Boolean read fUnderline write fUnderline default False;
     property FontColor: TColor read fFontColor write fFontColor default clBlack;
     property FontSize: Integer read fFontSize write fFontSize default 12;
-    property BackColor: TColor read fBackColor write fBackColor default clWhite;
+    property BackColor: TColor read fBackColor write SetBackColor
+      default clWhite;
   end;
 
 var
@@ -97,6 +99,15 @@ begin
   for Li := 0 to rmmoText.Lines.Count - 2 do
     Result := Result + Length(rmmoText.Lines[Li]) + 1;
   Result := Result + Length(rmmoText.Lines[rmmoText.Lines.Count - 1]) - Len;
+end;
+
+procedure TTextForm.SetBackColor(AValue: TColor);
+// *** couleur du fond du texte ***
+begin
+  if fBackColor = AValue then // pas de changement ?
+    Exit; // on sort ?
+  fBackColor := AValue; // nouvelle valeur
+  rmmoText.Color := fBackColor; // éditeur en accord
 end;
 
 procedure TTextForm.Clear;
@@ -128,8 +139,7 @@ procedure TTextForm.WriteTextLN(const St: string);
 var
   LStart: Integer;
 begin
-  with rmmoText do
-    Lines[Lines.Count - 1] := Lines[Lines.Count - 1] + St;
+  rmmoText.Lines.Add(St);
   with rmmoText do
     LStart := GetSelStart(Length(St));
   rmmoText.GetTextAttributes(LStart, fFParams);

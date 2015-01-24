@@ -42,6 +42,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, Menus,
   ActnList, StdActns, ComCtrls,
+  GVConsts, // constantes générales
   GVErrConsts, // constantes des erreurs
   GVAutomat; // interpréteur
 
@@ -223,7 +224,11 @@ type
   private
     fModified: Boolean; // drapeau de modification
     fDeepFollow: Boolean; // drapeau de trace approfondie
-    fGVAutomat: TGVAutomat; // interprèteur
+    fGVAutomat: TGVAutomat; // interpréteur
+    // recherche d'une couleur normalisée
+    function GetAColor(const AValue: TColor): TGVAutomatMessage;
+    // conversion d'une couleur
+    function SetAColor(const St: string): TColor;
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
     procedure GetMessage(Sender: TObject); // messages
@@ -236,7 +241,6 @@ implementation
 
 {$R *.lfm}
 uses
-  GVConsts, // constantes
   GVPrimConsts, // primitives
   GVErrors, // constantes des erreurs
   FrmTurtle, // fiche de la tortue
@@ -375,23 +379,53 @@ procedure TMainForm.GetMessage(Sender: TObject);
 // *** gestionnaire des messages ***
 begin
   case fGVAutomat.Message.fCommand of
-    acWrite: TextForm.WriteTextLN(fGVAutomat.Message.fMessage);
-    acClear: TextForm.Clear;
+    acWrite: TextForm.WriteTextLN(fGVAutomat.Message.fMessage); // écriture
+    acClear: TextForm.Clear; // nettoyage
     acReadList: ; // fGVAutomat.Message := GetValue; ### TODO ###
     acConfirm: ; // fGVAutomat.Message := GetBool; ### TODO ###
     acType: ; // ### TODO ###
     acReadChar: ; // ### TODO ###
+    // styles de caractères
     acBold: TextForm.Bold := True;
     acUnderline: TextForm.Underline := True;
     acItalic: TextForm.Italic := True;
     acNoBold: TextForm.Bold := False;
     acNoUnderline: TextForm.Underline := False;
     acNoItalic: TextForm.Italic := False;
-    acColor: ; //fGVAutomat.Message := GetColor; ### TODO ###
-    acBackColor: ; // fGVAutomat.Message := GetBackColor; ### TODO ###
-    acSetColor: ; //TextForm.rmmoText.Font.Color := SetAColor(fGVAutomat.Message.fMessage); ### TODO ###
-    acSetBackColor: ; //TextForm.rmmoText.Color := SetAColor(fGVAutomat.Message.fMessage); ### TODO ###
+    // couleurs
+    acColor: fGVAutomat.Message := GetAColor(TextForm.FontColor);
+    acBackColor: fGVAutomat.Message := GetAColor(TextForm.BackColor);
+    acSetColor: TextForm.FontColor := SetAColor(fGVAutomat.Message.fMessage);
+    acSetBackColor: TextForm.BackColor :=
+      SetAColor(fGVAutomat.Message.fMessage);
   end;
+end;
+
+function TMainForm.GetAColor(const AValue: TColor): TGVAutomatMessage;
+// *** recherche d'une couleur normalisée ***
+var
+  Li: Integer;
+  Lr: Integer;
+begin
+  Lr := -1;
+  for Li := 0 to sizeOf(CColors) do
+    if CColors[Li] = AValue then // trouvée ?
+    begin
+      Lr := Li; // couleur enregistrée
+      Break; // on arrête de boucler
+    end;
+  Result.fMessage := IntToStr(Lr);
+end;
+
+function TMainForm.SetAColor(const St: string): TColor;
+// *** conversion d'une couleur ***
+var
+  Li: Integer;
+begin
+  Result := clBlack; // couleur noire par défaut
+  if TryStrToInt(St, Li) then // on essaye de convertir en nombre
+    if (Li >= 0) and (Li <= SizeOf(CColors)) then // dans les bornes autorisées ?
+      Result := CColors[Li]; // renvoi de la couleur
 end;
 
 end.
