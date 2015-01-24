@@ -229,6 +229,10 @@ type
     function GetAColor(const AValue: TColor): TGVAutomatMessage;
     // conversion d'une couleur
     function SetAColor(const St: string): TColor;
+    // recherche de fonte
+    function GetFont: TGVAutomatMessage;
+    // taille de la fonte
+    function GetFontSize: TGVAutomatMessage;
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
     procedure GetMessage(Sender: TObject); // messages
@@ -401,10 +405,10 @@ begin
     acSetBackColor: TextForm.BackColor :=
       SetAColor(fGVAutomat.Message.fMessage);
     // fontes
-    // acFont: fGVAutomat.Message := GetFont;  ### TODO ###
+    acFont: fGVAutomat.Message := GetFont;
     acSetFont: TextForm.Font.Name := fGVAutomat.Message.fMessage;
     acSetFontSize: TextForm.FontSize := StrToInt(fGVAutomat.Message.fMessage);
-    //acFontSize: fGVAutomat.Message := GetFontSize;  ### TODO ###
+    acFontSize: fGVAutomat.Message := GetFontSize;
   end;
 end;
 
@@ -433,6 +437,18 @@ begin
   if TryStrToInt(St, Li) then // on essaye de convertir en nombre
     if (Li >= 0) and (Li <= SizeOf(CColors)) then // dans les bornes autorisées ?
       Result := CColors[Li]; // renvoi de la couleur
+end;
+
+function TMainForm.GetFont: TGVAutomatMessage;
+// *** recherche de la fonte en cours (texte) ***
+begin
+  Result.fMessage := TextForm.Font.Name;
+end;
+
+function TMainForm.GetFontSize: TGVAutomatMessage;
+// *** recherche de la taille de la fonte en cours (texte ***
+begin
+  Result.fMessage := IntToStr(TextForm.FontSize);
 end;
 
 end.

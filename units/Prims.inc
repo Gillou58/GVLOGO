@@ -2808,7 +2808,7 @@ begin
     252: DoPrimBackTextColor; // COULEUR.FOND.TEXTE
     253, 254: DoPrimSetBackTextColor; // FIXE.COULEUR.FOND.TEXTE FCFT
     255: DoPrimTurtleOutPut; // SORTIE.TORTUE
-    256, 257: DoPrimSetFontSize; // FIXE.TAILLE.FONTE FTT
+    256, 257: DoPrimSetFontSize; // FIXE.TAILLE.FONTE FTF
     258, 259: DoPrimFontSize; // TAILLE.FONTE
     260: DoPrimFont; // FONTE
     261: DoPrimSetFont; // FIXE.FONTE
