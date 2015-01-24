@@ -2145,6 +2145,7 @@ object MainForm: TMainForm
       Caption = 'Procédures'
       Hint = 'Montrer les procédures'
       ImageIndex = 38
+      OnExecute = ShowProcsExecute
     end
     object ShowPcks: TAction
       Category = 'Show'

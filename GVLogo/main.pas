@@ -219,6 +219,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure HelpAboutExecute(Sender: TObject);
     procedure ShowCmdLineExecute(Sender: TObject);
+    procedure ShowProcsExecute(Sender: TObject);
     procedure ShowTextExecute(Sender: TObject);
     procedure ShowTurtleExecute(Sender: TObject);
   private
@@ -236,6 +237,7 @@ type
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
     procedure GetMessage(Sender: TObject); // messages
+    property Automat: TGVAutomat read fGVAutomat write fGVAutomat;
   end;
 
 var
@@ -253,6 +255,7 @@ uses
   FrmEdit, // ligne de commande
   FrmError, // fiche des erreurs
   FrmInfo, // information
+  FrmProcs, // procédures
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -266,29 +269,29 @@ end;
 procedure TMainForm.FormActivate(Sender: TObject);
 // *** activation de la fenêtre principale ***
 begin
-  fGVAutomat.Turtle := TurtleForm.GVTurtle; // tortue liée à l'automate
+  Automat.Turtle := TurtleForm.GVTurtle; // tortue liée à l'automate
 end;
 
 procedure TMainForm.ExecFollowExecute(Sender: TObject);
 // *** trace ***
 begin
-  fGVAutomat.Follow := fGVAutomat.Follow; // on inverse sa valeur
+  Automat.Follow := Automat.Follow; // on inverse sa valeur
 end;
 
 procedure TMainForm.ExeStopExecute(Sender: TObject);
 // *** stop ***
 begin
-  fGVAutomat.Stop := True; // arrêt demandé
+  Automat.Stop := True; // arrêt demandé
 end;
 
 procedure TMainForm.FileOpenAccept(Sender: TObject);
 // *** ouverture d'un fichier ***
 begin
   // exécute le chargement du fichier choisi
-  fGVAutomat.Process(CBeginList + P_LoadAll + CBlank + CQuote +
+  Automat.Process(CBeginList + P_LoadAll + CBlank + CQuote +
     FileOpen.Dialog.FileName + CEndList);
   // pas d'erreur et interpréteur en attente ?
-  if (fGVAutomat.Error.Ok) and (fGVAutomat.State = asWaiting) then
+  if (Automat.Error.Ok) and (Automat.State = asWaiting) then
     FrmInfo.ShowInfoForm(Format(GVM_Load, [FileOpen.Dialog.FileName]));
 end;
 
@@ -296,16 +299,16 @@ procedure TMainForm.ExecDeepFollowExecute(Sender: TObject);
 // *** trace approfondie ***
 begin
   fDeepFollow := not fDeepFollow; // on inverse le drapeau
-  fGVAutomat.Follow := fDeepFollow; // interpréteur à jour
+  Automat.Follow := fDeepFollow; // interpréteur à jour
 end;
 
 procedure TMainForm.ExecExecuteExecute(Sender: TObject);
 // *** interprétation ***
 begin
-  fGVAutomat.Clear; // nettoyage
+  Automat.Clear; // nettoyage
   ExecExecute.Enabled := False; // action inactive
   try
-    fGVAutomat.Process(CBeginList + FrmEdit.EditForm.EditCmdLine.Text +
+    Automat.Process(CBeginList + FrmEdit.EditForm.EditCmdLine.Text +
       CEndList); // ligne à exécuter
   finally
     ExecExecute.Enabled := True; // action active
@@ -331,15 +334,15 @@ begin
   fDeepFollow := False; // pas de trace approfondie
   Caption :=  CE_GVTitle + ' ' + CE_GVVersion + ' ' + CE_GVAuthor +
     ' ' + CE_GVDate;  // entête
-  fGVAutomat := TGVAutomat.Create; // création de l'interpréteur
-  fGVAutomat.Error.OnError := @GetError; // gestionnaire d'erreurs
-  fGVAutomat.OnNewLine := @GetMessage; // gestionnaire de messages
+  Automat := TGVAutomat.Create; // création de l'interpréteur
+  Automat.Error.OnError := @GetError; // gestionnaire d'erreurs
+  Automat.OnNewLine := @GetMessage; // gestionnaire de messages
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 // *** destruction de la fiche ***
 begin
-  fGVAutomat.Free; // libération de l'interpréteur
+  Automat.Free; // libération de l'interpréteur
 end;
 
 procedure TMainForm.HelpAboutExecute(Sender: TObject);
@@ -353,6 +356,12 @@ procedure TMainForm.ShowCmdLineExecute(Sender: TObject);
 begin
   EditForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   EditForm.Show; // on la voit
+end;
+
+procedure TMainForm.ShowProcsExecute(Sender: TObject);
+// *** affichage des procédures disponibles
+begin
+  ShowProcsForm; // on montre la fiche
 end;
 
 procedure TMainForm.ShowTextExecute(Sender: TObject);
@@ -373,7 +382,7 @@ procedure TMainForm.GetError(Sender: TObject; ErrorRec: TGVErrorRec);
 // *** gestion des erreurs ***
 begin
   // préparation des données
-  with fGVAutomat.Datas do
+  with Automat.Datas do
     ErrorForm.SetError((Sender as TGVErrors).ErrorMessage, ErrorRec.ErrItem,
       fLine, fItem, fPrim, fProc, fNum, fLevel, ErrorRec.ErrPos);
   // affichage de la fenêtre appropriée
@@ -383,14 +392,14 @@ end;
 procedure TMainForm.GetMessage(Sender: TObject);
 // *** gestionnaire des messages ***
 begin
-  case fGVAutomat.Message.fCommand of
+  case Automat.Message.fCommand of
     // écriture avec retour chariot
-    acWrite: TextForm.WriteTextLN(fGVAutomat.Message.fMessage);
+    acWrite: TextForm.WriteTextLN(Automat.Message.fMessage);
     acClear: TextForm.Clear; // nettoyage
-    acReadList: ; // fGVAutomat.Message := GetValue; ### TODO ###
-    acConfirm: ; // fGVAutomat.Message := GetBool; ### TODO ###
+    acReadList: ; // Automat.Message := GetValue; ### TODO ###
+    acConfirm: ; // Automat.Message := GetBool; ### TODO ###
     // écriture sans retour chariot
-    acType: TextForm.WriteText(fGVAutomat.Message.fMessage);
+    acType: TextForm.WriteText(Automat.Message.fMessage);
     acReadChar: ; // ### TODO ###
     // styles de caractères
     acBold: TextForm.Bold := True;
@@ -400,16 +409,16 @@ begin
     acNoUnderline: TextForm.Underline := False;
     acNoItalic: TextForm.Italic := False;
     // couleurs
-    acColor: fGVAutomat.Message := GetAColor(TextForm.FontColor);
-    acBackColor: fGVAutomat.Message := GetAColor(TextForm.BackColor);
-    acSetColor: TextForm.FontColor := SetAColor(fGVAutomat.Message.fMessage);
+    acColor: Automat.Message := GetAColor(TextForm.FontColor);
+    acBackColor: Automat.Message := GetAColor(TextForm.BackColor);
+    acSetColor: TextForm.FontColor := SetAColor(Automat.Message.fMessage);
     acSetBackColor: TextForm.BackColor :=
-      SetAColor(fGVAutomat.Message.fMessage);
+      SetAColor(Automat.Message.fMessage);
     // fontes
-    acFont: fGVAutomat.Message := GetFont;
-    acSetFont: TextForm.Font.Name := fGVAutomat.Message.fMessage;
-    acSetFontSize: TextForm.FontSize := StrToInt(fGVAutomat.Message.fMessage);
-    acFontSize: fGVAutomat.Message := GetFontSize;
+    acFont: Automat.Message := GetFont;
+    acSetFont: TextForm.Font.Name := Automat.Message.fMessage;
+    acSetFontSize: TextForm.FontSize := StrToInt(Automat.Message.fMessage);
+    acFontSize: Automat.Message := GetFontSize;
   end;
 end;
 
