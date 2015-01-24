@@ -1,12 +1,13 @@
 object MainForm: TMainForm
   Left = 6
-  Height = 117
+  Height = 120
   Top = 3
-  Width = 809
+  Width = 450
+  ActiveControl = CoolBarMain
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'GVLOGO - Gilles VASSEUR 2015 - v1.0.0'
-  ClientHeight = 97
-  ClientWidth = 809
+  ClientHeight = 100
+  ClientWidth = 450
   FormStyle = fsStayOnTop
   Menu = MainMenu
   OnActivate = FormActivate
@@ -16,9 +17,9 @@ object MainForm: TMainForm
   LCLVersion = '1.2.6.0'
   object CoolBarMain: TCoolBar
     Left = 0
-    Height = 97
+    Height = 100
     Top = 0
-    Width = 809
+    Width = 450
     Align = alClient
     Bands = <    
       item

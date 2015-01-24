@@ -3,6 +3,7 @@ object EditForm: TEditForm
   Height = 34
   Top = 318
   Width = 573
+  ActiveControl = EditCmdLine
   BorderIcons = [biMinimize]
   BorderStyle = bsSingle
   Caption = 'Ligne de commande'
@@ -19,7 +20,9 @@ object EditForm: TEditForm
     Top = 0
     Width = 573
     Align = alClient
+    Font.Height = -16
     OnKeyPress = EditCmdLineKeyPress
+    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 0

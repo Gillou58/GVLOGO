@@ -913,7 +913,8 @@ object ErrorForm: TErrorForm
     Left = 112
     Height = 39
     Top = 63
-    Width = 73
+    Width = 417
+    AutoSize = False
     Background.Color = clBlack
     Background.ColorOpacity = 255
     Background.Gradient1.StartColor = clWhite
@@ -951,10 +952,10 @@ object ErrorForm: TErrorForm
     Border.Width = 1
     Caption = '< vide >'
     FontEx.Color = clDefault
-    FontEx.EndEllipsis = False
+    FontEx.EndEllipsis = True
     FontEx.FontQuality = fqSystemClearType
     FontEx.Height = 14
-    FontEx.SingleLine = True
+    FontEx.SingleLine = False
     FontEx.Shadow = True
     FontEx.ShadowColor = clBlack
     FontEx.ShadowColorOpacity = 255
@@ -963,7 +964,7 @@ object ErrorForm: TErrorForm
     FontEx.ShadowOffsetY = 5
     FontEx.Style = []
     FontEx.TextAlignment = bcaCenter
-    FontEx.WordBreak = False
+    FontEx.WordBreak = True
     Rounding.RoundX = 1
     Rounding.RoundY = 1
     Rounding.RoundOptions = []
@@ -972,7 +973,8 @@ object ErrorForm: TErrorForm
     Left = 136
     Height = 15
     Top = 120
-    Width = 44
+    Width = 393
+    AutoSize = False
     Background.Color = clBlack
     Background.ColorOpacity = 255
     Background.Gradient1.StartColor = clWhite
@@ -1021,7 +1023,7 @@ object ErrorForm: TErrorForm
     FontEx.ShadowOffsetX = 5
     FontEx.ShadowOffsetY = 5
     FontEx.Style = []
-    FontEx.TextAlignment = bcaCenter
+    FontEx.TextAlignment = bcaLeftCenter
     FontEx.WordBreak = False
     Rounding.RoundX = 1
     Rounding.RoundY = 1
@@ -1090,7 +1092,8 @@ object ErrorForm: TErrorForm
     Left = 136
     Height = 15
     Top = 168
-    Width = 44
+    Width = 393
+    AutoSize = False
     Background.Color = clBlack
     Background.ColorOpacity = 255
     Background.Gradient1.StartColor = clWhite
@@ -1139,7 +1142,7 @@ object ErrorForm: TErrorForm
     FontEx.ShadowOffsetX = 5
     FontEx.ShadowOffsetY = 5
     FontEx.Style = []
-    FontEx.TextAlignment = bcaCenter
+    FontEx.TextAlignment = bcaLeftCenter
     FontEx.WordBreak = False
     Rounding.RoundX = 1
     Rounding.RoundY = 1
