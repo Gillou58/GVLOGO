@@ -375,24 +375,22 @@ procedure TMainForm.GetMessage(Sender: TObject);
 // *** gestionnaire des messages ***
 begin
   case fGVAutomat.Message.fCommand of
-    acWrite: TextForm.rmmoText.Lines.Add(fGVAutomat.Message.fMessage);
-    acClear: TextForm.rmmoText.Lines.Clear;
-    acReadList: ; // fGVAutomat.Message := GetValue;
-    acConfirm: ; // fGVAutomat.Message := GetBool;
-    acType: with TextForm.rmmoText do
-      Lines[Lines.Count-1] := Lines[Lines.Count-1] +
-        fGVAutomat.Message.fMessage;
+    acWrite: TextForm.WriteTextLN(fGVAutomat.Message.fMessage);
+    acClear: TextForm.Clear;
+    acReadList: ; // fGVAutomat.Message := GetValue; ### TODO ###
+    acConfirm: ; // fGVAutomat.Message := GetBool; ### TODO ###
+    acType: ; // ### TODO ###
     acReadChar: ; // ### TODO ###
-    acBold: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style + [fsBold];
-    acUnderline: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style + [fsUnderline];
-    acItalic: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style + [fsItalic];
-    acNoBold: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style - [fsBold];
-    acNoUnderline: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style - [fsUnderline];
-    acNoItalic: TextForm.rmmoText.Font.Style := TextForm.rmmoText.Font.Style - [fsItalic];
-    acColor: ; //fGVAutomat.Message := GetColor;
-    acBackColor: ; // fGVAutomat.Message := GetBackColor;
-    acSetColor: ; //TextForm.rmmoText.Font.Color := SetAColor(fGVAutomat.Message.fMessage);
-    acSetBackColor: ; //TextForm.rmmoText.Color := SetAColor(fGVAutomat.Message.fMessage);
+    acBold: TextForm.Bold := True;
+    acUnderline: TextForm.Underline := True;
+    acItalic: TextForm.Italic := True;
+    acNoBold: TextForm.Bold := False;
+    acNoUnderline: TextForm.Underline := False;
+    acNoItalic: TextForm.Italic := False;
+    acColor: ; //fGVAutomat.Message := GetColor; ### TODO ###
+    acBackColor: ; // fGVAutomat.Message := GetBackColor; ### TODO ###
+    acSetColor: ; //TextForm.rmmoText.Font.Color := SetAColor(fGVAutomat.Message.fMessage); ### TODO ###
+    acSetBackColor: ; //TextForm.rmmoText.Color := SetAColor(fGVAutomat.Message.fMessage); ### TODO ###
   end;
 end;
 

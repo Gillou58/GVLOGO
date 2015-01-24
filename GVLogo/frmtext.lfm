@@ -46,6 +46,7 @@ object TextForm: TTextForm
     0000000000000000000000000000000000000000000000000000000000000000
     0000
   }
+  OnCreate = FormCreate
   OnDeactivate = FormDeactivate
   LCLVersion = '1.2.6.0'
   object sbText: TStatusBar
@@ -66,5 +67,7 @@ object TextForm: TTextForm
     ReadOnly = True
     ScrollBars = ssAutoBoth
     TabOrder = 1
+    WordWrap = False
+    ZoomFactor = 1
   end
 end
