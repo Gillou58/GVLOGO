@@ -181,6 +181,7 @@
         <Filename Value="frminfo.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="InfoForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FrmInfo"/>
       </Unit22>

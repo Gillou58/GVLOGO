@@ -118,7 +118,7 @@ object InfoForm: TInfoForm
     StateNormal.Background.Gradient1.StartColor = clAqua
     StateNormal.Background.Gradient1.StartColorOpacity = 255
     StateNormal.Background.Gradient1.DrawMode = dmSet
-    StateNormal.Background.Gradient1.EndColor = 8405056
+    StateNormal.Background.Gradient1.EndColor = clBlue
     StateNormal.Background.Gradient1.EndColorOpacity = 255
     StateNormal.Background.Gradient1.ColorCorrection = True
     StateNormal.Background.Gradient1.GradientType = gtLinear

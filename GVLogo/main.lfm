@@ -1,13 +1,13 @@
 object MainForm: TMainForm
-  Left = 6
-  Height = 120
-  Top = 3
-  Width = 450
+  Left = 19
+  Height = 121
+  Top = 1
+  Width = 500
   ActiveControl = CoolBarMain
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'GVLOGO - Gilles VASSEUR 2015 - v1.0.0'
-  ClientHeight = 100
-  ClientWidth = 450
+  ClientHeight = 101
+  ClientWidth = 500
   FormStyle = fsStayOnTop
   Menu = MainMenu
   OnActivate = FormActivate
@@ -19,8 +19,7 @@ object MainForm: TMainForm
     Left = 0
     Height = 100
     Top = 0
-    Width = 450
-    Align = alClient
+    Width = 500
     Bands = <    
       item
         Control = tbFile
@@ -254,8 +253,7 @@ object MainForm: TMainForm
   end
   object MainMenu: TMainMenu
     Images = ImageListMenu
-    left = 592
-    top = 8
+    left = 272
     object MenuFIle: TMenuItem
       Caption = 'Fichier'
       object MenuNew: TMenuItem
@@ -1840,8 +1838,7 @@ object MainForm: TMainForm
   end
   object ActionList: TActionList
     Images = ImageListMenu
-    left = 536
-    top = 8
+    left = 232
     object EditCut: TEditCut
       Category = 'Edit'
       Caption = 'Coup&er'
@@ -2163,8 +2160,7 @@ object MainForm: TMainForm
     end
   end
   object ImageListMenu: TImageList
-    left = 480
-    top = 8
+    left = 192
     Bitmap = {
       4C694E0000001000000010000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

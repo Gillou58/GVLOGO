@@ -245,6 +245,7 @@ implementation
 
 {$R *.lfm}
 uses
+  StrUtils, // chaînes
   GVPrimConsts, // primitives
   GVErrors, // constantes des erreurs
   FrmTurtle, // fiche de la tortue
