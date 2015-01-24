@@ -379,11 +379,13 @@ procedure TMainForm.GetMessage(Sender: TObject);
 // *** gestionnaire des messages ***
 begin
   case fGVAutomat.Message.fCommand of
-    acWrite: TextForm.WriteTextLN(fGVAutomat.Message.fMessage); // écriture
+    // écriture avec retour chariot
+    acWrite: TextForm.WriteTextLN(fGVAutomat.Message.fMessage);
     acClear: TextForm.Clear; // nettoyage
     acReadList: ; // fGVAutomat.Message := GetValue; ### TODO ###
     acConfirm: ; // fGVAutomat.Message := GetBool; ### TODO ###
-    acType: ; // ### TODO ###
+    // écriture sans retour chariot
+    acType: TextForm.WriteText(fGVAutomat.Message.fMessage);
     acReadChar: ; // ### TODO ###
     // styles de caractères
     acBold: TextForm.Bold := True;

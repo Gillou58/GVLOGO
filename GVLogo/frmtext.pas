@@ -45,6 +45,16 @@ uses
 
 type
 
+  // *** enregistrement d'un style ***
+  TStyleRec =
+    record
+      Start: Integer; // position du style
+      Len: Integer; // longueur
+      Style: TFontParams; // style
+    end;
+
+  // *** fenêtre du texte ***
+
   { TTextForm }
 
   TTextForm = class(TForm)
@@ -60,12 +70,16 @@ type
     fUnderline: Boolean;
     fFontColor: TColor;
     fFontSize: Integer;
-    function GetSelStart(const Len: Integer): Integer;
+    fStylesArray: array of TStyleRec;
+    function GetSelStart: Integer;
     procedure SetBackColor(AValue: TColor);
+    procedure AddStyle(const AStart: Integer; ALen: Integer;
+      AStyle: TFontParams);
   public
-    procedure Clear;
-    procedure WriteText(const St: string);
-    procedure WriteTextLN(const St: string);
+    procedure Clear; // nettoyage
+    procedure WriteText(const St: string); // écriture du texte formaté
+    procedure WriteTextLN(const St: string); // écriture avec retour chariot
+    // styles
     property Bold: Boolean read fBold write fBold default False;
     property Italic: Boolean read fItalic write fItalic default False;
     property UnderLine: Boolean read fUnderline write fUnderline default False;
@@ -90,7 +104,7 @@ begin
   sbText.SimpleText := EmptyStr; // barre nettoyée
 end;
 
-function TTextForm.GetSelStart(const Len: Integer): Integer;
+function TTextForm.GetSelStart: Integer;
 // *** calcul de la position de départ ***
 var
   Li: Integer;
@@ -98,7 +112,7 @@ begin
   Result := 0;
   for Li := 0 to rmmoText.Lines.Count - 2 do
     Result := Result + Length(rmmoText.Lines[Li]) + 1;
-  Result := Result + Length(rmmoText.Lines[rmmoText.Lines.Count - 1]) - Len;
+  Result := Result + Length(rmmoText.Lines[rmmoText.Lines.Count - 1]);
 end;
 
 procedure TTextForm.SetBackColor(AValue: TColor);
@@ -108,6 +122,16 @@ begin
     Exit; // on sort ?
   fBackColor := AValue; // nouvelle valeur
   rmmoText.Color := fBackColor; // éditeur en accord
+end;
+
+procedure TTextForm.AddStyle(const AStart: Integer; ALen: Integer;
+  AStyle: TFontParams);
+// *** ajout d'un style ***
+begin
+  SetLength(fStylesArray, Length(fStylesArray) + 1);
+  fStylesArray[Length(fStylesArray) - 1].Start := AStart;
+  fStylesArray[Length(fStylesArray) - 1].Len := ALen;
+  fStylesArray[Length(fStylesArray) - 1].Style := AStyle;
 end;
 
 procedure TTextForm.Clear;
@@ -130,34 +154,46 @@ end;
 
 procedure TTextForm.WriteText(const St: string);
 // *** écriture d'un texte ***
+var
+  LStart: Integer;
+  Li: Integer;
 begin
-  WriteTextLN(St); // ### TODO ###
+  LStart := GetSelStart; // cherche le début
+  // récupère les attributs en cours
+  rmmoText.GetTextAttributes(LStart, fFParams);
+  // calcul des nouveaux attributs
+  if Bold then  // gras ?
+    fFParams.Style:= fFParams.Style + [fsBold]
+  else
+    fFParams.Style:= fFParams.Style - [fsBold];
+  if Italic then // italique ?
+    fFParams.Style:= fFParams.Style + [fsItalic]
+  else
+    fFParams.Style:= fFParams.Style - [fsItalic];
+ if Underline then // souligné ?
+    fFParams.Style:= fFParams.Style + [fsUnderline]
+  else
+    fFParams.Style:= fFParams.Style - [fsUnderline];
+  fFParams.Color := FontColor; // couleur de fonte
+  fFParams.Size := FontSize; // taille de fonte
+  // conserve ces attributs
+  AddStyle(LStart, Length(St), fFParams);
+  // ajout de la ligne
+  with rmmoText do
+    Lines[Lines.Count - 1] := Lines[Lines.Count - 1] + St;
+  // ajout des styles
+  for Li := 0 to (Length(fStylesArray) - 1) do
+    rmmoText.SetTextAttributes(fStylesArray[Li].Start, fStylesArray[Li].Len,
+      fStylesArray[Li].Style);
 end;
 
 procedure TTextForm.WriteTextLN(const St: string);
 // *** écriture d'un texte (avec retour chariot) ***
-var
-  LStart: Integer;
 begin
-  rmmoText.Lines.Add(St);
-  with rmmoText do
-    LStart := GetSelStart(Length(St));
-  rmmoText.GetTextAttributes(LStart, fFParams);
-  if Bold then
-    fFParams.Style:= fFParams.Style + [fsBold]
-  else
-    fFParams.Style:= fFParams.Style - [fsBold];
-  if Italic then
-    fFParams.Style:= fFParams.Style + [fsItalic]
-  else
-    fFParams.Style:= fFParams.Style - [fsItalic];
- if Underline then
-    fFParams.Style:= fFParams.Style + [fsUnderline]
-  else
-    fFParams.Style:= fFParams.Style - [fsUnderline];
-  fFParams.Color := FontColor;
-  fFParams.Size := FontSize;
-  rmmoText.SetTextAttributes(LStart, Length(St), fFParams);
+  WriteText(St); // on écrit à la suite
+  rmmoText.Lines.Add(EmptyStr); // passage à la ligne
+  if Length(fStylesArray) <> 0 then // des styles enregistrés ?
+    SetLength(fStylesArray, 0); // on les supprime
 end;
 
 end.
