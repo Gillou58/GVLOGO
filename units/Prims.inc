@@ -2551,6 +2551,49 @@ begin
     SetError(CE_BadBool, fWkRec.fItem);
 end;
 
+procedure DoPrimSetFontSize;
+// *** FIXE.TAILLE.FONTE FTT ***
+begin
+  AData; // un mot attendu
+  if LW.IsInt then
+  begin
+    fWkMess.fCommand := acSetFontSize; // fixe la taille de la fonte
+    fWkMess.fMessage := fWkRec.fItem;
+    MessageChange; // exécution
+  end
+  else
+    // [### Erreur: entier incorrect ###]
+    SetError(CE_BadInt, fWkRec.fItem);
+end;
+
+procedure DoPrimFontSize;
+// *** TAILLE.FONTE ***
+begin
+  fWkMess.fCommand := acFontSize; // demande de la taille de fonte
+  MessageChange; // exécution
+  PushConst(fWkMess.fMessage); // réponse empilée
+end;
+
+procedure DoPrimFont;
+// *** FONTE ***
+begin
+  fWkMess.fCommand := acFont; // demande de la fonte en cours
+  MessageChange; // exécution
+  PushConst(fWkMess.fMessage); // réponse empilée
+end;
+
+procedure DoPrimSetFont;
+// *** FIXE.FONTE ***
+begin
+  fWkMess.fCommand := acSetFont; // fixe la fonte du texte
+  if IsListPop then // une liste ?
+    fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // message affecté
+  else
+    fWkMess.fMessage := fWkRec.fItem;
+  MessageChange; // exécution
+end;
+
+
 // #################################################### //
 
 procedure DoExePrim(const N: Integer);
@@ -2765,5 +2808,9 @@ begin
     252: DoPrimBackTextColor; // COULEUR.FOND.TEXTE
     253, 254: DoPrimSetBackTextColor; // FIXE.COULEUR.FOND.TEXTE FCFT
     255: DoPrimTurtleOutPut; // SORTIE.TORTUE
+    256, 257: DoPrimSetFontSize; // FIXE.TAILLE.FONTE FTT
+    258, 259: DoPrimFontSize; // TAILLE.FONTE
+    260: DoPrimFont; // FONTE
+    261: DoPrimSetFont; // FIXE.FONTE
   end;
 end;

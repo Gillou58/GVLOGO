@@ -261,7 +261,8 @@ type
 
   TGVAutomatCmd = (acNone, acClear, acWrite, acType, acReadList, acReadChar,
     acConfirm, acBold, acUnderline, acItalic, acNoBold, acNoUnderline,
-    acNoItalic, acColor, acSetColor, acBackColor, acSetBackColor);
+    acNoItalic, acColor, acSetColor, acBackColor, acSetBackColor,
+    acSetFontSize, acFontSize, acSetFont, acFont);
 
   // *** message lors de l'interprétation ***
   TGVAutomatMessage = record

@@ -50,7 +50,7 @@ const
   // *** longueur maximale du nom d'une primitive ***
   CMaxLengthPrim = 127;
   // *** nombre de primitives ***
-  CPrimCount = 255;
+  CPrimCount = 261;
 
  type
   // *** enregistrement d'une primitive ***
@@ -321,6 +321,12 @@ resourcestring
   P_SetBackTextColor = 'FIXE.COULEUR.FOND.TEXTE';
   P_SetBackTextColor2 = 'FCFT';
   P_TurtleOutPut = 'SORTIE.TORTUE';
+  P_SetFontSize = 'FIXE.TAILLE.FONTE';
+  P_SetFontSize2 = 'FTF';
+  P_FontSize = 'TAILLE.FONTE';
+  P_FontSize2 = 'TF';
+  P_Font = 'FONTE';
+  P_SetFont = 'FIXE.FONTE';
 
 const
   // tableau du nom des fonctions supportées par l'évaluation
@@ -585,12 +591,18 @@ const
     (Name: P_Underline; NbParams: 1),
     (Name: P_Italic; NbParams: 1),
     (Name: P_TextColor; NbParams: 0),
-    (Name: P_SetTextColor; NbParams: 1),
+    (Name: P_SetTextColor; NbParams: 1),  // 250
     (Name: P_SetTextColor2; NbParams: 1),
     (Name: P_BackTextColor; NbParams: 0),
     (Name: P_SetBackTextColor; NbParams: 1),
     (Name: P_SetBackTextColor2; NbParams: 1),
-    (Name: P_TurtleOutPut; NbParams: 1))
+    (Name: P_TurtleOutPut; NbParams: 1),
+    (Name: P_SetFontSize; NbParams: 1),
+    (Name: P_SetFontSize2; NbParams: 1),
+    (Name: P_FontSize; NbParams: 0),
+    (Name: P_FontSize2; NbParams: 0),
+    (Name: P_Font; NbParams: 0),  // 260
+    (Name: P_SetFont; NbParams: 1))
     ;
 
 implementation

@@ -44,7 +44,6 @@ uses
   ComCtrls;
 
 type
-
   // *** enregistrement d'un style ***
   TStyleRec =
     record
@@ -54,9 +53,6 @@ type
     end;
 
   // *** fenêtre du texte ***
-
-  { TTextForm }
-
   TTextForm = class(TForm)
     rmmoText: TRichMemo;
     sbText: TStatusBar;

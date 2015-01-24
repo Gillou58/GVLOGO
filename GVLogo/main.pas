@@ -400,6 +400,11 @@ begin
     acSetColor: TextForm.FontColor := SetAColor(fGVAutomat.Message.fMessage);
     acSetBackColor: TextForm.BackColor :=
       SetAColor(fGVAutomat.Message.fMessage);
+    // fontes
+    // acFont: fGVAutomat.Message := GetFont;  ### TODO ###
+    acSetFont: TextForm.Font.Name := fGVAutomat.Message.fMessage;
+    acSetFontSize: TextForm.FontSize := StrToInt(fGVAutomat.Message.fMessage);
+    //acFontSize: fGVAutomat.Message := GetFontSize;  ### TODO ###
   end;
 end;
 
