@@ -56,15 +56,41 @@ uses
   GVStacks; // piles
 
 type
+  // *** message de l'automate ***
+
+  { TGVAutomatMessage }
+
+  TGVAutomatMessage = class(TObject)
+    strict private
+      fCmd: TGVAutomatCmd; // commande en cours
+      fMessage: string; // message associé
+      fOnChange: TNotifyEvent;
+      procedure SetCmd(AValue: TGVAutomatCmd);
+      procedure SetMessage(AValue: string);
+    protected
+      procedure Change; // changement notifié
+    public
+      constructor Create; // création
+      destructor Destroy; override; // destructeur
+      procedure Clear; // nettoyage
+      // données regroupées
+      procedure SetMessageAll(const ACmd: TGVAutomatCmd; AMess: string);
+      // message
+      property Message: string read fMessage write SetMessage;
+      //commande
+      property Cmd: TGVAutomatCmd read fCmd write SetCmd default acNone;
+      // gestionnaire de changement
+      property OnMessageChange: TNotifyEvent read fOnChange write fOnChange;
+  end;
+
   // *** automate ***
   TGVAutomat = class(TObject)
     strict private
       fError: TGVErrors; // traitement des erreurs
+      fMessage: TGVAutomatMessage; // message de l'interpréteur
       fFollow: Boolean; // drapeau de suivi
-      fOnNewLine: TNotifyEvent; // accès à l'éditeur
       fOnStateChange: TNotifyEvent; // événement d'état
       fState: TGVAutomatState; // état de l'automate
-      fWkMess: TGVAutomatMessage; // message de l'interpréteur
       fWkRec: TGVAutomatRec; // espace d'interprétation
       fReturnFlag: Boolean; // drapeau de retour
       fReturnVal: string; // valeur de retour
@@ -100,8 +126,7 @@ type
       procedure ExeProc; // exécution d'une procédure
       procedure ExeCommand; // exécution d'une commande
     protected
-      procedure StateChange; // changement notifié
-      procedure MessageChange; // idem pour un message
+      procedure StateChange; // changement d'état notifié
     public
       constructor Create; // constructeur
       destructor Destroy; override; // destructeur
@@ -114,12 +139,12 @@ type
       // évaluateur
       property Eval: TGVEval read fEval write fEval;
       property Turtle: TGVTurtle read fTurtle write fTurtle; // tortue
-      // accès à l'éditeur
-      property OnNewLine: TNotiFyEvent read fOnNewLine write fOnNewLine;
       // variables locales
       property LocVars: TGVLocVars read fLocVars write fLocVars;
-      property Stop: Boolean read fStop write SetStop default False; // arrêt
-      property Error: TGVErrors read fError write fError; // erreur
+      // messages
+      property Message: TGVAutomatMessage read fMessage write fMessage;
+      // erreur
+      property Error: TGVErrors read fError write fError;
       // état de l'automate
       property State: TGVAutomatState read fState write SetState
         default asWaiting;
@@ -127,9 +152,10 @@ type
       property OnStateChange: TNotifyEvent read fOnStateChange
         write fOnStateChange;
       property Datas: TGVAutomatRec read fWkRec; // données
-      property Message: TGVAutomatMessage read fWkMess write fWkMess; // message
       // trace de l'exécution
       property Follow: Boolean read fFollow write SetFollow default False;
+      // arrêt
+      property Stop: Boolean read fStop write SetStop default False;
   end;
 
 implementation
@@ -137,6 +163,56 @@ implementation
 uses
   {%H-}StrUtils, // directive nécessaire pour IFTHEN (voir TGVWORDS)
   Math;
+
+{ TGVAutomatMessage }
+
+procedure TGVAutomatMessage.SetCmd(AValue: TGVAutomatCmd);
+// *** commande pour l'automate ***
+begin
+  fCmd := AValue; // commande mémorisée
+  Change; // changement notifié
+end;
+
+procedure TGVAutomatMessage.SetMessage(AValue: string);
+// *** message pour l'automate ***
+begin
+  if fMessage = AValue then // pas de changement ?
+    Exit; // on sort
+  fMessage := AValue; // nouveau message affecté
+end;
+
+procedure TGVAutomatMessage.Change;
+// *** changement d'un message en attente ***
+begin
+  if Assigned(fOnChange) then // gestionnaire affecté ?
+    fOnChange(Self); // on l'exécute
+end;
+
+constructor TGVAutomatMessage.Create;
+// *** création de l'objet ***
+begin
+  Clear; // on nettoie
+end;
+
+destructor TGVAutomatMessage.Destroy;
+// *** destruction de l'objet ***
+begin
+  inherited Destroy; // on hérite
+end;
+
+procedure TGVAutomatMessage.Clear;
+// *** nettoyage de l'objet ***
+begin
+  SetMessageAll(acNone, EmptyStr); // message à zéro
+end;
+
+procedure TGVAutomatMessage.SetMessageAll(const ACmd: TGVAutomatCmd;
+  AMess: string);
+// *** message complet ***
+begin
+  Message := AMess; // message affecté
+  Cmd := ACmd; // commande affectée et effectuée
+end;
 
 { TGVAutomat }
 
@@ -517,35 +593,31 @@ begin
     fOnStateChange(Self); // on exécute le gestionnaire
 end;
 
-procedure TGVAutomat.MessageChange;
-// *** notification de message ***
-begin
-  if Assigned(fOnNewLine) then // si actif
-    fOnNewLine(Self); // on exécute le gestionnaire
-end;
-
 constructor TGVAutomat.Create;
 // *** création ***
 begin
-  fWkStack := TGVStringStack.Create; // pile de travail
-  fParamsStack := TGVIntegerStack.Create; // pile des paramètres
-  fDatasStack := TGVStringStack.Create; // pile des données
-  fCommandsStack := TGVStringStack.Create; // pile des commandes
-  fExeStack := TGVStringStack.Create; // pile d'exécution
-  Stop := False; // pas d'arrêt
-  Follow := False; // pas de suivi
+  // piles
+  fWkStack := TGVStringStack.Create; // travail
+  fParamsStack := TGVIntegerStack.Create; // paramètres
+  fDatasStack := TGVStringStack.Create; // données
+  fCommandsStack := TGVStringStack.Create; // commandes
+  fExeStack := TGVStringStack.Create; // exécution
+  // drapeaux
+  fStop := False; // pas d'arrêt
+  fFollow := False; // pas de suivi
   fTurtleOutPut:= False; // écriture sur l'écran normal
+  fState := asWaiting; // en attente
+  // modules
   Error := TGVErrors.Create; // traitement des erreurs
   fKernel:= TGVLogoKernel.Create; // noyau
   fKernel.Error.OnError := @Error.GetError; // gestionnaire centralisé d'erreurs
   fLocVars := TGVLocVars.Create; // variables locales
-  // gestionnaire centralisé d'erreurs
-  fLocVars.Error.OnError := @Error.GetError;
+  fLocVars.Error.OnError := @Error.GetError; // gestionnaire centralisé d'erreurs
   fEval := TGVEval.Create; // évaluateur
   fEval.Kernel := fKernel; // noyau et évaluateur liés
   fEval.LocVars := fLocVars; // idem pour les variables locales
   fEval.Error.OnError := @Error.GetError; // gestionnaire centralisé d'erreurs
-  State := asWaiting; // en attente
+  fMessage := TGVAutomatMessage.Create; // messages
 end;
 
 destructor TGVAutomat.Destroy;
@@ -560,6 +632,7 @@ begin
   fEval.Free; // évaluateur
   fKernel.Free; // noyau
   fLocVars.Free; // variables locales
+  fMessage.Free; // messages
   inherited Destroy; // on hérite
 end;
 
@@ -576,11 +649,7 @@ begin
     fProc := EmptyStr; // procédure en cours
     fLevel := 0; // niveau en cours
   end;
-  with fWkMess do
-  begin
-    fCommand := acNone; // aucune commande
-    fMessage := EmptyStr; // chaîne vide
-  end;
+  Message.Clear; // message réinitialisé
   fParamsStack.Clear; // pile des paramètres
   fDatasStack.Clear; // pile des données
   fCommandsStack.Clear; // pile des commandes

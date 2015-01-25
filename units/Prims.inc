@@ -81,13 +81,11 @@ begin
     fWkRec.fItem := LW.WithEsc; // avec le caractère d'échappement
   end;
   if fTurtleOutput then
+    // écriture sur l'écran de la tortue
     fTurtle.Text(fWkRec.fItem)
   else
-  begin
-    fWkMess.fMessage := fWkRec.fItem; // valeur brute enregistrée
-    fWkMess.fCommand := acWrite; // demande d'écriture
-    MessageChange; // notification de changement
-  end;
+    // écriture dans l'éditeur
+    Message.SetMessageAll(acWrite, fWkRec.fItem);
 end;
 
 procedure DoPrimWrite;
@@ -103,11 +101,7 @@ begin
   if fTurtleOutput then
     fTurtle.Text(fWkRec.fItem)
   else
-  begin
-    fWkMess.fMessage := fWkRec.fItem; // message récupéré
-    fWkMess.fCommand := acWrite; // demande d'écriture
-    MessageChange; // notification de changement
-  end;
+   Message.SetMessageAll(acWrite, fWkRec.fItem);
 end;
 
 procedure DoPrimType;
@@ -123,11 +117,7 @@ begin
   if fTurtleOutput then
     fTurtle.Text(fWkRec.fItem)
   else
-  begin
-    fWkMess.fMessage := fWkRec.fItem; // message récupéré
-    fWkMess.fCommand := acType; // demande d'écriture
-    MessageChange; // notification de changement
-  end;
+   Message.SetMessageAll(acType, fWkRec.fItem);
 end;
 
 procedure DoPrimGive;
@@ -397,11 +387,7 @@ begin
     // procédure récupérée
     if (fKernel.ProcToEdit(LW.Text, LLst) and (LLst.Count > 0)) then
       for LS in LLst do  // on balaie la définition
-      begin
-        fWkMess.fMessage := LS; // le message
-        fWkMess.fCommand := acWrite; // demande d'écriture
-        MessageChange; // changement notifié
-      end;
+        Message.SetMessageAll(acWrite, LS);
   finally
     LLst.Free; // libération de la liste de travail
   end;
@@ -1984,8 +1970,7 @@ end;
 procedure DoPrimClearText;
 // *** VIDE.TEXTE VT ***
 begin
-  fWkMess.fCommand := acClear; // demande d'effacement
-  MessageChange; // changement notifié
+  Message.Cmd := acClear; // demande d'effacement
 end;
 
 procedure DoPrimWordP;
@@ -2363,9 +2348,8 @@ end;
 procedure DoPrimReadList;
 // *** LIS.LISTE LL ***
 begin
-  fWkMess.fCommand := acReadList; // demande de lecture
-  MessageChange; // notification de changement
-  fWkRec.fItem := fWkMess.fMessage; // on récupère le message de retour
+  Message.Cmd := acReadList; // demande de lecture
+  fWkRec.fItem := Message.Message; // on récupère le message de retour
   LL.Text := CBeginList + fWkRec.fItem + CEndList; // contrôle de la liste
   if LL.IsValid then // liste correcte ?
     PushConst(LL.ToStr) // résultat empilé
@@ -2377,9 +2361,8 @@ end;
 procedure DoPrimReadChar;
 // *** LIS.CAR ***
 begin
-  fWkMess.fCommand := acReadChar; // demande de lecture
-  MessageChange; // notification de changement
-  fWkRec.fItem := fWkMess.fMessage; // on récupère le message de retour
+  Message.Cmd := acReadChar; // demande de lecture
+  fWkRec.fItem := Message.Message; // on récupère le message de retour
   PushConst(fWkRec.fItem); // résultat empilé
 end;
 
@@ -2387,12 +2370,11 @@ procedure DoPrimConfirm;
 // *** CONFIRME ***
 begin
   if IsListPop then // une liste ?
-    fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // message affecté
+    Message.Message := LU.ListToStr(fWkRec.fItem) // message affecté
   else
-    fWkMess.fMessage := fWkRec.fItem;
-  fWkMess.fCommand := acConfirm; // demande de réponse O/N
-  MessageChange; // notification de changement
-  fWkRec.fItem := fWkMess.fMessage; // on récupère le message de retour
+    Message.Message := fWkRec.fItem;
+  Message.Cmd := acConfirm; // demande de réponse O/N
+  fWkRec.fItem := Message.Message; // on récupère le message de retour
   LW.Text := fWkRec.fItem; // analyse du résultat
   if LW.IsBoolean then // un booléen ?
     PushConst(fWkRec.fItem) // résultat empilé
@@ -2412,11 +2394,7 @@ begin
     // procédures récupérées
     if (fKernel.AllProcsToEdit(LLst) and (LLst.Count > 0)) then
       for LS in LLst do  // on balaie la définition
-      begin
-        fWkMess.fMessage := LS; // le message
-        fWkMess.fCommand := acWrite; // demande d'écriture
-        MessageChange; // changement notifié
-      end;
+        Message.SetMessageAll(acWrite, LS); // on écrit
   finally
     LLst.Free; // libération de la liste de travail
   end;
@@ -2450,10 +2428,9 @@ begin
   if LW.IsBoolean then // un booléen ?
   begin
     if LW.AsBoolean then // valeur vraie ?
-      fWkMess.fCommand := acBold // en gras
+      Message.Cmd := acBold // en gras
     else
-      fWkMess.fCommand := acNoBold; // pas en gras
-    MessageChange; // changement notifié
+      Message.Cmd := acNoBold; // pas en gras
   end
   else
     // [### Erreur: pas un booléen ###]
@@ -2467,10 +2444,9 @@ begin
   if LW.IsBoolean then // un booléen ?
   begin
     if LW.AsBoolean then // valeur vraie ?
-      fWkMess.fCommand := acUnderline // souligné
+      Message.Cmd := acUnderline // souligné
     else
-      fWkMess.fCommand := acNoUnderLine; // pas souligné
-    MessageChange; // changement notifié
+      Message.Cmd := acNoUnderLine; // pas souligné
   end
   else
     // [### Erreur: pas un booléen ###]
@@ -2484,10 +2460,9 @@ begin
   if LW.IsBoolean then // un booléen ?
   begin
     if LW.AsBoolean then // valeur vraie ?
-      fWkMess.fCommand := acItalic // en italiques
+      Message.Cmd := acItalic // en italiques
     else
-      fWkMess.fCommand := acNoItalic; // pas en italiques
-    MessageChange; // changement notifié
+      Message.Cmd := acNoItalic; // pas en italiques
   end
   else
     // [### Erreur: pas un booléen ###]
@@ -2497,9 +2472,8 @@ end;
 procedure DoPrimTextColor;
 // *** COULEUR.TEXTE ***
 begin
-  fWkMess.fCommand := acColor; // demande de la couleur du texte
-  MessageChange; // exécution
-  PushConst(fWkMess.fMessage); // réponse empilée
+  Message.Cmd := acColor; // demande de la couleur du texte
+  PushConst(Message.Message); // réponse empilée
 end;
 
 procedure DoPrimSetTextColor;
@@ -2507,11 +2481,7 @@ procedure DoPrimSetTextColor;
 begin
   AData; // un mot attendu
   if LW.IsInt then
-  begin
-    fWkMess.fCommand := acSetColor; // fixe la couleur du texte
-    fWkMess.fMessage := fWkRec.fItem;
-    MessageChange; // exécution
-  end
+    Message.SetMessageAll(acSetColor, fWkRec.fItem)
   else
     // [### Erreur: entier incorrect ###]
     SetError(CE_BadInt, fWkRec.fItem);
@@ -2520,9 +2490,8 @@ end;
 procedure DoPrimBackTextColor;
 // *** COULEUR.FOND.TEXTE ***
 begin
-  fWkMess.fCommand := acBackColor; // demande de la couleur de fond du texte
-  MessageChange; // exécution
-  PushConst(fWkMess.fMessage); // réponse empilée
+  Message.Cmd := acBackColor; // demande de la couleur de fond du texte
+  PushConst(Message.Message); // réponse empilée
 end;
 
 procedure DoPrimSetBackTextColor;
@@ -2530,11 +2499,7 @@ procedure DoPrimSetBackTextColor;
 begin
   AData; // un mot attendu
   if LW.IsInt then
-  begin
-    fWkMess.fCommand := acSetBackColor; // fixe la couleur de fond du texte
-    fWkMess.fMessage := fWkRec.fItem;
-    MessageChange; // exécution
-  end
+    Message.SetMessageAll(acSetBackColor, fWkRec.fItem)
   else
     // [### Erreur: entier incorrect ###]
     SetError(CE_BadInt, fWkRec.fItem);
@@ -2556,11 +2521,7 @@ procedure DoPrimSetFontSize;
 begin
   AData; // un mot attendu
   if LW.IsInt then
-  begin
-    fWkMess.fCommand := acSetFontSize; // fixe la taille de la fonte
-    fWkMess.fMessage := fWkRec.fItem;
-    MessageChange; // exécution
-  end
+    Message.SetMessageAll(acSetFontSize, fWkRec.fItem)
   else
     // [### Erreur: entier incorrect ###]
     SetError(CE_BadInt, fWkRec.fItem);
@@ -2569,28 +2530,25 @@ end;
 procedure DoPrimFontSize;
 // *** TAILLE.FONTE ***
 begin
-  fWkMess.fCommand := acFontSize; // demande de la taille de fonte
-  MessageChange; // exécution
-  PushConst(fWkMess.fMessage); // réponse empilée
+  Message.Cmd := acFontSize; // demande de la taille de fonte
+  PushConst(Message.Message); // réponse empilée
 end;
 
 procedure DoPrimFont;
 // *** FONTE ***
 begin
-  fWkMess.fCommand := acFont; // demande de la fonte en cours
-  MessageChange; // exécution
-  PushConst(fWkMess.fMessage); // réponse empilée
+  Message.Cmd := acFont; // demande de la fonte en cours
+  PushConst(Message.Message); // réponse empilée
 end;
 
 procedure DoPrimSetFont;
 // *** FIXE.FONTE ***
 begin
-  fWkMess.fCommand := acSetFont; // fixe la fonte du texte
   if IsListPop then // une liste ?
-    fWkMess.fMessage := LU.ListToStr(fWkRec.fItem) // message affecté
+    Message.Message := LU.ListToStr(fWkRec.fItem) // message affecté
   else
-    fWkMess.fMessage := fWkRec.fItem;
-  MessageChange; // exécution
+    Message.Message := fWkRec.fItem;
+  Message.Cmd := acSetFont; // fixe la fonte du texte
 end;
 
 

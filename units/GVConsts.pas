@@ -264,12 +264,6 @@ type
     acNoItalic, acColor, acSetColor, acBackColor, acSetBackColor,
     acSetFontSize, acFontSize, acSetFont, acFont);
 
-  // *** message lors de l'interprétation ***
-  TGVAutomatMessage = record
-    fCommand: TGVAutomatCmd;
-    fMessage: string;
-  end;
-
   // *** état de l'automate ***
   TGVAutomatState = (asWaiting, asEnding, asWorking, asError,
     asWord, asList, asVar, asNumber, asEval, asProc, asPrim,

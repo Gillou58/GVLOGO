@@ -78,11 +78,8 @@ type
   private
     fDeepTrace: Boolean; // trace approfondie
     fWaitForKey: Boolean; // attente d'une touche
-    function GetValue: TGVAutomatMessage; // saisie d'une valeur
-    function GetBool: TGVAutomatMessage; // saisie de vrai/faux
-    function GetKey(const Ch: Char): TGVAutomatMessage; // un caractère
-    function GetColor: TGVAutomatMessage; // couleur caractères
-    function GetBackColor: TGVAutomatMessage; // couleur fond caractères
+    function GetColor: string; // couleur caractères
+    function GetBackColor: string; // couleur fond caractères
     function SetAColor(const St: string): TColor; // couleur convertie
   public
     Automat: TGVAutomat; // automate
@@ -173,7 +170,7 @@ begin
   Automat := TGVAutomat.Create; // automate créé
   Automat.OnStateChange := @GetStateChange; // état changé
   Automat.Error.OnError := @GetError; // gestionnaire d'erreurs
-  Automat.OnNewLine := @GetMessage; // gestionnaire de messages
+  Automat.Message.OnMessageChange := @GetMessage; // gestionnaire de messages
   Automat.Follow := False; // pas de trace par défaut
   fDeepTrace := False;
   // on crée la tortue
@@ -198,35 +195,12 @@ procedure TMainForm.FormKeyPress(Sender: TObject; var Key: char);
 begin
   if fWaitForKey then
   begin
-    Automat.Message := GetKey(Key);
+    Automat.Message.Message := Key;
     fWaitForKey := False;
   end;
 end;
 
-function TMainForm.GetValue: TGVAutomatMessage;
-// saisie d'une valeur
-begin
-  Result.fMessage := InputBox('TestGVAutomat',
-    'Entrez la valeur demandée ici :', EmptyStr);
-end;
-
-function TMainForm.GetBool: TGVAutomatMessage;
-// saisie d'une valeur vrai/faux
-begin
-  if MessageDlg(Automat.Message.fMessage , mtConfirmation, mbYesNo, 0) = mrYes
-  then
-    Result.fMessage := CStTrue
-  else
-    Result.fMessage := CStFalse;
-end;
-
-function TMainForm.GetKey(const Ch: Char): TGVAutomatMessage;
-// saisie d'un caractère
-begin
-  Result.fMessage := Ch;
-end;
-
-function TMainForm.GetColor: TGVAutomatMessage;
+function TMainForm.GetColor: string;
 // couleur caractères
 var
   Li: Integer;
@@ -239,10 +213,10 @@ begin
       Lr := Li; // couleur enregistrée
       Break; // on arrête de boucler
     end;
-  Result.fMessage := IntToStr(Lr);
+  Result := IntToStr(Lr);
 end;
 
-function TMainForm.GetBackColor: TGVAutomatMessage;
+function TMainForm.GetBackColor: string;
 // couleur de fond du texte
 var
   Li: Integer;
@@ -255,7 +229,7 @@ begin
       Lr := Li; // couleur enregistrée
       Break; // on arrête de boucler
     end;
-  Result.fMessage := IntToStr(Lr);
+  Result := IntToStr(Lr);
 end;
 
 function TMainForm.SetAColor(const St: string): TColor;
@@ -324,13 +298,24 @@ end;
 procedure TMainForm.GetMessage(Sender: TObject);
 // gestionnaire des messages
 begin
-  case Automat.Message.fCommand of
-    acWrite: mmoMain.Lines.Add(Automat.Message.fMessage);
+  case Automat.Message.Cmd of
+    // écriture
+    acWrite: mmoMain.Lines.Add(Automat.Message.Message);
+    // nettoyage
     acClear: mmoMain.Lines.Clear;
-    acReadList: Automat.Message := GetValue;
-    acConfirm: Automat.Message := GetBool;
+    // lecture d'une liste
+    acReadList: Automat.Message.Message := InputBox('TestGVAutomat',
+    'Entrez la valeur demandée ici :', EmptyStr);
+    // demande de confirmation
+    acConfirm: if MessageDlg(Automat.Message.Message , mtConfirmation,
+      mbYesNo, 0) = mrYes then
+        Automat.Message.Message := CStTrue // vrai en retour
+      else
+        Automat.Message.Message := CStFalse; // faux en retour
+    // écriture sans retour chariot
     acType: with mmoMain do
-      Lines[Lines.Count-1] := Lines[Lines.Count-1] + Automat.Message.fMessage;
+      Lines[Lines.Count-1] := Lines[Lines.Count-1] + Automat.Message.Message;
+    // lecture d'un caractère
     acReadChar: begin
                   fWaitForKey := True;
                   while fWaitForKey do
@@ -342,10 +327,10 @@ begin
     acNoBold: mmoMain.Font.Style := mmoMain.Font.Style - [fsBold];
     acNoUnderline: mmoMain.Font.Style := mmoMain.Font.Style - [fsUnderline];
     acNoItalic: mmoMain.Font.Style := mmoMain.Font.Style - [fsItalic];
-    acColor: Automat.Message := GetColor;
-    acBackColor: Automat.Message := GetBackColor;
-    acSetColor: mmoMain.Font.Color := SetAColor(Automat.Message.fMessage);
-    acSetBackColor: mmoMain.Color := SetAColor(Automat.Message.fMessage);
+    acColor: Automat.Message.Message := GetColor;
+    acBackColor: Automat.Message.Message := GetBackColor;
+    acSetColor: mmoMain.Font.Color := SetAColor(Automat.Message.Message);
+    acSetBackColor: mmoMain.Color := SetAColor(Automat.Message.Message);
   end;
 end;
 

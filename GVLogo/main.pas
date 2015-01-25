@@ -227,13 +227,9 @@ type
     fDeepFollow: Boolean; // drapeau de trace approfondie
     fGVAutomat: TGVAutomat; // interpréteur
     // recherche d'une couleur normalisée
-    function GetAColor(const AValue: TColor): TGVAutomatMessage;
+    function GetAColor(const AValue: TColor): string;
     // conversion d'une couleur
     function SetAColor(const St: string): TColor;
-    // recherche de fonte
-    function GetFont: TGVAutomatMessage;
-    // taille de la fonte
-    function GetFontSize: TGVAutomatMessage;
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
     procedure GetMessage(Sender: TObject); // messages
@@ -336,7 +332,7 @@ begin
     ' ' + CE_GVDate;  // entête
   Automat := TGVAutomat.Create; // création de l'interpréteur
   Automat.Error.OnError := @GetError; // gestionnaire d'erreurs
-  Automat.OnNewLine := @GetMessage; // gestionnaire de messages
+  Automat.Message.OnMessageChange := @GetMessage; // gestionnaire de messages
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -392,14 +388,21 @@ end;
 procedure TMainForm.GetMessage(Sender: TObject);
 // *** gestionnaire des messages ***
 begin
-  case Automat.Message.fCommand of
+  case Automat.Message.Cmd of
     // écriture avec retour chariot
-    acWrite: TextForm.WriteTextLN(Automat.Message.fMessage);
+    acWrite: TextForm.WriteTextLN(Automat.Message.Message);
     acClear: TextForm.Clear; // nettoyage
-    acReadList: ; // Automat.Message := GetValue; ### TODO ###
-    acConfirm: ; // Automat.Message := GetBool; ### TODO ###
+    // lecture d'une liste
+    acReadList: Automat.Message.Message := InputBox('TestGVAutomat',
+    'Entrez la valeur demandée ici :', EmptyStr);
+    // demande de confirmation
+    acConfirm: if MessageDlg(Automat.Message.Message , mtConfirmation,
+      mbYesNo, 0) = mrYes then
+        Automat.Message.Message := CStTrue // vrai en retour
+      else
+        Automat.Message.Message := CStFalse; // faux en retour
     // écriture sans retour chariot
-    acType: TextForm.WriteText(Automat.Message.fMessage);
+    acType: TextForm.WriteText(Automat.Message.Message);
     acReadChar: ; // ### TODO ###
     // styles de caractères
     acBold: TextForm.Bold := True;
@@ -409,20 +412,20 @@ begin
     acNoUnderline: TextForm.Underline := False;
     acNoItalic: TextForm.Italic := False;
     // couleurs
-    acColor: Automat.Message := GetAColor(TextForm.FontColor);
-    acBackColor: Automat.Message := GetAColor(TextForm.BackColor);
-    acSetColor: TextForm.FontColor := SetAColor(Automat.Message.fMessage);
+    acColor: Automat.Message.Message := GetAColor(TextForm.FontColor);
+    acBackColor: Automat.Message.Message := GetAColor(TextForm.BackColor);
+    acSetColor: TextForm.FontColor := SetAColor(Automat.Message.Message);
     acSetBackColor: TextForm.BackColor :=
-      SetAColor(Automat.Message.fMessage);
+      SetAColor(Automat.Message.Message);
     // fontes
-    acFont: Automat.Message := GetFont;
-    acSetFont: TextForm.Font.Name := Automat.Message.fMessage;
-    acSetFontSize: TextForm.FontSize := StrToInt(Automat.Message.fMessage);
-    acFontSize: Automat.Message := GetFontSize;
+    acFont: Automat.Message.Message := TextForm.Font.Name;
+    acSetFont: TextForm.Font.Name := Automat.Message.Message;
+    acSetFontSize: TextForm.FontSize := StrToInt(Automat.Message.Message);
+    acFontSize: Automat.Message.Message := IntToStr(TextForm.FontSize);
   end;
 end;
 
-function TMainForm.GetAColor(const AValue: TColor): TGVAutomatMessage;
+function TMainForm.GetAColor(const AValue: TColor): string;
 // *** recherche d'une couleur normalisée ***
 var
   Li: Integer;
@@ -435,7 +438,7 @@ begin
       Lr := Li; // couleur enregistrée
       Break; // on arrête de boucler
     end;
-  Result.fMessage := IntToStr(Lr);
+  Result := IntToStr(Lr);
 end;
 
 function TMainForm.SetAColor(const St: string): TColor;
@@ -447,18 +450,6 @@ begin
   if TryStrToInt(St, Li) then // on essaye de convertir en nombre
     if (Li >= 0) and (Li <= SizeOf(CColors)) then // dans les bornes autorisées ?
       Result := CColors[Li]; // renvoi de la couleur
-end;
-
-function TMainForm.GetFont: TGVAutomatMessage;
-// *** recherche de la fonte en cours (texte) ***
-begin
-  Result.fMessage := TextForm.Font.Name;
-end;
-
-function TMainForm.GetFontSize: TGVAutomatMessage;
-// *** recherche de la taille de la fonte en cours (texte ***
-begin
-  Result.fMessage := IntToStr(TextForm.FontSize);
 end;
 
 end.
