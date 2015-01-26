@@ -40,10 +40,11 @@ unit GVHighlighter;
 interface
 
 uses
-  Classes, SysUtils, Graphics, SynEditTypes, SynEditHighlighter;
+  Classes, SysUtils, Graphics, SynEditTypes, SynEditHighlighter,
+  SynEditHighlighterFoldBase;
 
 type
-  TGVHighlighter = class(TSynCustomHighlighter)
+  TGVHighlighter = class(TSynCustomFoldHighlighter)
   private
     fPrims: TStringList; // liste des primitives
     // attributs
@@ -263,6 +264,12 @@ begin
   while (fTokenEnd <= Li) and not(fLineText[fTokenEnd]
     in [#9, ' ', '[', ']','(', ')']) do
       Inc(fTokenEnd); // on compte jusqu'à la fin de l'élément
+  // POUR ou FIN ? => pliage possible
+  if SameText(TrimLeft(Copy(fLineText, 1, fTokenEnd - 1)), P_To) then
+    StartCodeFoldBlock(nil)
+  else
+  if SameText(TrimLeft(Copy(fLineText, 1, fTokenEnd - 1)), P_End) then
+    EndCodeFoldBlock
 end;
 
 function TGVHighlighter.GetEol: Boolean;

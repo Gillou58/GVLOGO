@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="3"/>
+      <BuildNr Value="4"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Test de GVHighlighter" LegalCopyright="GIlles Vasseur 2014" LegalTrademarks="GNU GPL" OriginalFilename="TestGVHighlighter" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -40,7 +40,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="5">
       <Unit0>
         <Filename Value="TestGVHighlighter.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -64,6 +64,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="GVPrimConsts"/>
       </Unit3>
+      <Unit4>
+        <Filename Value="..\..\units\GVHighlighter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVHighlighter"/>
+      </Unit4>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
