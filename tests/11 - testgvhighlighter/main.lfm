@@ -1,19 +1,21 @@
 object MainForm: TMainForm
-  Left = 332
+  Left = 552
   Height = 608
-  Top = 150
+  Top = 127
   Width = 872
   Caption = 'Test de GVHighlighter - (c) Gilles Vasseur 2014 - V1.0.0 - GVLOGO'
   ClientHeight = 608
   ClientWidth = 872
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  Position = poScreenCenter
   LCLVersion = '1.2.6.0'
   inline SynEditMain: TSynEdit
-    Left = 16
-    Height = 526
-    Top = 8
-    Width = 840
+    Left = 0
+    Height = 535
+    Top = 0
+    Width = 872
+    Align = alClient
     Font.Height = -13
     Font.Name = 'Courier New'
     Font.Pitch = fpFixed
@@ -823,35 +825,47 @@ object MainForm: TMainForm
     Width = 872
     Panels = <>
   end
-  object btnExit: TBitBtn
-    Cursor = crHandPoint
-    Left = 781
-    Height = 30
-    Hint = 'Fermer le logiciel'
-    Top = 552
-    Width = 75
-    DefaultCaption = True
-    Kind = bkClose
-    ModalResult = 11
-    OnClick = btnExitClick
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 2
-  end
-  object btnHighlight: TBitBtn
-    Cursor = crHandPoint
-    Left = 696
-    Height = 30
-    Hint = 'Colorer l''éditeur'
-    Top = 552
-    Width = 75
-    Caption = 'Colorer'
-    Default = True
-    Kind = bkOK
-    ModalResult = 1
-    OnClick = btnHighlightClick
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 3
+  object pnlMain: TPanel
+    Left = 0
+    Height = 50
+    Top = 535
+    Width = 872
+    Align = alBottom
+    Anchors = []
+    ClientHeight = 50
+    ClientWidth = 872
+    TabOrder = 1
+    object btnExit: TBitBtn
+      AnchorSideRight.Control = pnlMain
+      Cursor = crHandPoint
+      Left = 784
+      Height = 30
+      Hint = 'Fermer le logiciel'
+      Top = 8
+      Width = 75
+      DefaultCaption = True
+      Kind = bkClose
+      ModalResult = 11
+      OnClick = btnExitClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object btnHighlight: TBitBtn
+      Cursor = crHandPoint
+      Left = 704
+      Height = 30
+      Hint = 'Colorer l''éditeur'
+      Top = 8
+      Width = 75
+      Caption = 'Colorer'
+      Default = True
+      Kind = bkOK
+      ModalResult = 1
+      OnClick = btnHighlightClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
   end
 end

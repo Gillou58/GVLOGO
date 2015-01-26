@@ -41,7 +41,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, SynEdit, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Buttons,
+  ComCtrls, Buttons, ExtCtrls,
   GVHighlighter; // unité de coloration
 
 type
@@ -49,6 +49,7 @@ type
   TMainForm = class(TForm)
     btnExit: TBitBtn;
     btnHighlight: TBitBtn;
+    pnlMain: TPanel;
     sbMain: TStatusBar;
     SynEditMain: TSynEdit;
     procedure btnExitClick(Sender: TObject);
