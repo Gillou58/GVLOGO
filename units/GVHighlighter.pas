@@ -121,40 +121,41 @@ begin
   inherited Create(AOwner);
   // initialisation des primitives
   fPrims := TStringList.Create; // création de la liste des primitives
-  fPrims.Delimiter := ' '; // CBLANK
-  fPrims.DelimitedText := CPrimsAll; // toutes les primitives par ordre alphabétique
+  fPrims.Delimiter := CBlank; // délimiteur de primitives
+  // toutes les primitives par ordre alphabétique
+  fPrims.DelimitedText := CPrimsAll;
   // création des attributs
-  fVarAttri := TSynHighlighterAttributes.Create('variable', 'var');
+  fVarAttri := TSynHighlighterAttributes.Create('var', 'var');
   AddAttribute(fVarAttri);
   fVarAttri.Style := [fsBold];
   // primitives
-  fKeyWordAttri := TSynHighlighterAttributes.Create('primitive', 'prim');
+  fKeyWordAttri := TSynHighlighterAttributes.Create('prim', 'prim');
   AddAttribute(fKeyWordAttri);
   fKeyWordAttri.Style := [fsBold];
   fKeyWordAttri.Foreground := clBlue;
   // identificateurs
-  fIdentifierAttri := TSynHighlighterAttributes.Create('identificateur',
+  fIdentifierAttri := TSynHighlighterAttributes.Create('ident',
     'ident');
   AddAttribute(fIdentifierAttri);
   // espace
-  fSpaceAttri := TSynHighlighterAttributes.Create('espace', 'space');
+  fSpaceAttri := TSynHighlighterAttributes.Create('space', 'space');
   AddAttribute(fSpaceAttri);
   fSpaceAttri.FrameEdges := sfeAround;
   // nombres
-  fNumberAttri := TSynHighlighterAttributes.Create('nombre', 'number');
+  fNumberAttri := TSynHighlighterAttributes.Create('number', 'number');
   AddAttribute(fNumberAttri);
   fNumberAttri.Foreground := clRed;
   // symboles
-  fSymbolAttri := TSynHighlighterAttributes.Create('symbole', 'symbol');
+  fSymbolAttri := TSynHighlighterAttributes.Create('symbol', 'symbol');
   AddAttribute(fSymbolAttri);
   fSymbolAttri.Foreground := clFuchsia;
   // commentaire
-  fCommentAttri := TSynHighlighterAttributes.Create('commentaire', 'comment');
+  fCommentAttri := TSynHighlighterAttributes.Create('comment', 'comment');
   AddAttribute(fCommentAttri);
   fCommentAttri.Foreground := clGreen;
   fCommentAttri.Style := [fsItalic];
   // chaîne
-  fStringAttri := TSynHighlighterAttributes.Create('chaîne', 'string');
+  fStringAttri := TSynHighlighterAttributes.Create('string', 'string');
   AddAttribute(fStringAttri);
   fStringAttri.Foreground := clMaroon;
 end;
@@ -235,11 +236,11 @@ begin
     Exit // on sort
   else
   // une chaîne ?
-  if fLineText[fTokenEnd] = '"' then
+  if fLineText[fTokenEnd] = CQuote then
   begin
     LB := True; // drapeau de caractère d'échappement
     while (fTokenEnd <= Li) and (not (fLineText[fTokenEnd]
-      in [#9, ' ']) or LB) do
+      in [CTab, CBlank]) or LB) do
         begin
           LB := fLineText[fTokenEnd] = '$';
           Inc(fTokenEnd); // on compte jusqu'à la fin de l'élément
@@ -247,22 +248,22 @@ begin
   end
   else
   // un symbole ?
-  if fLineText[fTokenEnd] in ['[', ']', '(', ')'] then
+  if fLineText[fTokenEnd] in CBraces then
     Inc(fTokenEnd)
   else
   // un commentaire ?
-  if (fLineText[fTokenEnd] = '/') and ((fTokenEnd + 1) <= Length(fLineText))
-    and (fLineText[fTokenEnd + 1] = '/') then
+  if (fLineText[fTokenEnd] = CSlash) and ((fTokenEnd + 1) <= Length(fLineText))
+    and (fLineText[fTokenEnd + 1] = CSlash) then
       fTokenEnd := Length(fLineText) + 1
   else
   // un espace ?
-  if fLineText[fTokenEnd] in [#9, ' '] then
-    while (fTokenEnd <= Li) and (fLineText[fTokenEnd] in [#0..#32]) do
+  if fLineText[fTokenEnd] in CBlanks then
+    while (fTokenEnd <= Li) and (fLineText[fTokenEnd] in CNonPrintable) do
       Inc(fTokenEnd) // on saute les espaces
   else
   // autres cas
   while (fTokenEnd <= Li) and not(fLineText[fTokenEnd]
-    in [#9, ' ', '[', ']','(', ')']) do
+    in CSeparators) do
       Inc(fTokenEnd); // on compte jusqu'à la fin de l'élément
   // POUR ou FIN ? => pliage possible
   if SameText(TrimLeft(Copy(fLineText, 1, fTokenEnd - 1)), P_To) then
@@ -292,27 +293,27 @@ var
   Lpos: Integer;
 begin
   // est-ce un commentaire ?
-  if TrimLeft(Copy(fLineText, 1, 2)) = '//' then
+  if TrimLeft(Copy(fLineText, 1, 2)) = CComment then
     Result := CommentAttri
   else
   // est-ce une chaîne ?
-  if fLineText[fTokenPos] = '"' then
+  if fLineText[fTokenPos] = CQuote then
     Result := StringAttri
   else
   // est-ce un espace ?
-  if fLineText[fTokenPos] in [#9, ' '] then
+  if fLineText[fTokenPos] in CBlanks then
     Result := SpaceAttri
   else
   // un nombre ?
-  if fLineText[fTokenPos] in ['+','-','0'..'9'] then
+  if fLineText[fTokenPos] in CDigitPlus then
     Result := NumberAttri
   else
   // est-ce une liste ?
-  if fLineText[fTokenPos] in ['[', ']', '(', ')'] then
+  if fLineText[fTokenPos] in CBraces then
     Result := SymbolAttri
   else
   // est-ce une variable ?
-  if fLineText[fTokenPos] = ':' then
+  if fLineText[fTokenPos] = CColon then
     Result := VarAttri
   else
   // est-ce une primitive ?

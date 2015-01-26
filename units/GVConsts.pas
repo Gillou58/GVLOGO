@@ -56,6 +56,8 @@ resourcestring
 const
   // *** listes ***
   CBlank = ' '; // espace
+  CTab = #9; // tabulation
+  CSlash = '/'; // slash
   CBeginList = '['; // début de liste
   CEndList = ']'; // fin de liste
   CBeginPar = '('; // début d'expression
@@ -63,7 +65,9 @@ const
   CEmptyList = CBeginList + CEndList; // liste vide
 
   // *** séparateurs ***
-  CSeparators = [CBlank, CBeginList, CEndList, CBeginPar, CEndPar];
+  CBlanks = [CTab, CBlank];
+  CBraces = [CBeginList, CEndList, CBeginPar, CEndPar];
+  CSeparators = CBlanks + CBraces;
 
   // *** caractères ***
   CLink = '$'; // caractère de lien
@@ -91,9 +95,10 @@ const
   CLowerOrEqual = '<='; // plus petit ou égal
 
   // *** caractères spéciaux ***
-  CSpecialChar = [CBlank, CEqual, CPlus, CMinus, CMul, CDiv, CBeginPar, CEndPar,
-    CPower, CGreater, CLower];
+  CSpecialChar = [CTab, CBlank, CEqual, CPlus, CMinus, CMul, CDiv, CBeginPar,
+    CEndPar, CPower, CGreater, CLower];
 
+  CNonPrintable = [#0..#32];
   // *** ensembles de caractères courants ***
   CLowAlpha = ['a' .. 'z']; // caractères alphabétiques en minuscules
   CHighAlpha = ['A' .. 'Z']; // caractères alphabétiques en majuscules
