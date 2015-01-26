@@ -899,13 +899,5 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 0
     end
-    object Button1: TButton
-      Left = 328
-      Height = 25
-      Top = 13
-      Width = 75
-      Caption = 'Button1'
-      TabOrder = 4
-    end
   end
 end

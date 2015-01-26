@@ -89,6 +89,8 @@ e. Répertoire "tests" : contient tous les logiciels de tests des unités de GVL
 
    => testgvautomat : test de l’interpréteur
 
+   => testgvhighlighter : test de la syntaxe colorée d’un éditeur
+
 f. Répertoire "units" : contient toutes les unités nécessaires à GVLOGO.
 
 g. Répertoire "GVLogo" : contient le programme GVLOGO sous sa forme la plus évoluée (*** travail en cours ***).
@@ -101,6 +103,6 @@ Vous pouvez aussi vous rendre sur mon site pour les éventuelles mises à jour :
 
 Les suggestions, modifications, propositions et questions sont les bienvenues.
 
-Gilles VASSEUR, le 24 janvier 2015
+Gilles VASSEUR, le 26 janvier 2015
 
  
