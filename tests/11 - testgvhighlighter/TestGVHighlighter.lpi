@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="5"/>
+      <BuildNr Value="7"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Test de GVHighlighter" LegalCopyright="GIlles Vasseur 2014" LegalTrademarks="GNU GPL" OriginalFilename="TestGVHighlighter" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
     <BuildModes Count="1">

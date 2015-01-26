@@ -47,13 +47,17 @@ uses
 type
   // TMainForm
   TMainForm = class(TForm)
+    btnUnfoldAll: TBitBtn;
+    btnFoldAll: TBitBtn;
     btnExit: TBitBtn;
     btnHighlight: TBitBtn;
     pnlMain: TPanel;
     sbMain: TStatusBar;
     SynEditMain: TSynEdit;
     procedure btnExitClick(Sender: TObject);
+    procedure btnFoldAllClick(Sender: TObject);
     procedure btnHighlightClick(Sender: TObject);
+    procedure btnUnfoldAllClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
@@ -76,6 +80,12 @@ begin
   Close;
 end;
 
+procedure TMainForm.btnFoldAllClick(Sender: TObject);
+// tout plier
+begin
+  SynEditMain.FoldAll(0, True);
+end;
+
 procedure TMainForm.btnHighlightClick(Sender: TObject);
 // éditeur coloré
 begin
@@ -83,6 +93,12 @@ begin
     SynEditMain.Highlighter := fGVHighlighter // colorisation affectée
   else
     SynEditMain.Highlighter := nil; // pas de coloration
+end;
+
+procedure TMainForm.btnUnfoldAllClick(Sender: TObject);
+// tout déplier
+begin
+  SynEditMain.UnfoldAll;
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);

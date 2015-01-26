@@ -3,7 +3,8 @@ object MainForm: TMainForm
   Height = 608
   Top = 127
   Width = 872
-  Caption = 'Test de GVHighlighter - (c) Gilles Vasseur 2014 - V1.0.0 - GVLOGO'
+  ActiveControl = SynEditMain
+  Caption = 'Test de GVHighlighter - Gilles Vasseur 2014 - V1.0.0 - GVLOGO'
   ClientHeight = 608
   ClientWidth = 872
   OnCreate = FormCreate
@@ -838,31 +839,62 @@ object MainForm: TMainForm
     object btnExit: TBitBtn
       AnchorSideRight.Control = pnlMain
       Cursor = crHandPoint
-      Left = 784
+      Left = 760
       Height = 30
       Hint = 'Fermer le logiciel'
       Top = 8
-      Width = 75
+      Width = 100
       DefaultCaption = True
       Kind = bkClose
       ModalResult = 11
       OnClick = btnExitClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
+      TabOrder = 3
     end
     object btnHighlight: TBitBtn
       Cursor = crHandPoint
-      Left = 704
+      Left = 648
       Height = 30
       Hint = 'Colorer l''éditeur'
       Top = 8
-      Width = 75
+      Width = 100
       Caption = 'Colorer'
       Default = True
       Kind = bkOK
       ModalResult = 1
       OnClick = btnHighlightClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object btnFoldAll: TBitBtn
+      Cursor = crHandPoint
+      Left = 536
+      Height = 30
+      Hint = 'Tout plier'
+      Top = 8
+      Width = 100
+      Caption = 'Tout plier'
+      Kind = bkAll
+      ModalResult = 8
+      OnClick = btnFoldAllClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object btnUnfoldAll: TBitBtn
+      Cursor = crHandPoint
+      Left = 424
+      Height = 30
+      Hint = 'Tout déplier'
+      Top = 8
+      Width = 100
+      Cancel = True
+      Caption = 'Tout déplier'
+      Kind = bkNo
+      ModalResult = 7
+      OnClick = btnUnfoldAllClick
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
