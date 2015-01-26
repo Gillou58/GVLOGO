@@ -207,6 +207,7 @@ type
     tbSearch: TToolButton;
     tbReplace: TToolButton;
     tbSelectAll: TToolButton;
+    procedure ExecClearExecute(Sender: TObject);
     procedure ExecDeepFollowExecute(Sender: TObject);
     procedure ExecExecuteExecute(Sender: TObject);
     procedure ExecFollowExecute(Sender: TObject);
@@ -220,6 +221,7 @@ type
     procedure HelpAboutExecute(Sender: TObject);
     procedure ShowCmdLineExecute(Sender: TObject);
     procedure ShowProcsExecute(Sender: TObject);
+    procedure ShowProcsUpdate(Sender: TObject);
     procedure ShowTextExecute(Sender: TObject);
     procedure ShowTurtleExecute(Sender: TObject);
   private
@@ -298,6 +300,12 @@ begin
   Automat.Follow := fDeepFollow; // interpréteur à jour
 end;
 
+procedure TMainForm.ExecClearExecute(Sender: TObject);
+// *** nettoyage de l'interpréteur ***
+begin
+  Automat.Clear;
+end;
+
 procedure TMainForm.ExecExecuteExecute(Sender: TObject);
 // *** interprétation ***
 begin
@@ -358,6 +366,13 @@ procedure TMainForm.ShowProcsExecute(Sender: TObject);
 // *** affichage des procédures disponibles
 begin
   ShowProcsForm; // on montre la fiche
+end;
+
+procedure TMainForm.ShowProcsUpdate(Sender: TObject);
+// *** procédures disponibles ? ***
+begin
+  // action active s'il y a des procédures à éditer
+  ShowProcs.Enabled := (Automat.Kernel.ProcsCount <> 0);
 end;
 
 procedure TMainForm.ShowTextExecute(Sender: TObject);

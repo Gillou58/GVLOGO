@@ -1175,12 +1175,12 @@ begin
       for Li := 1 to Lj do // les recherche
         LS := LS + CBlank + ParamNum(Name, Li); // paramètres
     Lst.Add(EmptyStr); // espace
-    Lst.Add(P_To + CBlank + Name + LS); // entête
+    Lst.Add(LowerCase(P_To) + CBlank + Name + LS); // entête
     Lj := ProcLinesCount(Name); // nombre de lignes
     if (Lj <> 0) then // s'il y a au moins une ligne
       for Li := 1 to Lj do // les recherche et les ajoute
         Lst.Add(CBlank + CBlank + fTempList.ListToStr(ProcLine(Name, Li)));
-    Lst.Add(P_End); // fin de la procédure
+    Lst.Add(Lowercase(P_End)); // fin de la procédure
     Result := True; // tout est OK
   end
   else

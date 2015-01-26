@@ -131,6 +131,7 @@ type
       constructor Create; // constructeur
       destructor Destroy; override; // destructeur
       procedure Clear; // nettoyage
+      procedure ClearAll; // nettoyage complet
       procedure Process(const St: string); // lancement de l'automate
       procedure SetError(const Code: TGVError; ErrItem: string;
         ErrPos: Integer = CE_NoErr); // gestion des erreurs
@@ -662,6 +663,13 @@ begin
   Follow := False; // pas de suivi
   fTurtleOutPut:= False; // écriture sur l'écran normal
   State := asWaiting; // état
+end;
+
+procedure TGVAutomat.ClearAll;
+// *** nettoyage complet ***
+begin
+  fKernel.Clear; // noyau nettoyé
+  Clear; // et le reste aussi
 end;
 
 procedure TGVAutomat.SetError(const Code: TGVError; ErrItem: string;

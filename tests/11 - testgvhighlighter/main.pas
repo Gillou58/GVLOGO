@@ -41,7 +41,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, SynEdit, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Buttons, ExtCtrls,
+  ComCtrls, Buttons, ExtCtrls, StdCtrls,
   GVHighlighter; // unité de coloration
 
 type
@@ -51,6 +51,7 @@ type
     btnFoldAll: TBitBtn;
     btnExit: TBitBtn;
     btnHighlight: TBitBtn;
+    Button1: TButton;
     pnlMain: TPanel;
     sbMain: TStatusBar;
     SynEditMain: TSynEdit;

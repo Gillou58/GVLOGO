@@ -33,7 +33,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 
-{$I GVDefines.inc}
+{$I GVDefines.inc} // fichier des définitions préalables
 
 unit FrmInfo;
 
@@ -44,9 +44,7 @@ uses
   ExtCtrls, StdCtrls;
 
 type
-
-  { TInfoForm }
-
+  // *** TInfoForm ***
   TInfoForm = class(TForm)
     btnClose: TBCButton;
     imgInfo: TImage;

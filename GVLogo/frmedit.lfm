@@ -1,7 +1,7 @@
 object EditForm: TEditForm
-  Left = 699
+  Left = 22
   Height = 34
-  Top = 318
+  Top = 168
   Width = 573
   ActiveControl = EditCmdLine
   BorderIcons = [biMinimize]
@@ -10,7 +10,6 @@ object EditForm: TEditForm
   ClientHeight = 34
   ClientWidth = 573
   FormStyle = fsSystemStayOnTop
-  Position = poScreenCenter
   LCLVersion = '1.2.6.0'
   object EditCmdLine: TEdit
     Cursor = crHandPoint

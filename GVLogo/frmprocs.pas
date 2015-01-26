@@ -40,8 +40,9 @@ unit FrmProcs;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, BCButton, Forms, Controls, Graphics, Dialogs,
-  StdCtrls;
+  Classes, SysUtils, FileUtil, BCButton, SynEdit, Forms, Controls, Graphics,
+  Dialogs, StdCtrls,
+  GVHighlighter; // coloration syntaxique
 
 type
 
@@ -50,13 +51,17 @@ type
   TProcsForm = class(TForm)
     btnQuit: TBCButton;
     cbProcs: TComboBox;
+    SynEditProcs: TSynEdit;
     procedure btnQuitClick(Sender: TObject);
-    procedure cbProcsChange(Sender: TObject);
-    procedure cbProcsGetItems(Sender: TObject);
+    procedure cbProcsEnter(Sender: TObject);
+    procedure cbProcsKeyPress(Sender: TObject; var Key: char);
+    procedure cbProcsSelect(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
-    { private declarations }
+    fGVHighlighter: TGVHighlighter; // coloration syntaxique
   public
-    { public declarations }
+
   end;
 
   function ShowProcsForm: TModalResult;
@@ -90,18 +95,13 @@ begin
   Close; // on ferme la fenêtre
 end;
 
-procedure TProcsForm.cbProcsChange(Sender: TObject);
-// *** affichage de la procédure choisie ***
-begin
-  // ### TODO ###
-end;
-
-procedure TProcsForm.cbProcsGetItems(Sender: TObject);
-// *** traitement pour l'affichage ***
+procedure TProcsForm.cbProcsEnter(Sender: TObject);
+// *** traitement pour l'affichage dans la boîte ***
 var
   LL: TGVList;
   LS: string;
 begin
+  cbProcs.Clear; // on nettoie la boîte
   LL := TGVList.Create; // création de la liste
   try
     // affectation des procédures
@@ -113,6 +113,36 @@ begin
   finally
     LL.Free; // liste libérée
   end;
+end;
+
+procedure TProcsForm.cbProcsKeyPress(Sender: TObject; var Key: char);
+// *** touche pressée ***
+begin
+  if key = #13 then
+    cbProcsSelect(nil);
+end;
+
+procedure TProcsForm.cbProcsSelect(Sender: TObject);
+// *** affichage de la procédure choisie ***
+begin
+  SynEditProcs.Lines.Clear; // nettoyage de l'éditeur
+  // édition de la procédure
+  with cbProcs do
+    MainForm.Automat.Kernel.ProcToEdit(Items[ItemIndex], SynEditProcs.Lines);
+end;
+
+procedure TProcsForm.FormCreate(Sender: TObject);
+// *** création de la fiche ***
+begin
+  fGVHighlighter := TGVHighlighter.Create(Self); // création de la colorisation
+  SynEditProcs.Highlighter := fGVHighlighter; // éditeur lié
+  SynEditProcs.Lines.Clear; // nettoyage
+end;
+
+procedure TProcsForm.FormDestroy(Sender: TObject);
+// *** destruction de la fiche ***
+begin
+  fGVHighlighter.Free; // libération de la colorisation
 end;
 
 end.

@@ -293,7 +293,7 @@ var
   Lpos: Integer;
 begin
   // est-ce un commentaire ?
-  if TrimLeft(Copy(fLineText, 1, 2)) = CComment then
+  if Copy(TrimLeft(fLineText), 1, 2) = CComment then
     Result := CommentAttri
   else
   // est-ce une chaîne ?

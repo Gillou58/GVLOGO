@@ -2066,6 +2066,7 @@ object MainForm: TMainForm
       Caption = '&Nettoyer'
       Hint = 'Nettoyer l''interpréteur'
       ImageIndex = 35
+      OnExecute = ExecClearExecute
       ShortCut = 123
     end
     object ExecFollow: TAction
@@ -2146,6 +2147,7 @@ object MainForm: TMainForm
       Hint = 'Montrer les procédures'
       ImageIndex = 38
       OnExecute = ShowProcsExecute
+      OnUpdate = ShowProcsUpdate
     end
     object ShowPcks: TAction
       Category = 'Show'
