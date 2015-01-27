@@ -1844,6 +1844,7 @@ object MainForm: TMainForm
       Caption = 'Coup&er'
       Hint = 'Couper'
       ImageIndex = 31
+      OnExecute = EditCutExecute
       ShortCut = 16472
     end
     object EditCopy: TEditCopy
@@ -1851,6 +1852,7 @@ object MainForm: TMainForm
       Caption = '&Copier'
       Hint = 'Copier'
       ImageIndex = 32
+      OnExecute = EditCopyExecute
       ShortCut = 16451
     end
     object EditPaste: TEditPaste
@@ -1858,6 +1860,7 @@ object MainForm: TMainForm
       Caption = '&Coller'
       Hint = 'Coller'
       ImageIndex = 33
+      OnExecute = EditPasteExecute
       ShortCut = 16470
     end
     object EditSelectAll: TEditSelectAll
@@ -1865,6 +1868,7 @@ object MainForm: TMainForm
       Caption = '&Tout sélectionner'
       Hint = 'Tout sélectionner'
       ImageIndex = 21
+      OnExecute = EditSelectAllExecute
       ShortCut = 16449
     end
     object EditUndo: TEditUndo
@@ -1872,6 +1876,7 @@ object MainForm: TMainForm
       Caption = '&Défaire'
       Hint = 'Défaire'
       ImageIndex = 24
+      OnExecute = EditUndoExecute
       ShortCut = 16474
     end
     object SearchFind: TSearchFind
@@ -1970,6 +1975,7 @@ object MainForm: TMainForm
       Caption = 'Refaire'
       Hint = 'Refaire la dernière action'
       ImageIndex = 13
+      OnExecute = EditRedoExecute
       ShortCut = 24666
     end
     object EditIndent: TAction
@@ -1977,6 +1983,7 @@ object MainForm: TMainForm
       Caption = 'Indenter la sélection'
       Hint = 'Indenter la sélection'
       ImageIndex = 8
+      OnExecute = EditIndentExecute
       ShortCut = 16457
     end
     object EditUnIndent: TAction
@@ -1984,17 +1991,20 @@ object MainForm: TMainForm
       Caption = 'Désindente la sélection'
       Hint = 'Désindente la sélection'
       ImageIndex = 34
+      OnExecute = EditUnIndentExecute
       ShortCut = 16469
     end
     object EditLineSelect: TAction
       Category = 'Edit'
       Caption = 'Sélectionner la ligne'
       Hint = 'Sélectionner la ligne'
+      OnExecute = EditLineSelectExecute
     end
     object EditWordSelect: TAction
       Category = 'Edit'
       Caption = 'Sélectionner le mot'
       Hint = 'Sélectionner le mot'
+      OnExecute = EditWordSelectExecute
     end
     object EditTurtleState: TAction
       Category = 'Edit'

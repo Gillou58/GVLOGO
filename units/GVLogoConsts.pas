@@ -49,6 +49,8 @@ resourcestring
   CrsInfo = 'Information';
   CrsConfirm = 'Confirmation';
   CrsSave = 'Voulez-vous enregistrer %s ?';
+  CrsLine = 'Ligne: ';
+  CrsCol = 'Colonne: ';
 
 
 implementation

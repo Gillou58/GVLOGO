@@ -53,7 +53,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="26">
+    <Units Count="27">
       <Unit0>
         <Filename Value="GVLOGO.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -202,10 +202,18 @@
         <UnitName Value="GVHighlighter"/>
       </Unit24>
       <Unit25>
-        <Filename Value="..\units\gvlogoconsts.pas"/>
+        <Filename Value="..\units\GVLogoConsts.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GVLogoConsts"/>
       </Unit25>
+      <Unit26>
+        <Filename Value="frmeditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="EditorForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="FrmEditor"/>
+      </Unit26>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

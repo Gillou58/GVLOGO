@@ -207,6 +207,16 @@ type
     tbSearch: TToolButton;
     tbReplace: TToolButton;
     tbSelectAll: TToolButton;
+    procedure EditCopyExecute(Sender: TObject);
+    procedure EditCutExecute(Sender: TObject);
+    procedure EditIndentExecute(Sender: TObject);
+    procedure EditLineSelectExecute(Sender: TObject);
+    procedure EditPasteExecute(Sender: TObject);
+    procedure EditRedoExecute(Sender: TObject);
+    procedure EditSelectAllExecute(Sender: TObject);
+    procedure EditUndoExecute(Sender: TObject);
+    procedure EditUnIndentExecute(Sender: TObject);
+    procedure EditWordSelectExecute(Sender: TObject);
     procedure ExecClearExecute(Sender: TObject);
     procedure ExecDeepFollowExecute(Sender: TObject);
     procedure ExecExecuteExecute(Sender: TObject);
@@ -225,7 +235,6 @@ type
     procedure ShowTextExecute(Sender: TObject);
     procedure ShowTurtleExecute(Sender: TObject);
   private
-    fModified: Boolean; // drapeau de modification
     fDeepFollow: Boolean; // drapeau de trace approfondie
     fGVAutomat: TGVAutomat; // interpréteur
     // recherche d'une couleur normalisée
@@ -255,6 +264,7 @@ uses
   FrmError, // fiche des erreurs
   FrmInfo, // information
   FrmProcs, // procédures
+  FrmEditor, // édition
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -291,7 +301,13 @@ begin
     FileOpen.Dialog.FileName + CEndList);
   // pas d'erreur et interpréteur en attente ?
   if (Automat.Error.Ok) and (Automat.State = asWaiting) then
+  begin
+    // boîte d'information
     FrmInfo.ShowInfoForm(Format(CrsLoad, [FileOpen.Dialog.FileName]));
+    if Automat.Kernel.AllProcsToEdit(FrmEditor.EditorForm.SynEditEditor.Lines)
+      then
+        EditorForm.ShowOnTop; // éditeur en vue
+  end;
 end;
 
 procedure TMainForm.ExecDeepFollowExecute(Sender: TObject);
@@ -304,7 +320,68 @@ end;
 procedure TMainForm.ExecClearExecute(Sender: TObject);
 // *** nettoyage de l'interpréteur ***
 begin
-  Automat.Clear;
+  // ### confirmation TODO ###
+  Automat.ClearAll;
+end;
+
+procedure TMainForm.EditUndoExecute(Sender: TObject);
+// *** défaire (éditeur) ***
+begin
+  EditorForm.SynEditEditor.Undo;
+end;
+
+procedure TMainForm.EditUnIndentExecute(Sender: TObject);
+// *** déindentation (éditeur) ***
+begin
+  // ### TODO ###
+end;
+
+procedure TMainForm.EditWordSelectExecute(Sender: TObject);
+// *** sélectionner le mot en cours (éditeur) ***
+begin
+  EditorForm.SynEditEditor.SelectWord;
+end;
+
+procedure TMainForm.EditRedoExecute(Sender: TObject);
+// *** refaire (éditeur) ***
+begin
+  EditorForm.SynEditEditor.Redo;
+end;
+
+procedure TMainForm.EditSelectAllExecute(Sender: TObject);
+// *** tout sélectionner (éditeur) ***
+begin
+  EditorForm.SynEditEditor.SelectAll;
+end;
+
+procedure TMainForm.EditIndentExecute(Sender: TObject);
+// *** indentation (éditeur) ***
+begin
+  // ### TODO ###
+end;
+
+procedure TMainForm.EditLineSelectExecute(Sender: TObject);
+// *** sélectionner la ligne (éditeur) ***
+begin
+  EditorForm.SynEditEditor.SelectLine();
+end;
+
+procedure TMainForm.EditPasteExecute(Sender: TObject);
+// *** coller (éditeur) ***
+begin
+  EditorForm.SynEditEditor.PasteFromClipboard;
+end;
+
+procedure TMainForm.EditCutExecute(Sender: TObject);
+// *** couper (éditeur) ***
+begin
+  EditorForm.SynEditEditor.CutToClipboard;
+end;
+
+procedure TMainForm.EditCopyExecute(Sender: TObject);
+// *** copier (éditeur) ***
+begin
+  EditorForm.SynEditEditor.CopyToClipboard;
 end;
 
 procedure TMainForm.ExecExecuteExecute(Sender: TObject);
@@ -324,9 +401,9 @@ procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 // *** travail avant la fermeture du logiciel ***
 begin
   // vérification de l'enregistrement des modifications
-  if fModified then
+  if EditorForm.SynEditEditor.Modified then
   begin
-    // demande d'enregistrement des modifications
+    // demande d'enregistrement des modifications  ### TODO ###
   end;
   // fermeture des fenêtres en cours
   CanClose := True; // fermeture autorisée
@@ -335,7 +412,6 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 // *** création de la fiche principale ***
 begin
-  fModified := False; // pas de modification
   fDeepFollow := False; // pas de trace approfondie
   Caption :=  CE_GVTitle + ' ' + CE_GVVersion + ' ' + CE_GVAuthor +
     ' ' + CE_GVDate;  // entête
