@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="25"/>
+      <BuildNr Value="26"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="langage GVLOGO" InternalName="GVLOGO" LegalCopyright="Gilles Vasseur 2014-2015" LegalTrademarks="GNU GPL" OriginalFilename="GVLOGO.PAS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -53,7 +53,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="25">
+    <Units Count="26">
       <Unit0>
         <Filename Value="GVLOGO.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -201,6 +201,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="GVHighlighter"/>
       </Unit24>
+      <Unit25>
+        <Filename Value="..\units\gvlogoconsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GVLogoConsts"/>
+      </Unit25>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

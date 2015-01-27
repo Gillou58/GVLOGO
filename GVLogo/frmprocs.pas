@@ -41,27 +41,29 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, BCButton, SynEdit, Forms, Controls, Graphics,
-  Dialogs, StdCtrls,
+  Dialogs, StdCtrls, ComCtrls,
   GVHighlighter; // coloration syntaxique
 
 type
-
-  { TProcsForm }
-
+  // *** TProcsForm ***
   TProcsForm = class(TForm)
+    btnSave: TBCButton;
     btnQuit: TBCButton;
     cbProcs: TComboBox;
+    sbProcs: TStatusBar;
     SynEditProcs: TSynEdit;
     procedure btnQuitClick(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
     procedure cbProcsEnter(Sender: TObject);
     procedure cbProcsKeyPress(Sender: TObject; var Key: char);
     procedure cbProcsSelect(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure SynEditProcsChange(Sender: TObject);
   private
     fGVHighlighter: TGVHighlighter; // coloration syntaxique
   public
-
   end;
 
   function ShowProcsForm: TModalResult;
@@ -70,6 +72,8 @@ implementation
 
 uses
   Main, // fiche principale
+  GVLogoConsts, // constantes GVLOGO
+  FrmInfo, // messages
   GVLists; // listes
 
 function ShowProcsForm: TModalResult;
@@ -89,8 +93,18 @@ end;
 
 { TProcsForm }
 
+procedure TProcsForm.btnSaveClick(Sender: TObject);
+// *** enregistrement des modifications ***
+var
+  Err: Integer;
+begin
+  SynEditProcs.Modified := not MainForm.Automat.Kernel.EditToProc(
+    SynEditProcs.Lines, 0, 0, Err); // enregistrement
+  SynEditProcsChange(nil); // changement notifié
+end;
+
 procedure TProcsForm.btnQuitClick(Sender: TObject);
-// *** fermeture de la fenêtre ***
+// *** fermeture de la fenêtre
 begin
   Close; // on ferme la fenêtre
 end;
@@ -124,11 +138,51 @@ end;
 
 procedure TProcsForm.cbProcsSelect(Sender: TObject);
 // *** affichage de la procédure choisie ***
+var
+  LChange: Boolean;
+  Err: Integer;
 begin
-  SynEditProcs.Lines.Clear; // nettoyage de l'éditeur
-  // édition de la procédure
-  with cbProcs do
-    MainForm.Automat.Kernel.ProcToEdit(Items[ItemIndex], SynEditProcs.Lines);
+  LChange := True; // changement par défaut
+  if SynEditProcs.Modified then // éditeur modifié ?
+  begin
+    // confirmation
+    case FrmInfo.ShowConfirmForm(Format(CrsSave,
+      [cbProcs.Items[cbProcs.ItemIndex]])) of
+        // on veut enregistrer la procédure
+        mrYes: LChange := MainForm.Automat.Kernel.EditToProc(SynEditProcs.Lines,
+          0, 0, Err);
+        mrNo: LChange := True; // pas d'enregistrement
+        mrCancel: LChange := False; // abandon
+      end;
+  end;
+  if LChange then // changement autorisé ?
+  begin
+    SynEditProcs.Lines.Clear; // nettoyage de l'éditeur
+    // édition de la procédure
+    with cbProcs do
+      MainForm.Automat.Kernel.ProcToEdit(Items[ItemIndex], SynEditProcs.Lines);
+  end;
+end;
+
+procedure TProcsForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+// *** fermeture de la fenêtre ***
+var
+  Err: Integer;
+begin
+  if SynEditProcs.Modified then // éditeur modifié ?
+  begin
+    // confirmation
+    case FrmInfo.ShowConfirmForm(Format(CrsSave,
+      [cbProcs.Items[cbProcs.ItemIndex]])) of
+        // on veut enregistrer la procédure
+        mrYes: CanClose := MainForm.Automat.Kernel.EditToProc(SynEditProcs.Lines,
+          0, 0, Err);
+        mrNo: CanClose := True; // pas d'enregistrement
+        mrCancel: CanClose := False; // abandon
+      end;
+  end
+  else
+    CanClose := True; // on ferme la fenêtre
 end;
 
 procedure TProcsForm.FormCreate(Sender: TObject);
@@ -143,6 +197,15 @@ procedure TProcsForm.FormDestroy(Sender: TObject);
 // *** destruction de la fiche ***
 begin
   fGVHighlighter.Free; // libération de la colorisation
+end;
+
+procedure TProcsForm.SynEditProcsChange(Sender: TObject);
+// *** éditeur modifié ***
+begin
+  if SynEditProcs.Modified then
+    sbProcs.Panels[1].Text := CrsModified
+  else
+    sbProcs.Panels[1].Text := CrsOk;
 end;
 
 end.

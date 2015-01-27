@@ -248,6 +248,7 @@ uses
   StrUtils, // chaînes
   GVPrimConsts, // primitives
   GVErrors, // constantes des erreurs
+  GVLogoConsts, // constantes du projet
   FrmTurtle, // fiche de la tortue
   FrmText, // fiche du texte
   FrmEdit, // ligne de commande
@@ -290,7 +291,7 @@ begin
     FileOpen.Dialog.FileName + CEndList);
   // pas d'erreur et interpréteur en attente ?
   if (Automat.Error.Ok) and (Automat.State = asWaiting) then
-    FrmInfo.ShowInfoForm(Format(GVM_Load, [FileOpen.Dialog.FileName]));
+    FrmInfo.ShowInfoForm(Format(CrsLoad, [FileOpen.Dialog.FileName]));
 end;
 
 procedure TMainForm.ExecDeepFollowExecute(Sender: TObject);

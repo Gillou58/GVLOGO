@@ -45,11 +45,18 @@ uses
 
 type
   // *** TInfoForm ***
+
+  { TInfoForm }
+
   TInfoForm = class(TForm)
+    btnNo: TBCButton;
+    btnYes: TBCButton;
     btnClose: TBCButton;
     imgInfo: TImage;
     mmoInfo: TMemo;
     procedure btnCloseClick(Sender: TObject);
+    procedure btnNoClick(Sender: TObject);
+    procedure btnYesClick(Sender: TObject);
   private
     fMessage: string;
     procedure SetMessage(const AValue: string);
@@ -58,9 +65,13 @@ type
     property Mess: string read fMessage write SetMessage;
   end;
 
-  function ShowInfoForm(const St: string): TModalResult;
+  function ShowInfoForm(const St: string): TModalResult; // information
+  function ShowConfirmForm(const St: string): TModalResult; // confirmation
 
 implementation
+
+uses
+  GVLogoConsts; // constantes GVLOGO
 
 function ShowInfoForm(const St: string): TModalResult;
 // *** affichage d'une information ***
@@ -68,6 +79,7 @@ var
   GVInfoForm: TInfoForm;
 begin
   GVInfoForm := TInfoForm.Create(nil); // fiche créée
+  GVInfoForm.Caption := CrsInfo; // titre de la fenêtre
   try
     GVInfoForm.Mess := St; // message affecté
     Result := GVInfoForm.ShowModal; // fiche affichée
@@ -76,6 +88,24 @@ begin
   end;
 end;
 
+function ShowConfirmForm(const St: string): TModalResult;
+// *** affichage d'une confirmation ***
+var
+  GVConfirmForm: TInfoForm;
+begin
+  GVConfirmForm := TInfoForm.Create(nil); // fiche créée
+  try
+    GVConfirmForm.Caption := CrsConfirm; // titre de la fenêtre
+    GVConfirmForm.btnNo.Visible := True; // boutons visibles
+    GVConfirmForm.btnYes.Visible := True;
+    GVConfirmForm.Mess := St; // message affecté
+    Result := GVConfirmForm.ShowModal; // fiche affichée
+  finally
+    GVConfirmForm.Free; // fiche libérée
+  end;
+end;
+
+
 {$R *.lfm}
 
 { TInfoForm }
@@ -83,7 +113,19 @@ end;
 procedure TInfoForm.btnCloseClick(Sender: TObject);
 // *** fermeture de la fenêtre ***
 begin
-  Close; // on ferme
+  Self.ModalResult := mrCancel; // on ferme
+end;
+
+procedure TInfoForm.btnNoClick(Sender: TObject);
+// *** bouton non pressé ***
+begin
+  Self.ModalResult := mrNo;
+end;
+
+procedure TInfoForm.btnYesClick(Sender: TObject);
+// *** bouton Oui pressé ***
+begin
+  Self.ModalResult := mrYes;
 end;
 
 procedure TInfoForm.SetMessage(const AValue: string);
