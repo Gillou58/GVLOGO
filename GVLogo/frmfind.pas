@@ -18,8 +18,8 @@ type
     btnFind: TBitBtn;
     cboxCase: TCheckBox;
     cboxReplace: TCheckBox;
-    cbPrompt: TCheckBox;
-    cbWholeWord: TCheckBox;
+    cboxPrompt: TCheckBox;
+    cboxWholeWord: TCheckBox;
     cbFind: TComboBox;
     cbReplace: TComboBox;
     lblReplace: TLabel;
@@ -36,9 +36,9 @@ type
     procedure cbFindChange(Sender: TObject);
     procedure cboxCaseChange(Sender: TObject);
     procedure cboxReplaceChange(Sender: TObject);
-    procedure cbPromptChange(Sender: TObject);
+    procedure cboxPromptChange(Sender: TObject);
     procedure cbReplaceChange(Sender: TObject);
-    procedure cbWholeWordChange(Sender: TObject);
+    procedure cboxWholeWordChange(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure rbBackwardChange(Sender: TObject);
     procedure rbSelectedChange(Sender: TObject);
@@ -105,17 +105,17 @@ begin
   // contrôles activés/désactivés
   lblReplace.Enabled := cboxReplace.Checked;
   cbReplace.Enabled := cboxReplace.Checked;
-  cbPrompt.Enabled := cboxReplace.Checked;
+  cboxPrompt.Enabled := cboxReplace.Checked;
   if cboxReplace.Checked then
     fSynSearch := fSynSearch + [ssoReplace]
   else
     fSynSearch := fSynSearch - [ssoReplace];
 end;
 
-procedure TFindForm.cbPromptChange(Sender: TObject);
+procedure TFindForm.cboxPromptChange(Sender: TObject);
 // *** demande sur remplacement ***
 begin
-  if cbPrompt.Checked then
+  if cboxPrompt.Checked then
     fSynSearch := fSynSearch + [ssoPrompt]
   else
     fSynSearch := fSynSearch - [ssoPrompt];
@@ -127,10 +127,10 @@ begin
   fReplace := cbReplace.Text;
 end;
 
-procedure TFindForm.cbWholeWordChange(Sender: TObject);
+procedure TFindForm.cboxWholeWordChange(Sender: TObject);
 // *** mot entier ou non ***
 begin
-  if cbWholeWord.Checked then
+  if cboxWholeWord.Checked then
     fSynSearch := fSynSearch + [ssoWholeWord]
   else
     fSynSearch := fSynSearch - [ssoWholeWord];
@@ -139,12 +139,14 @@ end;
 procedure TFindForm.FormActivate(Sender: TObject);
 // *** activation de la fenêtre ***
 begin
+  // mise à jour des contrôles
   cbFind.Text := fFind;
   cboxCase.Checked := (ssoMatchCase in fSynSearch);
-  cbWholeWord.Checked := (ssoWholeWord in fSynSearch);
-  cbPrompt.Checked := (ssoPrompt in fSynSearch);
+  cboxWholeWord.Checked := (ssoWholeWord in fSynSearch);
+  cboxPrompt.Checked := (ssoPrompt in fSynSearch);
   rbSelected.Checked := (ssoSelectedOnly in fSynSearch);
   rbBackward.Checked := (ssoBackwards in fSynSearch);
+  fSynSearch := fSynSearch - [ssoFindContinue];
 end;
 
 procedure TFindForm.rbBackwardChange(Sender: TObject);

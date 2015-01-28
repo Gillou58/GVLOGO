@@ -236,10 +236,8 @@ object MainForm: TMainForm
       end
       object tbSearch: TToolButton
         Left = 103
-        Hint = 'Rechercher dans l''éditeur'
         Top = 2
-        Caption = '&Chercher...'
-        ImageIndex = 17
+        Action = SearchFind
       end
       object tbReplace: TToolButton
         Left = 126

@@ -3,6 +3,7 @@ object FindForm: TFindForm
   Height = 256
   Top = 151
   Width = 382
+  ActiveControl = cbFind
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Chercher'
   ClientHeight = 256
@@ -183,7 +184,7 @@ object FindForm: TFindForm
       ShowHint = True
       TabOrder = 0
     end
-    object cbWholeWord: TCheckBox
+    object cboxWholeWord: TCheckBox
       Cursor = crHandPoint
       Left = 6
       Height = 35
@@ -191,12 +192,12 @@ object FindForm: TFindForm
       Top = 41
       Width = 153
       Caption = 'Mots entiers seulement'
-      OnChange = cbWholeWordChange
+      OnChange = cboxWholeWordChange
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
     end
-    object cbPrompt: TCheckBox
+    object cboxPrompt: TCheckBox
       Cursor = crHandPoint
       Left = 6
       Height = 34
@@ -206,7 +207,7 @@ object FindForm: TFindForm
       Caption = 'Arrêt sur remplacement'
       Checked = True
       Enabled = False
-      OnChange = cbPromptChange
+      OnChange = cboxPromptChange
       ParentShowHint = False
       ShowHint = True
       State = cbChecked
