@@ -1845,6 +1845,7 @@ object MainForm: TMainForm
       Hint = 'Couper'
       ImageIndex = 31
       OnExecute = EditCutExecute
+      OnUpdate = SearchFindUpdate
       ShortCut = 16472
     end
     object EditCopy: TEditCopy
@@ -1853,6 +1854,7 @@ object MainForm: TMainForm
       Hint = 'Copier'
       ImageIndex = 32
       OnExecute = EditCopyExecute
+      OnUpdate = SearchFindUpdate
       ShortCut = 16451
     end
     object EditPaste: TEditPaste
@@ -1869,6 +1871,7 @@ object MainForm: TMainForm
       Hint = 'Tout sélectionner'
       ImageIndex = 21
       OnExecute = EditSelectAllExecute
+      OnUpdate = SearchFindUpdate
       ShortCut = 16449
     end
     object EditUndo: TEditUndo
@@ -1877,6 +1880,7 @@ object MainForm: TMainForm
       Hint = 'Défaire'
       ImageIndex = 24
       OnExecute = EditUndoExecute
+      OnUpdate = EditUndoUpdate
       ShortCut = 16474
     end
     object SearchFindNext: TSearchFindNext
@@ -1960,6 +1964,7 @@ object MainForm: TMainForm
       Hint = 'Refaire la dernière action'
       ImageIndex = 13
       OnExecute = EditRedoExecute
+      OnUpdate = EditRedoUpdate
       ShortCut = 24666
     end
     object EditIndent: TAction
@@ -2054,6 +2059,7 @@ object MainForm: TMainForm
       Hint = 'Interpréter l''éditeur'
       ImageIndex = 0
       OnExecute = ExecInterpretExecute
+      OnUpdate = SearchFindUpdate
       ShortCut = 117
     end
     object ExecClear: TAction
@@ -2162,6 +2168,7 @@ object MainForm: TMainForm
       Hint = 'Chercher dans l''éditeur'
       ImageIndex = 17
       OnExecute = SearchFindExecute
+      OnUpdate = SearchFindUpdate
       ShortCut = 16454
     end
     object SearchReplace: TAction
@@ -2170,6 +2177,7 @@ object MainForm: TMainForm
       Hint = 'Remplacement dans l''éditeur'
       ImageIndex = 20
       OnExecute = SearchReplaceExecute
+      OnUpdate = SearchFindUpdate
       ShortCut = 16466
     end
   end

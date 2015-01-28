@@ -47,9 +47,7 @@ uses
   GVAutomat; // interpréteur
 
 type
-
-  { TMainForm }
-
+  // *** TMainForm ***
   TMainForm = class(TForm)
     SearchReplace: TAction;
     SearchFind: TAction;
@@ -207,6 +205,8 @@ type
     tbSearch: TToolButton;
     tbReplace: TToolButton;
     tbSelectAll: TToolButton;
+    procedure EditRedoUpdate(Sender: TObject);
+    procedure EditUndoUpdate(Sender: TObject);
     procedure SearchFindExecute(Sender: TObject);
     procedure EditCopyExecute(Sender: TObject);
     procedure EditCutExecute(Sender: TObject);
@@ -231,6 +231,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure HelpAboutExecute(Sender: TObject);
+    procedure SearchFindUpdate(Sender: TObject);
     procedure SearchReplaceExecute(Sender: TObject);
     procedure ShowCmdLineExecute(Sender: TObject);
     procedure ShowProcsExecute(Sender: TObject);
@@ -307,20 +308,21 @@ end;
 procedure TMainForm.FileOpenAccept(Sender: TObject);
 // *** ouverture d'un fichier ***
 begin
+  // ### confirmation TODO ###
   // exécute le chargement du fichier choisi
   Automat.Process(CBeginList + P_LoadAll + CBlank + CQuote +
     FileOpen.Dialog.FileName + CEndList);
   // pas d'erreur et interpréteur en attente ?
   if (Automat.Error.Ok) and (Automat.State = asWaiting) then
   begin
-    // boîte d'information
-    FrmInfo.ShowInfoForm(Format(CrsLoad, [FileOpen.Dialog.FileName]));
     if Automat.Kernel.AllProcsToEdit(FrmEditor.EditorForm.SynEditEditor.Lines)
       then
       begin
         // nom de fichier en titre
         EditorForm.Caption := FileOpen.Dialog.FileName;
         EditorForm.ShowOnTop; // éditeur en vue
+        // boîte d'information
+        FrmInfo.ShowInfoForm(Format(CrsLoad, [FileOpen.Dialog.FileName]));
       end;
   end;
 end;
@@ -342,6 +344,7 @@ end;
 procedure TMainForm.EditUndoExecute(Sender: TObject);
 // *** défaire (éditeur) ***
 begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
   EditorForm.SynEditEditor.Undo;
 end;
 
@@ -354,6 +357,7 @@ end;
 procedure TMainForm.EditWordSelectExecute(Sender: TObject);
 // *** sélectionner le mot en cours (éditeur) ***
 begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
   EditorForm.SynEditEditor.SelectWord;
 end;
 
@@ -366,6 +370,7 @@ end;
 procedure TMainForm.EditSelectAllExecute(Sender: TObject);
 // *** tout sélectionner (éditeur) ***
 begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
   EditorForm.SynEditEditor.SelectAll;
 end;
 
@@ -378,12 +383,14 @@ end;
 procedure TMainForm.EditLineSelectExecute(Sender: TObject);
 // *** sélectionner la ligne (éditeur) ***
 begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
   EditorForm.SynEditEditor.SelectLine();
 end;
 
 procedure TMainForm.EditPasteExecute(Sender: TObject);
 // *** coller (éditeur) ***
 begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
   EditorForm.SynEditEditor.PasteFromClipboard;
 end;
 
@@ -396,6 +403,7 @@ end;
 procedure TMainForm.EditCopyExecute(Sender: TObject);
 // *** copier (éditeur) ***
 begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
   EditorForm.SynEditEditor.CopyToClipboard;
 end;
 
@@ -406,12 +414,26 @@ begin
   EditorForm.Search(skFind); // on cherche
 end;
 
+procedure TMainForm.EditUndoUpdate(Sender: TObject);
+// *** activation/ désactivation de défaire ***
+begin
+  EditUndo.Enabled := EditorForm.SynEditEditor.CanUndo; // possible ?
+end;
+
+procedure TMainForm.EditRedoUpdate(Sender: TObject);
+// *** activation/ désactivation de refaire ***
+begin
+  EditRedo.Enabled := EditorForm.SynEditEditor.CanRedo; // possible ?
+end;
+
 procedure TMainForm.ExecExecuteExecute(Sender: TObject);
 // *** interprétation ***
 begin
   Automat.Clear; // nettoyage
   ExecExecute.Enabled := False; // action inactive
   try
+    ShowTextExecute(nil); // on montre la fenêtre de texte
+    ShowTurtleExecute(nil); // on montre la fenêtre de la tortue
     Automat.Process(CBeginList + FrmEdit.EditForm.EditCmdLine.Text +
       CEndList); // ligne à exécuter
   finally
@@ -452,6 +474,14 @@ procedure TMainForm.HelpAboutExecute(Sender: TObject);
 // *** affichage de la boîte à propos ***
 begin
   ShowAboutForm; // on montre la fiche
+end;
+
+procedure TMainForm.SearchFindUpdate(Sender: TObject);
+// *** activation / désactivation de la recherche ***
+begin
+  // actif si l'éditeur est non vide
+  (Sender as TAction).Enabled := not ((EditorForm.SynEditEditor.Lines.Count = 1)
+    and (EditorForm.SynEditEditor.Lines[1] = EmptyStr));
 end;
 
 procedure TMainForm.SearchReplaceExecute(Sender: TObject);

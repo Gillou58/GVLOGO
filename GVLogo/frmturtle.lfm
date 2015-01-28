@@ -1,7 +1,7 @@
 object TurtleForm: TTurtleForm
-  Left = 857
+  Left = 939
   Height = 700
-  Top = 200
+  Top = 188
   Width = 700
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Zone de la tortue'

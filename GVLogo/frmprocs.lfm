@@ -578,8 +578,8 @@ object ProcsForm: TProcsForm
     Hint = 'Fermer la fenêtre'
     Top = 336
     Width = 90
+    Caption = 'Fermer'
     Default = True
-    DefaultCaption = True
     Kind = bkClose
     ModalResult = 11
     OnClick = btnQuitClick

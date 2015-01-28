@@ -1,11 +1,11 @@
 object EditorForm: TEditorForm
-  Left = 332
-  Height = 684
-  Top = 150
+  Left = 19
+  Height = 651
+  Top = 189
   Width = 719
   ActiveControl = SynEditEditor
   Caption = '< vide >'
-  ClientHeight = 684
+  ClientHeight = 651
   ClientWidth = 719
   Icon.Data = {
     7E04000000000100010010100000010020006804000016000000280000001000
@@ -52,7 +52,7 @@ object EditorForm: TEditorForm
   LCLVersion = '1.2.6.0'
   inline SynEditEditor: TSynEdit
     Left = 0
-    Height = 661
+    Height = 628
     Top = 0
     Width = 719
     Align = alClient
@@ -565,7 +565,7 @@ object EditorForm: TEditorForm
   object sbEdit: TStatusBar
     Left = 0
     Height = 23
-    Top = 661
+    Top = 628
     Width = 719
     AutoHint = True
     Panels = <    

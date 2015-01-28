@@ -1,18 +1,51 @@
-unit FrmFind;
+{ |========================================================================|
+  |                                                                        |
+  |                  G V S O F T                                           |
+  |                  Projet : GVLogo                                       |
+  |                  Description : Fiche de recherche/remplacement         |
+  |                  Unité : main.pas                                      |
+  |                  Ecrit par  : VASSEUR Gilles                           |
+  |                  e-mail : g.vasseur58@laposte.net                      |
+  |                  Copyright : © G. VASSEUR 2014-2015                    |
+  |                  Date:    23-12-2014 18:00:00                          |
+  |                  Version : 1.0.0                                       |
+  |                                                                        |
+  |========================================================================| }
 
-{$mode objfpc}{$H+}
+// HISTORIQUE
+// 23/12/2014 - 1.0.0 - première version opérationnelle
+
+// FRMFIND - part of GVLOGO
+// Copyright (C) 2014-2015 Gilles VASSEUR
+//
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation, either version 3 of the License,
+// or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+
+{$I GVDefines.inc} // fichier des définitions préalables
+
+unit FrmFind;
 
 interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Buttons,
-  SynEditTypes; // types pour l'édteur
+  SynEditTypes; // types pour l'éditeur
 
 type
-
-  { TFindForm }
-
+  //*** TFindForm ***
   TFindForm = class(TForm)
     btnReplace: TBitBtn;
     btnReplaceAll: TBitBtn;
@@ -47,8 +80,8 @@ type
     procedure rbBackwardChange(Sender: TObject);
     procedure rbSelectedChange(Sender: TObject);
   private
-    fSynSearch: TSynSearchOptions;
-    fFind, fReplace: string;
+    fSynSearch: TSynSearchOptions; // options de recherche
+    fFind, fReplace: string; // textes de travail
   public
     procedure Find; // chercher
     procedure Replace; // remplacer
@@ -128,11 +161,17 @@ begin
   btnReplace.Visible := cboxReplace.Checked;
   btnReplaceAll.Visible := cboxReplace.Checked;;
   if cboxReplace.Checked then
-    // recherche
-    fSynSearch := fSynSearch + [ssoReplace]
+  begin
+    cbReplace.Cursor := crNo; // curseur adapté
+    cboxPrompt.Cursor := crNo;
+    fSynSearch := fSynSearch + [ssoReplace]; // recherche
+  end
   else
-    // remplacement
-    fSynSearch := fSynSearch - [ssoReplace, ssoReplaceAll]
+  begin
+    cbReplace.Cursor := crHandPoint; // curseur adapté
+    cboxPrompt.Cursor := crHandPoint;
+    fSynSearch := fSynSearch - [ssoReplace, ssoReplaceAll]; // remplacement
+  end;
 end;
 
 procedure TFindForm.cboxPromptChange(Sender: TObject);

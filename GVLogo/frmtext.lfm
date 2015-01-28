@@ -1,7 +1,7 @@
 object TextForm: TTextForm
-  Left = 136
+  Left = 218
   Height = 700
-  Top = 200
+  Top = 187
   Width = 700
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Fenêtre du texte'
@@ -58,6 +58,7 @@ object TextForm: TTextForm
     Panels = <>
   end
   object rmmoText: TRichMemo
+    Cursor = crNo
     Left = 0
     Height = 677
     Top = 0
