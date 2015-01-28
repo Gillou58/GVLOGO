@@ -42,7 +42,12 @@ interface
 uses
   Classes, SysUtils;
 
+type
+  // *** types de recherches ***
+  TSearchKind = (skFind, skFindNext, skReplace);
+
 resourcestring
+  // *** chaînes des messages ***
   CrsLoad = 'Les procédures du fichier "%s" ont été chargées.';
   CrsModified = 'Modifié';
   CrsOk = 'OK';
@@ -54,6 +59,7 @@ resourcestring
   CrsClose = '&Fermer';
   CrsCloseHint = 'Fermer la fenêtre';
   CrsInterpreter = ' L''éditeur a été correctement interprété.';
+  CrsNotFound = 'Le texte "%s" n''a pas été trouvé.';
 
 
 implementation

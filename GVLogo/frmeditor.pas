@@ -42,13 +42,12 @@ interface
 uses
   Classes, SysUtils, FileUtil, SynEdit, SynPluginSyncroEdit, Forms, Controls,
   Graphics, Dialogs, ComCtrls,
+  GVLogoConsts, // constantes de GVLOGO
+  FrmFind, // recherche
   GVHighlighter; // colorisation de la syntaxe
 
 type
   // *** TEditorForm ***
-
-  { TEditorForm }
-
   TEditorForm = class(TForm)
     sbEdit: TStatusBar;
     SynEditEditor: TSynEdit;
@@ -60,6 +59,7 @@ type
   private
     fGVHighlighter: TGVHighlighter;
   public
+    procedure Search(Kind: TSearchKind);
   end;
 
 var
@@ -68,8 +68,7 @@ var
 implementation
 
 uses
-  StrUtils,
-  GVLogoConsts; // constantes de GVLOGO
+  StrUtils;
 
 {$R *.lfm}
 
@@ -101,6 +100,16 @@ procedure TEditorForm.SynEditEditorKeyDown(Sender: TObject; var Key: Word;
 // *** touche pressée ***
 begin
   SynEditEditorChange(nil);
+end;
+
+procedure TEditorForm.Search(Kind: TSearchKind);
+// *** recherche dans le texte
+begin
+  case Kind of
+    skFind: FindForm.Find;
+    skFindNext:;
+    skReplace:;
+  end;
 end;
 
 end.

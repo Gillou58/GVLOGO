@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="34"/>
+      <BuildNr Value="35"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="langage GVLOGO" InternalName="GVLOGO" LegalCopyright="Gilles Vasseur 2014-2015" LegalTrademarks="GNU GPL" OriginalFilename="GVLOGO.PAS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -53,7 +53,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="27">
+    <Units Count="28">
       <Unit0>
         <Filename Value="GVLOGO.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -214,6 +214,14 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FrmEditor"/>
       </Unit26>
+      <Unit27>
+        <Filename Value="frmfind.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FindForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="FrmFind"/>
+      </Unit27>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

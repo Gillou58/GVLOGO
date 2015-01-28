@@ -936,7 +936,7 @@ object MainForm: TMainForm
     object MenuSearch: TMenuItem
       Caption = 'Chercher'
       object MenuSearch2: TMenuItem
-        Caption = '&Chercher...'
+        Action = SearchFind
         Bitmap.Data = {
           36040000424D3604000000000000360000002800000010000000100000000100
           2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
@@ -973,9 +973,6 @@ object MainForm: TMainForm
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
         }
-        Hint = 'Rechercher dans l''éditeur'
-        ImageIndex = 17
-        ShortCut = 16454
       end
       object MenuSearchNext: TMenuItem
         Action = SearchFindNext
@@ -2169,12 +2166,12 @@ object MainForm: TMainForm
       Hint = 'Montrer tout le contenu'
       ImageIndex = 47
     end
-    object ActionSearch: TAction
+    object SearchFind: TAction
       Category = 'Search'
       Caption = '&Chercher...'
       Hint = 'Chercher dans l''éditeur'
       ImageIndex = 17
-      OnExecute = ActionSearchExecute
+      OnExecute = SearchFindExecute
       ShortCut = 16454
     end
   end

@@ -10,7 +10,7 @@ uses
   Forms, bgrabitmappack, richmemopackage, main, FrmTurtle, GVAutomat, GVConsts,
   GVErrConsts, GVErrors, GVEval, GVKernel, GVLists, GVLocVars, GVPrimConsts,
   GVPropLists, GVStacks, GVTurtles, GVWords, GVHighlighter, FrmAbout, FrmError,
-  FrmText, FrmEdit, FrmInfo, FrmProcs, GVLogoConsts, FrmEditor;
+  FrmText, FrmEdit, FrmInfo, FrmProcs, GVLogoConsts, FrmEditor, FrmFind;
 
 {$R *.res}
 
@@ -23,6 +23,7 @@ begin
   Application.CreateForm(TTextForm, TextForm);
   Application.CreateForm(TEditForm, EditForm);
   Application.CreateForm(TEditorForm, EditorForm);
+  Application.CreateForm(TFindForm, FindForm);
   Application.Run;
 end.
 

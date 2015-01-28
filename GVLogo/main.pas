@@ -51,7 +51,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
-    ActionSearch: TAction;
+    SearchFind: TAction;
     CoolBarMain: TCoolBar;
     ShowAll: TAction;
     ShowPcks: TAction;
@@ -207,7 +207,7 @@ type
     tbSearch: TToolButton;
     tbReplace: TToolButton;
     tbSelectAll: TToolButton;
-    procedure ActionSearchExecute(Sender: TObject);
+    procedure SearchFindExecute(Sender: TObject);
     procedure EditCopyExecute(Sender: TObject);
     procedure EditCutExecute(Sender: TObject);
     procedure EditIndentExecute(Sender: TObject);
@@ -398,10 +398,11 @@ begin
   EditorForm.SynEditEditor.CopyToClipboard;
 end;
 
-procedure TMainForm.ActionSearchExecute(Sender: TObject);
+procedure TMainForm.SearchFindExecute(Sender: TObject);
 // *** recherche dans l'éditeur ***
 begin
-  // ### TODO ###
+  EditorForm.ShowOnTop; // on montre l'éditeur
+  EditorForm.Search(skFind); // on cherche
 end;
 
 procedure TMainForm.ExecExecuteExecute(Sender: TObject);
