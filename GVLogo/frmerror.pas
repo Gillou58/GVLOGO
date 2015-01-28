@@ -40,15 +40,16 @@ unit FrmError;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, BCButton, BCLabel, Forms, Controls, Graphics,
-  Dialogs, ExtCtrls, StdCtrls, GVErrConsts; // constantes d'erreurs
+  Classes, SysUtils, FileUtil, BCLabel, Forms, Controls, Graphics,
+  Dialogs, ExtCtrls, StdCtrls, Buttons,
+  GVErrConsts; // constantes d'erreurs
 
 type
 
   { TErrorForm }
 
   TErrorForm = class(TForm)
-    btnClose: TBCButton;
+    btnClose: TBitBtn;
     blblErrItem: TBCLabel;
     blblLine: TBCLabel;
     blblData: TBCLabel;

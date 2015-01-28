@@ -40,15 +40,18 @@ unit FrmProcs;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, BCButton, SynEdit, Forms, Controls, Graphics,
-  Dialogs, StdCtrls, ComCtrls,
+  Classes, SysUtils, FileUtil, SynEdit, Forms, Controls, Graphics,
+  Dialogs, StdCtrls, ComCtrls, Buttons,
   GVHighlighter; // coloration syntaxique
 
 type
   // *** TProcsForm ***
+
+  { TProcsForm }
+
   TProcsForm = class(TForm)
-    btnSave: TBCButton;
-    btnQuit: TBCButton;
+    btnSave: TBitBtn;
+    btnQuit: TBitBtn;
     cbProcs: TComboBox;
     sbProcs: TStatusBar;
     SynEditProcs: TSynEdit;
@@ -124,6 +127,8 @@ begin
     // on balaie la liste
     for LS in LL do
       cbProcs.AddItem(LS, nil); // ajout à la boîte
+    cbProcs.ItemIndex := 0; // pointe sur le premier élément
+    cbProcsSelect(nil); // on l'édite
   finally
     LL.Free; // liste libérée
   end;
@@ -191,6 +196,7 @@ begin
   fGVHighlighter := TGVHighlighter.Create(Self); // création de la colorisation
   SynEditProcs.Highlighter := fGVHighlighter; // éditeur lié
   SynEditProcs.Lines.Clear; // nettoyage
+
 end;
 
 procedure TProcsForm.FormDestroy(Sender: TObject);
@@ -202,10 +208,13 @@ end;
 procedure TProcsForm.SynEditProcsChange(Sender: TObject);
 // *** éditeur modifié ***
 begin
+  // message suivant l'état du texte
   if SynEditProcs.Modified then
     sbProcs.Panels[1].Text := CrsModified
   else
     sbProcs.Panels[1].Text := CrsOk;
+  // bouton de sauvegarde adapté à l'état du texte
+  btnSave.Enabled := SynEditProcs.Modified;
 end;
 
 end.

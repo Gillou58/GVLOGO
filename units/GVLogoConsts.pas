@@ -51,6 +51,9 @@ resourcestring
   CrsSave = 'Voulez-vous enregistrer %s ?';
   CrsLine = 'Ligne: ';
   CrsCol = 'Colonne: ';
+  CrsClose = '&Fermer';
+  CrsCloseHint = 'Fermer la fenêtre';
+  CrsInterpreter = ' L''éditeur a été correctement interprété.';
 
 
 implementation

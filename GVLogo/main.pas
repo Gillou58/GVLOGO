@@ -51,6 +51,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    ActionSearch: TAction;
     CoolBarMain: TCoolBar;
     ShowAll: TAction;
     ShowPcks: TAction;
@@ -169,7 +170,6 @@ type
     MenuWindows: TMenuItem;
     MenuSee: TMenuItem;
     MenuSearch: TMenuItem;
-    SearchFind: TSearchFind;
     SearchFindNext: TSearchFindNext;
     SearchReplace: TSearchReplace;
     tbFile: TToolBar;
@@ -207,6 +207,7 @@ type
     tbSearch: TToolButton;
     tbReplace: TToolButton;
     tbSelectAll: TToolButton;
+    procedure ActionSearchExecute(Sender: TObject);
     procedure EditCopyExecute(Sender: TObject);
     procedure EditCutExecute(Sender: TObject);
     procedure EditIndentExecute(Sender: TObject);
@@ -221,6 +222,7 @@ type
     procedure ExecDeepFollowExecute(Sender: TObject);
     procedure ExecExecuteExecute(Sender: TObject);
     procedure ExecFollowExecute(Sender: TObject);
+    procedure ExecInterpretExecute(Sender: TObject);
     procedure ExeStopExecute(Sender: TObject);
     procedure FileOpenAccept(Sender: TObject);
     procedure FileQuitExecute(Sender: TObject);
@@ -254,7 +256,7 @@ implementation
 
 {$R *.lfm}
 uses
-  StrUtils, // chaînes
+  {%H-}StrUtils, // chaînes
   GVPrimConsts, // primitives
   GVErrors, // constantes des erreurs
   GVLogoConsts, // constantes du projet
@@ -287,6 +289,14 @@ begin
   Automat.Follow := Automat.Follow; // on inverse sa valeur
 end;
 
+procedure TMainForm.ExecInterpretExecute(Sender: TObject);
+// *** interprétation ***
+var Err: Integer;
+begin
+  if Automat.Kernel.EditToProc(EditorForm.SynEditEditor.Lines, 0, 0, Err) then
+    FrmInfo.ShowInfoForm(CrsInterpreter); // information affichée si OK
+end;
+
 procedure TMainForm.ExeStopExecute(Sender: TObject);
 // *** stop ***
 begin
@@ -306,7 +316,11 @@ begin
     FrmInfo.ShowInfoForm(Format(CrsLoad, [FileOpen.Dialog.FileName]));
     if Automat.Kernel.AllProcsToEdit(FrmEditor.EditorForm.SynEditEditor.Lines)
       then
+      begin
+        // nom de fichier en titre
+        EditorForm.Caption := FileOpen.Dialog.FileName;
         EditorForm.ShowOnTop; // éditeur en vue
+      end;
   end;
 end;
 
@@ -331,7 +345,7 @@ begin
 end;
 
 procedure TMainForm.EditUnIndentExecute(Sender: TObject);
-// *** déindentation (éditeur) ***
+// *** retirer l'indentation (éditeur) ***
 begin
   // ### TODO ###
 end;
@@ -382,6 +396,12 @@ procedure TMainForm.EditCopyExecute(Sender: TObject);
 // *** copier (éditeur) ***
 begin
   EditorForm.SynEditEditor.CopyToClipboard;
+end;
+
+procedure TMainForm.ActionSearchExecute(Sender: TObject);
+// *** recherche dans l'éditeur ***
+begin
+  // ### TODO ###
 end;
 
 procedure TMainForm.ExecExecuteExecute(Sender: TObject);

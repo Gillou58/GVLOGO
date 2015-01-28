@@ -233,7 +233,7 @@ var
     begin
       NextChar; // caractère suivant
       // saute les blancs
-      while (LStCh = CBlank) and (LW <= UTF8Length(LSt2)) do
+      while (LStCh = CBlank) or (LStCh = CTab) and (LW <= UTF8Length(LSt2)) do
         NextChar; // caractère suivant
       if LItem <> EmptyStr then
       begin
@@ -336,7 +336,7 @@ var
     NextChar; // caractère suivant
     while (fPos = 0) and (LW <= UTF8Length(LSt2)) do // on boucle si possible
     begin
-      if LStCh = CBlank then
+      if (LStCh = CBlank) or (LStCh = CTab) then
       // *** blanc ? ***
         DoBlank
       else

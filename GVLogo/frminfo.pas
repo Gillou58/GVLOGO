@@ -40,8 +40,8 @@ unit FrmInfo;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, BCButton, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
+  ExtCtrls, StdCtrls, Buttons;
 
 type
   // *** TInfoForm ***
@@ -49,9 +49,9 @@ type
   { TInfoForm }
 
   TInfoForm = class(TForm)
-    btnNo: TBCButton;
-    btnYes: TBCButton;
-    btnClose: TBCButton;
+    btnQuit: TBitBtn;
+    btnNo: TBitBtn;
+    btnYes: TBitBtn;
     imgInfo: TImage;
     mmoInfo: TMemo;
     procedure btnCloseClick(Sender: TObject);
@@ -80,6 +80,11 @@ var
 begin
   GVInfoForm := TInfoForm.Create(nil); // fiche créée
   GVInfoForm.Caption := CrsInfo; // titre de la fenêtre
+  GVInfoForm.btnYes.Visible := False; // boutons superflus désactivés
+  GVInfoForm.btnNo.Visible := False;
+  GVInfoForm.btnQuit.Kind := bkClose; // bouton de fermeture
+  GVInfoForm.btnQuit.Hint := CrsCloseHint;
+  GVInfoForm.btnQuit.Caption := CrsClose; // bouton marqué
   try
     GVInfoForm.Mess := St; // message affecté
     Result := GVInfoForm.ShowModal; // fiche affichée

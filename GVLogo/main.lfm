@@ -236,8 +236,10 @@ object MainForm: TMainForm
       end
       object tbSearch: TToolButton
         Left = 103
+        Hint = 'Rechercher dans l''éditeur'
         Top = 2
-        Action = SearchFind
+        Caption = '&Chercher...'
+        ImageIndex = 17
       end
       object tbReplace: TToolButton
         Left = 126
@@ -934,7 +936,7 @@ object MainForm: TMainForm
     object MenuSearch: TMenuItem
       Caption = 'Chercher'
       object MenuSearch2: TMenuItem
-        Action = SearchFind
+        Caption = '&Chercher...'
         Bitmap.Data = {
           36040000424D3604000000000000360000002800000010000000100000000100
           2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
@@ -971,6 +973,9 @@ object MainForm: TMainForm
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
         }
+        Hint = 'Rechercher dans l''éditeur'
+        ImageIndex = 17
+        ShortCut = 16454
       end
       object MenuSearchNext: TMenuItem
         Action = SearchFindNext
@@ -1879,13 +1884,6 @@ object MainForm: TMainForm
       OnExecute = EditUndoExecute
       ShortCut = 16474
     end
-    object SearchFind: TSearchFind
-      Category = 'Search'
-      Caption = '&Chercher...'
-      Hint = 'Rechercher dans l''éditeur'
-      ImageIndex = 17
-      ShortCut = 16454
-    end
     object SearchReplace: TSearchReplace
       Category = 'Search'
       Caption = '&Remplacer'
@@ -1899,7 +1897,6 @@ object MainForm: TMainForm
       Caption = 'Chercher l''occurrence &suivante'
       Hint = 'Chercher dans l''éditeur'
       ImageIndex = 18
-      SearchFind = SearchFind
       ShortCut = 114
     end
     object HelpOnHelp: THelpOnHelp
@@ -2069,6 +2066,7 @@ object MainForm: TMainForm
       Caption = '&Interpréter'
       Hint = 'Interpréter l''éditeur'
       ImageIndex = 0
+      OnExecute = ExecInterpretExecute
       ShortCut = 117
     end
     object ExecClear: TAction
@@ -2170,6 +2168,14 @@ object MainForm: TMainForm
       Caption = 'Contenu'
       Hint = 'Montrer tout le contenu'
       ImageIndex = 47
+    end
+    object ActionSearch: TAction
+      Category = 'Search'
+      Caption = '&Chercher...'
+      Hint = 'Chercher dans l''éditeur'
+      ImageIndex = 17
+      OnExecute = ActionSearchExecute
+      ShortCut = 16454
     end
   end
   object ImageListMenu: TImageList

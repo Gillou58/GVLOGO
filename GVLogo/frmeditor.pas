@@ -55,8 +55,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure SynEditEditorChange(Sender: TObject);
-    procedure SynEditEditorKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure SynEditEditorKeyDown(Sender: TObject; var {%H-}Key: Word;
+      {%H-}Shift: TShiftState);
   private
     fGVHighlighter: TGVHighlighter;
   public
