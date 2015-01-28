@@ -46,6 +46,9 @@ uses
 
 type
   //*** TFindForm ***
+
+  { TFindForm }
+
   TFindForm = class(TForm)
     btnReplace: TBitBtn;
     btnReplaceAll: TBitBtn;
@@ -84,6 +87,7 @@ type
     fFind, fReplace: string; // textes de travail
   public
     procedure Find; // chercher
+    procedure FindNext; // continuer la recherche
     procedure Replace; // remplacer
   end;
 
@@ -110,15 +114,21 @@ end;
 procedure TFindForm.btnFindClick(Sender: TObject);
 // *** bouton de recherche ***
 begin
+  if fFind = EmptyStr then // chaîne de recherche vide ?
+    Exit; // on sort
   // non trouvée ?
   if EditorForm.SynEditEditor.SearchReplace(fFind, fReplace,
     fSynSearch) = 0 then
   begin
     ShowInfoForm(Format(CrsNotFound, [fFind])); // on informe
     fSynSearch := fSynSearch - [ssoFindContinue]; // on ne continue pas
+    EditorForm.SearchOK := False; // drapeau d'échec
   end
   else
+  begin
+    EditorForm.SearchOK := True; // drapeau de réussite
     fSynSearch := fSynSearch + [ssoFindContinue]; // recherche poursuivie
+  end;
 end;
 
 procedure TFindForm.btnReplaceAllClick(Sender: TObject);
@@ -235,6 +245,13 @@ procedure TFindForm.Find;
 begin
   cboxReplace.Checked := False;
   ShowOnTop; // fenêtre montrée
+end;
+
+procedure TFindForm.FindNext;
+// *** continuatiion de la recherche ***
+begin
+  fSynSearch := fSynSearch + [ssoFindContinue]; // recherche poursuivie
+  btnFindClick(nil); // on cherche sans la fenêtre
 end;
 
 procedure TFindForm.Replace;

@@ -48,6 +48,9 @@ uses
 
 type
   // *** TEditorForm ***
+
+  { TEditorForm }
+
   TEditorForm = class(TForm)
     sbEdit: TStatusBar;
     SynEditEditor: TSynEdit;
@@ -57,9 +60,12 @@ type
     procedure SynEditEditorKeyDown(Sender: TObject; var {%H-}Key: Word;
       {%H-}Shift: TShiftState);
   private
-    fGVHighlighter: TGVHighlighter;
+    fGVHighlighter: TGVHighlighter; // colorisation
+    fSearchOk: Boolean; // drapeau de recherche aboutie
   public
-    procedure Search(Kind: TSearchKind);
+    procedure Search(Kind: TSearchKind); // recherche et remplacement
+    // drapeau de recherche aboutie
+    property SearchOK: Boolean read fSearchOk write fSearchOk;
   end;
 
 var
@@ -103,12 +109,12 @@ begin
 end;
 
 procedure TEditorForm.Search(Kind: TSearchKind);
-// *** recherche dans le texte
+// *** recherche dans le texte ***
 begin
   case Kind of
-    skFind: FindForm.Find;
-    skFindNext:;
-    skReplace: FindForm.Replace;
+    skFind: FindForm.Find; // recherche simple
+    skFindNext: FindForm.FindNext; // recherche suivante
+    skReplace: FindForm.Replace; // remplacement
   end;
 end;
 

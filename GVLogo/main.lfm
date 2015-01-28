@@ -973,7 +973,7 @@ object MainForm: TMainForm
         }
       end
       object MenuSearchNext: TMenuItem
-        Action = SearchFindNext
+        Action = SearchNext
         Bitmap.Data = {
           36040000424D3604000000000000360000002800000010000000100000000100
           2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
@@ -1883,13 +1883,6 @@ object MainForm: TMainForm
       OnUpdate = EditUndoUpdate
       ShortCut = 16474
     end
-    object SearchFindNext: TSearchFindNext
-      Category = 'Search'
-      Caption = 'Chercher l''occurrence &suivante'
-      Hint = 'Chercher dans l''éditeur'
-      ImageIndex = 18
-      ShortCut = 114
-    end
     object HelpOnHelp: THelpOnHelp
       Category = 'Help'
       Caption = '&Aide sur l''aide'
@@ -2179,6 +2172,15 @@ object MainForm: TMainForm
       OnExecute = SearchReplaceExecute
       OnUpdate = SearchFindUpdate
       ShortCut = 16466
+    end
+    object SearchNext: TAction
+      Category = 'Search'
+      Caption = 'Chercher l''occurence &suivante'
+      Hint = 'Rechercher l''occurence suivante'
+      ImageIndex = 18
+      OnExecute = SearchNextExecute
+      OnUpdate = SearchNextUpdate
+      ShortCut = 114
     end
   end
   object ImageListMenu: TImageList

@@ -48,7 +48,11 @@ uses
 
 type
   // *** TMainForm ***
+
+  { TMainForm }
+
   TMainForm = class(TForm)
+    SearchNext: TAction;
     SearchReplace: TAction;
     SearchFind: TAction;
     CoolBarMain: TCoolBar;
@@ -169,7 +173,6 @@ type
     MenuWindows: TMenuItem;
     MenuSee: TMenuItem;
     MenuSearch: TMenuItem;
-    SearchFindNext: TSearchFindNext;
     tbFile: TToolBar;
     tbFileNew: TToolButton;
     tbFileNewProc: TToolButton;
@@ -232,6 +235,8 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure HelpAboutExecute(Sender: TObject);
     procedure SearchFindUpdate(Sender: TObject);
+    procedure SearchNextExecute(Sender: TObject);
+    procedure SearchNextUpdate(Sender: TObject);
     procedure SearchReplaceExecute(Sender: TObject);
     procedure ShowCmdLineExecute(Sender: TObject);
     procedure ShowProcsExecute(Sender: TObject);
@@ -482,6 +487,19 @@ begin
   // actif si l'éditeur est non vide
   (Sender as TAction).Enabled := not ((EditorForm.SynEditEditor.Lines.Count = 1)
     and (EditorForm.SynEditEditor.Lines[1] = EmptyStr));
+end;
+
+procedure TMainForm.SearchNextExecute(Sender: TObject);
+// *** poursuite d'une recherche aboutie ***
+begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
+  EditorForm.Search(skFindNext); // on cherche
+end;
+
+procedure TMainForm.SearchNextUpdate(Sender: TObject);
+// *** activation/ désactivation de la recherche suivante ***
+begin
+  SearchNext.Enabled := (SearchFind.Enabled) and (EditorForm.SearchOK);
 end;
 
 procedure TMainForm.SearchReplaceExecute(Sender: TObject);
