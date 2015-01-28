@@ -14,6 +14,8 @@ type
   { TFindForm }
 
   TFindForm = class(TForm)
+    btnReplace: TBitBtn;
+    btnReplaceAll: TBitBtn;
     btnCancel: TBitBtn;
     btnFind: TBitBtn;
     cboxCase: TCheckBox;
@@ -33,6 +35,8 @@ type
     rgWhere: TRadioGroup;
     procedure btnCancelClick(Sender: TObject);
     procedure btnFindClick(Sender: TObject);
+    procedure btnReplaceAllClick(Sender: TObject);
+    procedure btnReplaceClick(Sender: TObject);
     procedure cbFindChange(Sender: TObject);
     procedure cboxCaseChange(Sender: TObject);
     procedure cboxReplaceChange(Sender: TObject);
@@ -46,8 +50,8 @@ type
     fSynSearch: TSynSearchOptions;
     fFind, fReplace: string;
   public
-    //property FindCase: Boolean read fCase write fCase;
-    procedure Find;
+    procedure Find; // chercher
+    procedure Replace; // remplacer
   end;
 
 var
@@ -84,6 +88,20 @@ begin
     fSynSearch := fSynSearch + [ssoFindContinue]; // recherche poursuivie
 end;
 
+procedure TFindForm.btnReplaceAllClick(Sender: TObject);
+// *** remplacer tout ***
+begin
+  fSynSearch := fSynSearch + [ssoReplaceAll]; // drapeau de remplacement total
+  btnFindClick(nil); // changement effectué
+end;
+
+procedure TFindForm.btnReplaceClick(Sender: TObject);
+// *** remplacement ***
+begin
+  fSynSearch := fSynSearch + [ssoReplace] - [ssoReplaceAll]; // drapeau de remplacement
+  btnFindClick(nil); // changement effectué
+end;
+
 procedure TFindForm.cbFindChange(Sender: TObject);
 // *** texte à chercher ***
 begin
@@ -106,10 +124,15 @@ begin
   lblReplace.Enabled := cboxReplace.Checked;
   cbReplace.Enabled := cboxReplace.Checked;
   cboxPrompt.Enabled := cboxReplace.Checked;
+  btnFind.Visible := not cboxReplace.Checked;
+  btnReplace.Visible := cboxReplace.Checked;
+  btnReplaceAll.Visible := cboxReplace.Checked;;
   if cboxReplace.Checked then
+    // recherche
     fSynSearch := fSynSearch + [ssoReplace]
   else
-    fSynSearch := fSynSearch - [ssoReplace];
+    // remplacement
+    fSynSearch := fSynSearch - [ssoReplace, ssoReplaceAll]
 end;
 
 procedure TFindForm.cboxPromptChange(Sender: TObject);
@@ -147,6 +170,7 @@ begin
   rbSelected.Checked := (ssoSelectedOnly in fSynSearch);
   rbBackward.Checked := (ssoBackwards in fSynSearch);
   fSynSearch := fSynSearch - [ssoFindContinue];
+  cboxReplaceChange(nil);
 end;
 
 procedure TFindForm.rbBackwardChange(Sender: TObject);
@@ -170,7 +194,15 @@ end;
 procedure TFindForm.Find;
 // *** recherche ***
 begin
+  cboxReplace.Checked := False;
   ShowOnTop; // fenêtre montrée
+end;
+
+procedure TFindForm.Replace;
+// *** remplacement ***
+begin
+  cboxReplace.Checked := True;
+  ShowOnTop;
 end;
 
 

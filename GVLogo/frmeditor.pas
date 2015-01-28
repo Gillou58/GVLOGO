@@ -108,7 +108,7 @@ begin
   case Kind of
     skFind: FindForm.Find;
     skFindNext:;
-    skReplace:;
+    skReplace: FindForm.Replace;
   end;
 end;
 

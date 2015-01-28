@@ -1879,14 +1879,6 @@ object MainForm: TMainForm
       OnExecute = EditUndoExecute
       ShortCut = 16474
     end
-    object SearchReplace: TSearchReplace
-      Category = 'Search'
-      Caption = '&Remplacer'
-      Dialog.Options = [frDown, frReplace, frReplaceAll, frHidePromptOnReplace]
-      Hint = 'Remplacer dans l''éditeur'
-      ImageIndex = 20
-      ShortCut = 16466
-    end
     object SearchFindNext: TSearchFindNext
       Category = 'Search'
       Caption = 'Chercher l''occurrence &suivante'
@@ -2171,6 +2163,14 @@ object MainForm: TMainForm
       ImageIndex = 17
       OnExecute = SearchFindExecute
       ShortCut = 16454
+    end
+    object SearchReplace: TAction
+      Category = 'Search'
+      Caption = 'Remplacer...'
+      Hint = 'Remplacement dans l''éditeur'
+      ImageIndex = 20
+      OnExecute = SearchReplaceExecute
+      ShortCut = 16466
     end
   end
   object ImageListMenu: TImageList

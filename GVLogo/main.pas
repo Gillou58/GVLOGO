@@ -51,6 +51,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    SearchReplace: TAction;
     SearchFind: TAction;
     CoolBarMain: TCoolBar;
     ShowAll: TAction;
@@ -171,7 +172,6 @@ type
     MenuSee: TMenuItem;
     MenuSearch: TMenuItem;
     SearchFindNext: TSearchFindNext;
-    SearchReplace: TSearchReplace;
     tbFile: TToolBar;
     tbFileNew: TToolButton;
     tbFileNewProc: TToolButton;
@@ -231,6 +231,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure HelpAboutExecute(Sender: TObject);
+    procedure SearchReplaceExecute(Sender: TObject);
     procedure ShowCmdLineExecute(Sender: TObject);
     procedure ShowProcsExecute(Sender: TObject);
     procedure ShowProcsUpdate(Sender: TObject);
@@ -451,6 +452,13 @@ procedure TMainForm.HelpAboutExecute(Sender: TObject);
 // *** affichage de la boîte à propos ***
 begin
   ShowAboutForm; // on montre la fiche
+end;
+
+procedure TMainForm.SearchReplaceExecute(Sender: TObject);
+// *** remplacement dans l'éditeur ***
+begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
+  EditorForm.Search(skReplace); // on cherche
 end;
 
 procedure TMainForm.ShowCmdLineExecute(Sender: TObject);
