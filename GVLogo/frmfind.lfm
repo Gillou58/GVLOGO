@@ -1,11 +1,11 @@
 object FindForm: TFindForm
   Left = 1088
-  Height = 325
+  Height = 256
   Top = 151
   Width = 382
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Chercher'
-  ClientHeight = 325
+  ClientHeight = 256
   ClientWidth = 382
   Icon.Data = {
     7E04000000000100010010100000010020006804000016000000280000001000
@@ -46,6 +46,7 @@ object FindForm: TFindForm
     222F00800A20008020200080203C83806E648FF8496E8FF87820FFFF6C75FFFF
     2230
   }
+  OnActivate = FormActivate
   LCLVersion = '1.2.6.0'
   object cboxReplace: TCheckBox
     Cursor = crHandPoint
@@ -54,60 +55,15 @@ object FindForm: TFindForm
     Hint = 'Cocher pour un remplacement'
     Top = 40
     Width = 20
-    OnClick = cboxReplaceClick
+    OnChange = cboxReplaceChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
   end
-  object rgBegin: TRadioGroup
-    Left = 192
-    Height = 62
-    Top = 72
-    Width = 176
-    AutoFill = True
-    Caption = 'Origine '
-    ChildSizing.LeftRightSpacing = 6
-    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-    ChildSizing.EnlargeVertical = crsHomogenousChildResize
-    ChildSizing.ShrinkHorizontal = crsScaleChilds
-    ChildSizing.ShrinkVertical = crsScaleChilds
-    ChildSizing.Layout = cclLeftToRightThenTopToBottom
-    ChildSizing.ControlsPerLine = 1
-    ClientHeight = 44
-    ClientWidth = 172
-    TabOrder = 4
-    object rbCaret: TRadioButton
-      Cursor = crHandPoint
-      Left = 6
-      Height = 22
-      Hint = 'Rechercher depuis l''emplacement du curseur'
-      Top = 0
-      Width = 160
-      Caption = 'Depuis le curseur'
-      OnChange = rbCaretChange
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 0
-    end
-    object rbBegin: TRadioButton
-      Cursor = crHandPoint
-      Left = 6
-      Height = 22
-      Hint = 'Rechercher depuis le début du texte'
-      Top = 22
-      Width = 160
-      Caption = 'Depuis le début'
-      Checked = True
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 1
-      TabStop = True
-    end
-  end
   object rgWhere: TRadioGroup
     Left = 192
     Height = 62
-    Top = 139
+    Top = 72
     Width = 176
     AutoFill = True
     Caption = 'Portée '
@@ -120,7 +76,7 @@ object FindForm: TFindForm
     ChildSizing.ControlsPerLine = 1
     ClientHeight = 44
     ClientWidth = 172
-    TabOrder = 5
+    TabOrder = 4
     object rbSelected: TRadioButton
       Cursor = crHandPoint
       Left = 6
@@ -143,6 +99,7 @@ object FindForm: TFindForm
       Width = 160
       Caption = 'Globale'
       Checked = True
+      OnChange = rbSelectedChange
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
@@ -150,9 +107,9 @@ object FindForm: TFindForm
     end
   end
   object rgHeading: TRadioGroup
-    Left = 192
+    Left = 194
     Height = 62
-    Top = 216
+    Top = 144
     Width = 176
     AutoFill = True
     Caption = 'Direction '
@@ -165,7 +122,7 @@ object FindForm: TFindForm
     ChildSizing.ControlsPerLine = 1
     ClientHeight = 44
     ClientWidth = 172
-    TabOrder = 6
+    TabOrder = 5
     object rbBackward: TRadioButton
       Cursor = crHandPoint
       Left = 6
@@ -188,6 +145,7 @@ object FindForm: TFindForm
       Width = 160
       Caption = 'Vers l''avant'
       Checked = True
+      OnChange = rbBackwardChange
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
@@ -196,7 +154,7 @@ object FindForm: TFindForm
   end
   object rgOptions: TCheckGroup
     Left = 16
-    Height = 206
+    Height = 134
     Top = 72
     Width = 169
     AutoFill = True
@@ -209,13 +167,13 @@ object FindForm: TFindForm
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 188
+    ClientHeight = 116
     ClientWidth = 165
     TabOrder = 3
     object cboxCase: TCheckBox
       Cursor = crHandPoint
       Left = 6
-      Height = 59
+      Height = 35
       Hint = 'Cocher pour distinguer minuscules et majuscules'
       Top = 6
       Width = 153
@@ -228,9 +186,9 @@ object FindForm: TFindForm
     object cbWholeWord: TCheckBox
       Cursor = crHandPoint
       Left = 6
-      Height = 59
+      Height = 35
       Hint = 'Cocher pour ne traiter que les mots entiers'
-      Top = 65
+      Top = 41
       Width = 153
       Caption = 'Mots entiers seulement'
       OnChange = cbWholeWordChange
@@ -241,9 +199,9 @@ object FindForm: TFindForm
     object cbPrompt: TCheckBox
       Cursor = crHandPoint
       Left = 6
-      Height = 58
+      Height = 34
       Hint = 'Confirmer chaque remplacement'
-      Top = 124
+      Top = 76
       Width = 153
       Caption = 'Arrêt sur remplacement'
       Checked = True
@@ -294,16 +252,17 @@ object FindForm: TFindForm
     Width = 240
     Enabled = False
     ItemHeight = 15
+    OnChange = cbReplaceChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 2
   end
   object btnCancel: TBitBtn
     Cursor = crHandPoint
-    Left = 270
+    Left = 268
     Height = 30
     Hint = 'Annuler la recherche'
-    Top = 288
+    Top = 216
     Width = 100
     Cancel = True
     Caption = 'Annuler'
@@ -312,14 +271,14 @@ object FindForm: TFindForm
     OnClick = btnCancelClick
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 8
+    TabOrder = 7
   end
   object btnFind: TBitBtn
     Cursor = crHandPoint
-    Left = 160
+    Left = 152
     Height = 30
     Hint = 'Rechercher'
-    Top = 288
+    Top = 216
     Width = 100
     Caption = 'Rechercher'
     Glyph.Data = {
@@ -361,6 +320,6 @@ object FindForm: TFindForm
     OnClick = btnFindClick
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 7
+    TabOrder = 6
   end
 end

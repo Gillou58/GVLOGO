@@ -31,22 +31,19 @@ type
     rgHeading: TRadioGroup;
     rbGlobal: TRadioButton;
     rgWhere: TRadioGroup;
-    rbCaret: TRadioButton;
-    rbBegin: TRadioButton;
-    rgBegin: TRadioGroup;
     procedure btnCancelClick(Sender: TObject);
     procedure btnFindClick(Sender: TObject);
     procedure cbFindChange(Sender: TObject);
     procedure cboxCaseChange(Sender: TObject);
-    procedure cboxReplaceClick(Sender: TObject);
+    procedure cboxReplaceChange(Sender: TObject);
     procedure cbPromptChange(Sender: TObject);
+    procedure cbReplaceChange(Sender: TObject);
     procedure cbWholeWordChange(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
     procedure rbBackwardChange(Sender: TObject);
-    procedure rbCaretChange(Sender: TObject);
     procedure rbSelectedChange(Sender: TObject);
   private
     fSynSearch: TSynSearchOptions;
-    fStart: TPoint;
     fFind, fReplace: string;
   public
     //property FindCase: Boolean read fCase write fCase;
@@ -74,15 +71,17 @@ begin
 end;
 
 procedure TFindForm.btnFindClick(Sender: TObject);
+// *** bouton de recherche ***
 begin
-
   // non trouvée ?
-  if EditorForm.SynEditEditor.SearchReplaceEx(fFind, fReplace, fSynSearch,
-    fStart) = 0 then
-      ShowInfoForm(Format(CrsNotFound, [fFind]));
-  // position en cours
-  fStart.x := EditorForm.SynEditEditor.CaretX;
-  fStart.y := EditorForm.SynEditEditor.CaretY;
+  if EditorForm.SynEditEditor.SearchReplace(fFind, fReplace,
+    fSynSearch) = 0 then
+  begin
+    ShowInfoForm(Format(CrsNotFound, [fFind])); // on informe
+    fSynSearch := fSynSearch - [ssoFindContinue]; // on ne continue pas
+  end
+  else
+    fSynSearch := fSynSearch + [ssoFindContinue]; // recherche poursuivie
 end;
 
 procedure TFindForm.cbFindChange(Sender: TObject);
@@ -100,7 +99,7 @@ begin
     fSynSearch := fSynSearch - [ssoMatchCase];
 end;
 
-procedure TFindForm.cboxReplaceClick(Sender: TObject);
+procedure TFindForm.cboxReplaceChange(Sender: TObject);
 // *** remplacement actif ou non ***
 begin
   // contrôles activés/désactivés
@@ -122,6 +121,12 @@ begin
     fSynSearch := fSynSearch - [ssoPrompt];
 end;
 
+procedure TFindForm.cbReplaceChange(Sender: TObject);
+// *** texte de remplacement ***
+begin
+  fReplace := cbReplace.Text;
+end;
+
 procedure TFindForm.cbWholeWordChange(Sender: TObject);
 // *** mot entier ou non ***
 begin
@@ -131,30 +136,24 @@ begin
     fSynSearch := fSynSearch - [ssoWholeWord];
 end;
 
+procedure TFindForm.FormActivate(Sender: TObject);
+// *** activation de la fenêtre ***
+begin
+  cbFind.Text := fFind;
+  cboxCase.Checked := (ssoMatchCase in fSynSearch);
+  cbWholeWord.Checked := (ssoWholeWord in fSynSearch);
+  cbPrompt.Checked := (ssoPrompt in fSynSearch);
+  rbSelected.Checked := (ssoSelectedOnly in fSynSearch);
+  rbBackward.Checked := (ssoBackwards in fSynSearch);
+end;
+
 procedure TFindForm.rbBackwardChange(Sender: TObject);
 // *** en arrière ou en avant ***
 begin
   if rbBackward.Checked then
      fSynSearch := fSynSearch + [ssoBackwards]
    else
-     fSynSearch := fSynSearch + [ssoBackwards];
-end;
-
-procedure TFindForm.rbCaretChange(Sender: TObject);
-// *** origine ou position du curseur ***
-begin
-  if not rbCaret.Checked then
-  begin
-    // début du texte
-    fStart.x := 1;
-    fStart.y := 1;
-  end
-  else
-  begin
-    // position en cours
-    fStart.x := EditorForm.SynEditEditor.CaretX;
-    fStart.y := EditorForm.SynEditEditor.CaretY;
-  end;
+     fSynSearch := fSynSearch - [ssoBackwards];
 end;
 
 procedure TFindForm.rbSelectedChange(Sender: TObject);
