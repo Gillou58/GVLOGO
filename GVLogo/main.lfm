@@ -53,31 +53,37 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 0
       object tbFileNew: TToolButton
+        Cursor = crHandPoint
         Left = 1
         Top = 2
         Action = FileNew
       end
       object tbFileNewProc: TToolButton
+        Cursor = crHandPoint
         Left = 24
         Top = 2
         Action = FileNewProc
       end
       object tbFileSave: TToolButton
+        Cursor = crHandPoint
         Left = 70
         Top = 2
         Action = FileSave
       end
       object tbFilePrint: TToolButton
+        Cursor = crHandPoint
         Left = 93
         Top = 2
         Action = FilePrint
       end
       object tbFileOpen: TToolButton
+        Cursor = crHandPoint
         Left = 47
         Top = 2
         Action = FileOpen
       end
       object tbFileQuit: TToolButton
+        Cursor = crHandPoint
         Left = 116
         Top = 2
         Action = FileQuit
@@ -98,26 +104,31 @@ object MainForm: TMainForm
       Images = ImageListMenu
       TabOrder = 1
       object tbExecInter: TToolButton
+        Cursor = crHandPoint
         Left = 1
         Top = 2
         Action = ExecInterpret
       end
       object tbExecExec: TToolButton
+        Cursor = crHandPoint
         Left = 24
         Top = 2
         Action = ExecExecute
       end
       object tbExecWait: TToolButton
+        Cursor = crHandPoint
         Left = 47
         Top = 2
         Action = ExecWait
       end
       object tbExecStop: TToolButton
+        Cursor = crHandPoint
         Left = 70
         Top = 2
         Action = ExeStop
       end
       object tbExecClear: TToolButton
+        Cursor = crHandPoint
         Left = 93
         Top = 2
         Action = ExecClear
@@ -130,31 +141,37 @@ object MainForm: TMainForm
         Style = tbsDivider
       end
       object tbExecFollow: TToolButton
+        Cursor = crHandPoint
         Left = 121
         Top = 2
         Action = ExecFollow
       end
       object tbDeepFollow: TToolButton
+        Cursor = crHandPoint
         Left = 144
         Top = 2
         Action = ExecDeepFollow
       end
       object tbShowCmdLine: TToolButton
+        Cursor = crHandPoint
         Left = 177
         Top = 2
         Action = ShowCmdLine
       end
       object tbShowEdit: TToolButton
+        Cursor = crHandPoint
         Left = 200
         Top = 2
         Action = ShowEdit
       end
       object tbShowTurtle: TToolButton
+        Cursor = crHandPoint
         Left = 223
         Top = 2
         Action = ShowTurtle
       end
       object tbShowText: TToolButton
+        Cursor = crHandPoint
         Left = 246
         Top = 2
         Action = ShowText
@@ -174,26 +191,31 @@ object MainForm: TMainForm
         Style = tbsSeparator
       end
       object tbShowVars: TToolButton
+        Cursor = crHandPoint
         Left = 274
         Top = 2
         Action = ShowVars
       end
       object tbShowLocVars: TToolButton
+        Cursor = crHandPoint
         Left = 297
         Top = 2
         Action = ShowLocVars
       end
       object tbShowProcs: TToolButton
+        Cursor = crHandPoint
         Left = 320
         Top = 2
         Action = ShowProcs
       end
       object tbShowPcks: TToolButton
+        Cursor = crHandPoint
         Left = 343
         Top = 2
         Action = ShowPcks
       end
       object tbShowAll: TToolButton
+        Cursor = crHandPoint
         Left = 366
         Top = 2
         Action = ShowAll
@@ -213,16 +235,19 @@ object MainForm: TMainForm
       Images = ImageListMenu
       TabOrder = 2
       object tbEditCut: TToolButton
+        Cursor = crHandPoint
         Left = 1
         Top = 2
         Action = EditCut
       end
       object tbEditCopy: TToolButton
+        Cursor = crHandPoint
         Left = 24
         Top = 2
         Action = EditCopy
       end
       object tbEditPaste: TToolButton
+        Cursor = crHandPoint
         Left = 47
         Top = 2
         Action = EditPaste
@@ -235,16 +260,19 @@ object MainForm: TMainForm
         Style = tbsSeparator
       end
       object tbSearch: TToolButton
+        Cursor = crHandPoint
         Left = 103
         Top = 2
         Action = SearchFind
       end
       object tbReplace: TToolButton
+        Cursor = crHandPoint
         Left = 126
         Top = 2
         Action = SearchReplace
       end
       object tbSelectAll: TToolButton
+        Cursor = crHandPoint
         Left = 70
         Top = 2
         Action = EditSelectAll
@@ -2164,6 +2192,7 @@ object MainForm: TMainForm
       Hint = 'Montrer les procédures'
       ImageIndex = 38
       OnExecute = ShowProcsExecute
+      OnUpdate = ShowProcsUpdate
     end
     object ShowPcks: TAction
       Category = 'Show'

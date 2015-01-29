@@ -387,7 +387,7 @@ begin
     // procédure récupérée
     if (fKernel.ProcToEdit(LW.Text, LLst) and (LLst.Count > 0)) then
       for LS in LLst do  // on balaie la définition
-        Message.SetMessageAll(acWrite, LS);
+        Message.SetMessageAll(acWriteEdit, LS);
   finally
     LLst.Free; // libération de la liste de travail
   end;
@@ -1328,8 +1328,28 @@ end;
 
 procedure DoPrimPckToEdit;
 // *** EDITE.PAQUET ***
+var
+  LLst: TStringList;
+  LS: string;
 begin
-  AData; // mot attendu ######
+  AData; // mot attendu
+  if LW.IsValidIdent then
+  begin
+    LLst := TStringList.Create; // création de la liste de travail
+    try
+      // procédures récupérées
+      if (fKernel.PckToEdit(fWkRec.fItem, LLst) and (LLst.Count > 0)) then
+      begin
+        for LS in LLst do  // on balaie la définition
+          Message.SetMessageAll(acWriteEdit, LS); // on écrit
+      end;
+    finally
+      LLst.Free; // libération de la liste de travail
+    end;
+  end
+  else
+    // [### Erreur: mauvais mot ###]
+      SetError(CE_BadWord, fWkRec.fItem);
 end;
 
 procedure DoPrimSavePck;
@@ -2394,7 +2414,7 @@ begin
     // procédures récupérées
     if (fKernel.AllProcsToEdit(LLst) and (LLst.Count > 0)) then
       for LS in LLst do  // on balaie la définition
-        Message.SetMessageAll(acWrite, LS); // on écrit
+        Message.SetMessageAll(acWriteEdit, LS); // on écrit
   finally
     LLst.Free; // libération de la liste de travail
   end;

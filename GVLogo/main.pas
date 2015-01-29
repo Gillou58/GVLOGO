@@ -325,7 +325,7 @@ procedure TMainForm.FileOpenAccept(Sender: TObject);
 // *** ouverture d'un fichier ***
 begin
   // ### confirmation TODO ###
-  // ### types de fichiers : *.GVE ou autre TODOD ###
+  // ### types de fichiers : *.GVE ou autre TODO ###
   // exécute le chargement du fichier choisi
   Running := True; // exécution en cours
   try
@@ -473,9 +473,18 @@ begin
   if EditorForm.SynEditEditor.Modified then
   begin
     // demande d'enregistrement des modifications  ### TODO ###
-  end;
-  // fermeture des fenêtres en cours
-  CanClose := True; // fermeture autorisée
+    case ShowConfirmForm(Format(CrsSave, [EditorForm.Caption])) of
+      mrYes: begin
+               Automat.Process(CBeginList + P_SaveProcs + CBlank + CQuote +
+                 EditorForm.Caption + CEndList);
+               CanClose := Automat.Error.Ok; // on ferme si pas d'erreur
+      end;
+      mrNo: CanClose := True;
+      mrCancel: CanClose := False;
+    end;
+  end
+  else
+    CanClose := True; // fermeture autorisée
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -647,6 +656,8 @@ begin
     acSetFont: TextForm.Font.Name := Automat.Message.Message;
     acSetFontSize: TextForm.FontSize := StrToInt(Automat.Message.Message);
     acFontSize: Automat.Message.Message := IntToStr(TextForm.FontSize);
+    // éditeur
+    acWriteEdit: EditorForm.SynEditEditor.Lines.Add(Automat.Message.Message);
   end;
 end;
 

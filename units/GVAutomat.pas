@@ -668,8 +668,8 @@ end;
 procedure TGVAutomat.ClearAll;
 // *** nettoyage complet ***
 begin
-  fKernel.Clear; // noyau nettoyé
   Clear; // et le reste aussi
+  fKernel.Clear; // noyau nettoyé
 end;
 
 procedure TGVAutomat.SetError(const Code: TGVError; ErrItem: string;
