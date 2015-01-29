@@ -181,7 +181,7 @@ object MainForm: TMainForm
       object tbShowLocVars: TToolButton
         Left = 297
         Top = 2
-        Action = ShowLovVars
+        Action = ShowLocVars
       end
       object tbShowProcs: TToolButton
         Left = 320
@@ -1269,7 +1269,7 @@ object MainForm: TMainForm
           }
         end
         object MenuShowLocVars: TMenuItem
-          Action = ShowLovVars
+          Action = ShowLocVars
           Bitmap.Data = {
             36040000424D3604000000000000360000002800000010000000100000000100
             2000000000000004000064000000640000000000000000000000D8E9EC00D8E9
@@ -1839,6 +1839,23 @@ object MainForm: TMainForm
   object ActionList: TActionList
     Images = ImageListMenu
     left = 232
+    object ExecExecute: TAction
+      Category = 'Exec'
+      Caption = '&Exécuter'
+      Hint = 'Exécuter la ligne d''édition'
+      ImageIndex = 14
+      OnExecute = ExecExecuteExecute
+      ShortCut = 120
+    end
+    object SearchFind: TAction
+      Category = 'Search'
+      Caption = '&Chercher...'
+      Hint = 'Chercher dans l''éditeur'
+      ImageIndex = 17
+      OnExecute = SearchFindExecute
+      OnUpdate = SearchFindUpdate
+      ShortCut = 16454
+    end
     object EditCut: TEditCut
       Category = 'Edit'
       Caption = 'Coup&er'
@@ -1966,6 +1983,7 @@ object MainForm: TMainForm
       Hint = 'Indenter la sélection'
       ImageIndex = 8
       OnExecute = EditIndentExecute
+      OnUpdate = SearchFindUpdate
       ShortCut = 16457
     end
     object EditUnIndent: TAction
@@ -1974,6 +1992,7 @@ object MainForm: TMainForm
       Hint = 'Désindente la sélection'
       ImageIndex = 34
       OnExecute = EditUnIndentExecute
+      OnUpdate = SearchFindUpdate
       ShortCut = 16469
     end
     object EditLineSelect: TAction
@@ -1981,12 +2000,14 @@ object MainForm: TMainForm
       Caption = 'Sélectionner la ligne'
       Hint = 'Sélectionner la ligne'
       OnExecute = EditLineSelectExecute
+      OnUpdate = SearchFindUpdate
     end
     object EditWordSelect: TAction
       Category = 'Edit'
       Caption = 'Sélectionner le mot'
       Hint = 'Sélectionner le mot'
       OnExecute = EditWordSelectExecute
+      OnUpdate = SearchFindUpdate
     end
     object EditTurtleState: TAction
       Category = 'Edit'
@@ -2007,29 +2028,25 @@ object MainForm: TMainForm
       Category = 'Search'
       Caption = 'POUR suivant'
       Hint = 'Recherche du POUR suivant'
+      OnUpdate = SearchFindExecute
     end
     object SearchPreviousTo: TAction
       Category = 'Search'
       Caption = 'POUR précédent'
       Hint = 'Recherche du POUR précédent'
+      OnUpdate = SearchFindUpdate
     end
     object SearchNextEnd: TAction
       Category = 'Search'
       Caption = 'FIN suivant'
       Hint = 'Recherche du FIN suivant'
+      OnUpdate = SearchFindUpdate
     end
     object SearchPreviousEnd: TAction
       Category = 'Search'
       Caption = 'FIN précédent'
       Hint = 'Recherche du FIN précédent'
-    end
-    object ExecExecute: TAction
-      Category = 'Exec'
-      Caption = '&Exécuter'
-      Hint = 'Exécuter la ligne d''édition'
-      ImageIndex = 14
-      OnExecute = ExecExecuteExecute
-      ShortCut = 120
+      OnUpdate = SearchFindUpdate
     end
     object ExeStop: TAction
       Category = 'Exec'
@@ -2130,7 +2147,7 @@ object MainForm: TMainForm
       Hint = 'Montrer les variables'
       ImageIndex = 40
     end
-    object ShowLovVars: TAction
+    object ShowLocVars: TAction
       Category = 'Show'
       Caption = 'Variables locales'
       Hint = 'Montrer les variables locales'
@@ -2155,15 +2172,6 @@ object MainForm: TMainForm
       Caption = 'Contenu'
       Hint = 'Montrer tout le contenu'
       ImageIndex = 47
-    end
-    object SearchFind: TAction
-      Category = 'Search'
-      Caption = '&Chercher...'
-      Hint = 'Chercher dans l''éditeur'
-      ImageIndex = 17
-      OnExecute = SearchFindExecute
-      OnUpdate = SearchFindUpdate
-      ShortCut = 16454
     end
     object SearchReplace: TAction
       Category = 'Search'

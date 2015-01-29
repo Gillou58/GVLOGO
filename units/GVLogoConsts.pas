@@ -42,6 +42,9 @@ interface
 uses
   Classes, SysUtils;
 
+const
+  CMaxHistoryEntries = 10; // mémorisation des entrées
+
 type
   // *** types de recherches ***
   TSearchKind = (skFind, skFindNext, skReplace);

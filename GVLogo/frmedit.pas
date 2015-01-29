@@ -40,12 +40,20 @@ unit FrmEdit;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Buttons;
 
 type
   // *** TEditForm ***
+
+  { TEditForm }
+
   TEditForm = class(TForm)
-    EditCmdLine: TEdit;
+    cbEditCmdLine: TComboBox;
+    sbWait: TSpeedButton;
+    sbExec: TSpeedButton;
+    spStop: TSpeedButton;
+    //procedure cbEditCmdLineEnter(Sender: TObject);
     procedure EditCmdLineKeyPress(Sender: TObject; var Key: char);
   private
   public
@@ -57,6 +65,7 @@ var
 implementation
 
 uses
+  GVLogoConsts, // constantes du projet
   Main; // fiche principale
 
 {$R *.lfm}
@@ -67,8 +76,22 @@ procedure TEditForm.EditCmdLineKeyPress(Sender: TObject; var Key: char);
 // *** test des touches ***
 begin
   if Key = #13 then // touche Entrée ?
+  begin
+    // mémorisation de l'entrée
+    cbEditCmdLine.AddHistoryItem(cbEditCmdLine.Text, CMaxHistoryEntries, True,
+      True);
     MainForm.ExecExecuteExecute(nil); // exécution des commandes
+  end;
 end;
+
+//procedure TEditForm.cbEditCmdLineEnter(Sender: TObject);
+//// *** entrée dans le contrôle ***
+//begin
+//  // accessible si aucun programme en cours d'exécution
+//  cbEditCmdLine.Enabled := not MainForm.Running;
+//end;
+
+
 
 end.
 

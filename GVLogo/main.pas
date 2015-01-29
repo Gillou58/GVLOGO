@@ -59,7 +59,7 @@ type
     ShowAll: TAction;
     ShowPcks: TAction;
     ShowProcs: TAction;
-    ShowLovVars: TAction;
+    ShowLocVars: TAction;
     ShowVars: TAction;
     ShowText: TAction;
     ShowTurtle: TAction;
@@ -435,13 +435,15 @@ end;
 procedure TMainForm.EditUndoUpdate(Sender: TObject);
 // *** activation/ désactivation de défaire ***
 begin
-  EditUndo.Enabled := EditorForm.SynEditEditor.CanUndo; // possible ?
+  EditUndo.Enabled := EditorForm.SynEditEditor.CanUndo // possible ?
+    and not Running; // et pas de programme en cours
 end;
 
 procedure TMainForm.EditRedoUpdate(Sender: TObject);
 // *** activation/ désactivation de refaire ***
 begin
-  EditRedo.Enabled := EditorForm.SynEditEditor.CanRedo; // possible ?
+  EditRedo.Enabled := (EditorForm.SynEditEditor.CanRedo) // possible ?
+    and not Running; // sans exécution en cours
 end;
 
 procedure TMainForm.ExecExecuteExecute(Sender: TObject);
@@ -454,9 +456,13 @@ begin
     ShowTextExecute(nil); // on montre la fenêtre de texte
     ShowTurtleExecute(nil); // on montre la fenêtre de la tortue
     ShowCmdLineExecute(nil); // on montre la ligne de commande
-    Automat.Process(CBeginList + FrmEdit.EditForm.EditCmdLine.Text +
+    FileOpen.Enabled := False; // pas de chargement de fichier
+    FileSaveAs.Enabled := False; // idem sauvegarde
+    Automat.Process(CBeginList + FrmEdit.EditForm.cbEditCmdLine.Text +
       CEndList); // ligne à exécuter
   finally
+    FileOpen.Enabled := True; // chargement possible
+    FileSaveAs.Enabled := True; // idem sauvegarde
     MainForm.Menu := MainMenu; // réactivation du menu principal
     Running := False; // drapeau d'exécution
   end;
@@ -503,7 +509,7 @@ begin
   // actif si l'éditeur est non vide et pas de programme en cours
   (Sender as TAction).Enabled := not ((EditorForm.SynEditEditor.Lines.Count = 1)
     and (EditorForm.SynEditEditor.Lines[1] = EmptyStr)) and
-    (Automat.State = asWaiting);
+    not Running;
 end;
 
 procedure TMainForm.SearchNextExecute(Sender: TObject);
@@ -651,14 +657,24 @@ begin
   if fRunning = AValue then // pas de changement ?
     Exit; // on sort
   fRunning := AValue; // nouvelle valeur affectée
-  ExeStop.Enabled := fRunning; // interruption possible ?
-  ExecClear.Enabled := not fRunning; // nettoyage possible ?
-  ExecWait.Enabled := fRunning; // pause possible ?
-  ExecExecute.Enabled := not fRunning; // exécution possible ?
-  ExecInterpret.Enabled := not fRunning; // intreprétation possible ?
-  FileQuit.Enabled := not fRunning; // sortie possible ?
-  FileOpen.Enabled := not fRunning; // ouverture de fichier possible ?
-  FileNew.Enabled := not fRunning; // nouveau fichier possible ?
+  ExeStop.Enabled := fRunning; // interruption
+  ExecClear.Enabled := not fRunning; // nettoyage
+  ExecWait.Enabled := fRunning; // pause
+  ExecExecute.Enabled := not fRunning; // exécution
+  ExecInterpret.Enabled := not fRunning; // interprétation
+  FileQuit.Enabled := not fRunning; // sortie
+  FileOpen.Enabled := not fRunning; // ouverture de fichier
+  FileNew.Enabled := not fRunning; // nouveau fichier
+  FileNewProc.Enabled := not Running; // nouvelle procédure
+  FileClose.Enabled := not fRunning; // fermeture de fichier
+  FilePrint.Enabled := not Running; // impression
+  FileSave.Enabled := not Running; // sauvegarde
+  EditCut.Enabled := not fRunning; // couper
+  EditCopy.Enabled := not fRunning; // ccpier
+  EditPaste.Enabled := not fRunning; // coller
+  EditForm.cbEditCmdLine.Enabled := not fRunning; // ligne de commande
+  HelpAbout.Enabled := not Running; // aide sur l'aide
+  HelpPrims.Enabled := not Running; // aide sur les primitives
 end;
 
 end.
