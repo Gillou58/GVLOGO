@@ -235,8 +235,12 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure HelpAboutExecute(Sender: TObject);
     procedure SearchFindUpdate(Sender: TObject);
+    procedure SearchNextEndExecute(Sender: TObject);
     procedure SearchNextExecute(Sender: TObject);
+    procedure SearchNextToExecute(Sender: TObject);
     procedure SearchNextUpdate(Sender: TObject);
+    procedure SearchPreviousEndExecute(Sender: TObject);
+    procedure SearchPreviousToExecute(Sender: TObject);
     procedure SearchReplaceExecute(Sender: TObject);
     procedure ShowCmdLineExecute(Sender: TObject);
     procedure ShowEditExecute(Sender: TObject);
@@ -506,6 +510,13 @@ begin
     not Running;
 end;
 
+procedure TMainForm.SearchNextEndExecute(Sender: TObject);
+// *** recherche FIN suivant ***
+begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
+  EditorForm.Search(skNextEnd); // on cherche
+end;
+
 procedure TMainForm.SearchNextExecute(Sender: TObject);
 // *** poursuite d'une recherche aboutie ***
 begin
@@ -513,10 +524,31 @@ begin
   EditorForm.Search(skFindNext); // on cherche
 end;
 
+procedure TMainForm.SearchNextToExecute(Sender: TObject);
+// *** recherche POUR suivant ***
+begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
+  EditorForm.Search(skNextTo); // on cherche
+end;
+
 procedure TMainForm.SearchNextUpdate(Sender: TObject);
 // *** activation/ désactivation de la recherche suivante ***
 begin
   SearchNext.Enabled := (SearchFind.Enabled) and (EditorForm.SearchOK);
+end;
+
+procedure TMainForm.SearchPreviousEndExecute(Sender: TObject);
+// *** recherche FIN précédent ***
+begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
+  EditorForm.Search(skPrevEnd); // on cherche
+end;
+
+procedure TMainForm.SearchPreviousToExecute(Sender: TObject);
+// *** recherche POUR précédent ***
+begin
+  EditorForm.ShowOnTop; // on montre l'éditeur
+  EditorForm.Search(skPrevTo); // on cherche
 end;
 
 procedure TMainForm.SearchReplaceExecute(Sender: TObject);

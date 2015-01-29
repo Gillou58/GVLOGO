@@ -63,7 +63,8 @@ type
     fGVHighlighter: TGVHighlighter; // colorisation
     fSearchOk: Boolean; // drapeau de recherche aboutie
   public
-    procedure Search(Kind: TSearchKind); // recherche et remplacement
+    // recherche et remplacement
+    procedure Search(Kind: TSearchKind);
     // drapeau de recherche aboutie
     property SearchOK: Boolean read fSearchOk write fSearchOk;
   end;
@@ -115,6 +116,10 @@ begin
     skFind: FindForm.Find; // recherche simple
     skFindNext: FindForm.FindNext; // recherche suivante
     skReplace: FindForm.Replace; // remplacement
+    skNextTo: FindForm.NextTo; // POUR suivant
+    skPrevTo: FindForm.PrevTo; // POUR précédent
+    skNextEnd: FindForm.NextEnd; // FIN suivant
+    skPrevEnd: FindForm.PrevEnd; // FIN précédent
   end;
 end;
 

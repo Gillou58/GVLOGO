@@ -85,10 +85,17 @@ type
   private
     fSynSearch: TSynSearchOptions; // options de recherche
     fFind, fReplace: string; // textes de travail
+    procedure NextPrevPrim(const APrim: string; Backwards: Boolean = False);
   public
     procedure Find; // chercher
     procedure FindNext; // continuer la recherche
     procedure Replace; // remplacer
+    procedure NextTo; // POUR suivant
+    procedure PrevTo; // POUR précédent
+    procedure NextEnd; // FIN suivant
+    procedure PrevEnd; // FIN précédent
+    property FindText: string read fFind write fFind;
+    property ReplaceText: string read fReplace write fReplace;
   end;
 
 var
@@ -98,6 +105,7 @@ implementation
 
 uses
   GVLogoConsts, // constantes de GVLOGO
+  GVPrimConsts, // constantes des primitives
   FrmInfo, // boîte d'information
   FrmEditor; // fenêtre d'édition
 
@@ -141,7 +149,8 @@ end;
 procedure TFindForm.btnReplaceClick(Sender: TObject);
 // *** remplacement ***
 begin
-  fSynSearch := fSynSearch + [ssoReplace] - [ssoReplaceAll]; // drapeau de remplacement
+  // drapeau de remplacement
+  fSynSearch := fSynSearch + [ssoReplace] - [ssoReplaceAll];
   btnFindClick(nil); // changement effectué
 end;
 
@@ -240,6 +249,27 @@ begin
     fSynSearch := fSynSearch + [ssoEntireScope] - [ssoSelectedOnly];
 end;
 
+procedure TFindForm.NextPrevPrim(const APrim: string; Backwards: Boolean);
+// *** recherche d'un mot donné (avant ou arrière) ***
+var
+  LOldFind: string;
+  LOldOptions: TSynSearchOptions;
+begin
+  LOldFind := FindText; // on conserve les données précédentes
+  LOldOptions := fSynSearch;
+  try
+    if Backwards then // en arrière ?
+      fSynSearch := [ssoBackwards] // en arrière
+    else
+      fSynSearch := []; // pas d'options en cours
+    FindText := APrim; // primitive à rechercher
+    btnFindClick(nil); // recherche effectuée
+  finally
+    FindText := LOldFind; // on retrouve les données originales
+    fSynSearch := LOldOptions;
+  end;
+end;
+
 procedure TFindForm.Find;
 // *** recherche ***
 begin
@@ -248,7 +278,7 @@ begin
 end;
 
 procedure TFindForm.FindNext;
-// *** continuatiion de la recherche ***
+// *** continuation de la recherche ***
 begin
   fSynSearch := fSynSearch + [ssoFindContinue]; // recherche poursuivie
   btnFindClick(nil); // on cherche sans la fenêtre
@@ -259,6 +289,30 @@ procedure TFindForm.Replace;
 begin
   cboxReplace.Checked := True;
   ShowOnTop;
+end;
+
+procedure TFindForm.NextTo;
+// *** POUR suivant ***
+begin
+  NextPrevPrim(P_To);
+end;
+
+procedure TFindForm.PrevTo;
+// *** POUR précédent ***
+begin
+  NextPrevPrim(P_To, True);
+end;
+
+procedure TFindForm.NextEnd;
+// *** FIN suivant ***
+begin
+  NextPrevPrim(P_End);
+end;
+
+procedure TFindForm.PrevEnd;
+// *** FIN précédent ***
+begin
+  NextPrevPrim(P_End, True);
 end;
 
 

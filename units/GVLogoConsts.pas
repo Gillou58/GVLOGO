@@ -47,7 +47,8 @@ const
 
 type
   // *** types de recherches ***
-  TSearchKind = (skFind, skFindNext, skReplace);
+  TSearchKind = (skFind, skFindNext, skReplace, skNextTo, skPrevTo,
+    skNextEnd, skPrevEnd);
 
 resourcestring
   // *** chaînes des messages ***
