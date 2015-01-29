@@ -1347,7 +1347,7 @@ object ErrorForm: TErrorForm
     Hint = 'Fermer la fenêtre'
     Top = 336
     Width = 100
-    DefaultCaption = True
+    Caption = 'Fermer'
     Kind = bkClose
     ModalResult = 11
     OnClick = btnCloseClick

@@ -210,8 +210,6 @@ type
     tbSelectAll: TToolButton;
     procedure EditRedoUpdate(Sender: TObject);
     procedure EditUndoUpdate(Sender: TObject);
-    procedure ExecExecuteUpdate(Sender: TObject);
-    procedure ExeStopUpdate(Sender: TObject);
     procedure SearchFindExecute(Sender: TObject);
     procedure EditCopyExecute(Sender: TObject);
     procedure EditCutExecute(Sender: TObject);
@@ -440,18 +438,6 @@ begin
   EditUndo.Enabled := EditorForm.SynEditEditor.CanUndo; // possible ?
 end;
 
-procedure TMainForm.ExecExecuteUpdate(Sender: TObject);
-// *** activation/ désactivation de exécute ***
-begin
-  ExecExecute.Enabled := not Running; // pas d'exécution en cours
-end;
-
-procedure TMainForm.ExeStopUpdate(Sender: TObject);
-// *** activation/désactivation de stop ***
-begin
-  ExeStop.Enabled := Running; // seulement si exécution en cours
-end;
-
 procedure TMainForm.EditRedoUpdate(Sender: TObject);
 // *** activation/ désactivation de refaire ***
 begin
@@ -666,7 +652,13 @@ begin
     Exit; // on sort
   fRunning := AValue; // nouvelle valeur affectée
   ExeStop.Enabled := fRunning; // interruption possible ?
-  // ### attente aussi TODO ###
+  ExecClear.Enabled := not fRunning; // nettoyage possible ?
+  ExecWait.Enabled := fRunning; // pause possible ?
+  ExecExecute.Enabled := not fRunning; // exécution possible ?
+  ExecInterpret.Enabled := not fRunning; // intreprétation possible ?
+  FileQuit.Enabled := not fRunning; // sortie possible ?
+  FileOpen.Enabled := not fRunning; // ouverture de fichier possible ?
+  FileNew.Enabled := not fRunning; // nouveau fichier possible ?
 end;
 
 end.
