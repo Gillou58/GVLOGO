@@ -52,6 +52,16 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    MenuItem10: TMenuItem;
+    MenuPrevTo: TMenuItem;
+    MenuNextEnd: TMenuItem;
+    MenuPrevEnd: TMenuItem;
+    MenuNextTo: TMenuItem;
+    MenuReplace: TMenuItem;
+    MenuSearchFirst: TMenuItem;
+    MenuSearchNext: TMenuItem;
+    MenuItem17: TMenuItem;
+    MenuSearch: TMenuItem;
     SearchNext: TAction;
     SearchReplace: TAction;
     SearchFind: TAction;
@@ -104,15 +114,13 @@ type
     HelpOnHelp: THelpOnHelp;
     ImageListMenu: TImageList;
     MainMenu: TMainMenu;
-    MenuFIle: TMenuItem;
+    MenuFile: TMenuItem;
     MenuEdit: TMenuItem;
     MenuExec: TMenuItem;
     MenuHelp: TMenuItem;
     MenuItem1: TMenuItem;
     MenuIndent: TMenuItem;
     MenuIndentOff: TMenuItem;
-    MenuItem10: TMenuItem;
-    MenuItem11: TMenuItem;
     MenuInter: TMenuItem;
     MenuGO: TMenuItem;
     MenuItem12: TMenuItem;
@@ -140,13 +148,6 @@ type
     MenuShowTurtle: TMenuItem;
     MenuShowDebugger: TMenuItem;
     MenuShowEditor: TMenuItem;
-    MenuNextEnd: TMenuItem;
-    MenuPreviousEnd: TMenuItem;
-    MenuPreviousTo: TMenuItem;
-    MenuNextTo: TMenuItem;
-    MenuReplace: TMenuItem;
-    MenuSearchNext: TMenuItem;
-    MenuSearch2: TMenuItem;
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     MenuWord: TMenuItem;
@@ -172,7 +173,6 @@ type
     MenuNew: TMenuItem;
     MenuWindows: TMenuItem;
     MenuSee: TMenuItem;
-    MenuSearch: TMenuItem;
     tbFile: TToolBar;
     tbFileNew: TToolButton;
     tbFileNewProc: TToolButton;
@@ -452,18 +452,12 @@ begin
   Automat.Clear; // nettoyage
   try
     Running := True; // drapeau d'exécution
-    MainForm.Menu := nil; // désactivation du menu principal
     ShowTextExecute(nil); // on montre la fenêtre de texte
     ShowTurtleExecute(nil); // on montre la fenêtre de la tortue
     ShowCmdLineExecute(nil); // on montre la ligne de commande
-    FileOpen.Enabled := False; // pas de chargement de fichier
-    FileSaveAs.Enabled := False; // idem sauvegarde
     Automat.Process(CBeginList + FrmEdit.EditForm.cbEditCmdLine.Text +
       CEndList); // ligne à exécuter
   finally
-    FileOpen.Enabled := True; // chargement possible
-    FileSaveAs.Enabled := True; // idem sauvegarde
-    MainForm.Menu := MainMenu; // réactivation du menu principal
     Running := False; // drapeau d'exécution
   end;
 end;
@@ -673,9 +667,18 @@ begin
   EditCut.Enabled := not fRunning; // couper
   EditCopy.Enabled := not fRunning; // ccpier
   EditPaste.Enabled := not fRunning; // coller
+  EditSelectAll.Enabled := not fRunning; // tout sélectionner
+  SearchNext.Enabled := not fRunning; // recherche suivante
+  SearchFind.Enabled := not fRunning; // recherche
+  SearchReplace.Enabled := not fRunning; // rempalcement
   EditForm.cbEditCmdLine.Enabled := not fRunning; // ligne de commande
   HelpAbout.Enabled := not fRunning; // aide sur l'aide
   HelpPrims.Enabled := not fRunning; // aide sur les primitives
+  MenuFile.Enabled := not fRunning; // menus
+  MenuEdit.Enabled := not fRunning;
+  MenuSearch.Enabled := not fRunning;
+  MenuWindows.Enabled := fRunning;
+  MenuHelp.Enabled := not fRunning;
 end;
 
 end.

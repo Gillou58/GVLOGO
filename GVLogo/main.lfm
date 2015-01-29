@@ -254,7 +254,7 @@ object MainForm: TMainForm
   object MainMenu: TMainMenu
     Images = ImageListMenu
     left = 272
-    object MenuFIle: TMenuItem
+    object MenuFile: TMenuItem
       Caption = 'Fichier'
       object MenuNew: TMenuItem
         Action = FileNew
@@ -933,139 +933,32 @@ object MainForm: TMainForm
     end
     object MenuSearch: TMenuItem
       Caption = 'Chercher'
-      object MenuSearch2: TMenuItem
+      Hint = 'Chercher dans l''éditeur'
+      object MenuSearchFirst: TMenuItem
         Action = SearchFind
-        Bitmap.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF003E39
-          34FF393430FF332F2BFF2C2925FF272421FF201D1BFF1716141A110F0EDB0B0A
-          09FF070706FF040403FF000000FF000000FFFFFFFF00FFFFFF00FFFFFF004641
-          3BFF857A70FFC3B8AEFF7C7268FF7F756BFF36322DFF1E1C190F282522D49589
-          7DFFBAAEA2FF7C7268FF7F756BFF010101FFFFFFFF00FFFFFF00FFFFFF004D47
-          41FF83786FFFCCC3BAFF786F65FF7B7167FF2F2B28F9272421011D1B18EE9589
-          7DFFC2B8ADFF786F65FF7C7268FF060505FFFFFFFF00FFFFFF00FFFFFF00534C
-          46FC83786FFFCCC3BAFF797066FF71685FFF37332ED5FFFFFF00252220D5857A
-          70FFC2B8ADFF786F65FF7B7167FF0A0908FCFFFFFF00FFFFFF00FFFFFF005A52
-          4CC39F9286FFCCC3BAFFC0B4AAFFA6988BFF3E3934A8FFFFFF002C2925A89084
-          79FFC2B8ADFFC0B4AAFFA89B8EFF110F0EC3FFFFFF00FFFFFF00797066055C55
-          4EF9423D38FF58514AFF3D3833FF332F2BFF23201DE5171614301E1C19B51A18
-          16FF252220FF191715FF0F0E0DFF010101EE00000002FFFFFF009F9286059D91
-          85FFB1A396FF7F756BFF7C7268FF776D64FF6C635BFF2E2A26FF564F48FF8076
-          6CFF7C7268FF776D64FF70675EFF000000FE00000005FFFFFF00AB9D9004AFA1
-          94E1BAAEA2FF82776DFF82776DFFAA917BFFBAA794FFB7A48EFAB09781FF9F8D
-          7DFF836D5BFF716357FF95897DFF040403E000000003FFFFFF00B9ACA008877D
-          72489B8E82FF9D9185FF867B71FF564F48FF504A44FF80766CFF6E665DFF826C
-          58FFA6917DFF948474FF564F48FF0C0B0B7A07070601FFFFFF00FFFFFF00FFFF
-          FF00746B62FFA4978AFF95897DFF9F9286FF3E3934FFFFFFFF004C4640FF7E74
-          6AFF857A70FF3E3934FF453F3AA72522200C15131102FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF008E8378E2C3B8AEFF655D55FFFFFFFF007C7268FFA89B
-          8EFF9C8F83E4FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF009C8F83E2BCB0A4FF9D9185FFFFFFFF00AEA093FF9D91
-          85FF655D55DAFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-        }
       end
       object MenuSearchNext: TMenuItem
         Action = SearchNext
-        Bitmap.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF003BA8DBFF3BA8DBFFFFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF003BA8DBFF3BA8DBFF3BA8DBFF3BA8DBFFFFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF003BA8DBFF3BA8DBFF3BA8DBFF3BA8DBFF3BA8DBFF3BA8DBFFFFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF003BA8DBFF3BA8DBFFFFFFFF00FFFFFF00403B35FF4A44
-          3EFF49443EFF3A3631FF2A2623FFD8D8D800373434FF282522FF24221FFF1A18
-          16FF050404FFFFFFFF003BA8DBFF3BA8DBFFFFFFFF00FFFFFF0049433DFF9085
-          7CFFABA197FF7C7268FF49433EFFE6E5E500484441FFA09488FF9F9489FF7D73
-          69FF191715FFFFFFFF003BA8DBFF3BA8DBFFFFFFFF00FFFFFF00524C46FF9086
-          7DFFAEA59BFF776D64FF55504CFFEFEEEE0045423FFF9A8F84FFA0978CFF7A71
-          67FF1F1C1AFFFFFFFF003BA8DBFF3BA8DBFFFFFFFF00FFFFFF0078726EFFA397
-          8CFFC2B9AFFFA6998EFF827C76FFF3F2F2006F6C69FF9C9186FFBBB0A5FFA69A
-          8EFF4F4C49FFFFFFFF003BA8DBFF3BA8DBFFFDFDFD00FFFFFF00605953FF4641
-          3BFF4E4842FF38332FFF383532FFC6C6C5FF5A5856FF1D1B19FF201D1BFF1311
-          10FF111111FFFFFFFF003BA8DBFF3BA8DBFFFAFAFA00FFFFFF00A3978BFFA99D
-          90FF7F756BFF7F7469FF7D7267FF4E473FFF6B6056FF84786DFF7A6E64FF776D
-          63FF1C1A18FFFFFFFF003BA8DBFF3BA8DBFFFCFCFC00FFFFFF00C8BFB7FFA89B
-          90FF897E74FF86786AFF8E7F70FFA19181FF958372FF937F6DFF897666FF7D71
-          66FF555351FFFFFFFF003BA8DBFF3BA8DBFFFFFFFF00FFFFFF00F2F1EF00897E
-          73FF9B8E82FF887D72FF564F48FFC0BCB8FF5D564EFF857668FF7C6F63FF6C65
-          5FFFBBBAB9FFFFFFFF003BA8DBFF3BA8DBFFFEFEFE00FFFFFF00FFFFFF00E5E3
-          E1FFCFC9C4FFACA297FF776F66FFF0F0EF00776D64FFA09488FFBAB3ADFFE2E1
-          E0FFF9F9F900FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00DFDBD7FFB3A79CFFA5998DFFF6F5F400AC9F92FF94897FFFB8B4B0FFFFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-        }
       end
-      object MenuItem10: TMenuItem
+      object MenuItem17: TMenuItem
         Caption = '-'
       end
       object MenuReplace: TMenuItem
         Action = SearchReplace
-        Bitmap.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00113D55F7285F87FB4988BDFB428DBCC12D77B322FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF002B6583FB94C7F9FF91C9F9FF4185C9FF1C64AAF32E79
-          B92FFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF004389AAFFE0F2FFFF549AD8FF1A7ABEFF4998C5FF4081
-          B6FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF003E3934FF3934
-          30FF332F2BFF2C2925FF97B5C9FF7AB6D5FF90B7D1FF55C9E4FF5BDFF5FF78D0
-          EDFF4F9BDBFF000000FF000000FFFFFFFF00FFFFFF00FFFFFF0046413BFF857A
-          70FFC3B8AEFF7C7268FF7F756BFFA4C6D7FF75B8D6FFC2F6FDFF63DFF7FF5DE2
-          F8FF79D3F0FF4A99DCFF010101FFFFFFFF00FFFFFF00FFFFFF004D4741FF8378
-          6FFFCCC3BAFF786F65FF7B7167FF2F2B28F989AEBFFF77CBE7FFC7F7FDFF5EDC
-          F5FF5AE1F7FF7BD4F1FF4C9ADEFFFFFFFF00FFFFFF00FFFFFF00534C46FC8378
-          6FFFCCC3BAFF797066FF71685FFF37332ED5FFFFFF0095BDCAFF79D3EEFFC7F7
-          FDFF5FDCF5FF5BE2F7FF7AD6F2FF50A0E0FFFFFFFF00FFFFFF005A524CC39F92
-          86FFCCC3BAFFC0B4AAFFA6988BFF3E3934A8FFFFFF002C2925A8B5DEEBFF7DD4
-          EEFFC4F6FDFF6CDDF6FF6DCAEDFF63A3D7FF6399C9FF5192CA265C554EF9423D
-          38FF58514AFF3D3833FF332F2BFF23201DE5171614301E1C19B51A1816FFB5E6
-          F5FF81D6EEFFB2E3F9FF8BC0E7FFAED3F6FFC4E0FCFF669FD3F79D9185FFB1A3
-          96FF7F756BFF7C7268FF776D64FF6C635BFF2E2A26FF564F48FF80766CFF7C72
-          68FFB1E6F5FF77BEE7FFB4D2F0FFE5F3FFFFACD2EFFF488CC7E8AFA194E1BAAE
-          A2FF82776DFF82776DFFAA917BFFBAA794FFB7A48EFAB09781FF9F8D7DFF836D
-          5BFF716357FF94BDCCFF58A5D8FF85B1DBFF469DD0FF2B95D15E877D72489B8E
-          82FF9D9185FF867B71FF564F48FF504A44FF80766CFF6E665DFF826C58FFA691
-          7DFF948474FF564F48FF0C0B0B7A07070601FFFFFF00FFFFFF00FFFFFF00746B
-          62FFA4978AFF95897DFF9F9286FF3E3934FFFFFFFF004C4640FF7E746AFF857A
-          70FF3E3934FF453F3AA72522200C15131102FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF008E8378E2C3B8AEFF655D55FFFFFFFF007C7268FFA89B8EFF9C8F
-          83E4FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF009C8F83E2BCB0A4FF9D9185FFFFFFFF00AEA093FF9D9185FF655D
-          55DAFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-        }
       end
-      object MenuItem11: TMenuItem
+      object MenuItem10: TMenuItem
         Caption = '-'
       end
       object MenuNextTo: TMenuItem
         Action = SearchNextTo
       end
-      object MenuPreviousTo: TMenuItem
+      object MenuPrevTo: TMenuItem
         Action = SearchPreviousTo
       end
       object MenuNextEnd: TMenuItem
         Action = SearchNextEnd
       end
-      object MenuPreviousEnd: TMenuItem
+      object MenuPrevEnd: TMenuItem
         Action = SearchPreviousEnd
       end
     end
@@ -1842,6 +1735,7 @@ object MainForm: TMainForm
     object EditCut: TEditCut
       Category = 'Edit'
       Caption = 'Coup&er'
+      Enabled = False
       Hint = 'Couper'
       ImageIndex = 31
       OnExecute = EditCutExecute
@@ -1851,6 +1745,7 @@ object MainForm: TMainForm
     object EditCopy: TEditCopy
       Category = 'Edit'
       Caption = '&Copier'
+      Enabled = False
       Hint = 'Copier'
       ImageIndex = 32
       OnExecute = EditCopyExecute
@@ -1860,6 +1755,7 @@ object MainForm: TMainForm
     object EditPaste: TEditPaste
       Category = 'Edit'
       Caption = '&Coller'
+      Enabled = False
       Hint = 'Coller'
       ImageIndex = 33
       OnExecute = EditPasteExecute
@@ -1868,6 +1764,7 @@ object MainForm: TMainForm
     object EditSelectAll: TEditSelectAll
       Category = 'Edit'
       Caption = '&Tout sélectionner'
+      Enabled = False
       Hint = 'Tout sélectionner'
       ImageIndex = 21
       OnExecute = EditSelectAllExecute
@@ -1877,6 +1774,7 @@ object MainForm: TMainForm
     object EditUndo: TEditUndo
       Category = 'Edit'
       Caption = '&Défaire'
+      Enabled = False
       Hint = 'Défaire'
       ImageIndex = 24
       OnExecute = EditUndoExecute
@@ -1906,6 +1804,7 @@ object MainForm: TMainForm
       Dialog.Title = 'Enregistrer le fichier (sous un autre nom)'
       Dialog.DefaultExt = '.GVE'
       Dialog.Filter = 'Fichiers GVLOGO|*.GVE'
+      Enabled = False
       Hint = 'Enregistrer sous'
       ImageIndex = 16
     end
@@ -1926,6 +1825,7 @@ object MainForm: TMainForm
     object FileSave: TAction
       Category = 'File'
       Caption = '&Enregistrer'
+      Enabled = False
       Hint = 'Enregistrer l''éditeur en cours'
       ImageIndex = 26
       ShortCut = 16467
@@ -1933,12 +1833,14 @@ object MainForm: TMainForm
     object FileClose: TAction
       Category = 'File'
       Caption = 'Fermer l''éditeur'
+      Enabled = False
       Hint = 'Fermer l''éditeur'
       ImageIndex = 29
     end
     object FilePrint: TAction
       Category = 'File'
       Caption = 'Imprimer...'
+      Enabled = False
       Hint = 'Imprimer l''éditeur en cours'
       ImageIndex = 30
       ShortCut = 16464
@@ -1946,6 +1848,7 @@ object MainForm: TMainForm
     object EditRedo: TAction
       Category = 'Edit'
       Caption = 'Refaire'
+      Enabled = False
       Hint = 'Refaire la dernière action'
       ImageIndex = 13
       OnExecute = EditRedoExecute
@@ -1955,6 +1858,7 @@ object MainForm: TMainForm
     object EditIndent: TAction
       Category = 'Edit'
       Caption = 'Indenter la sélection'
+      Enabled = False
       Hint = 'Indenter la sélection'
       ImageIndex = 8
       OnExecute = EditIndentExecute
@@ -1964,6 +1868,7 @@ object MainForm: TMainForm
     object EditUnIndent: TAction
       Category = 'Edit'
       Caption = 'Désindente la sélection'
+      Enabled = False
       Hint = 'Désindente la sélection'
       ImageIndex = 34
       OnExecute = EditUnIndentExecute
@@ -1973,6 +1878,7 @@ object MainForm: TMainForm
     object EditLineSelect: TAction
       Category = 'Edit'
       Caption = 'Sélectionner la ligne'
+      Enabled = False
       Hint = 'Sélectionner la ligne'
       OnExecute = EditLineSelectExecute
       OnUpdate = SearchFindUpdate
@@ -1980,6 +1886,7 @@ object MainForm: TMainForm
     object EditWordSelect: TAction
       Category = 'Edit'
       Caption = 'Sélectionner le mot'
+      Enabled = False
       Hint = 'Sélectionner le mot'
       OnExecute = EditWordSelectExecute
       OnUpdate = SearchFindUpdate
@@ -2002,30 +1909,35 @@ object MainForm: TMainForm
     object SearchNextTo: TAction
       Category = 'Search'
       Caption = 'POUR suivant'
+      Enabled = False
       Hint = 'Recherche du POUR suivant'
-      OnUpdate = SearchFindExecute
+      OnUpdate = SearchFindUpdate
     end
     object SearchPreviousTo: TAction
       Category = 'Search'
       Caption = 'POUR précédent'
+      Enabled = False
       Hint = 'Recherche du POUR précédent'
       OnUpdate = SearchFindUpdate
     end
     object SearchNextEnd: TAction
       Category = 'Search'
       Caption = 'FIN suivant'
+      Enabled = False
       Hint = 'Recherche du FIN suivant'
       OnUpdate = SearchFindUpdate
     end
     object SearchPreviousEnd: TAction
       Category = 'Search'
       Caption = 'FIN précédent'
+      Enabled = False
       Hint = 'Recherche du FIN précédent'
       OnUpdate = SearchFindUpdate
     end
     object ExeStop: TAction
       Category = 'Exec'
       Caption = '&Arrêter'
+      Enabled = False
       Hint = 'Arrêter l''exécution'
       ImageIndex = 22
       OnExecute = ExeStopExecute
@@ -2034,6 +1946,7 @@ object MainForm: TMainForm
     object ExecWait: TAction
       Category = 'Exec'
       Caption = '&Pause'
+      Enabled = False
       Hint = 'Mettre le programme en pause'
       ImageIndex = 11
       ShortCut = 116
@@ -2041,6 +1954,7 @@ object MainForm: TMainForm
     object ExecInterpret: TAction
       Category = 'Exec'
       Caption = '&Interpréter'
+      Enabled = False
       Hint = 'Interpréter l''éditeur'
       ImageIndex = 0
       OnExecute = ExecInterpretExecute
@@ -2150,6 +2064,7 @@ object MainForm: TMainForm
     object SearchReplace: TAction
       Category = 'Search'
       Caption = 'Remplacer...'
+      Enabled = False
       Hint = 'Remplacement dans l''éditeur'
       ImageIndex = 20
       OnExecute = SearchReplaceExecute
@@ -2159,9 +2074,11 @@ object MainForm: TMainForm
     object SearchNext: TAction
       Category = 'Search'
       Caption = 'Chercher l''occurence &suivante'
+      Enabled = False
       Hint = 'Rechercher l''occurence suivante'
       ImageIndex = 18
       OnExecute = SearchNextExecute
+      OnUpdate = SearchFindUpdate
       ShortCut = 114
     end
     object FileQuit: TAction
@@ -2175,6 +2092,7 @@ object MainForm: TMainForm
     object SearchFind: TAction
       Category = 'Search'
       Caption = '&Chercher...'
+      Enabled = False
       Hint = 'Chercher dans l''éditeur'
       ImageIndex = 17
       OnExecute = SearchFindExecute
