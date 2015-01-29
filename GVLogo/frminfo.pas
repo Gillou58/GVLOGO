@@ -54,9 +54,6 @@ type
     btnYes: TBitBtn;
     imgInfo: TImage;
     mmoInfo: TMemo;
-    procedure btnCloseClick(Sender: TObject);
-    procedure btnNoClick(Sender: TObject);
-    procedure btnYesClick(Sender: TObject);
   private
     fMessage: string;
     procedure SetMessage(const AValue: string);
@@ -114,24 +111,6 @@ end;
 {$R *.lfm}
 
 { TInfoForm }
-
-procedure TInfoForm.btnCloseClick(Sender: TObject);
-// *** fermeture de la fenêtre ***
-begin
-  Self.ModalResult := mrCancel; // on ferme
-end;
-
-procedure TInfoForm.btnNoClick(Sender: TObject);
-// *** bouton non pressé ***
-begin
-  Self.ModalResult := mrNo;
-end;
-
-procedure TInfoForm.btnYesClick(Sender: TObject);
-// *** bouton Oui pressé ***
-begin
-  Self.ModalResult := mrYes;
-end;
 
 procedure TInfoForm.SetMessage(const AValue: string);
 // *** changement de message ***

@@ -1,0 +1,117 @@
+//   essai  de fichier
+
+
+pour Spirale_Couleurs :nbre :motif :cote
+  donne "pas 1
+  repete :nbre [fcc mod somme cc 1 19 exec phrase :motif :cote gauche 31 lc avance :pas donne "pas somme :pas 3 bc]
+fin
+
+pour Tourne_Couleurs :nbre :motif :cote
+  repete :nbre [fcc mod somme cc 1 19 exec phrase :motif :cote gauche quotient 360 :nbre av 9]
+fin
+
+pour Emboite_Couleurs :nbre :motif :cote
+  repete :nbre [ fcc mod somme cc 1 19 exec phrase :motif :cote donne "cote somme :cote 7 origine]
+fin
+
+pour Emboitement :nbre :motif :cote
+  repete :nbre [exec phrase :motif :cote donne "cote somme :cote 7 origine]
+fin
+
+pour Spirale :nbre :motif :cote
+  donne "pas 1
+  repete :nbre [exec phrase :motif :cote gauche 31 lc av :pas donne "pas somme :pas 3 bc]
+fin
+
+pour Tetraedre :cote :niveau
+  si egal? :niveau 0 [Stop]
+  repete 3 [av :cote tetraedre div :cote 1,9 diff :niveau 1 morceau :cote]
+fin
+
+pour Morceau :cote
+  td 150 av produit :cote rac 3
+  td 150 av :cote
+  td 180
+fin
+
+pour petale
+  td 45
+  repete 6 [repete 90 [av 2 td 2] td 90]
+fin
+
+pour fleur
+  repete 8 [fcc diff hasard 19 1 petale] ct
+fin
+
+pour tourne_c :nbre :motif :cote
+  // forme qui tourne (dans motif avec couleurs)
+  repete :nbre [fcc diff hasard 19 1 exec ph :motif :cote tg quotient 360 :nbre av 9]
+fin
+
+pour tourne2 :nbre :motif :cote
+  // forme qui tourne (dans motif)
+  repete :nbre [exec ph :motif :cote tg quotient 360 :nbre av 9]
+fin
+
+pour Poly12 :cote
+  // un polyedre à 12 faces
+  polyedre :cote 12 30
+fin
+
+pour polyedre :lcote :nbcotes :angle
+  // un polyedre
+  bc
+  xpolygone :lcote :nbcotes :angle
+  td diff 90 :angle
+  av :lcote
+  tg diff 90 :angle
+  polygone :nbcotes :lcote
+fin
+
+pour jonction :lcote :angle :anciencap
+  // jonction de deux polygones
+  fcap 90
+  td diff 90 :angle
+  av :lcote
+  re :lcote
+  fcap :anciencap
+fin
+
+pour xpolygone :lcote :nbcotes :angle
+  // xpolygones sur un cercle
+  repete :nbcotes [jonction :lcote :angle cap av :lcote td quotient 360 :nbcotes]
+fin
+
+pour Tourne :nbre :motif :cote
+  repete :nbre [exec phrase :motif :cote gauche quotient 360 :nbre av 9]
+fin
+
+pour octogone :n
+  // un octogone
+  polygone 8 :n
+fin
+
+pour pentagone :n
+  // un pentagone
+  polygone 5 :n
+fin
+
+pour hexagone :n
+  // un hexagone
+  polygone 6 :n
+fin
+
+pour polygone :n :long
+  // un polygone
+  repete :n [av :long td quotient 360 :n]
+fin
+
+pour carre :n
+  // un carré
+  polygone 4 :n
+fin
+
+pour triangle :n
+  // un triangle
+  polygone 3 :n
+fin

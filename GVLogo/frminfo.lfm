@@ -589,7 +589,6 @@ object InfoForm: TInfoForm
     Caption = '&Oui'
     Kind = bkYes
     ModalResult = 6
-    OnClick = btnNoClick
     ParentShowHint = False
     ShowHint = True
     TabOrder = 0

@@ -1926,8 +1926,8 @@ object MainForm: TMainForm
     object FileOpen: TFileOpen
       Category = 'File'
       Caption = '&Ouvrir'
-      Dialog.DefaultExt = '.*.GVE'
-      Dialog.Filter = 'Fichiers GVLOGO|*.GVE'
+      Dialog.DefaultExt = '.GVL'
+      Dialog.Filter = 'Fichiers GVLOGO|*.GVL'
       Dialog.Options = [ofFileMustExist, ofEnableSizing, ofViewDetail, ofAutoPreview]
       Hint = 'Ouvrir un fichier de procédures'
       ImageIndex = 27
@@ -1964,6 +1964,8 @@ object MainForm: TMainForm
       Enabled = False
       Hint = 'Enregistrer l''éditeur en cours'
       ImageIndex = 26
+      OnExecute = FileSaveExecute
+      OnUpdate = FileSaveUpdate
       ShortCut = 16467
     end
     object FileClose: TAction

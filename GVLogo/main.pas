@@ -210,6 +210,8 @@ type
     tbSelectAll: TToolButton;
     procedure EditRedoUpdate(Sender: TObject);
     procedure EditUndoUpdate(Sender: TObject);
+    procedure FileSaveExecute(Sender: TObject);
+    procedure FileSaveUpdate(Sender: TObject);
     procedure SearchFindExecute(Sender: TObject);
     procedure EditCopyExecute(Sender: TObject);
     procedure EditCutExecute(Sender: TObject);
@@ -252,10 +254,12 @@ type
     fDeepFollow: Boolean; // drapeau de trace approfondie
     fGVAutomat: TGVAutomat; // interpréteur
     fRunning: Boolean; // drapeau d'exécution en cours
+    fModified: Boolean; // éditeur modifié
     // recherche d'une couleur normalisée
     function GetAColor(const AValue: TColor): string;
     // conversion d'une couleur
     function SetAColor(const St: string): TColor;
+    procedure SetModified(AValue: Boolean);
     procedure SetRunning(AValue: Boolean);
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
@@ -263,6 +267,8 @@ type
     property Automat: TGVAutomat read fGVAutomat write fGVAutomat;
     // drapeau d'exécution en cours
     property Running: Boolean read fRunning write SetRunning;
+    // drapeau d'éditeur modifié
+    property Modified: Boolean read fModified write SetModified;
   end;
 
 var
@@ -327,25 +333,14 @@ begin
   // ### confirmation TODO ###
   // ### types de fichiers : *.GVE ou autre TODO ###
   // exécute le chargement du fichier choisi
-  Running := True; // exécution en cours
   try
-    Automat.Process(CBeginList + P_LoadAll + CBlank + CQuote +
-      FileOpen.Dialog.FileName + CEndList);
-  finally
-    Running := False; // fin d'exécution
-  end;
-  // pas d'erreur ?
-  if Automat.Error.Ok then
-  begin
-    if Automat.Kernel.AllProcsToEdit(FrmEditor.EditorForm.SynEditEditor.Lines)
-      then
-      begin
-        // nom de fichier en titre
-        EditorForm.Caption := FileOpen.Dialog.FileName;
-        EditorForm.ShowOnTop; // éditeur en vue
-        // boîte d'information
-        FrmInfo.ShowInfoForm(Format(CrsLoad, [FileOpen.Dialog.FileName]));
-      end;
+    EditorForm.ShowOnTop; // éditeur en vue
+    EditorForm.SynEditEditor.Lines.LoadFromFile(FileOpen.Dialog.FileName);
+    EditorForm.Caption := FileOpen.Dialog.FileName;
+    // boîte d'information
+    FrmInfo.ShowInfoForm(Format(CrsLoad, [FileOpen.Dialog.FileName]));
+  except
+    FrmInfo.ShowInfoForm(Format(CrsErrLoad, [FileOpen.Dialog.FileName]));
   end;
 end;
 
@@ -443,6 +438,20 @@ begin
     and not Running; // et pas de programme en cours
 end;
 
+procedure TMainForm.FileSaveExecute(Sender: TObject);
+// *** sauvegarde ***
+begin
+  // ### contrôle si existe + saveas si nouveau + protextion TODO ###
+  EditorForm.SynEditEditor.Lines.SaveToFile(EditorForm.Caption);
+end;
+
+procedure TMainForm.FileSaveUpdate(Sender: TObject);
+// *** activation/ désactivation de la sauvegarde ***
+begin
+  FileSave.Enabled := (not Running) and Modified;
+  FileSaveAs.Enabled := FileSave.Enabled;
+end;
+
 procedure TMainForm.EditRedoUpdate(Sender: TObject);
 // *** activation/ désactivation de refaire ***
 begin
@@ -468,16 +477,26 @@ end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 // *** travail avant la fermeture du logiciel ***
+var
+  T: TmodalResult;
 begin
   // vérification de l'enregistrement des modifications
   if EditorForm.SynEditEditor.Modified then
   begin
     // demande d'enregistrement des modifications  ### TODO ###
-    case ShowConfirmForm(Format(CrsSave, [EditorForm.Caption])) of
+    T :=ShowConfirmForm(Format(CrsSave, [EditorForm.Caption]));
+    case T of
       mrYes: begin
-               Automat.Process(CBeginList + P_SaveProcs + CBlank + CQuote +
-                 EditorForm.Caption + CEndList);
-               CanClose := Automat.Error.Ok; // on ferme si pas d'erreur
+               try
+                 EditorForm.SynEditEditor.Lines.SaveToFile('Tout.GVL'); // ###
+                 CanClose := True;
+                 // ### sauvegarde effectuée
+                 FrmInfo.ShowInfoForm(Format(CrsSaved, ['Tout.GVL']));
+               except
+                 CanClose := False;
+                 // ### erreur sauvegarde
+                 FrmInfo.ShowInfoForm(Format(CrsErrSaved, ['Tout.GVL']));
+               end;
       end;
       mrNo: CanClose := True;
       mrCancel: CanClose := False;
@@ -686,6 +705,16 @@ begin
   if TryStrToInt(St, Li) then // on essaye de convertir en nombre
     if (Li >= 0) and (Li <= SizeOf(CColors)) then // dans les bornes autorisées ?
       Result := CColors[Li]; // renvoi de la couleur
+end;
+
+procedure TMainForm.SetModified(AValue: Boolean);
+// *** éditeur modifié ***
+begin
+  if fModified = AValue then // pas de changement ?
+    Exit; /// on sort
+  fModified := AValue; // nouvelle valeur
+  FileSave.Enabled := fModified; // état sauvegarde adaptée
+  FileSaveAs.Enabled := fModified;
 end;
 
 procedure TMainForm.SetRunning(AValue: Boolean);

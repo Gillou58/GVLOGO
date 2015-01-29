@@ -75,6 +75,7 @@ var
 implementation
 
 uses
+  Main, // fiche principale
   StrUtils;
 
 {$R *.lfm}
@@ -100,6 +101,7 @@ begin
   with SynEditEditor do
     sbEdit.Panels[1].Text := Format(CrsLine + '%.3d - ' + CrsCol + '%.3d - %s',
       [CaretY, CaretX, IfThen(Modified, CrsModified, CrsOk)]);
+  MainForm.Modified := SynEditEditor.Modified;
 end;
 
 procedure TEditorForm.SynEditEditorKeyDown(Sender: TObject; var Key: Word;

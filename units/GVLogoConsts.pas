@@ -52,7 +52,10 @@ type
 
 resourcestring
   // *** chaînes des messages ***
-  CrsLoad = 'Les procédures du fichier "%s" ont été chargées.';
+  CrsLoad = 'Le fichier "%s" a été chargé.';
+  CrsErrLoad = 'Le fichier "%s" n''a pas pu être chargé.';
+  CrsSaved = 'Le fichier "%s" a été sauvegardé.';
+  CrsErrSaved = 'Le fichier "%s" n''a pas pu être sauvegardé.';
   CrsModified = 'Modifié';
   CrsOk = 'OK';
   CrsInfo = 'Information';

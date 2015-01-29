@@ -1,7 +1,7 @@
 object EditorForm: TEditorForm
-  Left = 19
+  Left = 254
   Height = 651
-  Top = 189
+  Top = 219
   Width = 719
   ActiveControl = SynEditEditor
   Caption = '< vide >'
