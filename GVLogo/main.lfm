@@ -1839,23 +1839,6 @@ object MainForm: TMainForm
   object ActionList: TActionList
     Images = ImageListMenu
     left = 232
-    object ExecExecute: TAction
-      Category = 'Exec'
-      Caption = '&Exécuter'
-      Hint = 'Exécuter la ligne d''édition'
-      ImageIndex = 14
-      OnExecute = ExecExecuteExecute
-      ShortCut = 120
-    end
-    object SearchFind: TAction
-      Category = 'Search'
-      Caption = '&Chercher...'
-      Hint = 'Chercher dans l''éditeur'
-      ImageIndex = 17
-      OnExecute = SearchFindExecute
-      OnUpdate = SearchFindUpdate
-      ShortCut = 16454
-    end
     object EditCut: TEditCut
       Category = 'Edit'
       Caption = 'Coup&er'
@@ -1925,14 +1908,6 @@ object MainForm: TMainForm
       Dialog.Filter = 'Fichiers GVLOGO|*.GVE'
       Hint = 'Enregistrer sous'
       ImageIndex = 16
-    end
-    object FileQuit: TAction
-      Category = 'File'
-      Caption = '&Quitter'
-      Hint = 'Quitter le logiciel'
-      ImageIndex = 4
-      OnExecute = FileQuitExecute
-      ShortCut = 16465
     end
     object FileNew: TAction
       Category = 'File'
@@ -2159,7 +2134,6 @@ object MainForm: TMainForm
       Hint = 'Montrer les procédures'
       ImageIndex = 38
       OnExecute = ShowProcsExecute
-      OnUpdate = ShowProcsUpdate
     end
     object ShowPcks: TAction
       Category = 'Show'
@@ -2188,8 +2162,32 @@ object MainForm: TMainForm
       Hint = 'Rechercher l''occurence suivante'
       ImageIndex = 18
       OnExecute = SearchNextExecute
-      OnUpdate = SearchNextUpdate
       ShortCut = 114
+    end
+    object FileQuit: TAction
+      Category = 'File'
+      Caption = '&Quitter'
+      Hint = 'Quitter le logiciel'
+      ImageIndex = 4
+      OnExecute = FileQuitExecute
+      ShortCut = 16465
+    end
+    object SearchFind: TAction
+      Category = 'Search'
+      Caption = '&Chercher...'
+      Hint = 'Chercher dans l''éditeur'
+      ImageIndex = 17
+      OnExecute = SearchFindExecute
+      OnUpdate = SearchFindUpdate
+      ShortCut = 16454
+    end
+    object ExecExecute: TAction
+      Category = 'Exec'
+      Caption = '&Exécuter'
+      Hint = 'Exécuter la ligne d''édition'
+      ImageIndex = 14
+      OnExecute = ExecExecuteExecute
+      ShortCut = 120
     end
   end
   object ImageListMenu: TImageList

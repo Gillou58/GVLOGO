@@ -330,8 +330,8 @@ begin
   finally
     Running := False; // fin d'exécution
   end;
-  // pas d'erreur et interpréteur en attente ?
-  if (Automat.Error.Ok) and (Automat.State = asWaiting) then
+  // pas d'erreur ?
+  if Automat.Error.Ok then
   begin
     if Automat.Kernel.AllProcsToEdit(FrmEditor.EditorForm.SynEditEditor.Lines)
       then
@@ -654,8 +654,8 @@ end;
 procedure TMainForm.SetRunning(AValue: Boolean);
 // *** exécution en cours ***
 begin
-  if fRunning = AValue then // pas de changement ?
-    Exit; // on sort
+  if fRunning = AValue then
+    Exit;
   fRunning := AValue; // nouvelle valeur affectée
   ExeStop.Enabled := fRunning; // interruption
   ExecClear.Enabled := not fRunning; // nettoyage
@@ -664,17 +664,18 @@ begin
   ExecInterpret.Enabled := not fRunning; // interprétation
   FileQuit.Enabled := not fRunning; // sortie
   FileOpen.Enabled := not fRunning; // ouverture de fichier
+  FileSaveAs.Enabled := not fRunning; // sauvegarde sous
   FileNew.Enabled := not fRunning; // nouveau fichier
-  FileNewProc.Enabled := not Running; // nouvelle procédure
+  FileNewProc.Enabled := not fRunning; // nouvelle procédure
   FileClose.Enabled := not fRunning; // fermeture de fichier
-  FilePrint.Enabled := not Running; // impression
-  FileSave.Enabled := not Running; // sauvegarde
+  FilePrint.Enabled := not fRunning; // impression
+  FileSave.Enabled := not fRunning; // sauvegarde
   EditCut.Enabled := not fRunning; // couper
   EditCopy.Enabled := not fRunning; // ccpier
   EditPaste.Enabled := not fRunning; // coller
   EditForm.cbEditCmdLine.Enabled := not fRunning; // ligne de commande
-  HelpAbout.Enabled := not Running; // aide sur l'aide
-  HelpPrims.Enabled := not Running; // aide sur les primitives
+  HelpAbout.Enabled := not fRunning; // aide sur l'aide
+  HelpPrims.Enabled := not fRunning; // aide sur les primitives
 end;
 
 end.
