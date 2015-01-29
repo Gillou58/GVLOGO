@@ -2029,6 +2029,7 @@ object MainForm: TMainForm
       Hint = 'Exécuter la ligne d''édition'
       ImageIndex = 14
       OnExecute = ExecExecuteExecute
+      OnUpdate = ExecExecuteUpdate
       ShortCut = 120
     end
     object ExeStop: TAction
@@ -2037,6 +2038,7 @@ object MainForm: TMainForm
       Hint = 'Arrêter l''exécution'
       ImageIndex = 22
       OnExecute = ExeStopExecute
+      OnUpdate = ExeStopUpdate
       ShortCut = 115
     end
     object ExecWait: TAction
@@ -2105,6 +2107,7 @@ object MainForm: TMainForm
       Caption = '&Editeur'
       Hint = 'Voir l''éditeur'
       ImageIndex = 70
+      OnExecute = ShowEditExecute
       ShortCut = 24645
     end
     object ShowTurtle: TAction

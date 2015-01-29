@@ -53,6 +53,7 @@ resourcestring
   CrsOk = 'OK';
   CrsInfo = 'Information';
   CrsConfirm = 'Confirmation';
+  CrsAsk = 'Question';
   CrsSave = 'Voulez-vous enregistrer %s ?';
   CrsLine = 'Ligne: ';
   CrsCol = 'Colonne: ';
@@ -60,7 +61,8 @@ resourcestring
   CrsCloseHint = 'Fermer la fenêtre';
   CrsInterpreter = ' L''éditeur a été correctement interprété.';
   CrsNotFound = 'Le texte "%s" n''a pas été trouvé.';
-
+  CrsAskForValue = 'Entrez la valeur demandée ici :';
+  CrsStop = 'Le programme a été arrêté.';
 
 implementation
 

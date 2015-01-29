@@ -210,6 +210,8 @@ type
     tbSelectAll: TToolButton;
     procedure EditRedoUpdate(Sender: TObject);
     procedure EditUndoUpdate(Sender: TObject);
+    procedure ExecExecuteUpdate(Sender: TObject);
+    procedure ExeStopUpdate(Sender: TObject);
     procedure SearchFindExecute(Sender: TObject);
     procedure EditCopyExecute(Sender: TObject);
     procedure EditCutExecute(Sender: TObject);
@@ -239,6 +241,7 @@ type
     procedure SearchNextUpdate(Sender: TObject);
     procedure SearchReplaceExecute(Sender: TObject);
     procedure ShowCmdLineExecute(Sender: TObject);
+    procedure ShowEditExecute(Sender: TObject);
     procedure ShowProcsExecute(Sender: TObject);
     procedure ShowProcsUpdate(Sender: TObject);
     procedure ShowTextExecute(Sender: TObject);
@@ -246,14 +249,18 @@ type
   private
     fDeepFollow: Boolean; // drapeau de trace approfondie
     fGVAutomat: TGVAutomat; // interpréteur
+    fRunning: Boolean; // drapeau d'exécution en cours
     // recherche d'une couleur normalisée
     function GetAColor(const AValue: TColor): string;
     // conversion d'une couleur
     function SetAColor(const St: string): TColor;
+    procedure SetRunning(AValue: Boolean);
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
     procedure GetMessage(Sender: TObject); // messages
     property Automat: TGVAutomat read fGVAutomat write fGVAutomat;
+    // drapeau d'exécution en cours
+    property Running: Boolean read fRunning write SetRunning;
   end;
 
 var
@@ -300,6 +307,7 @@ procedure TMainForm.ExecInterpretExecute(Sender: TObject);
 // *** interprétation ***
 var Err: Integer;
 begin
+  ShowEditExecute(nil); // éditeur montré
   if Automat.Kernel.EditToProc(EditorForm.SynEditEditor.Lines, 0, 0, Err) then
     FrmInfo.ShowInfoForm(CrsInterpreter); // information affichée si OK
 end;
@@ -308,15 +316,22 @@ procedure TMainForm.ExeStopExecute(Sender: TObject);
 // *** stop ***
 begin
   Automat.Stop := True; // arrêt demandé
+  ShowInfoForm(CrsStop); // message affiché
 end;
 
 procedure TMainForm.FileOpenAccept(Sender: TObject);
 // *** ouverture d'un fichier ***
 begin
   // ### confirmation TODO ###
+  // ### types de fichiers : *.GVE ou autre TODOD ###
   // exécute le chargement du fichier choisi
-  Automat.Process(CBeginList + P_LoadAll + CBlank + CQuote +
-    FileOpen.Dialog.FileName + CEndList);
+  Running := True; // exécution en cours
+  try
+    Automat.Process(CBeginList + P_LoadAll + CBlank + CQuote +
+      FileOpen.Dialog.FileName + CEndList);
+  finally
+    Running := False; // fin d'exécution
+  end;
   // pas d'erreur et interpréteur en attente ?
   if (Automat.Error.Ok) and (Automat.State = asWaiting) then
   begin
@@ -425,6 +440,18 @@ begin
   EditUndo.Enabled := EditorForm.SynEditEditor.CanUndo; // possible ?
 end;
 
+procedure TMainForm.ExecExecuteUpdate(Sender: TObject);
+// *** activation/ désactivation de exécute ***
+begin
+  ExecExecute.Enabled := not Running; // pas d'exécution en cours
+end;
+
+procedure TMainForm.ExeStopUpdate(Sender: TObject);
+// *** activation/désactivation de stop ***
+begin
+  ExeStop.Enabled := Running; // seulement si exécution en cours
+end;
+
 procedure TMainForm.EditRedoUpdate(Sender: TObject);
 // *** activation/ désactivation de refaire ***
 begin
@@ -435,14 +462,17 @@ procedure TMainForm.ExecExecuteExecute(Sender: TObject);
 // *** interprétation ***
 begin
   Automat.Clear; // nettoyage
-  ExecExecute.Enabled := False; // action inactive
   try
+    Running := True; // drapeau d'exécution
+    MainForm.Menu := nil; // désactivation du menu principal
     ShowTextExecute(nil); // on montre la fenêtre de texte
     ShowTurtleExecute(nil); // on montre la fenêtre de la tortue
+    ShowCmdLineExecute(nil); // on montre la ligne de commande
     Automat.Process(CBeginList + FrmEdit.EditForm.EditCmdLine.Text +
       CEndList); // ligne à exécuter
   finally
-    ExecExecute.Enabled := True; // action active
+    MainForm.Menu := MainMenu; // réactivation du menu principal
+    Running := False; // drapeau d'exécution
   end;
 end;
 
@@ -484,9 +514,10 @@ end;
 procedure TMainForm.SearchFindUpdate(Sender: TObject);
 // *** activation / désactivation de la recherche ***
 begin
-  // actif si l'éditeur est non vide
+  // actif si l'éditeur est non vide et pas de programme en cours
   (Sender as TAction).Enabled := not ((EditorForm.SynEditEditor.Lines.Count = 1)
-    and (EditorForm.SynEditEditor.Lines[1] = EmptyStr));
+    and (EditorForm.SynEditEditor.Lines[1] = EmptyStr)) and
+    (Automat.State = asWaiting);
 end;
 
 procedure TMainForm.SearchNextExecute(Sender: TObject);
@@ -516,8 +547,15 @@ begin
   EditForm.Show; // on la voit
 end;
 
+procedure TMainForm.ShowEditExecute(Sender: TObject);
+// *** affichage de l'éditeur ***
+begin
+  EditorForm.WindowState := wsNormal; // la fenêtre est redimensionnée
+  EditorForm.Show; // on la voit
+end;
+
 procedure TMainForm.ShowProcsExecute(Sender: TObject);
-// *** affichage des procédures disponibles
+// *** affichage des procédures disponibles ***
 begin
   ShowProcsForm; // on montre la fiche
 end;
@@ -562,8 +600,8 @@ begin
     acWrite: TextForm.WriteTextLN(Automat.Message.Message);
     acClear: TextForm.Clear; // nettoyage
     // lecture d'une liste
-    acReadList: Automat.Message.Message := InputBox('TestGVAutomat',
-    'Entrez la valeur demandée ici :', EmptyStr);
+    acReadList: Automat.Message.Message := InputBox(CrsAsk,
+    CrsAskForValue, EmptyStr);
     // demande de confirmation
     acConfirm: if MessageDlg(Automat.Message.Message , mtConfirmation,
       mbYesNo, 0) = mrYes then
@@ -619,6 +657,16 @@ begin
   if TryStrToInt(St, Li) then // on essaye de convertir en nombre
     if (Li >= 0) and (Li <= SizeOf(CColors)) then // dans les bornes autorisées ?
       Result := CColors[Li]; // renvoi de la couleur
+end;
+
+procedure TMainForm.SetRunning(AValue: Boolean);
+// *** exécution en cours ***
+begin
+  if fRunning = AValue then // pas de changement ?
+    Exit; // on sort
+  fRunning := AValue; // nouvelle valeur affectée
+  ExeStop.Enabled := fRunning; // interruption possible ?
+  // ### attente aussi TODO ###
 end;
 
 end.
