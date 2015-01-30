@@ -3,7 +3,7 @@ object InfoForm: TInfoForm
   Height = 151
   Top = 150
   Width = 481
-  ActiveControl = btnQuit
+  ActiveControl = btnYes
   BorderStyle = bsDialog
   ClientHeight = 151
   ClientWidth = 481
@@ -581,7 +581,7 @@ object InfoForm: TInfoForm
   end
   object btnNo: TBitBtn
     Cursor = crHandPoint
-    Left = 280
+    Left = 176
     Height = 30
     Hint = 'Réponse positive'
     Top = 112
@@ -591,11 +591,11 @@ object InfoForm: TInfoForm
     ModalResult = 6
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 0
+    TabOrder = 1
   end
   object btnYes: TBitBtn
     Cursor = crHandPoint
-    Left = 176
+    Left = 280
     Height = 30
     Hint = 'Réponse négative'
     Top = 112
@@ -605,6 +605,6 @@ object InfoForm: TInfoForm
     ModalResult = 7
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 1
+    TabOrder = 0
   end
 end

@@ -46,9 +46,6 @@ uses
 
 type
   // *** TProcsForm ***
-
-  { TProcsForm }
-
   TProcsForm = class(TForm)
     btnSave: TBitBtn;
     btnQuit: TBitBtn;
@@ -99,10 +96,10 @@ end;
 procedure TProcsForm.btnSaveClick(Sender: TObject);
 // *** enregistrement des modifications ***
 var
-  Err: Integer;
+  LErr: Integer;
 begin
   SynEditProcs.Modified := not MainForm.Automat.Kernel.EditToProc(
-    SynEditProcs.Lines, 0, 0, Err); // enregistrement
+    SynEditProcs.Lines, 0, 0, LErr); // enregistrement
   SynEditProcsChange(nil); // changement notifié
 end;
 
@@ -123,7 +120,7 @@ begin
   try
     // affectation des procédures
     LL.Text := MainForm.Automat.Kernel.ProcsToList;
-    Self.Text := Self.Text + ' (' + IntToStr(LL.Count) + ')';
+    Self.Text := Format(CrsProcs ,[LL.Count]); // entête de la fenêtre
     // on balaie la liste
     for LS in LL do
       cbProcs.AddItem(LS, nil); // ajout à la boîte
@@ -145,7 +142,7 @@ procedure TProcsForm.cbProcsSelect(Sender: TObject);
 // *** affichage de la procédure choisie ***
 var
   LChange: Boolean;
-  Err: Integer;
+  LErr: Integer;
 begin
   LChange := True; // changement par défaut
   if SynEditProcs.Modified then // éditeur modifié ?
@@ -155,7 +152,7 @@ begin
       [cbProcs.Items[cbProcs.ItemIndex]])) of
         // on veut enregistrer la procédure
         mrYes: LChange := MainForm.Automat.Kernel.EditToProc(SynEditProcs.Lines,
-          0, 0, Err);
+            0, 0, LErr);
         mrNo: LChange := True; // pas d'enregistrement
         mrCancel: LChange := False; // abandon
       end;
@@ -165,14 +162,16 @@ begin
     SynEditProcs.Lines.Clear; // nettoyage de l'éditeur
     // édition de la procédure
     with cbProcs do
-      MainForm.Automat.Kernel.ProcToEdit(Items[ItemIndex], SynEditProcs.Lines);
+      if MainForm.Automat.Kernel.ProcToEdit(Items[ItemIndex],
+        SynEditProcs.Lines) then
+          SynEditProcs.Modified := False; // drapeau de modification à jour
   end;
 end;
 
 procedure TProcsForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 // *** fermeture de la fenêtre ***
 var
-  Err: Integer;
+  LErr: Integer;
 begin
   if SynEditProcs.Modified then // éditeur modifié ?
   begin
@@ -181,7 +180,7 @@ begin
       [cbProcs.Items[cbProcs.ItemIndex]])) of
         // on veut enregistrer la procédure
         mrYes: CanClose := MainForm.Automat.Kernel.EditToProc(SynEditProcs.Lines,
-          0, 0, Err);
+          0, 0, LErr);
         mrNo: CanClose := True; // pas d'enregistrement
         mrCancel: CanClose := False; // abandon
       end;

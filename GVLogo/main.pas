@@ -48,9 +48,6 @@ uses
 
 type
   // *** TMainForm ***
-
-  { TMainForm }
-
   TMainForm = class(TForm)
     MenuItem10: TMenuItem;
     MenuPrevTo: TMenuItem;
@@ -344,8 +341,6 @@ begin
     EditorForm.ShowOnTop; // éditeur en vue
     EditorForm.SynEditEditor.Lines.LoadFromFile(FileOpen.Dialog.FileName);
     EditorForm.Caption := FileOpen.Dialog.FileName;
-    // boîte d'information
-    FrmInfo.ShowInfoForm(Format(CrsLoad, [FileOpen.Dialog.FileName]));
   except
     // erreur
     FrmInfo.ShowInfoForm(Format(CrsErrLoad, [FileOpen.Dialog.FileName]));
@@ -456,6 +451,8 @@ begin
     begin
       SynEditEditor.Lines.Clear; // on vide l'éditeur
       Caption := CrsUnknownFile; // fichier par défaut
+      WindowState := wsNormal; // apparence normale
+      ShowOnTop; // on montre la fenêtre
     end;
   end;
 end;
@@ -463,7 +460,20 @@ end;
 procedure TMainForm.FileSaveExecute(Sender: TObject);
 // *** sauvegarde ***
 begin
-  FileSaved(EditorForm.Caption);
+  // nouveau fichier ?
+  if EditorForm.Caption = CrsUnknownFile then
+    FileSaved(EditorForm.Caption) // sauvegarde sous
+  else
+  begin
+    try
+      // sauvegarde effectuée
+      EditorForm.SynEditEditor.Lines.SaveToFile(EditorForm.Caption);
+      Modified := False; // drapeau de modification à jour
+    except
+      // message d'erreur
+      FrmInfo.ShowInfoForm(Format(CrsErrSaved, [EditorForm.Caption]));
+    end;
+  end;
 end;
 
 procedure TMainForm.FileSaveUpdate(Sender: TObject);
@@ -710,7 +720,8 @@ begin
   if fModified = AValue then // pas de changement ?
     Exit; /// on sort
   fModified := AValue; // nouvelle valeur
-  FileSave.Enabled := fModified; // état sauvegarde adaptée
+  EditorForm.SynEditEditor.Modified := fModified; // éditeur à jour
+  FileSave.Enabled := fModified; // état sauvegarde adapté
   FileSaveAs.Enabled := fModified;
 end;
 
@@ -755,8 +766,19 @@ function TMainForm.SaveFile(const St: string): TModalResult;
 var
   LSt: string;
 begin
-  LSt := ChangeFileExt(St, CExt); // on force l'extension
   Result := mrNone; // résultat neutre
+  LSt := ChangeFileExt(St, CExt); // on force l'extension
+  // est-ce le fichier par défaut ?
+  if LSt = CrsUnknownFile then
+  begin
+    if SaveDialog.Execute then // sauvegarde admise ?
+      LSt := SaveDialog.FileName // nouveau nom récupéré
+    else
+    begin
+      Result := mrCancel; // abandon
+      Exit;
+    end;
+  end;
   if FileExistsUTF8(LSt) then // le fichier existe-t-il déjà ?
     // on confirme ou non son remplacement
     Result := ShowConfirmForm(Format(CrsReplaceFile, [LSt]));
@@ -765,9 +787,8 @@ begin
     try
       // sauvegarde effectuée
       EditorForm.SynEditEditor.Lines.SaveToFile(LSt);
+      Modified := False; // drapeau de modification à jour
       Result := mrOk;
-      // message de sauvegarde réussie
-      FrmInfo.ShowInfoForm(Format(CrsSaved, [LSt]));
     except
       Result := mrAbort; // erreur de sauvegarde
       // message d'erreur

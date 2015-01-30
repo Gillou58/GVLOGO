@@ -45,9 +45,6 @@ uses
 
 type
   // *** TInfoForm ***
-
-  { TInfoForm }
-
   TInfoForm = class(TForm)
     btnQuit: TBitBtn;
     btnNo: TBitBtn;

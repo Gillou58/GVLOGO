@@ -1938,8 +1938,8 @@ object MainForm: TMainForm
       Category = 'File'
       Caption = 'Enregistrer &sous...'
       Dialog.Title = 'Enregistrer le fichier (sous un autre nom)'
-      Dialog.DefaultExt = '.GVE'
-      Dialog.Filter = 'Fichiers GVLOGO|*.GVE'
+      Dialog.DefaultExt = '.GVL'
+      Dialog.Filter = 'Fichiers GVLOGO|*.GVL'
       Enabled = False
       Hint = 'Enregistrer sous'
       ImageIndex = 16
@@ -4759,7 +4759,9 @@ object MainForm: TMainForm
     }
   end
   object SaveDialog: TSaveDialog
+    Title = 'Enregistrer le fichier'
     DefaultExt = '.GVL'
+    Filter = 'Fichiers  GVLOGO|*.GVL'
     left = 440
     top = 64
   end

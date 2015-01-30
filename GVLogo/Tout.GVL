@@ -1,34 +1,35 @@
-// essai de fichier - Gilles Vasseur 2015 - GVLOGO
+// *** GVLOGO V1.0.0 ***
+// Fichier d'exemples pour la tortue - Gilles Vasseur 2015
 
 
-pour Spirale_Couleurs :nbre :motif :cote
+pour sirale_couleurs :nbre :motif :cote
   donne "pas 1
   repete :nbre [fcc mod somme cc 1 19 exec phrase :motif :cote gauche 31 lc avance :pas donne "pas somme :pas 3 bc]
 fin
 
-pour Tourne_Couleurs :nbre :motif :cote
+pour tourne_couleurs :nbre :motif :cote
   repete :nbre [fcc mod somme cc 1 19 exec phrase :motif :cote gauche quotient 360 :nbre av 9]
 fin
 
-pour Emboite_Couleurs :nbre :motif :cote
+pour emboite_couleurs :nbre :motif :cote
   repete :nbre [ fcc mod somme cc 1 19 exec phrase :motif :cote donne "cote somme :cote 7 origine]
 fin
 
-pour Emboitement :nbre :motif :cote
+pour emboitement :nbre :motif :cote
   repete :nbre [exec phrase :motif :cote donne "cote somme :cote 7 origine]
 fin
 
-pour Spirale :nbre :motif :cote
+pour spirale :nbre :motif :cote
   donne "pas 1
   repete :nbre [exec phrase :motif :cote gauche 31 lc av :pas donne "pas somme :pas 3 bc]
 fin
 
-pour Tetraedre :cote :niveau
+pour tetraedre :cote :niveau
   si egal? :niveau 0 [Stop]
   repete 3 [av :cote tetraedre div :cote 1,9 diff :niveau 1 morceau :cote]
 fin
 
-pour Morceau :cote
+pour morceau :cote
   td 150 av produit :cote rac 3
   td 150 av :cote
   td 180
@@ -53,7 +54,7 @@ pour tourne2 :nbre :motif :cote
   repete :nbre [exec ph :motif :cote tg quotient 360 :nbre av 9]
 fin
 
-pour Poly12 :cote
+pour poly12 :cote
   // un polyedre à 12 faces
   polyedre :cote 12 30
 fin
@@ -82,7 +83,7 @@ pour xpolygone :lcote :nbcotes :angle
   repete :nbcotes [jonction :lcote :angle cap av :lcote td quotient 360 :nbcotes]
 fin
 
-pour Tourne :nbre :motif :cote
+pour tourne :nbre :motif :cote
   repete :nbre [exec phrase :motif :cote gauche quotient 360 :nbre av 9]
 fin
 

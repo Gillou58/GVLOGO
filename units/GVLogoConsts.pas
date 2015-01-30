@@ -73,6 +73,7 @@ resourcestring
   CrsNotFound = 'Le texte "%s" n''a pas été trouvé.';
   CrsAskForValue = 'Entrez la valeur demandée ici :';
   CrsStop = 'Le programme a été arrêté.';
+  CrsProcs = 'Liste des procédures disponibles (%d)';
 
 implementation
 
