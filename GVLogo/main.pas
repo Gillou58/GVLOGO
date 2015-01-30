@@ -62,6 +62,7 @@ type
     MenuSearchNext: TMenuItem;
     MenuItem17: TMenuItem;
     MenuSearch: TMenuItem;
+    SaveDialog: TSaveDialog;
     SearchNext: TAction;
     SearchReplace: TAction;
     SearchFind: TAction;
@@ -210,6 +211,7 @@ type
     tbSelectAll: TToolButton;
     procedure EditRedoUpdate(Sender: TObject);
     procedure EditUndoUpdate(Sender: TObject);
+    procedure FileNewExecute(Sender: TObject);
     procedure FileSaveExecute(Sender: TObject);
     procedure FileSaveUpdate(Sender: TObject);
     procedure SearchFindExecute(Sender: TObject);
@@ -261,6 +263,10 @@ type
     function SetAColor(const St: string): TColor;
     procedure SetModified(AValue: Boolean);
     procedure SetRunning(AValue: Boolean);
+    // enregistrement d'un fichier
+    function SaveFile(const St: string): TModalResult;
+    // vérification avant nouveau fichier
+    function FileSaved(const St: string): Boolean;
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
     procedure GetMessage(Sender: TObject); // messages
@@ -330,8 +336,9 @@ end;
 procedure TMainForm.FileOpenAccept(Sender: TObject);
 // *** ouverture d'un fichier ***
 begin
-  // ### confirmation TODO ###
-  // ### types de fichiers : *.GVE ou autre TODO ###
+  // enregistrement avorté ou erroné ?
+  if not FileSaved(EditorForm.Caption) then
+    Exit; // on sort
   // exécute le chargement du fichier choisi
   try
     EditorForm.ShowOnTop; // éditeur en vue
@@ -340,6 +347,7 @@ begin
     // boîte d'information
     FrmInfo.ShowInfoForm(Format(CrsLoad, [FileOpen.Dialog.FileName]));
   except
+    // erreur
     FrmInfo.ShowInfoForm(Format(CrsErrLoad, [FileOpen.Dialog.FileName]));
   end;
 end;
@@ -354,8 +362,9 @@ end;
 procedure TMainForm.ExecClearExecute(Sender: TObject);
 // *** nettoyage de l'interpréteur ***
 begin
-  // ### confirmation TODO ###
-  Automat.ClearAll;
+  // enregistrement OK ?
+  if FileSaved(EditorForm.Caption) then
+    Automat.ClearAll; // on nettoie
 end;
 
 procedure TMainForm.EditUndoExecute(Sender: TObject);
@@ -438,11 +447,23 @@ begin
     and not Running; // et pas de programme en cours
 end;
 
+procedure TMainForm.FileNewExecute(Sender: TObject);
+// *** nouveau fichier ***
+begin
+  if FileSaved(EditorForm.Caption) then // sauvegarde nécessaire ?
+  begin
+    with EditorForm do
+    begin
+      SynEditEditor.Lines.Clear; // on vide l'éditeur
+      Caption := CrsUnknownFile; // fichier par défaut
+    end;
+  end;
+end;
+
 procedure TMainForm.FileSaveExecute(Sender: TObject);
 // *** sauvegarde ***
 begin
-  // ### contrôle si existe + saveas si nouveau + protextion TODO ###
-  EditorForm.SynEditEditor.Lines.SaveToFile(EditorForm.Caption);
+  FileSaved(EditorForm.Caption);
 end;
 
 procedure TMainForm.FileSaveUpdate(Sender: TObject);
@@ -477,33 +498,9 @@ end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 // *** travail avant la fermeture du logiciel ***
-var
-  T: TmodalResult;
 begin
-  // vérification de l'enregistrement des modifications
-  if EditorForm.SynEditEditor.Modified then
-  begin
-    // demande d'enregistrement des modifications  ### TODO ###
-    T :=ShowConfirmForm(Format(CrsSave, [EditorForm.Caption]));
-    case T of
-      mrYes: begin
-               try
-                 EditorForm.SynEditEditor.Lines.SaveToFile('Tout.GVL'); // ###
-                 CanClose := True;
-                 // ### sauvegarde effectuée
-                 FrmInfo.ShowInfoForm(Format(CrsSaved, ['Tout.GVL']));
-               except
-                 CanClose := False;
-                 // ### erreur sauvegarde
-                 FrmInfo.ShowInfoForm(Format(CrsErrSaved, ['Tout.GVL']));
-               end;
-      end;
-      mrNo: CanClose := True;
-      mrCancel: CanClose := False;
-    end;
-  end
-  else
-    CanClose := True; // fermeture autorisée
+  // fermeture autorisée suivant l'état du fichier
+  CanClose := FIleSaved(EditorForm.Caption);
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -751,6 +748,48 @@ begin
   MenuSearch.Enabled := not fRunning;
   MenuWindows.Enabled := fRunning;
   MenuHelp.Enabled := not fRunning;
+end;
+
+function TMainForm.SaveFile(const St: string): TModalResult;
+// *** enregistrement d'un fichier ***
+var
+  LSt: string;
+begin
+  LSt := ChangeFileExt(St, CExt); // on force l'extension
+  Result := mrNone; // résultat neutre
+  if FileExistsUTF8(LSt) then // le fichier existe-t-il déjà ?
+    // on confirme ou non son remplacement
+    Result := ShowConfirmForm(Format(CrsReplaceFile, [LSt]));
+  if Result in [mrYes, mrNone] then // sauvegarde demandée
+  begin
+    try
+      // sauvegarde effectuée
+      EditorForm.SynEditEditor.Lines.SaveToFile(LSt);
+      Result := mrOk;
+      // message de sauvegarde réussie
+      FrmInfo.ShowInfoForm(Format(CrsSaved, [LSt]));
+    except
+      Result := mrAbort; // erreur de sauvegarde
+      // message d'erreur
+      FrmInfo.ShowInfoForm(Format(CrsErrSaved, [LSt]));
+    end;
+  end;
+end;
+
+function TMainForm.FileSaved(const St: string): Boolean;
+// *** vérification avant nouveau fichier ***
+begin
+  if EditorForm.SynEditEditor.Modified then
+  begin
+    // demande d'enregistrement des modifications
+    case ShowConfirmForm(Format(CrsSave, [St])) of
+      mrYes: Result := (SaveFile(St) = mrOk); // on enregistre
+      mrNo: Result := True; // on n'enregistre pas
+      mrCancel: Result := False; // on abandonne l'opération
+    end;
+  end
+  else
+    Result := True; // pas besoin d'enregistrer
 end;
 
 end.

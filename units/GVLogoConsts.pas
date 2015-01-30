@@ -44,6 +44,7 @@ uses
 
 const
   CMaxHistoryEntries = 10; // mémorisation des entrées
+  CExt = '.GVL'; // extension par défaut
 
 type
   // *** types de recherches ***
@@ -52,10 +53,12 @@ type
 
 resourcestring
   // *** chaînes des messages ***
+  CrsUnknownFile = 'sans_nom' + CExt; // fichier par défaut
   CrsLoad = 'Le fichier "%s" a été chargé.';
   CrsErrLoad = 'Le fichier "%s" n''a pas pu être chargé.';
   CrsSaved = 'Le fichier "%s" a été sauvegardé.';
   CrsErrSaved = 'Le fichier "%s" n''a pas pu être sauvegardé.';
+  CrsReplaceFile = '"%s" existe déjà. Voulez-vous le remplacer ?';
   CrsModified = 'Modifié';
   CrsOk = 'OK';
   CrsInfo = 'Information';

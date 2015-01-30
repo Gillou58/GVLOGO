@@ -1949,6 +1949,7 @@ object MainForm: TMainForm
       Caption = '&Nouveau fichier'
       Hint = 'Nouveau fichier'
       ImageIndex = 10
+      OnExecute = FileNewExecute
       ShortCut = 16462
     end
     object FileNewProc: TAction
@@ -4756,5 +4757,10 @@ object MainForm: TMainForm
       5BAE01565B92015A5F00015A5F410053593E00535900003759000037590A0046
       450A00464500FFFFFF00FFFFFF00
     }
+  end
+  object SaveDialog: TSaveDialog
+    DefaultExt = '.GVL'
+    left = 440
+    top = 64
   end
 end
