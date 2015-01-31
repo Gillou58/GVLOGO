@@ -259,9 +259,9 @@ begin
   LOldOptions := fSynSearch;
   try
     if Backwards then // en arrière ?
-      fSynSearch := [ssoBackwards] // en arrière
+      fSynSearch := [ssoBackwards, ssoWholeWord] // en arrière
     else
-      fSynSearch := []; // pas d'options en cours
+      fSynSearch := [ssoWholeWord]; // mots entiers seulement
     FindText := APrim; // primitive à rechercher
     btnFindClick(nil); // recherche effectuée
   finally

@@ -316,10 +316,9 @@ end;
 
 procedure TMainForm.ExecInterpretExecute(Sender: TObject);
 // *** interprétation ***
-var Err: Integer;
 begin
   ShowEditExecute(nil); // éditeur montré
-  if Automat.Kernel.EditToProc(EditorForm.SynEditEditor.Lines, 0, 0, Err) then
+  if Automat.Kernel.EditToProc(EditorForm.SynEditEditor.Lines, 0, 0) then
     FrmInfo.ShowInfoForm(CrsInterpreter); // information affichée si OK
 end;
 

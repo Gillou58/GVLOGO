@@ -48,7 +48,6 @@ const
   CE_NoErr = -1;
 
 resourcestring
-
   // *** messages d'erreur ***
   ME_Nothing = '<vide >'; // élément vide
   ME_None = '%s : pas d''erreur à signaler.';
@@ -142,6 +141,9 @@ resourcestring
   ME_NotVar = '"%s" n''est pas une variable.';
   ME_LocVarForbidden = '"%s" ne peut pas être utilisée hors d''une procédure.';
   ME_AlreadyExists = '"%s" existe déjà en tant que variable locale.';
+  ME_VarNoName = 'Le mot DONNE n''est pas suivi d''un nom ou d''une valeur ' +
+    'dans "%s".';
+  ME_VarTooManyDatas = 'Trop d''éléments pour DONNE dans "%s".';
 
   // les paquets
   ME_UnknownPackage = 'Le paquet "%s" est inconnu.';
@@ -191,10 +193,11 @@ type
     CE_BadSave, CE_BadFile, CE_FileNotFound, CE_Version, CE_BadContent,
     CE_BadColor, CE_EmptyWordOrList, CE_UnknownPrim, CE_CantModifyPrim,
     CE_NorPrimNorProc, CE_BadElse, CE_BadTest, CE_BadVar, CE_UnknownVar,
-    CE_NotVar, CE_LocVarForbidden, CE_AlreadyExists, CE_UnknownPackage,
-    CE_PackageForbidden, CE_AlreadyPackage, CE_NotInPackage, CE_UnknownProc,
-    CE_BadParam, CE_DupParam, CE_BadLine, CE_BadDef, CE_NotTo, CE_NotEnd,
-    CE_EmptyEdit, CE_NorProcnorList, CE_BadTo, CE_BadEnd, CE_NoName,
+    CE_NotVar, CE_LocVarForbidden, CE_AlreadyExists, CE_VarNoName,
+    CE_VarTooManyDatas, CE_UnknownPackage, CE_PackageForbidden,
+    CE_AlreadyPackage, CE_NotInPackage, CE_UnknownProc, CE_BadParam,
+    CE_DupParam, CE_BadLine, CE_BadDef, CE_NotTo, CE_NotEnd, CE_EmptyEdit,
+    CE_NorProcnorList, CE_BadTo, CE_BadEnd, CE_NoName,
     CE_Protected, CE_BadName, CE_UnknownObject, CE_BadObj, CE_Burried,
     CE_NotEnoughDatas, CE_WhatAbout);
 
@@ -222,10 +225,11 @@ const
     ME_BadSave, ME_BadFile, ME_FileNotFound, ME_Version, ME_BadContent,
     ME_BadColor, ME_EmptyWordOrList, ME_UnknownPrim, ME_CantModifyPrim,
     ME_NorPrimNorProc, ME_BadElse, ME_BadTest, ME_BadVar, ME_UnknownVar,
-    ME_NotVar, ME_LocVarForbidden, ME_AlreadyExists, ME_UnknownPackage,
-    ME_PackageForbidden, ME_AlreadyPackage,  ME_NotInPackage, ME_UnknownProc,
-    ME_BadParam, ME_DupParam, ME_BadLine, ME_BadDef, ME_NotTo, ME_NotEnd,
-    ME_EmptyEdit, ME_NorProcnorList, ME_BadTo, ME_BadEnd, ME_NoName,
+    ME_NotVar, ME_LocVarForbidden, ME_AlreadyExists, ME_VarNoName,
+    ME_VarTooManyDatas, ME_UnknownPackage, ME_PackageForbidden,
+    ME_AlreadyPackage,  ME_NotInPackage, ME_UnknownProc, ME_BadParam,
+    ME_DupParam, ME_BadLine, ME_BadDef, ME_NotTo,
+    ME_NotEnd, ME_EmptyEdit, ME_NorProcnorList, ME_BadTo, ME_BadEnd, ME_NoName,
     ME_Protected, ME_BadName, ME_UnknownObject, ME_BadObj, ME_Burried,
     ME_NotEnoughDatas, ME_WhatAbout);
 

@@ -60,16 +60,15 @@ uses
 type
 
   // *** classe pour le noyau
-
-  { TGVLogoKernel }
-
   TGVLogoKernel = class(TObject)
   strict private
     fError: TGVErrors; // enregistrement d'une erreur
+    fErrPos: Integer; // position de l'erreur
     fProtected: Boolean; // drapeau de protection
     fWorkZone: TGVPropList; // zone de travail général
     fOnChange: TNotifyEvent; // notification des changements
     fTempList: TGVListUtils; // liste de travail
+    procedure SetErrPos(AValue: Integer);
     procedure SetProtected(AValue: Boolean); // protection des données
     // paramètre valide ?
     function IsValidParam(const Name: string): Boolean;
@@ -182,8 +181,7 @@ type
     // envoie toutes les procédures vers l'éditeur
     function AllProcsToEdit(Lst: TStrings): Boolean;
     // envoie d'un éditeur vers des procédures
-    function EditToProc(Editor: TStrings; FromLine, ToLine: Integer;
-      out Err: Integer): Boolean;
+    function EditToProc(Editor: TStrings; FromLine, ToLine: Integer): Boolean;
     // charge des procédures
     function LoadProcs(const FileName: string): Boolean;
     // sauve des procédures
@@ -282,6 +280,8 @@ type
     property OnChange: TNotifyEvent read fOnChange write fOnChange;
     // notification d'une erreur
     property Error: TGVErrors read fError write fError;
+    // emplacement d'une erreur (éditeur)
+    property ErrPos: Integer read fErrPos write SetErrPos;
   end;
 
 implementation
@@ -298,6 +298,16 @@ begin
     Exit; // on sort si aucun changement
   fProtected := AValue; // nouvelle valeur de protection
   Change; // on signifie le changement
+end;
+
+procedure TGVLogoKernel.SetErrPos(AValue: Integer);
+// *** emplacement d'une erreur (éditeur) ***
+var
+  LRec: TGVErrorRec;
+begin
+  fErrPos := AValue; // position de l'erreur
+  LRec.ErrPos := fErrPos;
+  Error.Error := LRec; // signalement au traitement des erreurs
 end;
 
 procedure TGVLogoKernel.Change;
@@ -1228,23 +1238,24 @@ begin
     Result := True;
 end;
 
-function TGVLogoKernel.EditToProc(Editor: TStrings; FromLine, ToLine: Integer;
-  out Err: Integer): Boolean;
+function TGVLogoKernel.EditToProc(Editor: TStrings; FromLine,
+  ToLine: Integer): Boolean;
 // *** éditeur vers procédure ***
 // compile le contenu d'un éditeur à partir de la ligne indiquée
 // (procédure après procédure)
 // Editor : liste des lignes de l'éditeur
 // FromLine : première ligne à analyser
 // ToLine: dernière ligne à analyser
-// Err : première ligne procédure fautive ou dernière ligne analysée
+// ErrPos : ligne fautive
 var
-  Line, Li: Integer;
+  Li: Integer;
   L1, L2: TGVList;
+  LW: TGVWord;
   LSt, LName, LDef: string;
   LDone: Boolean;
 begin
   Error.OK := True; // pas d'erreur
-  Err := 1; // ligne en cours pour erreur
+  ErrPos := 0; // ligne en cours pour erreur
   // on ajuste la recherche à la taille de l'éditeur
   if (ToLine > Editor.Count) or (ToLine = 0) then
     ToLine := Editor.Count;
@@ -1252,17 +1263,21 @@ begin
     FromLine := 1;
   if (ToLine - FromLine) >= 0 then // s'il y a des lignes à analyser
   begin
-    Line := FromLine - 1; // départ de l'analyse
+    ErrPos := FromLine; // départ de l'analyse
     // tant qu'il y a des lignes et qu'il n'y a pas d'erreur
-    while (Line < ToLine) and Error.Ok do
+    while (ErrPos <= ToLine) and Error.Ok do
     begin
       L1 := TGVList.Create;
       try
         // récupère la ligne en cours
-        L1.Text := CBeginList + Trim(Editor[Line]) + CEndList;
+        L1.Text := CBeginList + Trim(Editor[ErrPos - 1]) + CEndList;
+        if not L1.IsValid then // liste non valide ?
+          // [### Erreur: liste invalide ###]
+          Error.SetError(CE_BadList, Editor[ErrPos - 1], ErrPos)
+        else
         // *** c'est une ligne vide ou un commentaire ?
         if L1.IsEmptyList or (L1.First = CComment) then
-          Inc(Line) // ligne suivante
+          ErrPos := ErrPos + 1 // ligne suivante
         else
         begin
           // *** est-ce Pour ?
@@ -1286,22 +1301,20 @@ begin
                 LDef := CBeginList + LSt + CEndList + CBlank;
                 // *** on passe à la définition
                 LSt := CBeginList;
-                Inc(Line); // en changeant de ligne
+                ErrPos := ErrPos + 1; // en changeant de ligne
                 LDone := False; // drapeau d'opération effectuée
                 repeat
                   // on examine la ligne en cours
                   L2 := TGVList.Create;
                   try
-                    L2.Text := (CBeginList + Trim(Editor[Line]) + CEndList);
+                    L2.Text := (CBeginList + Trim(Editor[ErrPos - 1]) +
+                      CEndList);
                     if not L2.IsEmptyList then // on ignore une ligne vide
                     begin
                       // *** c'est encore le mot POUR ? ***
                       if AnsiSameText(L2.First, P_To) then
-                      begin
-                        Err := Line;
                         // [### Erreur: mot POUR mal placé ###]
-                        Error.SetError(CE_BadTo, LName, Err);
-                      end
+                        Error.SetError(CE_BadTo, LName, ErrPos)
                       else
                       // *** c'est le mot FIN ? ***
                       if AnsiSameText(L2.First, P_End) then
@@ -1312,40 +1325,55 @@ begin
                         begin // l'enregistrement s'est bien déroulé
                           LDone := True; // procédure enregistrée
                           Change; // on signale le changement
-                        end
-                        else
-                          Err := Line; // ligne d'erreur
+                        end;
                       end
                       else
-                        LSt := LSt + CBeginList + Trim(Editor[Line]) + CEndList
-                          + CBlank; // on ajoute la ligne
+                        LSt := LSt + CBeginList + Trim(Editor[ErrPos - 1]) +
+                          CEndList + CBlank; // on ajoute la ligne
                     end;
                   finally
                     L2.Free; // on libère la liste de travail
                   end;
-                  if (Line >= ToLine) or (not Error.OK) then
-                  begin
-                    Err := Line;
+                  if (ErrPos > ToLine) or (not Error.OK) then
                     // [### Erreur: mot FIN non rencontré ###]
-                    Error.SetError(CE_NotEnd, LName, Err);
-                  end;
-                  Inc(Line);
+                    Error.SetError(CE_NotEnd, LName, ErrPos);
+                  ErrPos := ErrPos + 1; // ligne suivante
                 until not Error.Ok or LDone; // on change de ligne
               end
               else
                 // [### Erreur: pas de nom après POUR ###]
-                Error.SetError(CE_NoName, Editor[Line], Line);
+                Error.SetError(CE_NoName, Editor[ErrPos - 1], ErrPos);
             except
-              Err := Line;
               // [### Erreur: mauvaise définition ###]
-              Error.SetError(CE_BadDef, LName, Err);
+              Error.SetError(CE_BadDef, LName, ErrPos);
             end;
           end
           else
+          // *** est-ce Donne ? [NB : un seul par ligne ] ***
+          if AnsiSameText(L1.First, P_Give) then
           begin
-            Err := Line;
-            // [### Erreur: pas de POUR ###]
-            Error.SetError(CE_NotTo, Editor[FromLine], Err);
+            // au moins 2 éléments en plus du nom
+            if (L1.Count > 2) then
+            begin
+              if (L1.Count = 3) then // 3 exactement
+              begin
+                LW := TGVWord.Create; // mot de travail
+                try
+                  LW.Text := L1[1]; // premier mot après Donne
+                  // ajout comme variable ?
+                  if AddVar(LW.WithoutQuote, L1[2]) then
+                    ErrPos := ErrPos + 1; // ligne suivante
+                finally
+                  LW.Free; // mot de travail libéré
+                end;
+              end
+              else
+                // [### Erreur: trop de données après DONNE ###]
+                Error.SetError(CE_VarTooManyDatas, Editor[ErrPos - 1], ErrPos);
+            end
+            else
+              // [### Erreur: pas de nom ou de valeur après DONNE ###]
+              Error.SetError(CE_VarNoName, Editor[ErrPos - 1], ErrPos);
           end;
         end;
       finally
@@ -1355,7 +1383,7 @@ begin
   end
   else
     // [### Erreur: pas de lignes à analyser ###]
-    Error.SetError(CE_EmptyEdit, Editor[FromLine], Err);
+    Error.SetError(CE_EmptyEdit, Editor[FromLine], ErrPos);
   Result := Error.Ok; // OK si pas d'erreur...
 end;
 

@@ -95,11 +95,9 @@ end;
 
 procedure TProcsForm.btnSaveClick(Sender: TObject);
 // *** enregistrement des modifications ***
-var
-  LErr: Integer;
 begin
   SynEditProcs.Modified := not MainForm.Automat.Kernel.EditToProc(
-    SynEditProcs.Lines, 0, 0, LErr); // enregistrement
+    SynEditProcs.Lines, 0, 0); // enregistrement
   SynEditProcsChange(nil); // changement notifié
 end;
 
@@ -142,7 +140,6 @@ procedure TProcsForm.cbProcsSelect(Sender: TObject);
 // *** affichage de la procédure choisie ***
 var
   LChange: Boolean;
-  LErr: Integer;
 begin
   LChange := True; // changement par défaut
   if SynEditProcs.Modified then // éditeur modifié ?
@@ -152,7 +149,7 @@ begin
       [cbProcs.Items[cbProcs.ItemIndex]])) of
         // on veut enregistrer la procédure
         mrYes: LChange := MainForm.Automat.Kernel.EditToProc(SynEditProcs.Lines,
-            0, 0, LErr);
+            0, 0);
         mrNo: LChange := True; // pas d'enregistrement
         mrCancel: LChange := False; // abandon
       end;
@@ -170,8 +167,6 @@ end;
 
 procedure TProcsForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 // *** fermeture de la fenêtre ***
-var
-  LErr: Integer;
 begin
   if SynEditProcs.Modified then // éditeur modifié ?
   begin
@@ -180,7 +175,7 @@ begin
       [cbProcs.Items[cbProcs.ItemIndex]])) of
         // on veut enregistrer la procédure
         mrYes: CanClose := MainForm.Automat.Kernel.EditToProc(SynEditProcs.Lines,
-          0, 0, LErr);
+          0, 0);
         mrNo: CanClose := True; // pas d'enregistrement
         mrCancel: CanClose := False; // abandon
       end;
@@ -195,7 +190,7 @@ begin
   fGVHighlighter := TGVHighlighter.Create(Self); // création de la colorisation
   SynEditProcs.Highlighter := fGVHighlighter; // éditeur lié
   SynEditProcs.Lines.Clear; // nettoyage
-
+  btnSave.Enabled := False; // sauvegarde désactivée
 end;
 
 procedure TProcsForm.FormDestroy(Sender: TObject);

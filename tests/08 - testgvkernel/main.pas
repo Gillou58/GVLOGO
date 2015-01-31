@@ -589,15 +589,9 @@ end;
 
 procedure TMainForm.btnEditToProcClick(Sender: TObject);
 // test de EditToProc
-var
-  Li: Integer;
 begin
-  Li := 0;
-  if GVKer.EditToProc(mmoGVKer.Lines, 0, 0, Li) then
-    mmoGVKer.Lines.Add(fmtMess('EDITTOPROC') + 'Editeur interprété.')
-  else
-    mmoGVKer.Lines.Add(fmtMess('EDITTOPROC') +
-      Format('Erreur à la ligne : %d.',[Li]));
+  if GVKer.EditToProc(mmoGVKer.Lines, 0, 0) then
+    mmoGVKer.Lines.Add(fmtMess('EDITTOPROC') + 'Editeur interprété.');
 end;
 
 procedure TMainForm.btnLoadAllClick(Sender: TObject);

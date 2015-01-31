@@ -48,9 +48,6 @@ uses
 
 type
   // *** TEditorForm ***
-
-  { TEditorForm }
-
   TEditorForm = class(TForm)
     sbEdit: TStatusBar;
     SynEditEditor: TSynEdit;
@@ -87,6 +84,7 @@ procedure TEditorForm.FormCreate(Sender: TObject);
 begin
   fGVHighlighter := TGVHighlighter.Create(Self); // création de la colorisation
   SynEditEditor.Highlighter := fGVHighlighter; // éditeur affecté
+  Caption := CrsUnknownFile; // entête par défaut
 end;
 
 procedure TEditorForm.FormDestroy(Sender: TObject);

@@ -1276,7 +1276,7 @@ object ErrorForm: TErrorForm
     Rounding.RoundY = 1
     Rounding.RoundOptions = []
   end
-  object Label1: TLabel
+  object LabelItem: TLabel
     Left = 8
     Height = 15
     Top = 120
@@ -1284,7 +1284,7 @@ object ErrorForm: TErrorForm
     Caption = 'Elément en cause : '
     ParentColor = False
   end
-  object Label2: TLabel
+  object LabelLine: TLabel
     Left = 8
     Height = 15
     Top = 144
@@ -1292,7 +1292,7 @@ object ErrorForm: TErrorForm
     Caption = 'Ligne en cours : '
     ParentColor = False
   end
-  object Label3: TLabel
+  object LabelData: TLabel
     Left = 8
     Height = 15
     Top = 168
@@ -1300,7 +1300,7 @@ object ErrorForm: TErrorForm
     Caption = 'Donnée en cours : '
     ParentColor = False
   end
-  object Label4: TLabel
+  object LabelPrim: TLabel
     Left = 8
     Height = 15
     Top = 192
@@ -1308,7 +1308,7 @@ object ErrorForm: TErrorForm
     Caption = 'Primitive en cours : '
     ParentColor = False
   end
-  object Label5: TLabel
+  object LabelProc: TLabel
     Left = 8
     Height = 15
     Top = 216
@@ -1316,7 +1316,7 @@ object ErrorForm: TErrorForm
     Caption = 'Procédure en cours : '
     ParentColor = False
   end
-  object Label6: TLabel
+  object LabelItemNum: TLabel
     Left = 8
     Height = 15
     Top = 240
@@ -1324,7 +1324,7 @@ object ErrorForm: TErrorForm
     Caption = 'Numéro de l''élément : '
     ParentColor = False
   end
-  object Label7: TLabel
+  object LabelLevel: TLabel
     Left = 8
     Height = 15
     Top = 264
@@ -1332,7 +1332,7 @@ object ErrorForm: TErrorForm
     Caption = 'Niveau de travail : '
     ParentColor = False
   end
-  object Label8: TLabel
+  object LabelPosErr: TLabel
     Left = 8
     Height = 15
     Top = 288

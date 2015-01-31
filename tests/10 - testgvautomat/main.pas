@@ -145,10 +145,8 @@ end;
 
 procedure TMainForm.btnToProcClick(Sender: TObject);
 // vers les procédures
-var
-  Err: Integer;
 begin
-  if Automat.Kernel.EditToProc(mmoMain.Lines, 0, 0, Err) then
+  if Automat.Kernel.EditToProc(mmoMain.Lines, 0, 0) then
   begin
     mmoMain.Lines.Add('// Editeur analysé...');
     mmoMain.Lines.Add('// A présent, je connais : ' +
