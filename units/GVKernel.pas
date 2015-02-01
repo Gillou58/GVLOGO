@@ -1250,7 +1250,6 @@ function TGVLogoKernel.EditToProc(Editor: TStrings; FromLine,
 var
   Li: Integer;
   L1, L2: TGVList;
-  LW: TGVWord;
   LSt, LName, LDef: string;
   LDone: Boolean;
 begin
@@ -1347,33 +1346,6 @@ begin
               // [### Erreur: mauvaise définition ###]
               Error.SetError(CE_BadDef, LName, ErrPos);
             end;
-          end
-          else
-          // *** est-ce Donne ? [NB : un seul par ligne ] ***
-          if AnsiSameText(L1.First, P_Give) then
-          begin
-            // au moins 2 éléments en plus du nom
-            if (L1.Count > 2) then
-            begin
-              if (L1.Count = 3) then // 3 exactement
-              begin
-                LW := TGVWord.Create; // mot de travail
-                try
-                  LW.Text := L1[1]; // premier mot après Donne
-                  // ajout comme variable ?
-                  if AddVar(LW.WithoutQuote, L1[2]) then
-                    ErrPos := ErrPos + 1; // ligne suivante
-                finally
-                  LW.Free; // mot de travail libéré
-                end;
-              end
-              else
-                // [### Erreur: trop de données après DONNE ###]
-                Error.SetError(CE_VarTooManyDatas, Editor[ErrPos - 1], ErrPos);
-            end
-            else
-              // [### Erreur: pas de nom ou de valeur après DONNE ###]
-              Error.SetError(CE_VarNoName, Editor[ErrPos - 1], ErrPos);
           end;
         end;
       finally

@@ -162,7 +162,7 @@ begin
   try
     // gestionnaire d'erreur en place
     LL.Error.OnError := @MainForm.GetError;
-    Li := 0; // avant la première ligne
+    Li := -1; // avant la première ligne
     // on balaie les lignes de l'éditeur tant qu'il n'y a pas d'erreur
     while (Li <= SynEditEditor.Lines.Count) and (MainForm.Automat.Error.Ok) do
     begin
@@ -175,7 +175,7 @@ begin
       // *** le premier élément est-il POUR ? ***
       if AnsiSameText(LL.First, P_To) then
       begin
-        LBg := Li; // marque le début de la procédure
+        LBg := Li + 1; // marque le début de la procédure
         // on boucle pour trouver le mot FIN
         while (Li <= SynEditEditor.Lines.Count) do
         begin
@@ -189,7 +189,8 @@ begin
           end;
         end;
         // on enregistre la procédure (erreur si FIN non trouvé)
-        MainForm.Automat.Kernel.EditToProc(SynEditEditor.Lines, LBg, Li + 1);
+        MainForm.Automat.Kernel.EditToProc(SynEditEditor.Lines, LBg,
+          Li + 1);
       end
       else
       begin
@@ -203,6 +204,7 @@ begin
       ShowInfoForm(CrsInterpreter) // message de réussite
     else
       ShowOnTop; // si erreur, on montre l'éditeur
+      MainForm.Automat.Clear; // on nettoie l'erreur
   finally
     LL.Free; // libération de la liste de travail
   end;

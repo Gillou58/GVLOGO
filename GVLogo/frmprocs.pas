@@ -174,8 +174,8 @@ begin
     case FrmInfo.ShowConfirmForm(Format(CrsSave,
       [cbProcs.Items[cbProcs.ItemIndex]])) of
         // on veut enregistrer la procédure
-        mrYes: CanClose := MainForm.Automat.Kernel.EditToProc(SynEditProcs.Lines,
-          0, 0);
+        mrYes: CanClose := MainForm.Automat.Kernel.EditToProc(
+          SynEditProcs.Lines, 0, 0);
         mrNo: CanClose := True; // pas d'enregistrement
         mrCancel: CanClose := False; // abandon
       end;
