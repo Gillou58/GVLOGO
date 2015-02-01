@@ -48,6 +48,9 @@ uses
 
 type
   // *** TMainForm ***
+
+  { TMainForm }
+
   TMainForm = class(TForm)
     MenuItem10: TMenuItem;
     MenuPrevTo: TMenuItem;
@@ -211,6 +214,7 @@ type
     procedure FileNewExecute(Sender: TObject);
     procedure FileSaveExecute(Sender: TObject);
     procedure FileSaveUpdate(Sender: TObject);
+    procedure HelpPrimsExecute(Sender: TObject);
     procedure SearchFindExecute(Sender: TObject);
     procedure EditCopyExecute(Sender: TObject);
     procedure EditCutExecute(Sender: TObject);
@@ -293,6 +297,7 @@ uses
   FrmInfo, // information
   FrmProcs, // procédures
   FrmEditor, // édition
+  FrmpHelpPrims, // aide sur les primitives
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -384,7 +389,9 @@ begin
       end;
     end;
     if (Automat.Error.Ok and LL.Error.Ok) then // pas d'erreur ?
-      ShowInfoForm(CrsInterpreter); // message de réussite
+      ShowInfoForm(CrsInterpreter) // message de réussite
+    else
+      EditorForm.ShowOnTop; // si erreur, on montre l'éditeur
   finally
     LL.Free; // libération de la liste de travail
   end;
@@ -551,6 +558,12 @@ begin
   FileSaveAs.Enabled := FileSave.Enabled;
 end;
 
+procedure TMainForm.HelpPrimsExecute(Sender: TObject);
+// *** aide sur les primitives ***
+begin
+  FrmpHelpPrims.ShowPrimsHelp; // on montre la fiche
+end;
+
 procedure TMainForm.EditRedoUpdate(Sender: TObject);
 // *** activation/ désactivation de refaire ***
 begin
@@ -608,9 +621,8 @@ procedure TMainForm.SearchFindUpdate(Sender: TObject);
 // *** activation / désactivation de la recherche ***
 begin
   // actif si l'éditeur est non vide et pas de programme en cours
-  (Sender as TAction).Enabled := not ((EditorForm.SynEditEditor.Lines.Count = 1)
-    and (EditorForm.SynEditEditor.Lines[1] = EmptyStr)) and
-    not Running;
+  (Sender as TAction).Enabled := not (((EditorForm.SynEditEditor.Lines.Count = 1)
+    and (EditorForm.SynEditEditor.Lines[1] = EmptyStr)) or Running);
 end;
 
 procedure TMainForm.SearchNextEndExecute(Sender: TObject);

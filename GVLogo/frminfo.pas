@@ -70,37 +70,37 @@ uses
 function ShowInfoForm(const St: string): TModalResult;
 // *** affichage d'une information ***
 var
-  GVInfoForm: TInfoForm;
+  LGVInfoForm: TInfoForm;
 begin
-  GVInfoForm := TInfoForm.Create(nil); // fiche créée
-  GVInfoForm.Caption := CrsInfo; // titre de la fenêtre
-  GVInfoForm.btnYes.Visible := False; // boutons superflus désactivés
-  GVInfoForm.btnNo.Visible := False;
-  GVInfoForm.btnQuit.Kind := bkClose; // bouton de fermeture
-  GVInfoForm.btnQuit.Hint := CrsCloseHint;
-  GVInfoForm.btnQuit.Caption := CrsClose; // bouton marqué
+  LGVInfoForm := TInfoForm.Create(nil); // fiche créée
   try
-    GVInfoForm.Mess := St; // message affecté
-    Result := GVInfoForm.ShowModal; // fiche affichée
+    LGVInfoForm.Caption := CrsInfo; // titre de la fenêtre
+    LGVInfoForm.btnYes.Visible := False; // boutons superflus désactivés
+    LGVInfoForm.btnNo.Visible := False;
+    LGVInfoForm.btnQuit.Kind := bkClose; // bouton de fermeture
+    LGVInfoForm.btnQuit.Hint := CrsCloseHint;
+    LGVInfoForm.btnQuit.Caption := CrsClose; // bouton marqué
+    LGVInfoForm.Mess := St; // message affecté
+    Result := LGVInfoForm.ShowModal; // fiche affichée
   finally
-    GVInfoForm.Free; // fiche libérée
+    LGVInfoForm.Free; // fiche libérée
   end;
 end;
 
 function ShowConfirmForm(const St: string): TModalResult;
 // *** affichage d'une confirmation ***
 var
-  GVConfirmForm: TInfoForm;
+  LGVConfirmForm: TInfoForm;
 begin
-  GVConfirmForm := TInfoForm.Create(nil); // fiche créée
+  LGVConfirmForm := TInfoForm.Create(nil); // fiche créée
   try
-    GVConfirmForm.Caption := CrsConfirm; // titre de la fenêtre
-    GVConfirmForm.btnNo.Visible := True; // boutons visibles
-    GVConfirmForm.btnYes.Visible := True;
-    GVConfirmForm.Mess := St; // message affecté
-    Result := GVConfirmForm.ShowModal; // fiche affichée
+    LGVConfirmForm.Caption := CrsConfirm; // titre de la fenêtre
+    LGVConfirmForm.btnNo.Visible := True; // boutons visibles
+    LGVConfirmForm.btnYes.Visible := True;
+    LGVConfirmForm.Mess := St; // message affecté
+    Result := LGVConfirmForm.ShowModal; // fiche affichée
   finally
-    GVConfirmForm.Free; // fiche libérée
+    LGVConfirmForm.Free; // fiche libérée
   end;
 end;
 

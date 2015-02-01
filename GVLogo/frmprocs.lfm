@@ -30,6 +30,7 @@ object ProcsForm: TProcsForm
     ParentShowHint = False
     ShowHint = True
     Sorted = True
+    Style = csDropDownList
     TabOrder = 0
   end
   inline SynEditProcs: TSynEdit

@@ -45,6 +45,7 @@ uses
 const
   CMaxHistoryEntries = 10; // mémorisation des entrées
   CExt = '.GVL'; // extension par défaut
+  CPrimDefs = 'GVPrimDefs.txt'; // définitions des primitives
 
 type
   // *** types de recherches ***
@@ -74,6 +75,8 @@ resourcestring
   CrsAskForValue = 'Entrez la valeur demandée ici :';
   CrsStop = 'Le programme a été arrêté.';
   CrsProcs = 'Liste des procédures disponibles (%d)';
+  CrsNoPrimHelp = 'Le fichier "%s" n''est pas accessible. L''aide sur les ' +
+    'primitives ne sera pas disponible.';
 
 implementation
 

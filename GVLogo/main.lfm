@@ -2137,6 +2137,7 @@ object MainForm: TMainForm
       Caption = 'Primitives'
       Hint = 'Aide des primitives'
       ImageIndex = 39
+      OnExecute = HelpPrimsExecute
     end
     object HelpAbout: TAction
       Category = 'Help'

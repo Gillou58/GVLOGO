@@ -10,7 +10,8 @@ uses
   Forms, bgrabitmappack, richmemopackage, main, FrmTurtle, GVAutomat, GVConsts,
   GVErrConsts, GVErrors, GVEval, GVKernel, GVLists, GVLocVars, GVPrimConsts,
   GVPropLists, GVStacks, GVTurtles, GVWords, GVHighlighter, FrmAbout, FrmError,
-  FrmText, FrmEdit, FrmInfo, FrmProcs, GVLogoConsts, FrmEditor, FrmFind;
+  FrmText, FrmEdit, FrmInfo, FrmProcs, GVLogoConsts, FrmEditor, FrmFind, 
+FrmpHelpPrims;
 
 {$R *.res}
 
