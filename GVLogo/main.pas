@@ -285,6 +285,7 @@ uses
   GVPrimConsts, // primitives
   GVErrors, // constantes des erreurs
   GVLogoConsts, // constantes du projet
+  GVLists, // listes
   FrmTurtle, // fiche de la tortue
   FrmText, // fiche du texte
   FrmEdit, // ligne de commande
@@ -316,10 +317,78 @@ end;
 
 procedure TMainForm.ExecInterpretExecute(Sender: TObject);
 // *** interprétation ***
+var
+  Li, LBg: Integer;
+  LL: TGVList;
+
+  function ValidLine: Boolean;
+  // traitement d'une ligne
+  begin
+    Result := True; // suppose que tout va bien
+    Inc(Li); // ligne suivante
+    // ligne transformée en liste
+    LL.Text := CBeginList + Trim(EditorForm.SynEditEditor.Lines[Li]) +
+      CEndList;
+    if not LL.IsValid then // une erreur ?
+    begin
+      // on positionne le curseur sur l'erreur
+      EditorForm.SynEditEditor.CaretX := LL.Error.Error.ErrPos;
+      EditorForm.SynEditEditor.CaretY := Li + 1;
+      Result := False; // erreur signalée
+    end;
+  end;
+
 begin
   ShowEditExecute(nil); // éditeur montré
-  if Automat.Kernel.EditToProc(EditorForm.SynEditEditor.Lines, 0, 0) then
-    FrmInfo.ShowInfoForm(CrsInterpreter); // information affichée si OK
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    // gestionnaire d'erreur en place
+    LL.Error.OnError := @GetError;
+    Li := 0; // avant la première ligne
+    // on balaie les lignes de l'éditeur tant qu'il n'y a pas d'erreur
+    while (Li <= EditorForm.SynEditEditor.Lines.Count) and (Automat.Error.Ok) do
+    begin
+      if (not ValidLine) then // test de la validité de la ligne
+        Break; // on arrête en cas d'erreur
+      // *** ligne vide ou premier élément commentaire ? ***
+      if LL.IsEmptyList or (LL.First = CComment) then
+        Continue // on force le bouclage
+      else
+      // *** le premier élément est-il POUR ? ***
+      if AnsiSameText(LL.First, P_To) then
+      begin
+        LBg := Li; // marque le début de la procédure
+        // on boucle pour trouver le mot FIN
+        while (Li <= EditorForm.SynEditEditor.Lines.Count) do
+        begin
+          if not ValidLine then // ligne incorrecte ?
+            Exit // on sort
+          else
+          begin
+            // FIN ? => on sort de la boucle
+            if (not LL.IsEmptyList) and AnsiSameText(LL.First, P_End) then
+              Break; // on sort de la boucle
+          end;
+        end;
+        // on enregistre la procédure (erreur si FIN non trouvé)
+        Automat.Kernel.EditToProc(EditorForm.SynEditEditor.Lines, LBg,
+          Li + 1);
+      end
+      else
+      begin
+        // *** on tente d'exécuter la ligne ***
+        // affectation à la ligne de commande
+        FrmEdit.EditForm.cbEditCmdLine.Text :=
+          EditorForm.SynEditEditor.Lines[Li];
+        ExecExecuteExecute(nil); // exécution
+      end;
+    end;
+    if (Automat.Error.Ok and LL.Error.Ok) then // pas d'erreur ?
+      ShowInfoForm(CrsInterpreter); // message de réussite
+  finally
+    LL.Free; // libération de la liste de travail
+  end;
+  //
 end;
 
 procedure TMainForm.ExeStopExecute(Sender: TObject);

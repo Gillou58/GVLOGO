@@ -64,6 +64,7 @@ type
     procedure Search(Kind: TSearchKind);
     // drapeau de recherche aboutie
     property SearchOK: Boolean read fSearchOk write fSearchOk;
+
   end;
 
 var

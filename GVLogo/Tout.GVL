@@ -2,7 +2,7 @@
 // Fichier d'exemples pour la tortue - Gilles Vasseur 2015
 
 
-pour sirale_couleurs :nbre :motif :cote
+pour spirale_couleurs :nbre :motif :cote
   donne "pas 1
   repete :nbre [fcc mod somme cc 1 19 exec phrase :motif :cote gauche 31 lc avance :pas donne "pas somme :pas 3 bc]
 fin
@@ -116,3 +116,7 @@ pour triangle :n
   // un triangle
   polygone 3 :n
 fin
+
+ve
+spirale_couleurs 50 "octogone 120
+

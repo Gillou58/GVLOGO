@@ -2008,7 +2008,7 @@ object MainForm: TMainForm
       Category = 'Edit'
       Caption = 'Désindente la sélection'
       Enabled = False
-      Hint = 'Désindente la sélection'
+      Hint = 'Désindenter la sélection'
       ImageIndex = 34
       OnExecute = EditUnIndentExecute
       OnUpdate = SearchFindUpdate
