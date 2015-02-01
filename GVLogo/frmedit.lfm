@@ -1,7 +1,7 @@
 object EditForm: TEditForm
-  Left = 22
+  Left = 463
   Height = 34
-  Top = 168
+  Top = 88
   Width = 573
   ActiveControl = cbEditCmdLine
   BorderIcons = [biMinimize]

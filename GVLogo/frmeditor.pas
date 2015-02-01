@@ -48,6 +48,9 @@ uses
 
 type
   // *** TEditorForm ***
+
+  { TEditorForm }
+
   TEditorForm = class(TForm)
     sbEdit: TStatusBar;
     SynEditEditor: TSynEdit;
@@ -62,6 +65,8 @@ type
   public
     // recherche et remplacement
     procedure Search(Kind: TSearchKind);
+    // interprétation de l'éditeur
+    procedure Process;
     // drapeau de recherche aboutie
     property SearchOK: Boolean read fSearchOk write fSearchOk;
 
@@ -73,7 +78,12 @@ var
 implementation
 
 uses
+  GVConsts, // constantes
+  GVPrimConsts, // conqtantes de primitives
+  GVLists, // listes
   Main, // fiche principale
+  FrmEdit, // ligne de commande
+  FrmInfo, // fenêtre d'information
   StrUtils;
 
 {$R *.lfm}
@@ -121,6 +131,80 @@ begin
     skPrevTo: FindForm.PrevTo; // POUR précédent
     skNextEnd: FindForm.NextEnd; // FIN suivant
     skPrevEnd: FindForm.PrevEnd; // FIN précédent
+  end;
+end;
+
+procedure TEditorForm.Process;
+// *** interprétation ***
+var
+  Li, LBg: Integer;
+  LL: TGVList;
+
+  function ValidLine: Boolean;
+  // traitement d'une ligne
+  begin
+    Result := True; // suppose que tout va bien
+    Inc(Li); // ligne suivante
+    // ligne transformée en liste
+    LL.Text := CBeginList + Trim(SynEditEditor.Lines[Li]) +
+      CEndList;
+    if not LL.IsValid then // une erreur ?
+    begin
+      // on positionne le curseur sur l'erreur
+      SynEditEditor.CaretX := LL.Error.Error.ErrPos;
+      SynEditEditor.CaretY := Li + 1;
+      Result := False; // erreur signalée
+    end;
+  end;
+
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    // gestionnaire d'erreur en place
+    LL.Error.OnError := @MainForm.GetError;
+    Li := 0; // avant la première ligne
+    // on balaie les lignes de l'éditeur tant qu'il n'y a pas d'erreur
+    while (Li <= SynEditEditor.Lines.Count) and (MainForm.Automat.Error.Ok) do
+    begin
+      if (not ValidLine) then // test de la validité de la ligne
+        Break; // on arrête en cas d'erreur
+      // *** ligne vide ou premier élément commentaire ? ***
+      if LL.IsEmptyList or (LL.First = CComment) then
+        Continue // on force le bouclage
+      else
+      // *** le premier élément est-il POUR ? ***
+      if AnsiSameText(LL.First, P_To) then
+      begin
+        LBg := Li; // marque le début de la procédure
+        // on boucle pour trouver le mot FIN
+        while (Li <= SynEditEditor.Lines.Count) do
+        begin
+          if not ValidLine then // ligne incorrecte ?
+            Exit // on sort
+          else
+          begin
+            // FIN ? => on sort de la boucle
+            if (not LL.IsEmptyList) and AnsiSameText(LL.First, P_End) then
+              Break; // on sort de la boucle
+          end;
+        end;
+        // on enregistre la procédure (erreur si FIN non trouvé)
+        MainForm.Automat.Kernel.EditToProc(SynEditEditor.Lines, LBg, Li + 1);
+      end
+      else
+      begin
+        // *** on tente d'exécuter la ligne ***
+        // affectation à la ligne de commande
+        FrmEdit.EditForm.cbEditCmdLine.Text := SynEditEditor.Lines[Li];
+        MainForm.ExecExecuteExecute(nil); // exécution
+      end;
+    end;
+    if (MainForm.Automat.Error.Ok and LL.Error.Ok) then // pas d'erreur ?
+      ShowInfoForm(CrsInterpreter) // message de réussite
+    else
+      ShowOnTop; // si erreur, on montre l'éditeur
+  finally
+    LL.Free; // libération de la liste de travail
   end;
 end;
 

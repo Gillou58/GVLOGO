@@ -289,7 +289,6 @@ uses
   GVPrimConsts, // primitives
   GVErrors, // constantes des erreurs
   GVLogoConsts, // constantes du projet
-  GVLists, // listes
   FrmTurtle, // fiche de la tortue
   FrmText, // fiche du texte
   FrmEdit, // ligne de commande
@@ -322,80 +321,9 @@ end;
 
 procedure TMainForm.ExecInterpretExecute(Sender: TObject);
 // *** interprétation ***
-var
-  Li, LBg: Integer;
-  LL: TGVList;
-
-  function ValidLine: Boolean;
-  // traitement d'une ligne
-  begin
-    Result := True; // suppose que tout va bien
-    Inc(Li); // ligne suivante
-    // ligne transformée en liste
-    LL.Text := CBeginList + Trim(EditorForm.SynEditEditor.Lines[Li]) +
-      CEndList;
-    if not LL.IsValid then // une erreur ?
-    begin
-      // on positionne le curseur sur l'erreur
-      EditorForm.SynEditEditor.CaretX := LL.Error.Error.ErrPos;
-      EditorForm.SynEditEditor.CaretY := Li + 1;
-      Result := False; // erreur signalée
-    end;
-  end;
-
 begin
   ShowEditExecute(nil); // éditeur montré
-  LL := TGVList.Create; // création de la liste de travail
-  try
-    // gestionnaire d'erreur en place
-    LL.Error.OnError := @GetError;
-    Li := 0; // avant la première ligne
-    // on balaie les lignes de l'éditeur tant qu'il n'y a pas d'erreur
-    while (Li <= EditorForm.SynEditEditor.Lines.Count) and (Automat.Error.Ok) do
-    begin
-      if (not ValidLine) then // test de la validité de la ligne
-        Break; // on arrête en cas d'erreur
-      // *** ligne vide ou premier élément commentaire ? ***
-      if LL.IsEmptyList or (LL.First = CComment) then
-        Continue // on force le bouclage
-      else
-      // *** le premier élément est-il POUR ? ***
-      if AnsiSameText(LL.First, P_To) then
-      begin
-        LBg := Li; // marque le début de la procédure
-        // on boucle pour trouver le mot FIN
-        while (Li <= EditorForm.SynEditEditor.Lines.Count) do
-        begin
-          if not ValidLine then // ligne incorrecte ?
-            Exit // on sort
-          else
-          begin
-            // FIN ? => on sort de la boucle
-            if (not LL.IsEmptyList) and AnsiSameText(LL.First, P_End) then
-              Break; // on sort de la boucle
-          end;
-        end;
-        // on enregistre la procédure (erreur si FIN non trouvé)
-        Automat.Kernel.EditToProc(EditorForm.SynEditEditor.Lines, LBg,
-          Li + 1);
-      end
-      else
-      begin
-        // *** on tente d'exécuter la ligne ***
-        // affectation à la ligne de commande
-        FrmEdit.EditForm.cbEditCmdLine.Text :=
-          EditorForm.SynEditEditor.Lines[Li];
-        ExecExecuteExecute(nil); // exécution
-      end;
-    end;
-    if (Automat.Error.Ok and LL.Error.Ok) then // pas d'erreur ?
-      ShowInfoForm(CrsInterpreter) // message de réussite
-    else
-      EditorForm.ShowOnTop; // si erreur, on montre l'éditeur
-  finally
-    LL.Free; // libération de la liste de travail
-  end;
-  //
+  EditorForm.Process; // on exécute
 end;
 
 procedure TMainForm.ExeStopExecute(Sender: TObject);
@@ -602,7 +530,8 @@ begin
     ' ' + CE_GVDate;  // entête
   Automat := TGVAutomat.Create; // création de l'interpréteur
   Automat.Error.OnError := @GetError; // gestionnaire d'erreurs
-  Automat.Message.OnMessageChange := @GetMessage; // gestionnaire de messages
+  // gestionnaire des messages
+  Automat.Message.OnMessageChange := @GetMessage;
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -728,43 +657,42 @@ end;
 procedure TMainForm.GetMessage(Sender: TObject);
 // *** gestionnaire des messages ***
 begin
-  case Automat.Message.Cmd of
-    // écriture avec retour chariot
-    acWrite: TextForm.WriteTextLN(Automat.Message.Message);
-    acClear: TextForm.Clear; // nettoyage
-    // lecture d'une liste
-    acReadList: Automat.Message.Message := InputBox(CrsAsk,
-    CrsAskForValue, EmptyStr);
-    // demande de confirmation
-    acConfirm: if MessageDlg(Automat.Message.Message , mtConfirmation,
-      mbYesNo, 0) = mrYes then
-        Automat.Message.Message := CStTrue // vrai en retour
-      else
-        Automat.Message.Message := CStFalse; // faux en retour
-    // écriture sans retour chariot
-    acType: TextForm.WriteText(Automat.Message.Message);
-    acReadChar: ; // ### TODO ###
-    // styles de caractères
-    acBold: TextForm.Bold := True;
-    acUnderline: TextForm.Underline := True;
-    acItalic: TextForm.Italic := True;
-    acNoBold: TextForm.Bold := False;
-    acNoUnderline: TextForm.Underline := False;
-    acNoItalic: TextForm.Italic := False;
-    // couleurs
-    acColor: Automat.Message.Message := GetAColor(TextForm.FontColor);
-    acBackColor: Automat.Message.Message := GetAColor(TextForm.BackColor);
-    acSetColor: TextForm.FontColor := SetAColor(Automat.Message.Message);
-    acSetBackColor: TextForm.BackColor :=
-      SetAColor(Automat.Message.Message);
-    // fontes
-    acFont: Automat.Message.Message := TextForm.Font.Name;
-    acSetFont: TextForm.Font.Name := Automat.Message.Message;
-    acSetFontSize: TextForm.FontSize := StrToInt(Automat.Message.Message);
-    acFontSize: Automat.Message.Message := IntToStr(TextForm.FontSize);
-    // éditeur
-    acWriteEdit: EditorForm.SynEditEditor.Lines.Add(Automat.Message.Message);
-  end;
+  with Automat.Message do
+    case Cmd of
+      // écriture avec retour chariot
+      acWrite: TextForm.WriteTextLN(Message);
+      acClear: TextForm.Clear; // nettoyage
+      // lecture d'une liste
+      acReadList: Message := InputBox(CrsAsk, CrsAskForValue, EmptyStr);
+      // demande de confirmation
+      acConfirm: if MessageDlg(Message , mtConfirmation, mbYesNo,
+        0) = mrYes then
+          Message := CStTrue // vrai en retour
+        else
+          Message := CStFalse; // faux en retour
+      // écriture sans retour chariot
+      acType: TextForm.WriteText(Message);
+      acReadChar: ; // ### TODO ###
+      // styles de caractères
+      acBold: TextForm.Bold := True;
+      acUnderline: TextForm.Underline := True;
+      acItalic: TextForm.Italic := True;
+      acNoBold: TextForm.Bold := False;
+      acNoUnderline: TextForm.Underline := False;
+      acNoItalic: TextForm.Italic := False;
+      // couleurs
+      acColor: Message := GetAColor(TextForm.FontColor);
+      acBackColor: Message := GetAColor(TextForm.BackColor);
+      acSetColor: TextForm.FontColor := SetAColor(Message);
+      acSetBackColor: TextForm.BackColor := SetAColor(Message);
+      // fontes
+      acFont: Message := TextForm.Font.Name;
+      acSetFont: TextForm.Font.Name := Message;
+      acSetFontSize: TextForm.FontSize := StrToInt(Message);
+      acFontSize: Message := IntToStr(TextForm.FontSize);
+      // éditeur
+      acWriteEdit: EditorForm.SynEditEditor.Lines.Add(Message);
+    end;
 end;
 
 function TMainForm.GetAColor(const AValue: TColor): string;

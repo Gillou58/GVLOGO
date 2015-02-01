@@ -53,6 +53,9 @@ type
     end;
 
   // *** fenêtre du texte ***
+
+  { TTextForm }
+
   TTextForm = class(TForm)
     rmmoText: TRichMemo;
     sbText: TStatusBar;
@@ -89,6 +92,9 @@ var
   TextForm: TTextForm;
 
 implementation
+
+uses
+  GVConsts; // constantes
 
 {$R *.lfm}
 
@@ -133,13 +139,13 @@ end;
 procedure TTextForm.Clear;
 // *** nettoyage ***
 begin
- Bold := False;
-   Italic := False;
-   Underline := False;
-   FontSize := 12;
-   FontColor := clBlack;
-   BackColor := clWhite;
-   rmmoText.Lines.Clear;
+  Bold := False;
+  Italic := False;
+  Underline := False;
+  FontSize := 12;
+  FontColor := clBlack;
+  BackColor := clWhite;
+  rmmoText.Lines.Clear;
 end;
 
 procedure TTextForm.FormCreate(Sender: TObject);
