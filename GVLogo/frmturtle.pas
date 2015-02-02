@@ -42,13 +42,10 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   ComCtrls,
-  GVTurtles // unité de la tortue
-  ;
+  GVTurtles; // unité de la tortue
 
 type
-
-  { TTurtleForm }
-
+  // *** TTurtleForm ***
   TTurtleForm = class(TForm)
     ilTurtle: TImageList;
     imgTurtle: TImage;

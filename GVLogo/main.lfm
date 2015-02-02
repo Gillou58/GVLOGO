@@ -1781,9 +1781,31 @@ object MainForm: TMainForm
     end
     object MenuWindows: TMenuItem
       Caption = 'Fenêtres'
-      object MenuWin1: TMenuItem
-        Caption = '< vide >'
-        Enabled = False
+      OnClick = MenuWindowsClick
+      object MenuWinCmdLine: TMenuItem
+        Caption = '&Ligne de commandes'
+        Hint = 'Voir la ligne de commandes'
+        OnClick = MenuWinCmdLineClick
+      end
+      object MenuWinShowEditor: TMenuItem
+        Caption = '&Editeur'
+        Hint = 'Voir l''éditeur'
+        OnClick = MenuWinShowEditorClick
+      end
+      object MenuWinShowTurtle: TMenuItem
+        Caption = '&Tortue'
+        Hint = 'Voir la tortue'
+        OnClick = MenuWinShowTurtleClick
+      end
+      object MenuWinShowText: TMenuItem
+        Caption = '&Fenêtre de texte'
+        Hint = 'Voir la fenêtre de texte'
+        OnClick = MenuWinShowTextClick
+      end
+      object MenuWinShowFollow: TMenuItem
+        Caption = '&Suivi'
+        Hint = 'Fenêtre de suivi'
+        OnClick = MenuWinShowFollowClick
       end
     end
     object MenuHelp: TMenuItem
@@ -2193,8 +2215,8 @@ object MainForm: TMainForm
     end
     object ShowCmdLine: TAction
       Category = 'Show'
-      Caption = '&Ligne de commande'
-      Hint = 'Voir la ligne de commande'
+      Caption = '&Ligne de commandes'
+      Hint = 'Voir la ligne de commandes'
       ImageIndex = 75
       OnExecute = ShowCmdLineExecute
       ShortCut = 24643

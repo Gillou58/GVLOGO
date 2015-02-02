@@ -48,9 +48,6 @@ uses
 
 type
   // *** TEditorForm ***
-
-  { TEditorForm }
-
   TEditorForm = class(TForm)
     sbEdit: TStatusBar;
     SynEditEditor: TSynEdit;
@@ -79,7 +76,7 @@ implementation
 
 uses
   GVConsts, // constantes
-  GVPrimConsts, // conqtantes de primitives
+  GVPrimConsts, // constantes de primitives
   GVLists, // listes
   Main, // fiche principale
   FrmEdit, // ligne de commande

@@ -5,8 +5,8 @@ object EditForm: TEditForm
   Width = 573
   ActiveControl = cbEditCmdLine
   BorderIcons = [biMinimize]
-  BorderStyle = bsSingle
-  Caption = 'Ligne de commande'
+  BorderStyle = bsDialog
+  Caption = 'Ligne de commandes'
   ClientHeight = 34
   ClientWidth = 573
   FormStyle = fsSystemStayOnTop

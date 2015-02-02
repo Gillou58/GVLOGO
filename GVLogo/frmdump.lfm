@@ -3,6 +3,7 @@ object DumpForm: TDumpForm
   Height = 155
   Top = 142
   Width = 669
+  BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Contenu'
   ClientHeight = 155
   ClientWidth = 669
@@ -47,6 +48,7 @@ object DumpForm: TDumpForm
   }
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   LCLVersion = '1.2.6.0'
   inline SynEditDump: TSynEdit
     Left = 0

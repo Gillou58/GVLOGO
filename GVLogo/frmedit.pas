@@ -2,7 +2,7 @@
   |                                                                        |
   |                  G V S O F T                                           |
   |                  Projet : GVLogo                                       |
-  |                  Description : Fenêtre de la ligne de commande         |
+  |                  Description : Fenêtre de la ligne de commandes        |
   |                  Unité : FrmEdit.pas                                   |
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |

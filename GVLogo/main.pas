@@ -52,6 +52,10 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    MenuWinShowFollow: TMenuItem;
+    MenuWinShowText: TMenuItem;
+    MenuWinShowTurtle: TMenuItem;
+    MenuWinShowEditor: TMenuItem;
     ShowFollow: TAction;
     MenuItem10: TMenuItem;
     MenuFollow: TMenuItem;
@@ -139,7 +143,7 @@ type
     MenuTurtleState: TMenuItem;
     MenuWait: TMenuItem;
     MenuPrimsHelp: TMenuItem;
-    MenuWin1: TMenuItem;
+    MenuWinCmdLine: TMenuItem;
     MenuStop: TMenuItem;
     MenuShowCmdLine: TMenuItem;
     MenuShowAll: TMenuItem;
@@ -218,6 +222,12 @@ type
     procedure FileSaveExecute(Sender: TObject);
     procedure FileSaveUpdate(Sender: TObject);
     procedure HelpPrimsExecute(Sender: TObject);
+    procedure MenuWinCmdLineClick(Sender: TObject);
+    procedure MenuWindowsClick(Sender: TObject);
+    procedure MenuWinShowEditorClick(Sender: TObject);
+    procedure MenuWinShowFollowClick(Sender: TObject);
+    procedure MenuWinShowTextClick(Sender: TObject);
+    procedure MenuWinShowTurtleClick(Sender: TObject);
     procedure SearchFindExecute(Sender: TObject);
     procedure EditCopyExecute(Sender: TObject);
     procedure EditCutExecute(Sender: TObject);
@@ -276,6 +286,7 @@ type
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
     procedure GetMessage(Sender: TObject); // messages
+    procedure GetKernelChange(Sender: TObject); // changement du noyau
     procedure GetStateChange(Sender: TObject); // changement d'état
     property Automat: TGVAutomat read fGVAutomat write fGVAutomat;
     // drapeau d'exécution en cours
@@ -500,6 +511,71 @@ begin
   FrmpHelpPrims.ShowPrimsHelp; // on montre la fiche
 end;
 
+procedure TMainForm.MenuWinCmdLineClick(Sender: TObject);
+// *** fenêtre de ligne de commandes ***
+begin
+  // affichage de la fenêtre inversé
+  MenuWinCmdLine.Checked := not MenuWinCmdLine.Checked;
+  if MenuWinCmdLine.Checked then
+    ShowCmdLineExecute(Sender) // on montre la fenêtre
+  else
+    EditForm.Close; // on la ferme
+end;
+
+procedure TMainForm.MenuWindowsClick(Sender: TObject);
+// *** activation du menu des fenêtres ***
+begin
+  MenuWinCmdLine.Checked := EditForm.IsVisible;
+  MenuWinShowEditor.Checked := EditorForm.IsVisible;
+  MenuWinShowTurtle.Checked := TurtleForm.IsVisible;
+  MenuWinShowText.Checked := TextForm.IsVisible;
+  MenuWinShowFollow.Checked := FollowForm.IsVisible;
+end;
+
+procedure TMainForm.MenuWinShowEditorClick(Sender: TObject);
+// *** fenêtre de l'éditeur ***
+begin
+  // affichage de la fenêtre inversé
+  MenuWinShowEditor.Checked := not MenuWinShowEditor.Checked;
+  if MenuWinShowEditor.Checked then
+    ShowEditExecute(Sender) // on montre la fenêtre
+  else
+    EditorForm.Close; // on la ferme
+end;
+
+procedure TMainForm.MenuWinShowFollowClick(Sender: TObject);
+// *** fenêtre du suivi ***
+begin
+  // affichage de la fenêtre inversé
+  MenuWinShowFollow.Checked := not MenuWinShowFollow.Checked;
+  if MenuWinShowFollow.Checked then
+    ShowFollowExecute(Sender) // on montre la fenêtre
+  else
+    FollowForm.Close; // on la ferme
+end;
+
+procedure TMainForm.MenuWinShowTextClick(Sender: TObject);
+// *** fenêtre de texte ***
+begin
+  // affichage de la fenêtre inversé
+  MenuWinShowText.Checked := not MenuWinShowText.Checked;
+  if MenuWinShowText.Checked then
+    ShowTextExecute(Sender) // on montre la fenêtre
+  else
+    TextForm.Close; // on la ferme
+end;
+
+procedure TMainForm.MenuWinShowTurtleClick(Sender: TObject);
+// *** fenêtre de la tortue ***
+begin
+  // affichage de la fenêtre inversé
+  MenuWinShowTurtle.Checked := not MenuWinShowTurtle.Checked;
+  if MenuWinShowTurtle.Checked then
+    ShowTurtleExecute(Sender) // on montre la fenêtre
+  else
+    TurtleForm.Close; // on la ferme
+end;
+
 procedure TMainForm.EditRedoUpdate(Sender: TObject);
 // *** activation/ désactivation de refaire ***
 begin
@@ -527,7 +603,7 @@ procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 // *** travail avant la fermeture du logiciel ***
 begin
   // fermeture autorisée suivant l'état du fichier
-  CanClose := FIleSaved(EditorForm.Caption);
+  CanClose := FileSaved(EditorForm.Caption);
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -539,6 +615,7 @@ begin
   Automat := TGVAutomat.Create; // création de l'interpréteur
   Automat.OnStateChange := @GetStateChange; // changement d'état
   Automat.Error.OnError := @GetError; // gestionnaire d'erreurs
+  Automat.Kernel.OnChange := @GetKernelChange; // changement du noyau
   // gestionnaire des messages
   Automat.Message.OnMessageChange := @GetMessage;
 end;
@@ -614,7 +691,6 @@ end;
 procedure TMainForm.ShowAllExecute(Sender: TObject);
 // *** affichage du contenu du noyau ***
 begin
-  DumpForm.Dump; // remplissage
   DumpForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   DumpForm.Show; // on la voit
 end;
@@ -719,6 +795,13 @@ begin
     end;
 end;
 
+procedure TMainForm.GetKernelChange(Sender: TObject);
+// *** changement du noyau ***
+begin
+  if DumpForm.IsVisible then // fenêtre de contenu visible ?
+    DumpForm.Dump; // on la met à jour
+end;
+
 procedure TMainForm.GetStateChange(Sender: TObject);
 // *** gestion du changement d'état ***
 var
@@ -818,7 +901,7 @@ begin
   MenuFile.Enabled := not fRunning; // menus
   MenuEdit.Enabled := not fRunning;
   MenuSearch.Enabled := not fRunning;
-  MenuWindows.Enabled := fRunning;
+  MenuWindows.Enabled := not fRunning;
   MenuHelp.Enabled := not fRunning;
 end;
 
