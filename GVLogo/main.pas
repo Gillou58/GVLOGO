@@ -692,28 +692,28 @@ procedure TMainForm.ShowAllExecute(Sender: TObject);
 // *** affichage du contenu du noyau ***
 begin
   DumpForm.WindowState := wsNormal; // la fenêtre est redimensionnée
-  DumpForm.Show; // on la voit
+  DumpForm.ShowOnTop; // on la voit
 end;
 
 procedure TMainForm.ShowCmdLineExecute(Sender: TObject);
 // *** montre la ligne de commande ***
 begin
   EditForm.WindowState := wsNormal; // la fenêtre est redimensionnée
-  EditForm.Show; // on la voit
+  EditForm.ShowOnTop; // on la voit
 end;
 
 procedure TMainForm.ShowEditExecute(Sender: TObject);
 // *** affichage de l'éditeur ***
 begin
   EditorForm.WindowState := wsNormal; // la fenêtre est redimensionnée
-  EditorForm.Show; // on la voit
+  EditorForm.ShowOnTop; // on la voit
 end;
 
 procedure TMainForm.ShowFollowExecute(Sender: TObject);
 // *** affichage de la fenêtre de suivi ***
 begin
   FollowForm.WindowState := wsNormal; // la fenêtre est redimensionnée
-  FollowForm.Show; // on la voit
+  FollowForm.ShowOnTop; // on la voit
 end;
 
 procedure TMainForm.ShowProcsExecute(Sender: TObject);
@@ -733,14 +733,14 @@ procedure TMainForm.ShowTextExecute(Sender: TObject);
 // *** affichage de la fenêtre de texte ***
 begin
   TextForm.WindowState := wsNormal; // la fenêtre est redimensionnée
-  TextForm.Show; // on la voit
+  TextForm.ShowOnTop; // on la voit
 end;
 
 procedure TMainForm.ShowTurtleExecute(Sender: TObject);
 // *** affichage de l'écran de la tortue ***
 begin
   TurtleForm.WindowState := wsNormal; // la fenêtre est redimensionnée
-  TurtleForm.Show; // on la voit
+  TurtleForm.ShowOnTop; // on la voit
 end;
 
 procedure TMainForm.GetError(Sender: TObject; ErrorRec: TGVErrorRec);
