@@ -45,9 +45,6 @@ uses
 
 type
   // *** TDumpForm ***
-
-  { TDumpForm }
-
   TDumpForm = class(TForm)
     SynEditDump: TSynEdit;
     procedure FormCreate(Sender: TObject);
@@ -56,7 +53,7 @@ type
   private
     fGVHighlighter: TGVHighlighter; // coloration syntaxique
   public
-    procedure Dump; // affichage
+    procedure Dump; // affichage du noyau
   end;
 
 var

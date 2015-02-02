@@ -2250,6 +2250,8 @@ object MainForm: TMainForm
       Caption = 'Variables'
       Hint = 'Montrer les variables'
       ImageIndex = 40
+      OnExecute = ShowVarsExecute
+      OnUpdate = ShowVarsUpdate
     end
     object ShowLocVars: TAction
       Category = 'Show'
@@ -2277,6 +2279,7 @@ object MainForm: TMainForm
       Hint = 'Montrer tout le contenu'
       ImageIndex = 47
       OnExecute = ShowAllExecute
+      OnUpdate = ShowAllUpdate
     end
     object SearchReplace: TAction
       Category = 'Search'

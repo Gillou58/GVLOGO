@@ -48,9 +48,6 @@ uses
 
 type
   // *** TMainForm ***
-
-  { TMainForm }
-
   TMainForm = class(TForm)
     MenuWinShowFollow: TMenuItem;
     MenuWinShowText: TMenuItem;
@@ -261,6 +258,7 @@ type
     procedure SearchPreviousToExecute(Sender: TObject);
     procedure SearchReplaceExecute(Sender: TObject);
     procedure ShowAllExecute(Sender: TObject);
+    procedure ShowAllUpdate(Sender: TObject);
     procedure ShowCmdLineExecute(Sender: TObject);
     procedure ShowEditExecute(Sender: TObject);
     procedure ShowFollowExecute(Sender: TObject);
@@ -268,6 +266,8 @@ type
     procedure ShowProcsUpdate(Sender: TObject);
     procedure ShowTextExecute(Sender: TObject);
     procedure ShowTurtleExecute(Sender: TObject);
+    procedure ShowVarsExecute(Sender: TObject);
+    procedure ShowVarsUpdate(Sender: TObject);
   private
     fDeepFollow: Boolean; // drapeau de trace approfondie
     fGVAutomat: TGVAutomat; // interpréteur
@@ -316,6 +316,7 @@ uses
   FrmpHelpPrims, // aide sur les primitives
   FrmFollow, // suivi
   FrmDump, // contenu du noyau
+  FrmVars, // variables globales
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -695,6 +696,13 @@ begin
   DumpForm.ShowOnTop; // on la voit
 end;
 
+procedure TMainForm.ShowAllUpdate(Sender: TObject);
+// *** (dés)activation de l'affichage du contenu ***
+begin
+  // seulement si le noyau est non vide
+  ShowAll.Enabled := (Automat.Kernel.Count <> 0);
+end;
+
 procedure TMainForm.ShowCmdLineExecute(Sender: TObject);
 // *** montre la ligne de commande ***
 begin
@@ -741,6 +749,20 @@ procedure TMainForm.ShowTurtleExecute(Sender: TObject);
 begin
   TurtleForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   TurtleForm.ShowOnTop; // on la voit
+end;
+
+procedure TMainForm.ShowVarsExecute(Sender: TObject);
+// *** affichage des variables globales ***
+begin
+  VarsForm.WindowState := wsNormal; // la fenêtre est redimensionnée
+  VarsForm.ShowOnTop; // on la voit
+end;
+
+procedure TMainForm.ShowVarsUpdate(Sender: TObject);
+// *** (dés)activation de l'affichage des variables ***
+begin
+  // seulement si au moins une variable
+  ShowVars.Enabled := (Automat.Kernel.VarsCount <> 0);
 end;
 
 procedure TMainForm.GetError(Sender: TObject; ErrorRec: TGVErrorRec);

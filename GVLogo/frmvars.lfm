@@ -1,0 +1,32 @@
+object VarsForm: TVarsForm
+  Left = 825
+  Height = 347
+  Top = 149
+  Width = 320
+  Caption = 'Variables globales en cours'
+  ClientHeight = 347
+  ClientWidth = 320
+  OnShow = FormShow
+  LCLVersion = '1.2.6.0'
+  object ValueListEditor: TValueListEditor
+    Left = 0
+    Height = 347
+    Top = 0
+    Width = 320
+    Align = alClient
+    FixedCols = 0
+    RowCount = 2
+    TabOrder = 0
+    TitleFont.Quality = fqCleartype
+    TitleFont.Style = [fsBold]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
+    TitleCaptions.Strings = (
+      'Nom'
+      'Valeur'
+    )
+    ColWidths = (
+      64
+      252
+    )
+  end
+end
