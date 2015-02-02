@@ -44,6 +44,7 @@ uses
   SynEditHighlighterFoldBase;
 
 type
+  // *** TGVHighlighter ***
   TGVHighlighter = class(TSynCustomFoldHighlighter)
   private
     fPrims: TStringList; // liste des primitives
@@ -67,24 +68,23 @@ type
     procedure SetStringAttri(AValue: TSynHighlighterAttributes);
     procedure SetSymbolAttri(AValue: TSynHighlighterAttributes);
     procedure SetVarAttri(AValue: TSynHighlighterAttributes);
-
   public
     constructor Create(AOwner: TComponent); override; // constructeur
     destructor Destroy; override; // destruction de l'objet
-	// affectation de la ligne
+    // affectation de la ligne
     procedure SetLine(const NewValue: string; LineNumber: Integer); override;
     procedure Next; override; // élément suivant
     function  GetEol: Boolean; override; // fin de ligne ?
-	// élément en cours
+    // élément en cours
     procedure GetTokenEx(out TokenStart: PChar; out TokenLength: Integer);
       override;
-	// attributs de l'élément  
+    // attributs de l'élément
     function  GetTokenAttribute: TSynHighlighterAttributes; override;
   public
     function GetToken: string; override; // élément
     function GetTokenPos: Integer; override; // position de l'élément
     function GetTokenKind: Integer; override; // type de l'élément
-	// attributs par défaut
+    // attributs par défaut
     function GetDefaultAttribute(Index: Integer): TSynHighlighterAttributes;
       override;
   published
@@ -113,7 +113,7 @@ uses
   GVConsts, // constantes générales
   GVPrimConsts; // constantes des primitives
 
-{ TSynSemoHl }
+{ TGVHighlighter }
 
 constructor TGVHighlighter.Create(AOwner: TComponent);
 // *** création de l'objet ***
@@ -251,9 +251,9 @@ begin
   if fLineText[fTokenEnd] in CBraces then
     Inc(fTokenEnd)
   else
-  // un commentaire ?
-  if (fLineText[fTokenEnd] = CSlash) and ((fTokenEnd + 1) <= Length(fLineText))
-    and (fLineText[fTokenEnd + 1] = CSlash) then
+  // un commentaire ? (seulement si commence la ligne)
+  if (Length(TrimLeft(fLineText)) > 1) and (TrimLeft(fLineText)[1] = CSlash)
+    and (TrimLeft(fLineText)[2] = CSlash) then
       fTokenEnd := Length(fLineText) + 1
   else
   // un espace ?

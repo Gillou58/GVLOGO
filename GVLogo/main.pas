@@ -48,6 +48,9 @@ uses
 
 type
   // *** TMainForm ***
+
+  { TMainForm }
+
   TMainForm = class(TForm)
     ShowFollow: TAction;
     MenuItem10: TMenuItem;
@@ -247,6 +250,7 @@ type
     procedure SearchPreviousEndExecute(Sender: TObject);
     procedure SearchPreviousToExecute(Sender: TObject);
     procedure SearchReplaceExecute(Sender: TObject);
+    procedure ShowAllExecute(Sender: TObject);
     procedure ShowCmdLineExecute(Sender: TObject);
     procedure ShowEditExecute(Sender: TObject);
     procedure ShowFollowExecute(Sender: TObject);
@@ -300,6 +304,7 @@ uses
   FrmEditor, // édition
   FrmpHelpPrims, // aide sur les primitives
   FrmFollow, // suivi
+  FrmDump, // contenu du noyau
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -604,6 +609,14 @@ procedure TMainForm.SearchReplaceExecute(Sender: TObject);
 begin
   EditorForm.ShowOnTop; // on montre l'éditeur
   EditorForm.Search(skReplace); // on cherche
+end;
+
+procedure TMainForm.ShowAllExecute(Sender: TObject);
+// *** affichage du contenu du noyau ***
+begin
+  DumpForm.Dump; // remplissage
+  DumpForm.WindowState := wsNormal; // la fenêtre est redimensionnée
+  DumpForm.Show; // on la voit
 end;
 
 procedure TMainForm.ShowCmdLineExecute(Sender: TObject);
