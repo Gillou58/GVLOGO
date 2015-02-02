@@ -259,12 +259,9 @@ begin
   end;
   if Automat.Follow then
     with mmoMain.Lines do
-    begin
-      for Li := 1 to Automat.Datas.fLevel do
-        Add(Format('// [%d]'+ CStatesArray[Automat.State] +
+      Add(Format('// [%d]'+ CStatesArray[Automat.State] +
           '...', [Li, LS])); // état affiché
-    end;
-   if fDeepTrace and (not (Automat.State in [asWaiting, asPreparing,
+    if fDeepTrace and (not (Automat.State in [asWaiting, asPreparing,
         asEnding]))then  // trace ?
      with mmoMain.Lines do
        begin

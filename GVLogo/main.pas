@@ -48,11 +48,10 @@ uses
 
 type
   // *** TMainForm ***
-
-  { TMainForm }
-
   TMainForm = class(TForm)
+    ShowFollow: TAction;
     MenuItem10: TMenuItem;
+    MenuFollow: TMenuItem;
     MenuPrevTo: TMenuItem;
     MenuNextEnd: TMenuItem;
     MenuPrevEnd: TMenuItem;
@@ -209,6 +208,7 @@ type
     tbSearch: TToolButton;
     tbReplace: TToolButton;
     tbSelectAll: TToolButton;
+    tbShowFollow: TToolButton;
     procedure EditRedoUpdate(Sender: TObject);
     procedure EditUndoUpdate(Sender: TObject);
     procedure FileNewExecute(Sender: TObject);
@@ -249,6 +249,7 @@ type
     procedure SearchReplaceExecute(Sender: TObject);
     procedure ShowCmdLineExecute(Sender: TObject);
     procedure ShowEditExecute(Sender: TObject);
+    procedure ShowFollowExecute(Sender: TObject);
     procedure ShowProcsExecute(Sender: TObject);
     procedure ShowProcsUpdate(Sender: TObject);
     procedure ShowTextExecute(Sender: TObject);
@@ -271,6 +272,7 @@ type
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
     procedure GetMessage(Sender: TObject); // messages
+    procedure GetStateChange(Sender: TObject); // changement d'état
     property Automat: TGVAutomat read fGVAutomat write fGVAutomat;
     // drapeau d'exécution en cours
     property Running: Boolean read fRunning write SetRunning;
@@ -297,6 +299,7 @@ uses
   FrmProcs, // procédures
   FrmEditor, // édition
   FrmpHelpPrims, // aide sur les primitives
+  FrmFollow, // suivi
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -316,7 +319,7 @@ end;
 procedure TMainForm.ExecFollowExecute(Sender: TObject);
 // *** trace ***
 begin
-  Automat.Follow := Automat.Follow; // on inverse sa valeur
+  Automat.Follow := not Automat.Follow; // on inverse sa valeur
 end;
 
 procedure TMainForm.ExecInterpretExecute(Sender: TObject);
@@ -529,6 +532,7 @@ begin
   Caption :=  CE_GVTitle + ' ' + CE_GVVersion + ' ' + CE_GVAuthor +
     ' ' + CE_GVDate;  // entête
   Automat := TGVAutomat.Create; // création de l'interpréteur
+  Automat.OnStateChange := @GetStateChange; // changement d'état
   Automat.Error.OnError := @GetError; // gestionnaire d'erreurs
   // gestionnaire des messages
   Automat.Message.OnMessageChange := @GetMessage;
@@ -616,6 +620,13 @@ begin
   EditorForm.Show; // on la voit
 end;
 
+procedure TMainForm.ShowFollowExecute(Sender: TObject);
+// *** affichage de la fenêtre de suivi ***
+begin
+  FollowForm.WindowState := wsNormal; // la fenêtre est redimensionnée
+  FollowForm.Show; // on la voit
+end;
+
 procedure TMainForm.ShowProcsExecute(Sender: TObject);
 // *** affichage des procédures disponibles ***
 begin
@@ -693,6 +704,35 @@ begin
       // éditeur
       acWriteEdit: EditorForm.SynEditEditor.Lines.Add(Message);
     end;
+end;
+
+procedure TMainForm.GetStateChange(Sender: TObject);
+// *** gestion du changement d'état ***
+var
+  LS: string;
+begin
+  if Automat.Follow then  // suivi ?
+  begin
+    case Automat.State of // message suivant l'état
+      asWord, asList, asVar, asNumber, asEval, asPushing, asProc,
+      asPrim, asPrimValue: LS := Automat.Datas.fItem;
+      asExePrim, asPrimDone: LS := Automat.Datas.fPrim;
+      asExeProc, asProcDone: LS := Automat.Datas.fProc;
+    else
+      LS := EmptyStr;
+    end;
+    // état affiché
+    FollowForm.Write(Format('[%d]  '+ CStatesArray[Automat.State],
+      [Automat.Datas.fLevel, LS]), 1);
+   end;
+   if fDeepFollow and (not (Automat.State in [asWaiting, asPreparing,
+        asEnding])) then  // trace ?
+          with Automat.Datas do
+          begin
+            FollowForm.Write(CrsLine + fLine, 2);
+            FollowForm.Write(Format(CrsFollowLine,
+              [fLevel, fItem, fNum, fPrim, fProc]), 1);
+          end;
 end;
 
 function TMainForm.GetAColor(const AValue: TColor): string;

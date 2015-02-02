@@ -45,15 +45,11 @@ uses
 
 type
   // *** TEditForm ***
-
-  { TEditForm }
-
   TEditForm = class(TForm)
     cbEditCmdLine: TComboBox;
     sbWait: TSpeedButton;
     sbExec: TSpeedButton;
     spStop: TSpeedButton;
-    //procedure cbEditCmdLineEnter(Sender: TObject);
     procedure EditCmdLineKeyPress(Sender: TObject; var Key: char);
   private
   public
@@ -83,15 +79,6 @@ begin
     MainForm.ExecExecuteExecute(nil); // exécution des commandes
   end;
 end;
-
-//procedure TEditForm.cbEditCmdLineEnter(Sender: TObject);
-//// *** entrée dans le contrôle ***
-//begin
-//  // accessible si aucun programme en cours d'exécution
-//  cbEditCmdLine.Enabled := not MainForm.Running;
-//end;
-
-
 
 end.
 

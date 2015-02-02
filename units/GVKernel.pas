@@ -59,7 +59,7 @@ uses
 
 type
 
-  // *** classe pour le noyau
+  // *** classe pour le noyau ***
   TGVLogoKernel = class(TObject)
   strict private
     fError: TGVErrors; // enregistrement d'une erreur

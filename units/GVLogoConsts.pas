@@ -77,6 +77,7 @@ resourcestring
   CrsProcs = 'Liste des procédures disponibles (%d)';
   CrsNoPrimHelp = 'Le fichier "%s" n''est pas accessible. L''aide sur les ' +
     'primitives ne sera pas disponible.';
+  CrsFollowLine = '[%d]  Donnée : %s - Num : %d - Prim : %s - Proc : %s';
 
 implementation
 

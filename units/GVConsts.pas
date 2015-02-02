@@ -97,8 +97,8 @@ const
   // *** caractères spéciaux ***
   CSpecialChar = [CTab, CBlank, CEqual, CPlus, CMinus, CMul, CDiv, CBeginPar,
     CEndPar, CPower, CGreater, CLower];
-
   CNonPrintable = [#0..#32];
+
   // *** ensembles de caractères courants ***
   CLowAlpha = ['a' .. 'z']; // caractères alphabétiques en minuscules
   CHighAlpha = ['A' .. 'Z']; // caractères alphabétiques en majuscules
@@ -263,7 +263,6 @@ type
   end;
 
   // *** commandes de l'interpréteur ***
-
   TGVAutomatCmd = (acNone, acClear, acWrite, acType, acReadList, acReadChar,
     acConfirm, acBold, acUnderline, acItalic, acNoBold, acNoUnderline,
     acNoItalic, acColor, acSetColor, acBackColor, acSetBackColor,
@@ -279,8 +278,8 @@ type
 resourcestring
   // *** chaînes des états de l'automate  
   MasWaiting = 'Attente %s';
-  MasEnding = 'Travail terminé';
-  MasWorking = 'Au travail';
+  MasEnding = 'Travail terminé %s';
+  MasWorking = 'Au travail %s';
   MasError = '===> Erreur : %s <===';
   MasWord = 'Mot "%s" traité';
   MasList = 'Liste "%s" traitée';
@@ -304,11 +303,11 @@ resourcestring
 const
   // ** messages pour l'état de l'automate ***
   CStatesArray: array[TGVAutomatState] of string = 
-   (MasWaiting, MasEnding,	MasWorking,	MasError, MasWord,	MasList,
-	MasVar,	MasNumber, MasEval,	MasProc, MasPrim, MasPushing,
-	MasStopped,	MasExePrim,	MasExeProc,	MasPreparing,  MasProcDone,
+   (MasWaiting, MasEnding, MasWorking, MasError, MasWord, MasList,
+	MasVar,	MasNumber, MasEval, MasProc, MasPrim, MasPushing,
+	MasStopped, MasExePrim,	MasExeProc, MasPreparing, MasProcDone,
 	MasPrimDone, MasPrimStop, MasPrimValue,	MasFollowing,
-	MasEndFollowing );
+	MasEndFollowing);
 
   // *** priorité des éléments d'une expression ***
   // nombre le plus élevé = priorité la moins élevée

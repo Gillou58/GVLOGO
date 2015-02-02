@@ -660,7 +660,6 @@ begin
   fEval.Clear; // évaluateur
   fLocVars.Clear; // variables locales
   fReturnFlag := False; // pas de retour
-  Follow := False; // pas de suivi
   fTurtleOutPut:= False; // écriture sur l'écran normal
   State := asWaiting; // état
 end;
@@ -669,6 +668,7 @@ procedure TGVAutomat.ClearAll;
 // *** nettoyage complet ***
 begin
   Clear; // et le reste aussi
+  Follow := False; // pas de suivi
   fKernel.Clear; // noyau nettoyé
 end;
 
