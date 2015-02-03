@@ -1,12 +1,12 @@
 object MainForm: TMainForm
   Left = 19
-  Height = 121
+  Height = 120
   Top = 1
   Width = 500
   ActiveControl = CoolBarMain
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'GVLOGO - Gilles VASSEUR 2015 - v1.0.0'
-  ClientHeight = 101
+  ClientHeight = 100
   ClientWidth = 500
   FormStyle = fsStayOnTop
   Menu = MainMenu
@@ -2251,7 +2251,6 @@ object MainForm: TMainForm
       Hint = 'Montrer les variables'
       ImageIndex = 40
       OnExecute = ShowVarsExecute
-      OnUpdate = ShowVarsUpdate
     end
     object ShowLocVars: TAction
       Category = 'Show'
@@ -2279,7 +2278,6 @@ object MainForm: TMainForm
       Hint = 'Montrer tout le contenu'
       ImageIndex = 47
       OnExecute = ShowAllExecute
-      OnUpdate = ShowAllUpdate
     end
     object SearchReplace: TAction
       Category = 'Search'

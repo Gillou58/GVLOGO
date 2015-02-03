@@ -746,6 +746,7 @@ begin
   Error.Clear; // pas d'erreur
   fProtected := False; // pas de protection
   fTempList.Clear; // utilitaire de liste nettoyé
+  Change; // notifie le changement
 end;
 
 function TGVLogoKernel.Count: Integer;

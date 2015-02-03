@@ -258,7 +258,6 @@ type
     procedure SearchPreviousToExecute(Sender: TObject);
     procedure SearchReplaceExecute(Sender: TObject);
     procedure ShowAllExecute(Sender: TObject);
-    procedure ShowAllUpdate(Sender: TObject);
     procedure ShowCmdLineExecute(Sender: TObject);
     procedure ShowEditExecute(Sender: TObject);
     procedure ShowFollowExecute(Sender: TObject);
@@ -267,7 +266,6 @@ type
     procedure ShowTextExecute(Sender: TObject);
     procedure ShowTurtleExecute(Sender: TObject);
     procedure ShowVarsExecute(Sender: TObject);
-    procedure ShowVarsUpdate(Sender: TObject);
   private
     fDeepFollow: Boolean; // drapeau de trace approfondie
     fGVAutomat: TGVAutomat; // interpréteur
@@ -696,13 +694,6 @@ begin
   DumpForm.ShowOnTop; // on la voit
 end;
 
-procedure TMainForm.ShowAllUpdate(Sender: TObject);
-// *** (dés)activation de l'affichage du contenu ***
-begin
-  // seulement si le noyau est non vide
-  ShowAll.Enabled := (Automat.Kernel.Count <> 0);
-end;
-
 procedure TMainForm.ShowCmdLineExecute(Sender: TObject);
 // *** montre la ligne de commande ***
 begin
@@ -756,13 +747,6 @@ procedure TMainForm.ShowVarsExecute(Sender: TObject);
 begin
   VarsForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   VarsForm.ShowOnTop; // on la voit
-end;
-
-procedure TMainForm.ShowVarsUpdate(Sender: TObject);
-// *** (dés)activation de l'affichage des variables ***
-begin
-  // seulement si au moins une variable
-  ShowVars.Enabled := (Automat.Kernel.VarsCount <> 0);
 end;
 
 procedure TMainForm.GetError(Sender: TObject; ErrorRec: TGVErrorRec);
@@ -822,6 +806,8 @@ procedure TMainForm.GetKernelChange(Sender: TObject);
 begin
   if DumpForm.IsVisible then // fenêtre de contenu visible ?
     DumpForm.Dump; // on la met à jour
+  if VarsForm.IsVisible then // fenêtre des variables visible ?
+    VarsForm.Vars; // idem
 end;
 
 procedure TMainForm.GetStateChange(Sender: TObject);

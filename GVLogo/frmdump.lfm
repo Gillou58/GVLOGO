@@ -1,12 +1,13 @@
 object DumpForm: TDumpForm
-  Left = 1095
-  Height = 155
-  Top = 142
-  Width = 669
+  Left = 860
+  Height = 350
+  Top = 180
+  Width = 320
+  ActiveControl = SynEditDump
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Contenu'
-  ClientHeight = 155
-  ClientWidth = 669
+  ClientHeight = 350
+  ClientWidth = 320
   Icon.Data = {
     7E04000000000100010010100000010020006804000016000000280000001000
     0000200000000100200000000000000400006400000064000000000000000000
@@ -52,9 +53,9 @@ object DumpForm: TDumpForm
   LCLVersion = '1.2.6.0'
   inline SynEditDump: TSynEdit
     Left = 0
-    Height = 155
+    Height = 350
     Top = 0
-    Width = 669
+    Width = 320
     Align = alClient
     Font.Height = -13
     Font.Name = 'Courier New'
