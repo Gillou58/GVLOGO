@@ -48,9 +48,6 @@ uses
 
 type
   // *** TMainForm ***
-
-  { TMainForm }
-
   TMainForm = class(TForm)
     MenuWinShowFollow: TMenuItem;
     MenuWinShowText: TMenuItem;
@@ -265,6 +262,7 @@ type
     procedure ShowEditExecute(Sender: TObject);
     procedure ShowFollowExecute(Sender: TObject);
     procedure ShowLocVarsExecute(Sender: TObject);
+    procedure ShowPcksExecute(Sender: TObject);
     procedure ShowProcsExecute(Sender: TObject);
     procedure ShowProcsUpdate(Sender: TObject);
     procedure ShowTextExecute(Sender: TObject);
@@ -320,6 +318,7 @@ uses
   FrmDump, // contenu du noyau
   FrmVars, // variables globales
   FrmLocVars, // variables locales
+  FrmPcks, // paquets
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -727,6 +726,13 @@ begin
   LocVarsForm.ShowOnTop; // on la voit
 end;
 
+procedure TMainForm.ShowPcksExecute(Sender: TObject);
+// *** afichage des paquets ***
+begin
+  PcksForm.WindowState := wsNormal; // la fenêtre est redimensionnée
+  PcksForm.ShowOnTop; // on la voit
+end;
+
 procedure TMainForm.ShowProcsExecute(Sender: TObject);
 // *** affichage des procédures disponibles ***
 begin
@@ -822,6 +828,8 @@ begin
     VarsForm.Vars; // idem
   if LocVarsForm.IsVisible then // fenêtre de variables locales visible ?
     LocVarsForm.LocVars; // idem
+  if PcksForm.IsVisible then // fenêtre de paquets visible ?
+    PcksForm.Pcks; // idem
 end;
 
 procedure TMainForm.GetStateChange(Sender: TObject);

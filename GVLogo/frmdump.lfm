@@ -1,5 +1,5 @@
 object DumpForm: TDumpForm
-  Left = 1099
+  Left = 984
   Height = 350
   Top = 417
   Width = 320
@@ -52,8 +52,10 @@ object DumpForm: TDumpForm
   OnShow = FormShow
   LCLVersion = '1.2.6.0'
   inline SynEditDump: TSynEdit
+    Cursor = crNo
     Left = 0
     Height = 350
+    Hint = 'Contenu du noyau de GVLOGO'
     Top = 0
     Width = 320
     Align = alClient

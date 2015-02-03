@@ -49,7 +49,7 @@ type
     procedure FormShow(Sender: TObject);
   private
   public
-    procedure Vars; // affichages des variables
+    procedure Vars; // affichage des variables
   end;
 
 var

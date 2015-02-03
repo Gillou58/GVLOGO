@@ -2272,6 +2272,7 @@ object MainForm: TMainForm
       Caption = 'Paquets'
       Hint = 'Montrer les paquets'
       ImageIndex = 41
+      OnExecute = ShowPcksExecute
     end
     object ShowAll: TAction
       Category = 'Show'

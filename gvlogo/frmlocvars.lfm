@@ -1,7 +1,7 @@
 object LocVarsForm: TLocVarsForm
-  Left = 1111
+  Left = 1015
   Height = 350
-  Top = 451
+  Top = 470
   Width = 320
   ActiveControl = ValueListEditor
   BorderIcons = [biSystemMenu, biMinimize]
@@ -53,16 +53,19 @@ object LocVarsForm: TLocVarsForm
     Cursor = crNo
     Left = 0
     Height = 350
-    Hint = 'Valeur des variables locales'
+    Hint = 'Variables locales en cours'
     Top = 0
     Width = 320
     Align = alClient
     FixedCols = 0
+    Font.Quality = fqCleartype
+    ParentFont = False
     ParentShowHint = False
     RowCount = 2
     ShowHint = True
     TabOrder = 0
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goAlwaysShowEditor, goThumbTracking]
+    TitleFont.Style = [fsBold]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goAlwaysShowEditor, goThumbTracking, goCellEllipsis]
     Strings.Strings = (
       ''
     )

@@ -1,7 +1,7 @@
 object VarsForm: TVarsForm
-  Left = 1127
+  Left = 1037
   Height = 350
-  Top = 486
+  Top = 534
   Width = 320
   ActiveControl = ValueListEditor
   BorderIcons = [biSystemMenu, biMinimize]
@@ -50,17 +50,23 @@ object VarsForm: TVarsForm
   OnShow = FormShow
   LCLVersion = '1.2.6.0'
   object ValueListEditor: TValueListEditor
+    Cursor = crNo
     Left = 0
     Height = 350
+    Hint = 'Variables globales en cours'
     Top = 0
     Width = 320
     Align = alClient
     FixedCols = 0
+    Font.Quality = fqCleartype
+    ParentFont = False
+    ParentShowHint = False
     RowCount = 2
+    ShowHint = True
     TabOrder = 0
     TitleFont.Quality = fqCleartype
     TitleFont.Style = [fsBold]
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goAlwaysShowEditor, goThumbTracking, goCellEllipsis]
     Strings.Strings = (
       ''
     )
