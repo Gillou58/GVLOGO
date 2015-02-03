@@ -2,7 +2,7 @@
   |                                                                        |
   |                  G V S O F T                                           |
   |                  Projet : GVLogo                                       |
-  |                  Description : Affichage des variables locales         |
+  |                  Description : Affichage des variables globales        |
   |                  Unité : FrmVars.pas                                   |
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
@@ -78,7 +78,7 @@ var
   Lst: TGVList;
   LS, LValue: string;
 begin
-  Lst := TGVList.Create; // création de la lsite de travail
+  Lst := TGVList.Create; // création de la liste de travail
   try
     ValueListEditor.Strings.Clear; // on nettoie les valeurs anciennes
     Lst.Text := MainForm.Automat.Kernel.VarsToList; // on récupère les valeurs

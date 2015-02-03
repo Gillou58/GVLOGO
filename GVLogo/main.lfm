@@ -2257,6 +2257,7 @@ object MainForm: TMainForm
       Caption = 'Variables locales'
       Hint = 'Montrer les variables locales'
       ImageIndex = 52
+      OnExecute = ShowLocVarsExecute
     end
     object ShowProcs: TAction
       Category = 'Show'

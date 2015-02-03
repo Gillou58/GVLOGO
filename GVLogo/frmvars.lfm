@@ -1,11 +1,11 @@
 object VarsForm: TVarsForm
-  Left = 820
+  Left = 1127
   Height = 350
-  Top = 150
+  Top = 486
   Width = 320
   ActiveControl = ValueListEditor
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Variables globales en cours'
+  Caption = 'Variables globales'
   ClientHeight = 350
   ClientWidth = 320
   Icon.Data = {

@@ -11,7 +11,7 @@ uses
   GVErrConsts, GVErrors, GVEval, GVKernel, GVLists, GVLocVars, GVPrimConsts,
   GVPropLists, GVStacks, GVTurtles, GVWords, GVHighlighter, FrmAbout, FrmError,
   FrmText, FrmEdit, FrmInfo, FrmProcs, GVLogoConsts, FrmEditor, FrmFind, 
-FrmpHelpPrims, FrmFollow, FrmDump, FrmVars;
+FrmpHelpPrims, FrmFollow, FrmDump, FrmVars, FrmLocVars;
 
 {$R *.res}
 
@@ -28,6 +28,7 @@ begin
   Application.CreateForm(TFollowForm, FollowForm);
   Application.CreateForm(TDumpForm, DumpForm);
   Application.CreateForm(TVarsForm, VarsForm);
+  Application.CreateForm(TLocVarsForm, LocVarsForm);
   Application.Run;
 end.
 

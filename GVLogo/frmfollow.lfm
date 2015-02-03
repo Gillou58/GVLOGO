@@ -1,12 +1,12 @@
 object FollowForm: TFollowForm
-  Left = 621
-  Height = 716
-  Top = 201
-  Width = 600
+  Left = 120
+  Height = 700
+  Top = 220
+  Width = 700
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Fenêtre de suivi'
-  ClientHeight = 716
-  ClientWidth = 600
+  ClientHeight = 700
+  ClientWidth = 700
   Icon.Data = {
     7E04000000000100010010100000010020006804000016000000280000001000
     0000200000000100200000000000000400006400000064000000000000000000
@@ -52,10 +52,10 @@ object FollowForm: TFollowForm
   inline SynMemoFollow: TSynMemo
     Cursor = crNo
     Left = 0
-    Height = 643
-    Hint = 'Zonne d''affichage du suivi'
+    Height = 627
+    Hint = 'Zone d''affichage du suivi'
     Top = 0
-    Width = 600
+    Width = 700
     Align = alClient
     Font.Height = -13
     Font.Name = 'Courier New'
@@ -545,23 +545,23 @@ object FollowForm: TFollowForm
   object sbFollow: TStatusBar
     Left = 0
     Height = 23
-    Top = 693
-    Width = 600
+    Top = 677
+    Width = 700
     AutoHint = True
     Panels = <>
   end
   object pnlFollow: TPanel
     Left = 0
     Height = 50
-    Top = 643
-    Width = 600
+    Top = 627
+    Width = 700
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 600
+    ClientWidth = 700
     TabOrder = 2
     object btnClear: TBitBtn
       Cursor = crHandPoint
-      Left = 400
+      Left = 496
       Height = 30
       Hint = 'Nettoyer la fenêtre'
       Top = 8
@@ -577,7 +577,7 @@ object FollowForm: TFollowForm
     end
     object btnClose: TBitBtn
       Cursor = crHandPoint
-      Left = 504
+      Left = 600
       Height = 30
       Hint = 'Fermer la fenêtre'
       Top = 8

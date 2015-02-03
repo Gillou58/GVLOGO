@@ -1,7 +1,7 @@
 object TextForm: TTextForm
-  Left = 218
+  Left = 100
   Height = 700
-  Top = 187
+  Top = 190
   Width = 700
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Fenêtre du texte'

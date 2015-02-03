@@ -48,6 +48,9 @@ uses
 
 type
   // *** TMainForm ***
+
+  { TMainForm }
+
   TMainForm = class(TForm)
     MenuWinShowFollow: TMenuItem;
     MenuWinShowText: TMenuItem;
@@ -261,6 +264,7 @@ type
     procedure ShowCmdLineExecute(Sender: TObject);
     procedure ShowEditExecute(Sender: TObject);
     procedure ShowFollowExecute(Sender: TObject);
+    procedure ShowLocVarsExecute(Sender: TObject);
     procedure ShowProcsExecute(Sender: TObject);
     procedure ShowProcsUpdate(Sender: TObject);
     procedure ShowTextExecute(Sender: TObject);
@@ -315,6 +319,7 @@ uses
   FrmFollow, // suivi
   FrmDump, // contenu du noyau
   FrmVars, // variables globales
+  FrmLocVars, // variables locales
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -715,6 +720,13 @@ begin
   FollowForm.ShowOnTop; // on la voit
 end;
 
+procedure TMainForm.ShowLocVarsExecute(Sender: TObject);
+// *** affichage des variables locales ***
+begin
+  LocVarsForm.WindowState := wsNormal; // la fenêtre est redimensionnée
+  LocVarsForm.ShowOnTop; // on la voit
+end;
+
 procedure TMainForm.ShowProcsExecute(Sender: TObject);
 // *** affichage des procédures disponibles ***
 begin
@@ -806,8 +818,10 @@ procedure TMainForm.GetKernelChange(Sender: TObject);
 begin
   if DumpForm.IsVisible then // fenêtre de contenu visible ?
     DumpForm.Dump; // on la met à jour
-  if VarsForm.IsVisible then // fenêtre des variables visible ?
+  if VarsForm.IsVisible then // fenêtre des variables globales visible ?
     VarsForm.Vars; // idem
+  if LocVarsForm.IsVisible then // fenêtre de variables locales visible ?
+    LocVarsForm.LocVars; // idem
 end;
 
 procedure TMainForm.GetStateChange(Sender: TObject);

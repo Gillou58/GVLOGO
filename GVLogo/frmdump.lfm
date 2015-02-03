@@ -1,7 +1,7 @@
 object DumpForm: TDumpForm
-  Left = 860
+  Left = 1099
   Height = 350
-  Top = 180
+  Top = 417
   Width = 320
   ActiveControl = SynEditDump
   BorderIcons = [biSystemMenu, biMinimize]

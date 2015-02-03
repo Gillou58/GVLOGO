@@ -215,7 +215,10 @@ end;
 function TGVLocVars.LocVarsCount: Integer;
 // *** nombre de variables locales ***
 begin
-  Result := fStack.Peek;
+  if fStack.Count <> 0 then
+    Result := fStack.Peek
+  else
+    Result := 0;
 end;
 
 function TGVLocVars.AddLocVar(const Name, Value: string): Boolean;
