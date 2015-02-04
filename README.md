@@ -19,7 +19,7 @@ Sommaire :
 
 ************************************************
 
-1. Objectifs du travail présenté
+1- Objectifs du travail présenté
 
 GVLOGO est un logiciel qui implémente pour Windows (32 et 64 bits) et Linux une version du langage LOGO. Il est par ailleurs fourni avec tous les programmes sources et les utilitaires nécessaires à la compréhension de son fonctionnement.
 
@@ -30,7 +30,7 @@ Les objectifs sont donc :
 * de permettre à un programmeur inexpérimenté de prendre conscience des difficultés rencontrées lors de la mise en oeuvre d'un tel projet.
 
 
-2. LICENCE
+2- LICENCE
 
 Les documents et logiciels du dossier GVLOGO sont protégés selon les termes de la licence GNU GPL qui doit être présente dans le dossier
 "GNU GPL".
@@ -57,7 +57,7 @@ Copyright (C) 2014 Gilles VASSEUR — Tous droits réservés.
   
   Vous devriez avoir reçu une copie de la Licence Générale Publique GNU avec ce programme ; si ce n’est pas le cas, consultez : <http://www.gnu.org/licenses/>.
 
-3. Contenu des répertoires
+3- Contenu des répertoires
 
 a. Le répertoire "3rdparty" contient les bibliothèques nécessaires au fonctionnement de GVLOGO.
 
@@ -95,7 +95,7 @@ f. Répertoire "units" : contient toutes les unités nécessaires à GVLOGO.
 
 g. Répertoire "GVLogo" : contient le programme GVLOGO sous sa forme la plus évoluée (*** travail en cours ***).
 
-4. Contact
+4- Contact
 
 Vous pouvez me contacter par mail : gillesvasseur58@gmail.com
 
