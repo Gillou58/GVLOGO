@@ -344,6 +344,11 @@ procedure TMainForm.ExecFollowExecute(Sender: TObject);
 // *** trace ***
 begin
   Automat.Follow := not Automat.Follow; // on inverse sa valeur
+  // on adapte l'affichage
+  if Automat.Follow then
+    ExecFollow.Caption := CrsNoFollow
+  else
+    ExecFollow.Caption := CrsFollow;
 end;
 
 procedure TMainForm.ExecInterpretExecute(Sender: TObject);
@@ -382,6 +387,17 @@ procedure TMainForm.ExecDeepFollowExecute(Sender: TObject);
 begin
   fDeepFollow := not fDeepFollow; // on inverse le drapeau
   Automat.Follow := fDeepFollow; // interpréteur à jour
+  // on adapte l'affichage
+  if fDeepFollow then
+  begin
+    ExecFollow.Caption := CrsNoFollow;
+    ExecDeepFollow.Caption := CrsNoDeepFollow;
+  end
+  else
+  begin
+    ExecFollow.Caption := CrsFollow;
+    ExecDeepFollow.Caption := CrsDeepFollow;
+  end;
 end;
 
 procedure TMainForm.ExecClearExecute(Sender: TObject);

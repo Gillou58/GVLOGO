@@ -81,6 +81,10 @@ resourcestring
   CrsAlreadyAProc = '"%s" existe déjà ! Voulez-vous l''éditer ?';
   CrsBadParams = 'La ligne de paramètres "%s" est incorrecte.';
   CrsEmptyNameProc = 'Le nom vide pour une procédure est incorrect.';
+  CrsFollow = 'Trace';
+  CrsNoFollow = 'Fin de trace';
+  CrsDeepFollow = 'Suivi en profondeur';
+  CrsNoDeepFollow = 'Fin de suivi';
 implementation
 
 end.
