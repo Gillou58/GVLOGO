@@ -158,6 +158,7 @@ resourcestring
   ME_DupParam = 'Le paramètre "%s" de la procédure en cours est en double.';
   ME_BadLine = 'La ligne "%s" de la procédure en cours est incorrecte.';
   ME_BadDef = 'La définition "%s" de la procédure en cours est incorrecte.';
+  ME_BadBodyDef = 'La partie "%s" de la procédure est incorrecte.';
   ME_NotTo = 'Le mot POUR est introuvable dans "%s".';
   ME_NotEnd = 'Le mot FIN est introuvable pour "%s".';
   ME_EmptyEdit =
@@ -196,8 +197,8 @@ type
     CE_NotVar, CE_LocVarForbidden, CE_AlreadyExists, CE_VarNoName,
     CE_VarTooManyDatas, CE_UnknownPackage, CE_PackageForbidden,
     CE_AlreadyPackage, CE_NotInPackage, CE_UnknownProc, CE_BadParam,
-    CE_DupParam, CE_BadLine, CE_BadDef, CE_NotTo, CE_NotEnd, CE_EmptyEdit,
-    CE_NorProcnorList, CE_BadTo, CE_BadEnd, CE_NoName,
+    CE_DupParam, CE_BadLine, CE_BadDef, CE_BadBodyDef, CE_NotTo, CE_NotEnd,
+    CE_EmptyEdit, CE_NorProcnorList, CE_BadTo, CE_BadEnd, CE_NoName,
     CE_Protected, CE_BadName, CE_UnknownObject, CE_BadObj, CE_Burried,
     CE_NotEnoughDatas, CE_WhatAbout);
 
@@ -228,7 +229,7 @@ const
     ME_NotVar, ME_LocVarForbidden, ME_AlreadyExists, ME_VarNoName,
     ME_VarTooManyDatas, ME_UnknownPackage, ME_PackageForbidden,
     ME_AlreadyPackage,  ME_NotInPackage, ME_UnknownProc, ME_BadParam,
-    ME_DupParam, ME_BadLine, ME_BadDef, ME_NotTo,
+    ME_DupParam, ME_BadLine, ME_BadDef, ME_BadBodyDef, ME_NotTo,
     ME_NotEnd, ME_EmptyEdit, ME_NorProcnorList, ME_BadTo, ME_BadEnd, ME_NoName,
     ME_Protected, ME_BadName, ME_UnknownObject, ME_BadObj, ME_Burried,
     ME_NotEnoughDatas, ME_WhatAbout);

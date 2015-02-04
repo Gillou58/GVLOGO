@@ -57,7 +57,14 @@ object NewProcForm: TNewProcForm
     Top = 410
     Width = 745
     AutoHint = True
-    Panels = <>
+    Panels = <    
+      item
+        Width = 300
+      end    
+      item
+        Width = 50
+      end>
+    SimplePanel = False
   end
   object pnlNewProc: TPanel
     Left = 0
@@ -107,6 +114,7 @@ object NewProcForm: TNewProcForm
       Caption = 'Enregistrer'
       Default = True
       Kind = bkOK
+      OnClick = btnSaveClick
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
@@ -127,6 +135,7 @@ object NewProcForm: TNewProcForm
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
+    OnExit = SynEditNewProcExit
     Gutter.Width = 57
     Gutter.MouseActions = <>
     RightGutter.Width = 0
@@ -655,6 +664,7 @@ object NewProcForm: TNewProcForm
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
+      OnExit = lbledtNameExit
     end
     object lbledtParams: TLabeledEdit
       Cursor = crHandPoint
@@ -678,6 +688,7 @@ object NewProcForm: TNewProcForm
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
+      OnExit = lbledtParamsExit
     end
   end
 end

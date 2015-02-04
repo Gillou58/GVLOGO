@@ -78,7 +78,9 @@ resourcestring
   CrsNoPrimHelp = 'Le fichier "%s" n''est pas accessible. L''aide sur les ' +
     'primitives ne sera pas disponible.';
   CrsFollowLine = '[%d]  Donnée : %s - Num : %d - Prim : %s - Proc : %s';
-
+  CrsAlreadyAProc = '"%s" existe déjà ! Voulez-vous l''éditer ?';
+  CrsBadParams = 'La ligne de paramètres "%s" est incorrecte.';
+  CrsEmptyNameProc = 'Le nom vide pour une procédure est incorrect.';
 implementation
 
 end.

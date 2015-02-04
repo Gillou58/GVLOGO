@@ -146,6 +146,10 @@ type
     function ProcsCount: Integer;
     // renvoie la liste des procédures
     function ProcsToList: string;
+    // vérifie la validité de la ligne de paramètres
+    function IsValidParamsLine(Lst: string): Boolean;
+    // vérifie la validité du corps de la procédure
+    function IsValidBodyDef(Lst: string): Boolean;
     // enregistre une procédure
     function AddProc(const Name, Lst: string): Boolean;
     // supprime une procédure
@@ -906,6 +910,79 @@ begin
   Result := ObjsToList(CProc);
 end;
 
+function TGVLogoKernel.IsValidParamsLine(Lst: string): Boolean;
+// *** vérifie la validité de la ligne de paramètres ***
+var
+  LT: TstringList;
+  Lst2: TGVList;
+  LS: string;
+begin
+  Result := False; // suppose une erreur
+  Lst2 := TGVList.Create; // paramètres
+  try
+    Lst2.Text := Lst; // liste affectée
+    if not Lst2.IsValid then // on sort si la liste est invalide
+    begin
+      // [### Erreur: mauvaise liste ###]
+      Error.SetError(CE_BadList2, LSt);
+      Exit; // on sort de la procédure
+    end;
+    LT := TStringList.Create; // liste des paramètres pour doublons
+    try
+      if not Lst2.IsEmptyList then // liste vide ?
+      begin
+        for LS in Lst2 do // on repère les paramètres
+          // s'il existe déjà ou s'il est incorrect
+          if (LT.IndexOf(LS) <> -1) then
+          begin
+            Result := False;
+            // [### Erreur: paramètre dupliqué ###]
+            Error.SetError(CE_DupParam, LS);
+            Break; // on sort de la boucle
+          end
+          else
+          if IsValidParam(LS) then // paramètre valide ?
+          begin
+            LT.Add(LS); // stocke le nouveau paramètre
+            Result := True; // c'est bon...
+          end
+          else
+          begin
+            Result := False;
+            // [### Erreur: mauvais paramètre ###]
+            Error.SetError(CE_BadParam, LS);
+            Break; // on sort de la boucle
+          end;
+      end
+      else
+        Result := True; // liste vide acceptée
+    finally
+      LT.Free; // on libère la liste de travail
+    end;
+  finally
+    Lst2.Free; // idem
+  end;
+end;
+
+function TGVLogoKernel.IsValidBodyDef(Lst: string): Boolean;
+// *** vérification de la validité du corps d'une procédure ***
+var
+  Lst1: TGVList;
+begin
+  Result := False; // suppose une erreur
+  Lst1 := TGVList.Create; // on crée la liste des lignes
+  try
+    Lst1.Text := Lst; // on lui affecte la liste de définition
+    if Lst1.IsValid then // liste valide ?
+      Result := True // c'est bon
+    else
+      // [### Erreur: mauvaise définition ###]
+      Error.SetError(CE_BadDef, Lst);
+  finally
+    Lst1.Free; // on libère la liste
+  end;
+end;
+
 function TGVLogoKernel.AddProc(const Name, Lst: string): Boolean;
 // *** ajout d'une procédure ***
 var
@@ -1401,90 +1478,31 @@ end;
 function TGVLogoKernel.IsValidDef(const LSt: string): Boolean;
 // *** définition valide ? ***
 var
-  Lst1, Lst2, Lst3: TGVList;
-  LT: TStrings;
-  LS: string;
+  Lst1: TGVList;
 begin
   Result := False; // on suppose une erreur
   Lst1 := TGVList.Create;
   try
     if fTempList.IsValid(LSt) then // liste correcte ?
-      Lst1.Text := LSt
+    begin
+      Lst1.Text := LSt;
+      if IsValidParamsLine(Lst1.First) then // analyse des paramètres
+      begin
+        if (Lst1.Count = 2) then // on doit avoir une définition
+          // on vérifie le corps de la procédure
+          Result := IsValidBodyDef(Lst1[1])
+        else
+          // [### Erreur: mauvaise définition ###]
+          Error.SetError(CE_BadDef, LSt);
+      end;
+    end
     else
     begin
       // [### Erreur: mauvaise liste ###]
       Error.SetError(CE_BadList2, LSt);
       Exit; // on sort de la procédure
     end;
-    Lst2 := TGVList.Create; // premier élément = paramètres
-    try
-      LT := TStringList.Create; // liste des paramètres pour doublons
-      try
-        if Lst1.First <> CEmptyList then
-        begin
-          Lst2.Text := Lst1.First;
-          for LS in Lst2 do // on repère les paramètres
-            // s'il existe déjà ou s'il est incorrect
-            if (LT.IndexOf(LS) <> -1) then
-            begin
-              Result := False;
-              // [### Erreur: paramètre dupliqué ###]
-              Error.SetError(CE_DupParam, LS);
-              Break; // on sort de la boucle
-            end
-            else
-            if IsValidParam(LS) then // paramètre valide ?
-            begin
-              LT.Add(LS); // stocke le nouveau paramètre
-              Result := True; // c'est bon...
-            end
-            else
-            begin
-              Result := False;
-              // [### Erreur: mauvais paramètre ###]
-              Error.SetError(CE_BadParam, LS);
-              Break; // on sort de la boucle
-            end;
-        end
-        else
-          Result := True; // liste vide acceptée
-      finally
-        LT.Free; // on libère la liste de travail
-      end;
-    finally
-      Lst2.Free; // idem
-    end;
-    if Result then // si tout va bien : on examine la définition
-    begin
-      Lst2 := TGVList.Create; // on analyse les lignes
-      try
-        if (Lst1.Count > 1) then // on doit avoir une définition
-        begin
-          Lst3 := TGVList.Create; // on crée la liste des lignes
-          try
-            Lst3.Text := Lst1[1]; // on lui affecte la liste de définition
-            for LS in Lst3 do // on balaie les lignes
-            begin
-              // liste valide
-              Result := fTempList.IsValid(LS);
-              if not Result then // sinon on sort
-              begin
-                // [### Erreur: mauvaise définition ###]
-                Error.SetError(CE_BadDef, Lst1[0]);
-                Break;
-              end;
-            end;
-          finally
-            Lst3.Free; // on libère la liste
-          end;
-        end
-        else
-          // [### Erreur: mauvaise définition ###]
-          Error.SetError(CE_BadDef, LSt);
-      finally
-        Lst2.Free; // on libère la liste
-      end;
-    end;
+
   finally
     Lst1.Free; // on libère la liste de travail
   end;

@@ -1,12 +1,12 @@
 object PrimsHelpForm: TPrimsHelpForm
   Left = 342
-  Height = 267
+  Height = 200
   Top = 150
   Width = 639
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Aide sur les primitives'
-  ClientHeight = 267
+  ClientHeight = 200
   ClientWidth = 639
   Icon.Data = {
     7E04000000000100010010100000010020006804000016000000280000001000
@@ -53,11 +53,11 @@ object PrimsHelpForm: TPrimsHelpForm
   LCLVersion = '1.2.6.0'
   object btnClose: TBitBtn
     Cursor = crHandPoint
-    Left = 549
+    Left = 524
     Height = 30
     Hint = 'Fermer la fenêtre'
-    Top = 224
-    Width = 75
+    Top = 160
+    Width = 100
     Caption = 'Fermer'
     Kind = bkClose
     ModalResult = 11
@@ -77,13 +77,12 @@ object PrimsHelpForm: TPrimsHelpForm
     OnSelect = cbPrimsSelect
     ParentShowHint = False
     ShowHint = True
-    Style = csDropDownList
     TabOrder = 1
   end
   object mmoDefs: TMemo
     Cursor = crNo
     Left = 320
-    Height = 202
+    Height = 138
     Hint = 'Définition de la primitive ne cours'
     Top = 8
     Width = 304

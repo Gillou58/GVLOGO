@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="115"/>
+      <BuildNr Value="125"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="langage GVLOGO" InternalName="GVLOGO" LegalCopyright="Gilles Vasseur 2014-2015" LegalTrademarks="GNU GPL" OriginalFilename="GVLOGO.PAS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -226,6 +226,7 @@
         <Filename Value="frmphelpprims.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="PrimsHelpForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FrmpHelpPrims"/>
       </Unit28>
@@ -272,6 +273,7 @@
         <Filename Value="frmnewproc.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="NewProcForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FrmNewProc"/>
       </Unit34>
