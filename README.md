@@ -1,4 +1,4 @@
-﻿GVLOGO
+GVLOGO
 ======
 
 French LOGO language with LAZARUS (Free Pascal)
