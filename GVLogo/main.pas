@@ -48,6 +48,9 @@ uses
 
 type
   // *** TMainForm ***
+
+  { TMainForm }
+
   TMainForm = class(TForm)
     MenuWinShowFollow: TMenuItem;
     MenuWinShowText: TMenuItem;
@@ -216,6 +219,7 @@ type
     procedure EditRedoUpdate(Sender: TObject);
     procedure EditUndoUpdate(Sender: TObject);
     procedure FileNewExecute(Sender: TObject);
+    procedure FileNewProcExecute(Sender: TObject);
     procedure FileSaveExecute(Sender: TObject);
     procedure FileSaveUpdate(Sender: TObject);
     procedure HelpPrimsExecute(Sender: TObject);
@@ -319,6 +323,7 @@ uses
   FrmVars, // variables globales
   FrmLocVars, // variables locales
   FrmPcks, // paquets
+  FrmNewProc, // nouvelle procédure
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -480,6 +485,12 @@ begin
       ShowOnTop; // on montre la fenêtre
     end;
   end;
+end;
+
+procedure TMainForm.FileNewProcExecute(Sender: TObject);
+// *** nouvelle procédure ***
+begin
+  ShowNewProcForm; // affichage de la fenêtre
 end;
 
 procedure TMainForm.FileSaveExecute(Sender: TObject);

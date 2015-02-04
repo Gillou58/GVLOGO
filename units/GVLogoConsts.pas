@@ -65,7 +65,7 @@ resourcestring
   CrsInfo = 'Information';
   CrsConfirm = 'Confirmation';
   CrsAsk = 'Question';
-  CrsSave = 'Voulez-vous enregistrer %s ?';
+  CrsSave = 'Voulez-vous enregistrer "%s" ?';
   CrsLine = 'Ligne: ';
   CrsCol = 'Colonne: ';
   CrsClose = '&Fermer';

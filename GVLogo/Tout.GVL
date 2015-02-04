@@ -117,6 +117,13 @@ pour triangle :n
   polygone 3 :n
 fin
 
-ve
-spirale_couleurs 50 "octogone 80
+vide.ecran
+spirale_couleurs 20 "octogone 80
+vide.texte
+fixe.taille.fonte 24 fct 8 gras vrai ecris [Exemple de figures]
+ecris []
+fixe.taille.fonte 12 fct 6 gras faux
+ecris [Ici, des octognes sont dessinés en spirale.]
+ecris[Leur couleur est définie au hasard.]
+
 

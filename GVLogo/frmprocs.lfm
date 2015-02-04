@@ -622,7 +622,6 @@ object ProcsForm: TProcsForm
     Default = True
     Kind = bkClose
     ModalResult = 11
-    OnClick = btnQuitClick
     ParentShowHint = False
     ShowHint = True
     TabOrder = 3

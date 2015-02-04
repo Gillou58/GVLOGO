@@ -2024,6 +2024,7 @@ object MainForm: TMainForm
       Caption = 'Nouvelle procédure'
       Hint = 'Création d''une procédure'
       ImageIndex = 28
+      OnExecute = FileNewProcExecute
       ShortCut = 16464
     end
     object FileSave: TAction

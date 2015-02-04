@@ -52,7 +52,6 @@ type
     cbProcs: TComboBox;
     sbProcs: TStatusBar;
     SynEditProcs: TSynEdit;
-    procedure btnQuitClick(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
     procedure cbProcsEnter(Sender: TObject);
     procedure cbProcsKeyPress(Sender: TObject; var Key: char);
@@ -99,12 +98,6 @@ begin
   SynEditProcs.Modified := not MainForm.Automat.Kernel.EditToProc(
     SynEditProcs.Lines, 0, 0); // enregistrement
   SynEditProcsChange(nil); // changement notifié
-end;
-
-procedure TProcsForm.btnQuitClick(Sender: TObject);
-// *** fermeture de la fenêtre
-begin
-  Close; // on ferme la fenêtre
 end;
 
 procedure TProcsForm.cbProcsEnter(Sender: TObject);

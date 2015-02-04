@@ -11,7 +11,7 @@ uses
   GVErrConsts, GVErrors, GVEval, GVKernel, GVLists, GVLocVars, GVPrimConsts,
   GVPropLists, GVStacks, GVTurtles, GVWords, GVHighlighter, FrmAbout, FrmError,
   FrmText, FrmEdit, FrmInfo, FrmProcs, GVLogoConsts, FrmEditor, FrmFind, 
-FrmpHelpPrims, FrmFollow, FrmDump, FrmVars, FrmLocVars, FrmPcks;
+FrmpHelpPrims, FrmFollow, FrmDump, FrmVars, FrmLocVars, FrmPcks, FrmNewProc;
 
 {$R *.res}
 
