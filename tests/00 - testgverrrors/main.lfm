@@ -2,12 +2,12 @@ object MainForm: TMainForm
   Left = 280
   Height = 405
   Top = 160
-  Width = 806
+  Width = 850
   ActiveControl = btnGenere
   BorderStyle = bsDialog
   Caption = 'Test de GVErrors - Gilles Vasseur 2014 - V1.0.0 - GVLOGO'
   ClientHeight = 405
-  ClientWidth = 806
+  ClientWidth = 850
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poScreenCenter
@@ -35,7 +35,7 @@ object MainForm: TMainForm
     Height = 30
     Hint = 'Génération d''une erreur aléatoire'
     Top = 8
-    Width = 75
+    Width = 96
     Caption = 'Générer'
     Default = True
     Kind = bkYes
@@ -51,7 +51,7 @@ object MainForm: TMainForm
     Height = 30
     Hint = 'Fermeture du logiciel'
     Top = 88
-    Width = 75
+    Width = 96
     Caption = 'Fermer'
     Kind = bkClose
     ModalResult = 11
@@ -65,7 +65,7 @@ object MainForm: TMainForm
     Height = 30
     Hint = 'Nettoyage de l''éditeur'
     Top = 48
-    Width = 75
+    Width = 96
     Cancel = True
     Caption = 'Nettoyer'
     Kind = bkCancel

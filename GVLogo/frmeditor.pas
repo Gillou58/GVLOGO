@@ -52,6 +52,7 @@ type
     sbEdit: TStatusBar;
     SynEditEditor: TSynEdit;
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure SynEditEditorChange(Sender: TObject);
     procedure SynEditEditorKeyDown(Sender: TObject; var {%H-}Key: Word;
@@ -93,6 +94,12 @@ begin
   fGVHighlighter := TGVHighlighter.Create(Self); // création de la colorisation
   SynEditEditor.Highlighter := fGVHighlighter; // éditeur affecté
   Caption := CrsUnknownFile; // entête par défaut
+end;
+
+procedure TEditorForm.FormDeactivate(Sender: TObject);
+// *** désactivation de la fiche ***
+begin
+  sbEdit.Panels[0].Text := CrsEditorForm; // mise à jour de la barre de statut
 end;
 
 procedure TEditorForm.FormDestroy(Sender: TObject);

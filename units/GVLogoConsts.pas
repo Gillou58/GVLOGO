@@ -85,6 +85,11 @@ resourcestring
   CrsNoFollow = 'Fin de trace';
   CrsDeepFollow = 'Suivi en profondeur';
   CrsNoDeepFollow = 'Fin de suivi';
+  CrsEditorForm = 'Fenêtre de l''éditeur';
+  CrsTurtleForm = 'Fenêtre de la tortue';
+  CrsTextForm = 'Fenêtre du texte';
+  CrsFollowForm = 'Fenêtre de suivi';
+
 implementation
 
 end.

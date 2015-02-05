@@ -14,7 +14,7 @@ object MainForm: TMainForm
   LCLVersion = '1.2.6.0'
   object MainPageControl: TPageControl
     Left = 0
-    Height = 616
+    Height = 618
     Top = 0
     Width = 1178
     ActivePage = TabSheetKernel
@@ -26,15 +26,15 @@ object MainForm: TMainForm
     OnChange = MainPageControlChange
     object TabSheetKernel: TTabSheet
       Caption = 'GVKernel'
-      ClientHeight = 588
-      ClientWidth = 1170
+      ClientHeight = 587
+      ClientWidth = 1174
       object GroupBoxVars: TGroupBox
         Left = 4
         Height = 184
         Top = 8
         Width = 256
         Caption = 'Variables'
-        ClientHeight = 166
+        ClientHeight = 165
         ClientWidth = 252
         TabOrder = 4
         object btnAddVar: TButton
@@ -174,7 +174,7 @@ object MainForm: TMainForm
         Top = 8
         Width = 193
         Caption = 'Procédures'
-        ClientHeight = 358
+        ClientHeight = 357
         ClientWidth = 189
         TabOrder = 6
         object btnIsProcedure: TButton
@@ -430,7 +430,7 @@ object MainForm: TMainForm
           Height = 25
           Hint = '   // envoie toutes lesprocédures en cours vers l''éditeur'#13#10'  function AllProcsToEdit(Lst: TStrings): Boolean;'
           Top = 328
-          Width = 90
+          Width = 127
           Caption = 'AllProcsToEdit'
           DragCursor = crDefault
           OnClick = btnAllProcsToEditClick
@@ -467,7 +467,7 @@ object MainForm: TMainForm
       end
       object LabEditKerName: TLabeledEdit
         Left = 612
-        Height = 23
+        Height = 27
         Top = 24
         Width = 440
         Color = clHighlight
@@ -476,8 +476,8 @@ object MainForm: TMainForm
         EditLabel.AnchorSideRight.Side = asrBottom
         EditLabel.AnchorSideBottom.Control = LabEditKerName
         EditLabel.Left = 612
-        EditLabel.Height = 15
-        EditLabel.Top = 6
+        EditLabel.Height = 17
+        EditLabel.Top = 4
         EditLabel.Width = 440
         EditLabel.Caption = 'Nom :'
         EditLabel.ParentColor = False
@@ -485,7 +485,7 @@ object MainForm: TMainForm
       end
       object LabEditKerValue: TLabeledEdit
         Left = 612
-        Height = 23
+        Height = 27
         Top = 72
         Width = 440
         Color = clHighlight
@@ -494,8 +494,8 @@ object MainForm: TMainForm
         EditLabel.AnchorSideRight.Side = asrBottom
         EditLabel.AnchorSideBottom.Control = LabEditKerValue
         EditLabel.Left = 612
-        EditLabel.Height = 15
-        EditLabel.Top = 54
+        EditLabel.Height = 17
+        EditLabel.Top = 52
         EditLabel.Width = 440
         EditLabel.Caption = 'Valeur :'
         EditLabel.ParentColor = False
@@ -503,7 +503,7 @@ object MainForm: TMainForm
       end
       object LabEditKerList: TLabeledEdit
         Left = 612
-        Height = 23
+        Height = 27
         Top = 120
         Width = 440
         Color = clHighlight
@@ -512,8 +512,8 @@ object MainForm: TMainForm
         EditLabel.AnchorSideRight.Side = asrBottom
         EditLabel.AnchorSideBottom.Control = LabEditKerList
         EditLabel.Left = 612
-        EditLabel.Height = 15
-        EditLabel.Top = 102
+        EditLabel.Height = 17
+        EditLabel.Top = 100
         EditLabel.Width = 440
         EditLabel.Caption = 'Liste :'
         EditLabel.ParentColor = False
@@ -525,7 +525,7 @@ object MainForm: TMainForm
         Top = 216
         Width = 121
         Caption = 'Primitives'
-        ClientHeight = 190
+        ClientHeight = 189
         ClientWidth = 117
         TabOrder = 9
         object btnIsPrim: TButton
@@ -613,7 +613,7 @@ object MainForm: TMainForm
         Top = 225
         Width = 257
         Caption = 'Paquets'
-        ClientHeight = 299
+        ClientHeight = 298
         ClientWidth = 253
         TabOrder = 5
         object btnIsPackage: TButton
@@ -857,7 +857,7 @@ object MainForm: TMainForm
         Top = 8
         Width = 121
         Caption = 'Listes de propriétés'
-        ClientHeight = 183
+        ClientHeight = 182
         ClientWidth = 117
         TabOrder = 8
         object btnDProp: TButton
@@ -932,7 +932,7 @@ object MainForm: TMainForm
         Top = 388
         Width = 193
         Caption = 'Objets généraux'
-        ClientHeight = 136
+        ClientHeight = 135
         ClientWidth = 189
         TabOrder = 7
         object btnExists: TButton
@@ -1046,7 +1046,7 @@ object MainForm: TMainForm
         Top = 428
         Width = 120
         Caption = 'Propriétés'
-        ClientHeight = 96
+        ClientHeight = 95
         ClientWidth = 116
         ParentColor = False
         TabOrder = 10
@@ -1093,7 +1093,7 @@ object MainForm: TMainForm
       object SpinEditKer: TSpinEdit
         Cursor = crHandPoint
         Left = 612
-        Height = 23
+        Height = 27
         Hint = 'Indice d''action'
         Top = 169
         Width = 50
@@ -1107,20 +1107,20 @@ object MainForm: TMainForm
       end
       object lblIndice: TLabel
         Left = 612
-        Height = 15
+        Height = 17
         Top = 152
-        Width = 40
+        Width = 51
         Caption = 'Indice :'
         FocusControl = SpinEditKer
         ParentColor = False
       end
       object BitBtnKerCancel: TBitBtn
         Cursor = crHandPoint
-        Left = 976
+        Left = 960
         Height = 30
         Hint = 'Nettoyer l''éditeur'
         Top = 552
-        Width = 90
+        Width = 106
         Cancel = True
         Caption = 'Nettoyer'
         Kind = bkCancel
@@ -1148,8 +1148,8 @@ object MainForm: TMainForm
   end
   object StatusBar: TStatusBar
     Left = 0
-    Height = 23
-    Top = 616
+    Height = 21
+    Top = 618
     Width = 1178
     AutoHint = True
     Panels = <>

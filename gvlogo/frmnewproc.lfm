@@ -53,8 +53,8 @@ object NewProcForm: TNewProcForm
   LCLVersion = '1.2.6.0'
   object sbNewProc: TStatusBar
     Left = 0
-    Height = 23
-    Top = 410
+    Height = 21
+    Top = 412
     Width = 745
     AutoHint = True
     Panels = <    
@@ -69,7 +69,7 @@ object NewProcForm: TNewProcForm
   object pnlNewProc: TPanel
     Left = 0
     Height = 50
-    Top = 360
+    Top = 362
     Width = 745
     Align = alBottom
     ClientHeight = 50
@@ -106,11 +106,11 @@ object NewProcForm: TNewProcForm
     end
     object btnSave: TBitBtn
       Cursor = crHandPoint
-      Left = 400
+      Left = 384
       Height = 30
       Hint = 'Enregistrer la procédure'
       Top = 8
-      Width = 100
+      Width = 116
       Caption = 'Enregistrer'
       Default = True
       Kind = bkOK
@@ -645,7 +645,7 @@ object NewProcForm: TNewProcForm
     object lbledtName: TLabeledEdit
       Cursor = crHandPoint
       Left = 136
-      Height = 23
+      Height = 27
       Hint = 'Taper le nom de la procédure'
       Top = 16
       Width = 596
@@ -654,10 +654,10 @@ object NewProcForm: TNewProcForm
       EditLabel.AnchorSideRight.Control = lbledtName
       EditLabel.AnchorSideBottom.Control = lbledtName
       EditLabel.AnchorSideBottom.Side = asrBottom
-      EditLabel.Left = 9
-      EditLabel.Height = 15
-      EditLabel.Top = 20
-      EditLabel.Width = 124
+      EditLabel.Left = -21
+      EditLabel.Height = 17
+      EditLabel.Top = 21
+      EditLabel.Width = 154
       EditLabel.Caption = 'Nom de la procédure  : '
       EditLabel.ParentColor = False
       LabelPosition = lpLeft
@@ -669,7 +669,7 @@ object NewProcForm: TNewProcForm
     object lbledtParams: TLabeledEdit
       Cursor = crHandPoint
       Left = 136
-      Height = 23
+      Height = 27
       Hint = 'Taper les paramètres de la procédure'
       Top = 56
       Width = 592
@@ -678,10 +678,10 @@ object NewProcForm: TNewProcForm
       EditLabel.AnchorSideRight.Control = lbledtParams
       EditLabel.AnchorSideBottom.Control = lbledtParams
       EditLabel.AnchorSideBottom.Side = asrBottom
-      EditLabel.Left = 65
-      EditLabel.Height = 15
-      EditLabel.Top = 60
-      EditLabel.Width = 68
+      EditLabel.Left = 44
+      EditLabel.Height = 17
+      EditLabel.Top = 61
+      EditLabel.Width = 89
       EditLabel.Caption = 'Paramètres : '
       EditLabel.ParentColor = False
       LabelPosition = lpLeft

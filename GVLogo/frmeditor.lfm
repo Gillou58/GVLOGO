@@ -49,6 +49,7 @@ object EditorForm: TEditorForm
   }
   OnActivate = SynEditEditorChange
   OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
   OnDestroy = FormDestroy
   LCLVersion = '1.2.6.0'
   inline SynEditEditor: TSynEdit

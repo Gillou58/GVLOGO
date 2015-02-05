@@ -130,8 +130,8 @@ object MainForm: TMainForm
   end
   object sbMain: TStatusBar
     Left = 0
-    Height = 23
-    Top = 655
+    Height = 21
+    Top = 657
     Width = 981
     AutoHint = True
     Panels = <    
@@ -174,7 +174,7 @@ object MainForm: TMainForm
   end
   object lbledtMain: TLabeledEdit
     Left = 480
-    Height = 23
+    Height = 27
     Hint = 'Texte à interpréter'
     Top = 32
     Width = 492
@@ -183,8 +183,8 @@ object MainForm: TMainForm
     EditLabel.AnchorSideRight.Side = asrBottom
     EditLabel.AnchorSideBottom.Control = lbledtMain
     EditLabel.Left = 480
-    EditLabel.Height = 15
-    EditLabel.Top = 14
+    EditLabel.Height = 17
+    EditLabel.Top = 12
     EditLabel.Width = 492
     EditLabel.Caption = ' Ligne à interpréter : '
     EditLabel.ParentColor = False
@@ -195,7 +195,7 @@ object MainForm: TMainForm
   end
   object btnGo: TBitBtn
     Cursor = crHandPoint
-    Left = 88
+    Left = 16
     Height = 30
     Hint = 'Effectuer l''interprétation'
     Top = 616
@@ -242,11 +242,11 @@ object MainForm: TMainForm
   end
   object btnDeepTrace: TBitBtn
     Cursor = crHandPoint
-    Left = 472
+    Left = 448
     Height = 30
     Hint = 'Trace approfondie'
     Top = 616
-    Width = 120
+    Width = 136
     Caption = 'Trace profonde'
     Kind = bkYesToAll
     ModalResult = 10
@@ -257,11 +257,11 @@ object MainForm: TMainForm
   end
   object btnToProc: TBitBtn
     Cursor = crHandPoint
-    Left = 344
+    Left = 288
     Height = 30
     Hint = 'Envoyer l''éditeur vers les procédures'
     Top = 616
-    Width = 120
+    Width = 144
     Caption = 'Vers procédures'
     Kind = bkHelp
     OnClick = btnToProcClick
@@ -271,7 +271,7 @@ object MainForm: TMainForm
   end
   object btnStop: TBitBtn
     Cursor = crHandPoint
-    Left = 216
+    Left = 152
     Height = 30
     Hint = 'Arrêt du programme en cours'
     Top = 616

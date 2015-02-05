@@ -47,6 +47,7 @@ object FollowForm: TFollowForm
     6A65
   }
   OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
   OnDestroy = FormDestroy
   LCLVersion = '1.2.6.0'
   inline SynMemoFollow: TSynMemo
@@ -548,7 +549,14 @@ object FollowForm: TFollowForm
     Top = 677
     Width = 700
     AutoHint = True
-    Panels = <>
+    Panels = <    
+      item
+        Width = 300
+      end    
+      item
+        Width = 300
+      end>
+    SimplePanel = False
   end
   object pnlFollow: TPanel
     Left = 0
@@ -556,6 +564,7 @@ object FollowForm: TFollowForm
     Top = 627
     Width = 700
     Align = alBottom
+    BevelOuter = bvNone
     ClientHeight = 50
     ClientWidth = 700
     TabOrder = 2

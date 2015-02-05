@@ -53,6 +53,7 @@ type
     SynMemoFollow: TSynMemo;
     procedure btnClearClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
     Hlighter: TSynPositionHighlighter;
@@ -68,6 +69,8 @@ implementation
 
 {$R *.lfm}
 
+uses
+  GVLOGOConsts; // constantes du projet
 { TFollowForm }
 
 procedure TFollowForm.btnClearClick(Sender: TObject);
@@ -83,6 +86,12 @@ begin
   Attr := HLighter.CreateTokenID('Attr',clBlue,clNone,[fsBold]); // attribut
   Attr2 := HLighter.CreateTokenID('Attr2',clNone,clAqua,[fsBold]); // attribut 2
   SynMemoFollow.Highlighter := HLighter; // éditeur relié
+end;
+
+procedure TFollowForm.FormDeactivate(Sender: TObject);
+// *** désactivation de la fenêtre ***
+begin
+  sbFollow.Panels[0].Text := CrsFollowForm; // barre d'état à jour
 end;
 
 procedure TFollowForm.FormDestroy(Sender: TObject);

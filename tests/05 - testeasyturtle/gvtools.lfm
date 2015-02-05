@@ -11,7 +11,7 @@ object FormTools: TFormTools
   ClientWidth = 463
   OnActivate = FormActivate
   Position = poMainFormCenter
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.2.6.0'
   object btnClose: TBitBtn
     Cursor = crHandPoint
     Left = 344
@@ -19,7 +19,7 @@ object FormTools: TFormTools
     Hint = 'Ferme la fenêtre.'
     Top = 232
     Width = 112
-    DefaultCaption = True
+    Caption = 'Fermer'
     Kind = bkClose
     ModalResult = 11
     OnClick = btnCloseClick
@@ -35,7 +35,7 @@ object FormTools: TFormTools
     Top = 232
     Width = 112
     Cancel = True
-    DefaultCaption = True
+    Caption = 'Annuler'
     Kind = bkCancel
     ModalResult = 2
     ParentShowHint = False

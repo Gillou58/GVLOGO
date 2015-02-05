@@ -2,12 +2,12 @@ object MainForm: TMainForm
   Left = 300
   Height = 404
   Top = 145
-  Width = 804
+  Width = 817
   ActiveControl = edtName
   BorderStyle = bsDialog
   Caption = 'TestGVLocVars - v1.0.0 - Gilles Vasseur 2014 - Test de GVLocVars'
   ClientHeight = 404
-  ClientWidth = 804
+  ClientWidth = 817
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poScreenCenter
@@ -61,7 +61,7 @@ object MainForm: TMainForm
   object edtName: TLabeledEdit
     Cursor = crHandPoint
     Left = 456
-    Height = 23
+    Height = 27
     Hint = 'Nom de la variable'
     Top = 32
     Width = 328
@@ -70,8 +70,8 @@ object MainForm: TMainForm
     EditLabel.AnchorSideRight.Side = asrBottom
     EditLabel.AnchorSideBottom.Control = edtName
     EditLabel.Left = 456
-    EditLabel.Height = 15
-    EditLabel.Top = 14
+    EditLabel.Height = 17
+    EditLabel.Top = 12
     EditLabel.Width = 328
     EditLabel.Caption = 'Nom de la variable :'
     EditLabel.ParentColor = False
@@ -83,7 +83,7 @@ object MainForm: TMainForm
   object edtValue: TLabeledEdit
     Cursor = crHandPoint
     Left = 456
-    Height = 23
+    Height = 27
     Hint = 'Valeur de la variable'
     Top = 80
     Width = 331
@@ -92,8 +92,8 @@ object MainForm: TMainForm
     EditLabel.AnchorSideRight.Side = asrBottom
     EditLabel.AnchorSideBottom.Control = edtValue
     EditLabel.Left = 456
-    EditLabel.Height = 15
-    EditLabel.Top = 62
+    EditLabel.Height = 17
+    EditLabel.Top = 60
     EditLabel.Width = 331
     EditLabel.Caption = 'Valeur de la variable :'
     EditLabel.ParentColor = False
@@ -105,7 +105,7 @@ object MainForm: TMainForm
   object seNumber: TSpinEdit
     Cursor = crHandPoint
     Left = 456
-    Height = 23
+    Height = 27
     Hint = 'Nombre de variables dans le bloc'
     Top = 136
     Width = 50
@@ -116,9 +116,9 @@ object MainForm: TMainForm
   end
   object lblNumber: TLabel
     Left = 456
-    Height = 15
+    Height = 17
     Top = 112
-    Width = 181
+    Width = 229
     Caption = 'Nombre de variables dans le bloc :'
     ParentColor = False
   end
@@ -126,10 +126,10 @@ object MainForm: TMainForm
     Left = 456
     Height = 160
     Top = 168
-    Width = 344
+    Width = 352
     Caption = 'Méthodes '
-    ClientHeight = 142
-    ClientWidth = 340
+    ClientHeight = 141
+    ClientWidth = 348
     TabOrder = 3
     object btnAddLocNumber: TButton
       Cursor = crHandPoint
@@ -137,7 +137,7 @@ object MainForm: TMainForm
       Height = 25
       Hint = '// réservation pour N variables locales'#13#10'   procedure AddLocNumber(N: Integer);'
       Top = 8
-      Width = 100
+      Width = 116
       Caption = 'AddLocNumber'
       OnClick = btnAddLocNumberClick
       ParentShowHint = False
@@ -146,7 +146,7 @@ object MainForm: TMainForm
     end
     object btnIsLocVar: TButton
       Cursor = crHandPoint
-      Left = 112
+      Left = 120
       Height = 25
       Hint = '// est-ce une variable locale ?'#13#10'  function IsLocVar(const Name: string): Boolean;'
       Top = 8
@@ -163,7 +163,7 @@ object MainForm: TMainForm
       Height = 25
       Hint = '//  function LocVarsCount: Integer;'#13#10'  affectation à une variable locale'
       Top = 8
-      Width = 100
+      Width = 112
       Caption = 'LocVarsCount'
       OnClick = btnLocVarsCountClick
       ParentShowHint = False
@@ -176,7 +176,7 @@ object MainForm: TMainForm
       Height = 25
       Hint = '// affectation à une variable locale'#13#10'  function AddLocVar(const Name, Value: string): Boolean;'
       Top = 56
-      Width = 100
+      Width = 116
       Caption = 'AddLocVar'
       OnClick = btnAddLocVarClick
       ParentShowHint = False
@@ -185,7 +185,7 @@ object MainForm: TMainForm
     end
     object btnUpdateLocVar: TButton
       Cursor = crHandPoint
-      Left = 112
+      Left = 120
       Height = 25
       Hint = '//  function UpdateLocVar(const Name, Value: string): Boolean; overload;'#13#10'  valeur d''une variable locale'
       Top = 56
@@ -202,7 +202,7 @@ object MainForm: TMainForm
       Height = 25
       Hint = '// valeur d''une variable locale'#13#10'  function ValLocVar(const Name: string; out Value: string): Boolean;'#13#10'  overload;'#13#10'  function ValLocVar(const Name: string): string; overload;'
       Top = 56
-      Width = 100
+      Width = 112
       Caption = 'ValLocVar'
       OnClick = btnValLocVarClick
       ParentShowHint = False
@@ -215,7 +215,7 @@ object MainForm: TMainForm
       Height = 25
       Hint = '// destruction du dernier groupe de variables locales'#13#10'  procedure DelLastGroup;'
       Top = 104
-      Width = 100
+      Width = 116
       Caption = 'DelLastGroup'
       OnClick = btnDelLastGroupClick
       ParentShowHint = False
@@ -224,7 +224,7 @@ object MainForm: TMainForm
     end
     object btnRemoveAllLocVars: TButton
       Cursor = crHandPoint
-      Left = 112
+      Left = 120
       Height = 25
       Hint = '// destruction de toutes les variables locales'#13#10' procedure Clear;'
       Top = 104
@@ -241,7 +241,7 @@ object MainForm: TMainForm
       Height = 25
       Hint = '// liste des variables locales'#13#10'  function LocVarsToList: string;'
       Top = 104
-      Width = 100
+      Width = 112
       Caption = 'LocVarsToList'
       OnClick = btnLocVarsToListClick
       ParentShowHint = False
@@ -251,9 +251,9 @@ object MainForm: TMainForm
   end
   object sbMain: TStatusBar
     Left = 0
-    Height = 23
-    Top = 381
-    Width = 804
+    Height = 21
+    Top = 383
+    Width = 817
     AutoHint = True
     Panels = <>
   end

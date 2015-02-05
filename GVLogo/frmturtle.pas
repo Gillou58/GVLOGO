@@ -72,6 +72,7 @@ uses
   StrUtils, // utilitaires pour les chaînes de caractères
   GVConsts, // constantes générales
   GVPrimConsts, // constantes pour VRAI et FAUX
+  GVLOGOCOnsts, // constantes du projet
   Main // fiche principale
   ;
 
@@ -92,7 +93,7 @@ end;
 procedure TTurtleForm.FormDeactivate(Sender: TObject);
 // *** désactivation de la fiche ***
 begin
-  sbTurtle.Panels[0].Text := EmptyStr;
+  sbTurtle.Panels[0].Text := CrsTurtleForm; // barre de statut à jour
 end;
 
 procedure TTurtleForm.FormDestroy(Sender: TObject);

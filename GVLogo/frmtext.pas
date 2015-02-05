@@ -52,10 +52,7 @@ type
       Style: TFontParams; // style
     end;
 
-  // *** fenêtre du texte ***
-
-  { TTextForm }
-
+  // *** TTextForm ***
   TTextForm = class(TForm)
     rmmoText: TRichMemo;
     sbText: TStatusBar;
@@ -94,6 +91,7 @@ var
 implementation
 
 uses
+  GVLOGOCOnsts, // constantes du projet
   GVConsts; // constantes
 
 {$R *.lfm}
@@ -103,7 +101,7 @@ uses
 procedure TTextForm.FormDeactivate(Sender: TObject);
 // *** la fenêtre est désactivée ***
 begin
-  sbText.SimpleText := EmptyStr; // barre nettoyée
+  sbText.SimpleText := CrsTextForm; // barre nettoyée
 end;
 
 function TTextForm.GetSelStart: Integer;

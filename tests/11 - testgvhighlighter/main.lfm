@@ -13,7 +13,7 @@ object MainForm: TMainForm
   LCLVersion = '1.2.6.0'
   inline SynEditMain: TSynEdit
     Left = 0
-    Height = 535
+    Height = 537
     Top = 0
     Width = 872
     Align = alClient
@@ -821,15 +821,15 @@ object MainForm: TMainForm
   end
   object sbMain: TStatusBar
     Left = 0
-    Height = 23
-    Top = 585
+    Height = 21
+    Top = 587
     Width = 872
     Panels = <>
   end
   object pnlMain: TPanel
     Left = 0
     Height = 50
-    Top = 535
+    Top = 537
     Width = 872
     Align = alBottom
     Anchors = []
@@ -844,7 +844,7 @@ object MainForm: TMainForm
       Hint = 'Fermer le logiciel'
       Top = 8
       Width = 100
-      DefaultCaption = True
+      Caption = 'Fermer'
       Kind = bkClose
       ModalResult = 11
       OnClick = btnExitClick
@@ -885,11 +885,11 @@ object MainForm: TMainForm
     end
     object btnUnfoldAll: TBitBtn
       Cursor = crHandPoint
-      Left = 424
+      Left = 400
       Height = 30
       Hint = 'Tout déplier'
       Top = 8
-      Width = 100
+      Width = 120
       Cancel = True
       Caption = 'Tout déplier'
       Kind = bkNo
