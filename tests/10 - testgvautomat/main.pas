@@ -246,7 +246,6 @@ procedure TMainForm.GetStateChange(Sender: TObject);
 // gestion du changement d'état
 var
   LS: string;
-  Li: Integer;
 begin
   case Automat.State of
     asWord, asList, asVar, asNumber, asEval, asPushing, asProc,
@@ -260,7 +259,7 @@ begin
   if Automat.Follow then
     with mmoMain.Lines do
       Add(Format('// [%d]'+ CStatesArray[Automat.State] +
-          '...', [Li, LS])); // état affiché
+          '...', [Automat.Datas.fLevel, LS])); // état affiché
     if fDeepTrace and (not (Automat.State in [asWaiting, asPreparing,
         asEnding]))then  // trace ?
      with mmoMain.Lines do
