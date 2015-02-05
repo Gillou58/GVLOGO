@@ -113,7 +113,7 @@ var
 begin
   Result := 0;
   for Li := 0 to rmmoText.Lines.Count - 2 do
-    Result := Result + Length(rmmoText.Lines[Li]) + 1;
+    Result := Result + Length(rmmoText.Lines[Li]);
   Result := Result + Length(rmmoText.Lines[rmmoText.Lines.Count - 1]);
 end;
 

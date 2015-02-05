@@ -48,9 +48,6 @@ uses
 
 type
   // *** TMainForm ***
-
-  { TMainForm }
-
   TMainForm = class(TForm)
     MenuWinShowFollow: TMenuItem;
     MenuWinShowText: TMenuItem;
@@ -105,7 +102,6 @@ type
     EditIndent: TAction;
     EditRedo: TAction;
     FilePrint: TAction;
-    FileClose: TAction;
     FileSave: TAction;
     FileNewProc: TAction;
     FileNew: TAction;
@@ -162,10 +158,8 @@ type
     MenuSelectAll: TMenuItem;
     MenuPaste: TMenuItem;
     MenuItem2: TMenuItem;
-    MenuCloseEditor: TMenuItem;
     MenuExit: TMenuItem;
     MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
     MenuDoAgain: TMenuItem;
@@ -942,7 +936,6 @@ begin
   FileSaveAs.Enabled := not fRunning; // sauvegarde sous
   FileNew.Enabled := not fRunning; // nouveau fichier
   FileNewProc.Enabled := not fRunning; // nouvelle procédure
-  FileClose.Enabled := not fRunning; // fermeture de fichier
   FilePrint.Enabled := not fRunning; // impression
   FileSave.Enabled := not fRunning; // sauvegarde
   EditCut.Enabled := not fRunning; // couper
