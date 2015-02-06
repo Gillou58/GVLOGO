@@ -73,8 +73,8 @@ uses
   GVConsts, // constantes générales
   GVPrimConsts, // constantes pour VRAI et FAUX
   GVLOGOCOnsts, // constantes du projet
-  Main // fiche principale
-  ;
+  FrmTurtleShow, // affichage des donneés de la tortue
+  Main; // fiche principale
 
 { TTurtleForm }
 
@@ -113,6 +113,9 @@ begin
       [Round(CoordX), Round(CoordY), Round(Heading)]) +
       ' Visible: ' + IfThen(TurtleVisible, MF_True, MF_False) +
       ' Baissé: ' + IfThen(PenDown, MF_True, MF_False);
+  // état de la tortue affiché ?
+  if Assigned(TurtleShowForm) and not TurtleShowForm.Changing then
+    TurtleShowForm.GetTurtleState; // on le ractualise
 end;
 
 procedure TTurtleForm.TurtleBeforePaint(Sender: TObject; cHeading: Integer);

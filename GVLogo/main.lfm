@@ -2093,6 +2093,7 @@ object MainForm: TMainForm
       Category = 'Edit'
       Caption = 'Etat de la tortue'
       Hint = 'Etat de la tortue'
+      OnExecute = EditTurtleStateExecute
     end
     object EditScreenState: TAction
       Category = 'Edit'

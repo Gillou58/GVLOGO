@@ -59,9 +59,6 @@ type
   TTurtleBeforeEvent = procedure(Sender: TObject; cHeading: Integer) of object;
 
   // *** classe de la tortue ***
-
-  { TGVTurtle }
-
   TGVTurtle = class(TObject)
     strict private
       fError: TGVErrors; // gestion des erreurs

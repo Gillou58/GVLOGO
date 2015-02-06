@@ -216,6 +216,7 @@ type
     tbSelectAll: TToolButton;
     tbShowFollow: TToolButton;
     procedure EditRedoUpdate(Sender: TObject);
+    procedure EditTurtleStateExecute(Sender: TObject);
     procedure EditUndoUpdate(Sender: TObject);
     procedure FileNewExecute(Sender: TObject);
     procedure FileNewProcExecute(Sender: TObject);
@@ -326,6 +327,7 @@ uses
   FrmPcks, // paquets
   FrmNewProc, // nouvelle procédure
   FrmOptions, // options
+  FrmTurtleShow, // état de la tortue
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -625,6 +627,12 @@ procedure TMainForm.EditRedoUpdate(Sender: TObject);
 begin
   EditRedo.Enabled := (EditorForm.SynEditEditor.CanRedo) // possible ?
     and not Running; // sans exécution en cours
+end;
+
+procedure TMainForm.EditTurtleStateExecute(Sender: TObject);
+// *** état de la tortue ***
+begin
+  TurtleShowForm.ShowOnTop; // on la montre
 end;
 
 procedure TMainForm.ExecExecuteExecute(Sender: TObject);

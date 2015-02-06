@@ -40,7 +40,8 @@ unit GVLogoConsts;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, Graphics,
+  GVConsts; // constantes générales
 
 const
   CMaxHistoryEntries = 10; // mémorisation des entrées
