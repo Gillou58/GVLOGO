@@ -10,8 +10,9 @@ uses
   Forms, bgrabitmappack, richmemopackage, main, FrmTurtle, GVAutomat, GVConsts,
   GVErrConsts, GVErrors, GVEval, GVKernel, GVLists, GVLocVars, GVPrimConsts,
   GVPropLists, GVStacks, GVTurtles, GVWords, GVHighlighter, FrmAbout, FrmError,
-  FrmText, FrmEdit, FrmInfo, FrmProcs, GVLogoConsts, FrmEditor, FrmFind, 
-FrmpHelpPrims, FrmFollow, FrmDump, FrmVars, FrmLocVars, FrmPcks, FrmNewProc;
+  FrmText, FrmEdit, FrmInfo, FrmProcs, GVLogoConsts, FrmEditor, FrmFind,
+  FrmpHelpPrims, FrmFollow, FrmDump, FrmVars, FrmLocVars, FrmPcks, FrmNewProc,
+  FrmOptions;
 
 {$R *.res}
 
@@ -30,6 +31,7 @@ begin
   Application.CreateForm(TVarsForm, VarsForm);
   Application.CreateForm(TLocVarsForm, LocVarsForm);
   Application.CreateForm(TPcksForm, PcksForm);
+  Application.CreateForm(TOptionsForm, OptionsForm);
   Application.Run;
 end.
 

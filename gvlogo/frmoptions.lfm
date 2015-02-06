@@ -1,0 +1,63 @@
+object OptionsForm: TOptionsForm
+  Left = 342
+  Height = 454
+  Top = 150
+  Width = 731
+  BorderStyle = bsDialog
+  Caption = 'Options'
+  ClientHeight = 454
+  ClientWidth = 731
+  OnActivate = FormActivate
+  Position = poScreenCenter
+  LCLVersion = '1.2.6.0'
+  object gbDirs: TGroupBox
+    Left = 16
+    Height = 105
+    Top = 40
+    Width = 704
+    Caption = 'Emplacements'
+    ClientHeight = 87
+    ClientWidth = 700
+    TabOrder = 0
+    object lblSetup: TLabel
+      Left = 17
+      Height = 15
+      Top = 15
+      Width = 83
+      Caption = 'Configuration : '
+      ParentColor = False
+    end
+    object edtSetup: TEdit
+      Cursor = crHandPoint
+      Left = 112
+      Height = 23
+      Hint = 'Emplacement du fichier de configuration'
+      Top = 7
+      Width = 576
+      Enabled = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object lblFiles: TLabel
+      Left = 17
+      Height = 15
+      Top = 55
+      Width = 46
+      Caption = 'Fichiers :'
+      ParentColor = False
+    end
+    object edtFiles: TEdit
+      Cursor = crHandPoint
+      Left = 112
+      Height = 23
+      Hint = 'Emplacement d''enregistrement des fichiers'
+      Top = 47
+      Width = 576
+      Enabled = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+  end
+end

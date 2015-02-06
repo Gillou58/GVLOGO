@@ -1807,6 +1807,9 @@ object MainForm: TMainForm
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
         }
       end
+      object MenuItemOptions: TMenuItem
+        Action = HelpOptions
+      end
       object MenuPrimsHelp: TMenuItem
         Action = HelpPrims
         Bitmap.Data = {
@@ -1957,6 +1960,7 @@ object MainForm: TMainForm
       Hint = 'Ouvrir un fichier de procédures'
       ImageIndex = 27
       ShortCut = 16463
+      BeforeExecute = FileOpenBeforeExecute
       OnAccept = FileOpenAccept
     end
     object FileSaveAs: TFileSaveAs
@@ -2286,6 +2290,13 @@ object MainForm: TMainForm
       ImageIndex = 46
       OnExecute = ShowFollowExecute
       ShortCut = 24659
+    end
+    object HelpOptions: TAction
+      Category = 'Help'
+      Caption = '&Options'
+      Hint = 'OPtions du logiciel'
+      ImageIndex = 73
+      OnExecute = HelpOptionsExecute
     end
   end
   object ImageListMenu: TImageList

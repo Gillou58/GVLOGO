@@ -54,6 +54,7 @@ type
 
 resourcestring
   // *** chaînes des messages ***
+  CrsGVLOGO = 'GVLOGO100';
   CrsUnknownFile = 'sans_nom' + CExt; // fichier par défaut
   CrsLoad = 'Le fichier "%s" a été chargé.';
   CrsErrLoad = 'Le fichier "%s" n''a pas pu être chargé.';

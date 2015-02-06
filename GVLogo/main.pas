@@ -48,7 +48,12 @@ uses
 
 type
   // *** TMainForm ***
+
+  { TMainForm }
+
   TMainForm = class(TForm)
+    HelpOptions: TAction;
+    MenuItemOptions: TMenuItem;
     MenuWinShowFollow: TMenuItem;
     MenuWinShowText: TMenuItem;
     MenuWinShowTurtle: TMenuItem;
@@ -214,8 +219,10 @@ type
     procedure EditUndoUpdate(Sender: TObject);
     procedure FileNewExecute(Sender: TObject);
     procedure FileNewProcExecute(Sender: TObject);
+    procedure FileOpenBeforeExecute(Sender: TObject);
     procedure FileSaveExecute(Sender: TObject);
     procedure FileSaveUpdate(Sender: TObject);
+    procedure HelpOptionsExecute(Sender: TObject);
     procedure HelpPrimsExecute(Sender: TObject);
     procedure MenuWinCmdLineClick(Sender: TObject);
     procedure MenuWindowsClick(Sender: TObject);
@@ -318,6 +325,7 @@ uses
   FrmLocVars, // variables locales
   FrmPcks, // paquets
   FrmNewProc, // nouvelle procédure
+  FrmOptions, // options
   FrmAbout; // boîte à propos
 
 { TMainForm }
@@ -503,6 +511,12 @@ begin
   ShowNewProcForm; // affichage de la fenêtre
 end;
 
+procedure TMainForm.FileOpenBeforeExecute(Sender: TObject);
+// *** avant le chargement d'un fichier ***
+begin
+  FileOpen.Dialog.InitialDir := OptionsForm.UserDir;
+end;
+
 procedure TMainForm.FileSaveExecute(Sender: TObject);
 // *** sauvegarde ***
 begin
@@ -527,6 +541,12 @@ procedure TMainForm.FileSaveUpdate(Sender: TObject);
 begin
   FileSave.Enabled := (not Running) and Modified;
   FileSaveAs.Enabled := FileSave.Enabled;
+end;
+
+procedure TMainForm.HelpOptionsExecute(Sender: TObject);
+// *** options du logiciel ***
+begin
+  OptionsForm.ShowOnTop; // on montre la fenêtre d'options
 end;
 
 procedure TMainForm.HelpPrimsExecute(Sender: TObject);
