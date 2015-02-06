@@ -82,10 +82,15 @@ resourcestring
   CrsAlreadyAProc = '"%s" existe déjà ! Voulez-vous l''éditer ?';
   CrsBadParams = 'La ligne de paramètres "%s" est incorrecte.';
   CrsEmptyNameProc = 'Le nom vide pour une procédure est incorrect.';
+  // *** configuration ***
+  CrsConfigFile = 'gvlogo.cfg';
+  CrsCreateDirErr = 'Impossible de créer le répertoire "%s".';
+  // *** suivi ***
   CrsFollow = 'Trace';
   CrsNoFollow = 'Fin de trace';
   CrsDeepFollow = 'Suivi en profondeur';
   CrsNoDeepFollow = 'Fin de suivi';
+  // *** fenêtres ***
   CrsEditorForm = 'Fenêtre de l''éditeur';
   CrsTurtleForm = 'Fenêtre de la tortue';
   CrsTextForm = 'Fenêtre du texte';

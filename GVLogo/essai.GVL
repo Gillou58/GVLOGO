@@ -1,6 +1,0 @@
-// essai GVLOGO - Gilles Vasseur 2015
-
-pour carre :n
-  repete 4 [avance :n droite 90]
-fin
-
