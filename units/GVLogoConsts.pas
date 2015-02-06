@@ -89,6 +89,15 @@ resourcestring
   CrsTurtleForm = 'Fenêtre de la tortue';
   CrsTextForm = 'Fenêtre du texte';
   CrsFollowForm = 'Fenêtre de suivi';
+  // *** traitement des erreurs ***
+  CrsErrItem = 'Elément';
+  CrsErrLine = 'Ligne';
+  CrsErrData = 'Donnée';
+  CrsErrPrim = 'Primitive';
+  CrsErrProc = 'Procédure';
+  CrsErrNum = 'Numéro';
+  CrsErrLevel = 'Niveau';
+  CrsErrPos = 'Position';
 
 implementation
 

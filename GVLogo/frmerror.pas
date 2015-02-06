@@ -40,32 +40,17 @@ unit FrmError;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, BCLabel, Forms, Controls, Graphics,
-  Dialogs, ExtCtrls, StdCtrls, Buttons,
+  Classes, SysUtils, FileUtil, SynMemo,
+  Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, StdCtrls,
   GVErrConsts; // constantes d'erreurs
 
 type
   // *** TErrorForm ***
   TErrorForm = class(TForm)
     btnClose: TBitBtn;
-    blblErrItem: TBCLabel;
-    blblLine: TBCLabel;
-    blblData: TBCLabel;
-    blblPrim: TBCLabel;
-    blblProc: TBCLabel;
-    blblNum: TBCLabel;
-    blblLevel: TBCLabel;
-    blblPos: TBCLabel;
-    blblMess: TBCLabel;
     imgErrTurtle: TImage;
-    LabelItem: TLabel;
-    LabelLine: TLabel;
-    LabelData: TLabel;
-    LabelPrim: TLabel;
-    LabelProc: TLabel;
-    LabelItemNum: TLabel;
-    LabelLevel: TLabel;
-    LabelPosErr: TLabel;
+    lblMess: TLabel;
+    SynMemoErr: TSynMemo;
     procedure btnCloseClick(Sender: TObject);
   private
   public
@@ -80,6 +65,9 @@ implementation
 
 {$R *.lfm}
 
+uses
+  GVLOGOConsts; // constantes du projet
+
 { TErrorForm }
 
 procedure TErrorForm.btnCloseClick(Sender: TObject);
@@ -92,24 +80,25 @@ procedure TErrorForm.SetError(const Err, ErrItem, Line, Data, Prim,
   Proc: string; Num, Level: Integer; Pos: Integer);
 // *** affichage de l'erreur ***
 begin
-  blblMess.Caption := Err; // message en toutes lettres
-  blblErrItem.Caption := ErrItem;
-  blblLine.Caption := Line;
-  blblData.Caption := Data;
-  if Prim <> EmptyStr then
-    blblPrim.Caption := Prim
-  else
-    blblPrim.Caption := ME_Nothing;
-  if Proc <> EmptyStr then
-    blblProc.Caption := Proc
-  else
-    blblProc.Caption := ME_Nothing;
-  blblNum.Caption := IntToStr(Num);
-  blblLevel.Caption := IntToStr(Level);
-  if Pos <> CE_NoErr then
-    blblPos.Caption := IntToStr(Pos)
-  else
-    blblPos.Caption := ME_Nothing;
+  lblMess.Caption := Err; // message en toutes lettres
+  with SynMemoErr.Lines do
+  begin
+    Clear; // on nettoie l'affichage
+    Add(CrsErrItem + ' : ' + ErrItem);
+    if (Line <> EmptyStr) then // une ligne pertinente ?
+      Add(CrsErrLine + ' : ' + Line);
+    if (Data <> EmptyStr) then // donnée ?
+      Add(CrsErrData + ' : ' + Data);
+    if (Prim <> EmptyStr) then // primitive ?
+      Add(CrsErrPrim + ' : ' + Prim);
+    if (Proc <> EmptyStr) then // procédure ?
+      Add(CrsErrProc + ' : ' + Proc);
+    if (Num > 0) then // numéro ?
+      Add(CrsErrNum + ' : ' + IntToStr(Num));
+    Add(CrsErrLevel + ' : ' + IntToStr(Level)); // niveau
+    if Pos <> CE_NoErr then
+      Add(CrsErrPos + ' : ' + IntToStr(Pos)); // position
+  end;
 end;
 
 end.
