@@ -1,12 +1,12 @@
 object TurtleShowForm: TTurtleShowForm
   Left = 342
-  Height = 322
+  Height = 404
   Top = 150
   Width = 602
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Etat de la tortue'
-  ClientHeight = 322
+  ClientHeight = 404
   ClientWidth = 602
   Icon.Data = {
     6612000000000100040010101000000000002801000046000000101000000000
@@ -159,12 +159,11 @@ object TurtleShowForm: TTurtleShowForm
     FFF8FFFFFFFFFFFFFFFF
   }
   OnActivate = FormActivate
-  OnCreate = FormCreate
   LCLVersion = '1.2.6.0'
   object sbTurtleShow: TStatusBar
     Left = 0
     Height = 23
-    Top = 299
+    Top = 381
     Width = 602
     AutoHint = True
     Panels = <    
@@ -179,7 +178,7 @@ object TurtleShowForm: TTurtleShowForm
   object pnlTurtleShow: TPanel
     Left = 0
     Height = 50
-    Top = 249
+    Top = 331
     Width = 602
     Align = alBottom
     ClientHeight = 50
@@ -197,7 +196,7 @@ object TurtleShowForm: TTurtleShowForm
       ModalResult = 11
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 2
+      TabOrder = 3
     end
     object btnCancel: TBitBtn
       Cursor = crHandPoint
@@ -209,16 +208,17 @@ object TurtleShowForm: TTurtleShowForm
       Cancel = True
       Caption = 'Annuler'
       Kind = bkCancel
+      OnClick = btnCancelClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
+      TabOrder = 2
     end
     object btnSave: TBitBtn
       Cursor = crHandPoint
-      Left = 272
+      Left = 160
       Height = 30
       Hint = 'Enregistrer les modifications'
-      Top = 9
+      Top = 8
       Width = 100
       Caption = 'Enregistrer'
       Default = True
@@ -227,6 +227,20 @@ object TurtleShowForm: TTurtleShowForm
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
+    end
+    object btnReInit: TBitBtn
+      Cursor = crHandPoint
+      Left = 272
+      Height = 30
+      Hint = 'Réinitialisaer les propriétés de la tortue'
+      Top = 9
+      Width = 100
+      Caption = 'Réinitialiser'
+      Kind = bkRetry
+      OnClick = btnReInitClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
     end
   end
   object gbCoords: TGroupBox
@@ -442,17 +456,16 @@ object TurtleShowForm: TTurtleShowForm
       Top = 76
       Width = 48
       Caption = 'Couleur :'
-      FocusControl = ColorBoxPen
       ParentColor = False
     end
     object ColorBoxPen: TColorBox
       Cursor = crHandPoint
       Left = 76
-      Height = 24
-      Hint = 'Couleur d''écriture du crayon'
+      Height = 22
+      Hint = 'Couleur du crayon de la tortue'
       Top = 71
       Width = 100
-      Style = [cbStandardColors, cbExtendedColors]
+      Style = [cbStandardColors, cbExtendedColors, cbIncludeNone, cbPrettyNames]
       ItemHeight = 16
       ParentShowHint = False
       ShowHint = True
@@ -530,6 +543,37 @@ object TurtleShowForm: TTurtleShowForm
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
+    end
+  end
+  object gbScreen: TGroupBox
+    Left = 16
+    Height = 80
+    Top = 248
+    Width = 185
+    Caption = 'Fond d''écran '
+    ClientHeight = 62
+    ClientWidth = 181
+    TabOrder = 8
+    object ColorBoxBckGround: TColorBox
+      Cursor = crHandPoint
+      Left = 78
+      Height = 24
+      Hint = 'Fond de l''écran de la tortue'
+      Top = 16
+      Width = 100
+      Style = [cbStandardColors, cbExtendedColors, cbIncludeNone, cbPrettyNames]
+      ItemHeight = 16
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object lblBckGrd: TLabel
+      Left = 8
+      Height = 15
+      Top = 16
+      Width = 48
+      Caption = 'Couleur :'
+      ParentColor = False
     end
   end
 end

@@ -47,6 +47,7 @@ uses
 type
   // *** TTurtleShowForm ***
   TTurtleShowForm = class(TForm)
+    btnReInit: TBitBtn;
     btnClose: TBitBtn;
     btnCancel: TBitBtn;
     btnSave: TBitBtn;
@@ -55,11 +56,14 @@ type
     cbFilled: TCheckBox;
     cbPenDown: TCheckBox;
     cbgDraw: TCheckGroup;
+    ColorBoxBckGround: TColorBox;
     ColorBoxPen: TColorBox;
     gbPen: TGroupBox;
     gbScale: TGroupBox;
+    gbScreen: TGroupBox;
     gvSpeed: TGroupBox;
     Label1: TLabel;
+    lblBckGrd: TLabel;
     lblScaleX: TLabel;
     Label3: TLabel;
     lblPenColor: TLabel;
@@ -79,9 +83,10 @@ type
     spedtHeading: TSpinEdit;
     spedtY: TSpinEdit;
     tbarSpeed: TTrackBar;
+    procedure btnCancelClick(Sender: TObject);
+    procedure btnReInitClick(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
   private
     fChanging: Boolean; // drapeau de changement
   public
@@ -102,22 +107,29 @@ uses
 
 { TTurtleShowForm }
 
-procedure TTurtleShowForm.FormCreate(Sender: TObject);
-// *** création de la fiche ***
-begin
-  GetTurtleState; // récupération et affichage des données
-end;
-
 procedure TTurtleShowForm.FormActivate(Sender: TObject);
 // *** fenêtre visible ***
 begin
-   GetTurtleState; // récupération et affichage des données
+  GetTurtleState; // récupération et affichage des données
 end;
 
 procedure TTurtleShowForm.btnSaveClick(Sender: TObject);
 // *** enregistrement des données ***
 begin
   SetTurtleState; // mise à jour de la tortue
+end;
+
+procedure TTurtleShowForm.btnCancelClick(Sender: TObject);
+// *** annulation des changements ***
+begin
+  GetTurtleState; // valeurs récupérées
+end;
+
+procedure TTurtleShowForm.btnReInitClick(Sender: TObject);
+// *** réinitialisation de la tortue ***
+begin
+  TurtleForm.GVTurtle.ReInit; // tortue réinitialisée
+  GetTurtleState; // valeurs récupérées
 end;
 
 procedure TTurtleShowForm.GetTurtleState;
@@ -139,6 +151,7 @@ begin
       cbFilled.Checked := Filled; // remplissage
       spedtWidth.Value := PenWidth; // largeur du crayon
       ColorBoxPen.Selected := PenColor; // couleur du crayon
+      ColorBoxBckGround.Selected := ScreenColor; // couleur de fond
       tbarSpeed.Position := Speed; // vitesse de la tortue
     end;
 end;
@@ -164,6 +177,7 @@ begin
     Filled := cbFilled.Checked ; // remplissage
     PenWidth := spedtWidth.Value; // largeur du crayon
     PenColor := ColorBoxPen.Selected; // couleur du crayon
+    ScreenColor := ColorBoxBckGround.Selected; // couleur de fond
     Speed := tbarSpeed.Position; // vitesse de la tortue
   end;
   Changing := False; // on a fini
