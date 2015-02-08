@@ -50,6 +50,10 @@ type
   // *** TMainForm ***
   TMainForm = class(TForm)
     HelpOptions: TAction;
+    MenuItem11: TMenuItem;
+    MenuItemTurtle: TMenuItem;
+    MenuItemText: TMenuItem;
+    MenuItem4: TMenuItem;
     MenuItemOptions: TMenuItem;
     MenuWinShowFollow: TMenuItem;
     MenuWinShowText: TMenuItem;
@@ -96,7 +100,6 @@ type
     SearchNextEnd: TAction;
     SearchPreviousEnd: TAction;
     EditTextState: TAction;
-    EditScreenState: TAction;
     EditTurtleState: TAction;
     EditWordSelect: TAction;
     EditLineSelect: TAction;
@@ -134,11 +137,7 @@ type
     MenuHelp2: TMenuItem;
     MenuItem15: TMenuItem;
     MenuAbout: TMenuItem;
-    MenuItem16: TMenuItem;
     MenuOpen: TMenuItem;
-    MenuTextState: TMenuItem;
-    MenuScreenState: TMenuItem;
-    MenuTurtleState: TMenuItem;
     MenuWait: TMenuItem;
     MenuPrimsHelp: TMenuItem;
     MenuWinCmdLine: TMenuItem;
