@@ -102,6 +102,8 @@ uses
 
 procedure TOptionsForm.FormCreate(Sender: TObject);
 // *** activation de la fiche ***
+var
+  Li: Integer;
 begin
   InitAll; // initilisation
   // on crée le fichier de configuration
@@ -113,6 +115,9 @@ begin
     begin
       // fichiers utilisateur
       UserDir := ReadString('directories', 'userdir', UserDir);
+      for Li := 0 to (CMaxHistoryEntries - 1) do // fichiers de l'historique
+        // on ajoute à la liste
+        AddHistFile(ReadString('history', 'H' + IntToStr(Li), EmptyStr));
     end;
   end;
 end;
@@ -154,6 +159,9 @@ end;
 
 procedure TOptionsForm.FormDestroy(Sender: TObject);
 // *** désactivation de la fiche ***
+var
+  Li: Integer;
+  LS: string;
 begin
   if not fAbort then
   begin
@@ -165,6 +173,14 @@ begin
         + CE_GVAuthor + ' ' +  CE_GVDate);
       // fichiers utilisateur
       WriteString('directories', 'userdir', UserDir);
+      // historique des fichiers
+      for Li := 0 to (CMaxHistoryEntries - 1) do
+      begin
+        LS := EmptyStr; // chaîne vide par défaut
+        if (cbHistFiles.Items.Count > Li) then // fichier disponible ?
+          LS := cbHistFiles.Items[Li]; // on le sauvegarde
+        WriteString('history', 'H' + IntToStr(Li), LS);
+      end;
     end;
   end;
   fIniFile.Free; // libération du fichier de configuration
@@ -240,6 +256,8 @@ var
   Li: Integer;
   LB: Boolean;
 begin
+  if (St = EmptyStr) then // chaîne vide ?
+    Exit; // on sort
   LB := False; // drapeau baissé
   for Li := 0 to cbHistFiles.Items.Count - 1 do // on balaie la liste
     if CompareText(cbHistFiles.Items[Li], St) = 0 then // existe déjà ?
@@ -252,7 +270,8 @@ begin
   begin
     cbHistFiles.Items.Insert(0, St); // place en première position
     // on supprime l'élément le plus ancien
-    cbHistFiles.Items.Delete(CMaxHistoryEntries);
+    if (cbHistFiles.Items.Count > CMaxHistoryEntries) then // trop d'éléments ?
+      cbHistFiles.Items.Delete(CMaxHistoryEntries);
   end;
   ClearHist; // menu nettoyé puis mis à jour
   with MainForm do
