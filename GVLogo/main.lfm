@@ -490,9 +490,37 @@ object MainForm: TMainForm
       end
       object MenuItem1: TMenuItem
         Caption = 'Récemment ouverts'
-        object MenuItem2: TMenuItem
-          Caption = '< vide >'
-          Enabled = False
+        object HF1: TMenuItem
+          Caption = '<vide>'
+          OnClick = HF1Click
+        end
+        object HF2: TMenuItem
+          Caption = '<vide>'
+          OnClick = HF1Click
+        end
+        object HF3: TMenuItem
+          Caption = '<vide>'
+          OnClick = HF1Click
+        end
+        object HF4: TMenuItem
+          Caption = '<vide>'
+          OnClick = HF1Click
+        end
+        object HF5: TMenuItem
+          Caption = '<vide>'
+          OnClick = HF1Click
+        end
+        object HF6: TMenuItem
+          Caption = '<vide>'
+          OnClick = HF1Click
+        end
+        object HF7: TMenuItem
+          Caption = '<vide>'
+          OnClick = HF1Click
+        end
+        object HF8: TMenuItem
+          Caption = '<vide>'
+          OnClick = HF1Click
         end
       end
       object MenuItem5: TMenuItem

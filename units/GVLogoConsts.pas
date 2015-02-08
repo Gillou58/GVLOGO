@@ -44,7 +44,7 @@ uses
   GVConsts; // constantes générales
 
 const
-  CMaxHistoryEntries = 10; // mémorisation des entrées
+  CMaxHistoryEntries = 8; // mémorisation des entrées
   CExt = '.GVL'; // extension par défaut
   CPrimDefs = 'GVPrimDefs.txt'; // définitions des primitives
 

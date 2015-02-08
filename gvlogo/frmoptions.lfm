@@ -1,12 +1,12 @@
 object OptionsForm: TOptionsForm
   Left = 342
-  Height = 187
+  Height = 273
   Top = 150
   Width = 731
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Options'
-  ClientHeight = 187
+  ClientHeight = 273
   ClientWidth = 731
   Icon.Data = {
     7E04000000000100010010100000010020006804000016000000280000001000
@@ -47,6 +47,7 @@ object OptionsForm: TOptionsForm
     743100F00D0A00E0202000C020200080696C0080616D000056610000653D0180
     2E5C
   }
+  OnActivate = FormActivate
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poScreenCenter
@@ -105,7 +106,7 @@ object OptionsForm: TOptionsForm
   object sbOptions: TStatusBar
     Left = 0
     Height = 23
-    Top = 164
+    Top = 250
     Width = 731
     AutoHint = True
     Panels = <>
@@ -113,7 +114,7 @@ object OptionsForm: TOptionsForm
   object pnlOptions: TPanel
     Left = 0
     Height = 50
-    Top = 114
+    Top = 200
     Width = 731
     Align = alBottom
     ClientHeight = 50
@@ -161,6 +162,29 @@ object OptionsForm: TOptionsForm
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
+    end
+  end
+  object gbHisto: TGroupBox
+    Left = 8
+    Height = 65
+    Top = 128
+    Width = 705
+    Caption = 'Historique '
+    ClientHeight = 47
+    ClientWidth = 701
+    TabOrder = 3
+    object cbHistFiles: TComboBox
+      Cursor = crHandPoint
+      Left = 112
+      Height = 23
+      Hint = 'Liste des fichiers récents'
+      Top = 8
+      Width = 576
+      ItemHeight = 15
+      ParentShowHint = False
+      ShowHint = True
+      Style = csDropDownList
+      TabOrder = 0
     end
   end
   object SelectDirectoryDialog: TSelectDirectoryDialog

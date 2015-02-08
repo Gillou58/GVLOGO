@@ -45,13 +45,18 @@ uses
 
 type
   // *** TOptionsForm ***
+
+  { TOptionsForm }
+
   TOptionsForm = class(TForm)
     btnAbort: TBitBtn;
     btnClear: TBitBtn;
     btnClose: TBitBtn;
+    cbHistFiles: TComboBox;
     edtFiles: TEdit;
     edtSetup: TEdit;
     gbDirs: TGroupBox;
+    gbHisto: TGroupBox;
     lblFiles: TLabel;
     lblSetup: TLabel;
     pnlOptions: TPanel;
@@ -61,6 +66,7 @@ type
     procedure btnClearClick(Sender: TObject);
     procedure edtFilesDblClick(Sender: TObject);
     procedure edtFilesExit(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
@@ -72,6 +78,8 @@ type
     procedure SetUserDir(const AValue: string);
   public
     procedure InitAll; // initialisation
+    procedure ClearHist; // nettoyage de l'historique
+    procedure AddHistFile(const St: string); // liste historique
     property ConfigFile: string read fConfigFile write SetConfigFile;
     property UserDir: string read fUserDir write SetUserDir;
   end;
@@ -83,7 +91,9 @@ implementation
 
 uses
   FrmInfo, // fenêtre d'information
+  Main, // fiche principale
   GVConsts, // constantes générales
+  GVErrConsts, // erreurs
   GVLOGOConsts; // constantes du projet
 
 {$R *.lfm}
@@ -111,6 +121,14 @@ procedure TOptionsForm.edtFilesExit(Sender: TObject);
 // *** changement de dossier d'enregistrement de dossiers
 begin
   UserDir := edtFiles.Text; // on tente de changer le répaertoire de travail
+end;
+
+procedure TOptionsForm.FormActivate(Sender: TObject);
+// *** fenêtre montrée ***
+begin
+  cbHistFiles.Enabled := (cbHistFiles.Items.Count > 0); // des éléments ?
+  if cbHistFiles.Enabled then
+    cbHistFiles.ItemIndex := 0  // on pointe sur le premier élément
 end;
 
 procedure TOptionsForm.edtFilesDblClick(Sender: TObject);
@@ -192,9 +210,92 @@ end;
 
 procedure TOptionsForm.InitAll;
 // *** initialisation ***
+var
+  Li: Integer;
 begin
   ConfigFile := EmptyStr; // fichier de configuration par défaut
   UserDir := EmptyStr; // idem pour l'emplacement des fichiers
+  ClearHist; // nettoyage de l'historique
+  cbHistFiles.Clear; // nettoyage de l'historique
+  for Li := 0 to CMaxHistoryEntries - 1 do // on balaie la liste
+    cbHistFiles.Items.Add(EmptyStr); // chaînes vides
+end;
+
+procedure TOptionsForm.ClearHist;
+// *** nettoyage de l'historique ***
+begin
+  // mise à jour du menu principal
+  with MainForm do
+  begin
+    HF1.Caption := ME_Nothing; HF1.Enabled := False;
+    HF2.Caption := EmptyStr; HF2.Visible := False;
+    HF3.Caption := EmptyStr; HF3.Visible := False;
+    HF4.Caption := EmptyStr; HF4.Visible := False;
+    HF5.Caption := EmptyStr; HF5.Visible := False;
+    HF6.Caption := EmptyStr; HF6.Visible := False;
+    HF7.Caption := EmptyStr; HF7.Visible := False;
+    HF8.Caption := EmptyStr; HF8.Visible := False;
+  end;
+end;
+
+procedure TOptionsForm.AddHistFile(const St: string);
+// *** fichier récent ***
+var
+  Li: Integer;
+  LB: Boolean;
+begin
+  LB := False; // drapeau baissé
+  for Li := 0 to CMaxHistoryEntries - 1 do // on balaie la liste
+    if CompareText(cbHistFiles.Items[Li], St) = 0 then // existe déjà ?
+    begin
+      cbHistFiles.Items.Exchange(0, Li); // replacé en premier
+      LB := True; // drapeau levé
+      Break; // on sort
+    end;
+  if not LB then // non trouvé ?
+  begin
+    cbHistFiles.Items.Insert(0, St); // place en première position
+    // on supprime l'élément le plus ancien
+    cbHistFiles.Items.Delete(CMaxHistoryEntries);
+  end;
+  ClearHist; // menu nettoyé puis mis à jour
+  with MainForm do
+  begin
+    if cbHistFiles.Items[0] <> EmptyStr then
+    begin
+      HF1.Caption := cbHistFiles.Items[0]; HF1.Enabled := True;
+    end
+    else
+      HF1.Caption := ME_Nothing;
+    if cbHistFiles.Items[1] <> EmptyStr then
+    begin
+      HF2.Caption := cbHistFiles.Items[1]; HF2.Visible := True;
+    end;
+    if cbHistFiles.Items[2] <> EmptyStr then
+    begin
+      HF3.Caption := cbHistFiles.Items[2]; HF3.Visible := True;
+    end;
+    if cbHistFiles.Items[3] <> EmptyStr then
+    begin
+      HF4.Caption := cbHistFiles.Items[3]; HF4.Visible := True;
+    end;
+    if cbHistFiles.Items[4] <> EmptyStr then
+    begin
+      HF5.Caption := cbHistFiles.Items[4]; HF5.Visible := True;
+    end;
+    if cbHistFiles.Items[5] <> EmptyStr then
+    begin
+      HF6.Caption := cbHistFiles.Items[5]; HF6.Visible := True;
+    end;
+    if cbHistFiles.Items[6] <> EmptyStr then
+    begin
+      HF7.Caption := cbHistFiles.Items[6]; HF7.Visible := True;
+    end;
+    if cbHistFiles.Items[7] <> EmptyStr then
+    begin
+      HF8.Caption := cbHistFiles.Items[7]; HF8.Visible := True;
+    end;
+  end;
 end;
 
 end.

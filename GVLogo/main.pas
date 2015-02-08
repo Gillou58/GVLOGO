@@ -48,9 +48,19 @@ uses
 
 type
   // *** TMainForm ***
+
+  { TMainForm }
+
   TMainForm = class(TForm)
     HelpOptions: TAction;
     MenuItem11: TMenuItem;
+    HF8: TMenuItem;
+    HF7: TMenuItem;
+    HF6: TMenuItem;
+    HF5: TMenuItem;
+    HF4: TMenuItem;
+    HF3: TMenuItem;
+    HF2: TMenuItem;
     MenuItemTurtle: TMenuItem;
     MenuItemText: TMenuItem;
     MenuItem4: TMenuItem;
@@ -158,7 +168,7 @@ type
     MenuSelectLine: TMenuItem;
     MenuSelectAll: TMenuItem;
     MenuPaste: TMenuItem;
-    MenuItem2: TMenuItem;
+    HF1: TMenuItem;
     MenuExit: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem5: TMenuItem;
@@ -211,6 +221,7 @@ type
     tbReplace: TToolButton;
     tbSelectAll: TToolButton;
     tbShowFollow: TToolButton;
+    procedure ActionOpenExecute(Sender: TObject);
     procedure EditRedoUpdate(Sender: TObject);
     procedure EditTurtleStateExecute(Sender: TObject);
     procedure EditUndoUpdate(Sender: TObject);
@@ -221,6 +232,7 @@ type
     procedure FileSaveUpdate(Sender: TObject);
     procedure HelpOptionsExecute(Sender: TObject);
     procedure HelpPrimsExecute(Sender: TObject);
+    procedure HF1Click(Sender: TObject);
     procedure MenuWinCmdLineClick(Sender: TObject);
     procedure MenuWindowsClick(Sender: TObject);
     procedure MenuWinShowEditorClick(Sender: TObject);
@@ -285,6 +297,8 @@ type
     function SaveFile(const St: string): TModalResult;
     // vérification avant nouveau fichier
     function FileSaved(const St: string): Boolean;
+    // ouverture d'un fichier
+    procedure DoFileOpen(const St: string);
   public
     procedure GetError(Sender: TObject; ErrorRec: TGVErrorRec); // erreurs
     procedure GetMessage(Sender: TObject); // messages
@@ -368,18 +382,7 @@ end;
 procedure TMainForm.FileOpenAccept(Sender: TObject);
 // *** ouverture d'un fichier ***
 begin
-  // enregistrement avorté ou erroné ?
-  if not FileSaved(EditorForm.Caption) then
-    Exit; // on sort
-  // exécute le chargement du fichier choisi
-  try
-    EditorForm.ShowOnTop; // éditeur en vue
-    EditorForm.SynEditEditor.Lines.LoadFromFile(FileOpen.Dialog.FileName);
-    EditorForm.Caption := FileOpen.Dialog.FileName;
-  except
-    // erreur
-    FrmInfo.ShowInfoForm(Format(CrsErrLoad, [FileOpen.Dialog.FileName]));
-  end;
+  DoFileOpen(FileOpen.Dialog.FileName); // on tente d'ouvrir
 end;
 
 procedure TMainForm.ExecDeepFollowExecute(Sender: TObject);
@@ -498,6 +501,7 @@ begin
       SynEditEditor.Lines.Clear; // on vide l'éditeur
       Caption := CrsUnknownFile; // fichier par défaut
       WindowState := wsNormal; // apparence normale
+      FileSaveAS.Enabled := True; // sauvegarde sous possible
       ShowOnTop; // on montre la fenêtre
     end;
   end;
@@ -526,6 +530,7 @@ begin
     try
       // sauvegarde effectuée
       EditorForm.SynEditEditor.Lines.SaveToFile(EditorForm.Caption);
+      OptionsForm.AddHistFile(EditorForm.Caption);
       Modified := False; // drapeau de modification à jour
     except
       // message d'erreur
@@ -538,7 +543,6 @@ procedure TMainForm.FileSaveUpdate(Sender: TObject);
 // *** activation/ désactivation de la sauvegarde ***
 begin
   FileSave.Enabled := (not Running) and Modified;
-  FileSaveAs.Enabled := FileSave.Enabled;
 end;
 
 procedure TMainForm.HelpOptionsExecute(Sender: TObject);
@@ -551,6 +555,13 @@ procedure TMainForm.HelpPrimsExecute(Sender: TObject);
 // *** aide sur les primitives ***
 begin
   FrmpHelpPrims.ShowPrimsHelp; // on montre la fiche
+end;
+
+procedure TMainForm.HF1Click(Sender: TObject);
+// *** chargement à partir de l'historique ***
+begin
+  // fichier indiqué par l'élément de menu
+  DoFileOpen((Sender as TMenuItem).Caption);
 end;
 
 procedure TMainForm.MenuWinCmdLineClick(Sender: TObject);
@@ -616,6 +627,11 @@ begin
     ShowTurtleExecute(Sender) // on montre la fenêtre
   else
     TurtleForm.Close; // on la ferme
+end;
+
+procedure TMainForm.ActionOpenExecute(Sender: TObject);
+begin
+
 end;
 
 procedure TMainForm.EditRedoUpdate(Sender: TObject);
@@ -1005,6 +1021,7 @@ begin
     try
       // sauvegarde effectuée
       EditorForm.SynEditEditor.Lines.SaveToFile(LSt);
+      OptionsForm.AddHistFile(LSt);
       Modified := False; // drapeau de modification à jour
       Result := mrOk;
     except
@@ -1029,6 +1046,26 @@ begin
   end
   else
     Result := True; // pas besoin d'enregistrer
+end;
+
+procedure TMainForm.DoFileOpen(const St: string);
+// *** ouverture d'un fichier ***
+begin
+  // enregistrement avorté ou erroné ?
+  if not FileSaved(EditorForm.Caption) then
+    Exit; // on sort
+  // exécute le chargement du fichier choisi
+  try
+    EditorForm.ShowOnTop; // éditeur en vue
+    // chargement du fichier
+    EditorForm.SynEditEditor.Lines.LoadFromFile(St);
+    EditorForm.Caption := St; // titre de la fenêtre
+    FileSaveAs.Enabled := True; // sauvegarde sous possible
+    OptionsForm.AddHistFile(St); // historique
+  except
+    // erreur
+    FrmInfo.ShowInfoForm(Format(CrsErrLoad, [St]));
+  end;
 end;
 
 end.
