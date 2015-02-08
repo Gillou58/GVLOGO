@@ -40,21 +40,22 @@ unit FrmAbout;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, BCLabel, Forms,
+  Classes, SysUtils, FileUtil, Forms,
   Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, Buttons;
 
 type
-
-  { TAboutForm }
-
+  // *** TAboutForm ***
   TAboutForm = class(TForm)
     btnClose: TBitBtn;
-    blblVersion: TBCLabel;
-    blblDate: TBCLabel;
-    blblSupport: TBCLabel;
     ilTurtle: TImageList;
     imgPowered: TImage;
     Label1: TLabel;
+    blblAuthor: TLabel;
+    blblVersion: TLabel;
+    blblDate: TLabel;
+    blblSupport: TLabel;
+    lblTitle: TLabel;
+    lblGVLOGOShadow: TLabel;
     lblLES: TLabel;
     lblURL: TLabel;
     lblAuthor: TLabel;
@@ -62,8 +63,6 @@ type
     lblTarget: TLabel;
     lblDate: TLabel;
     lblVersion: TLabel;
-    lblTitle: TBCLabel;
-    blblAuthor: TBCLabel;
     imgAbout: TImage;
     mmoAbout: TMemo;
     procedure BCBtnCloseClick(Sender: TObject);

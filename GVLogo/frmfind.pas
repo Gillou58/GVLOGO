@@ -46,9 +46,6 @@ uses
 
 type
   //*** TFindForm ***
-
-  { TFindForm }
-
   TFindForm = class(TForm)
     btnReplace: TBitBtn;
     btnReplaceAll: TBitBtn;

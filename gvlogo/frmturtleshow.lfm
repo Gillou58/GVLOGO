@@ -258,6 +258,7 @@ object TurtleShowForm: TTurtleShowForm
       Top = 16
       Width = 69
       Caption = 'Abscisse (X) :'
+      FocusControl = spedtX
       ParentColor = False
     end
     object lblY: TLabel
@@ -266,6 +267,7 @@ object TurtleShowForm: TTurtleShowForm
       Top = 48
       Width = 77
       Caption = 'Ordonnée (Y) :'
+      FocusControl = spedtY
       ParentColor = False
     end
     object lblHeading: TLabel
@@ -274,6 +276,7 @@ object TurtleShowForm: TTurtleShowForm
       Top = 80
       Width = 69
       Caption = 'Orientation : '
+      FocusControl = spedtHeading
       ParentColor = False
     end
     object spedtX: TSpinEdit
@@ -337,6 +340,7 @@ object TurtleShowForm: TTurtleShowForm
       Top = 0
       Width = 169
       Caption = 'Triangle'
+      OnChange = rbTriangleChange
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
@@ -349,6 +353,7 @@ object TurtleShowForm: TTurtleShowForm
       Top = 31
       Width = 169
       Caption = 'Dessin'
+      OnChange = rbTriangleChange
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
@@ -432,11 +437,11 @@ object TurtleShowForm: TTurtleShowForm
     end
     object spedtWidth: TSpinEdit
       Cursor = crHandPoint
-      Left = 96
+      Left = 76
       Height = 23
       Hint = 'Epaisseur du trait de crayon'
       Top = 40
-      Width = 80
+      Width = 100
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
@@ -456,6 +461,7 @@ object TurtleShowForm: TTurtleShowForm
       Top = 76
       Width = 48
       Caption = 'Couleur :'
+      FocusControl = ColorBoxPen
       ParentColor = False
     end
     object ColorBoxPen: TColorBox
@@ -487,6 +493,7 @@ object TurtleShowForm: TTurtleShowForm
       Top = 8
       Width = 74
       Caption = 'Echelle des X :'
+      FocusControl = spedtScaleX
       ParentColor = False
     end
     object Label3: TLabel
@@ -495,6 +502,7 @@ object TurtleShowForm: TTurtleShowForm
       Top = 38
       Width = 74
       Caption = 'Echelle des Y :'
+      FocusControl = spedtScaleY
       ParentColor = False
     end
     object spedtScaleX: TSpinEdit
@@ -557,7 +565,7 @@ object TurtleShowForm: TTurtleShowForm
     object ColorBoxBckGround: TColorBox
       Cursor = crHandPoint
       Left = 78
-      Height = 24
+      Height = 22
       Hint = 'Fond de l''écran de la tortue'
       Top = 16
       Width = 100
@@ -568,12 +576,46 @@ object TurtleShowForm: TTurtleShowForm
       TabOrder = 0
     end
     object lblBckGrd: TLabel
-      Left = 8
+      Left = 6
       Height = 15
-      Top = 16
+      Top = 23
       Width = 48
       Caption = 'Couleur :'
+      FocusControl = ColorBoxBckGround
       ParentColor = False
+    end
+  end
+  object gbSize: TGroupBox
+    Left = 408
+    Height = 88
+    Top = 240
+    Width = 185
+    Caption = 'Taille '
+    ClientHeight = 70
+    ClientWidth = 181
+    TabOrder = 9
+    object lblSize: TLabel
+      Left = 9
+      Height = 15
+      Top = 31
+      Width = 34
+      Caption = 'Taille :'
+      FocusControl = spedtSize
+      ParentColor = False
+    end
+    object spedtSize: TSpinEdit
+      Cursor = crHandPoint
+      Left = 76
+      Height = 23
+      Hint = 'Taille de la tortue triangulaire'
+      Top = 24
+      Width = 100
+      MaxValue = 32
+      MinValue = 4
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      Value = 4
     end
   end
 end

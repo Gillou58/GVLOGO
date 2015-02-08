@@ -45,9 +45,6 @@ uses
 
 type
   // *** TOptionsForm ***
-
-  { TOptionsForm }
-
   TOptionsForm = class(TForm)
     btnAbort: TBitBtn;
     btnClear: TBitBtn;

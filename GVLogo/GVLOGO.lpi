@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="145"/>
+      <BuildNr Value="148"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="langage GVLOGO" InternalName="GVLOGO" LegalCopyright="Gilles Vasseur 2014-2015" LegalTrademarks="GNU GPL" OriginalFilename="GVLOGO.PAS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -35,16 +35,16 @@
     </RunParams>
     <RequiredPackages Count="6">
       <Item1>
-        <PackageName Value="richmemopackage"/>
+        <PackageName Value="bgracontrols"/>
       </Item1>
       <Item2>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="richmemopackage"/>
       </Item2>
       <Item3>
-        <PackageName Value="CodeTools"/>
+        <PackageName Value="SynEdit"/>
       </Item3>
       <Item4>
-        <PackageName Value="bgracontrols"/>
+        <PackageName Value="CodeTools"/>
       </Item4>
       <Item5>
         <PackageName Value="BGRABitmapPack"/>

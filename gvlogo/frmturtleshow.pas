@@ -61,8 +61,10 @@ type
     gbPen: TGroupBox;
     gbScale: TGroupBox;
     gbScreen: TGroupBox;
+    gbSize: TGroupBox;
     gvSpeed: TGroupBox;
     Label1: TLabel;
+    lblSize: TLabel;
     lblBckGrd: TLabel;
     lblScaleX: TLabel;
     Label3: TLabel;
@@ -82,11 +84,13 @@ type
     spedtX: TSpinEdit;
     spedtHeading: TSpinEdit;
     spedtY: TSpinEdit;
+    spedtSize: TSpinEdit;
     tbarSpeed: TTrackBar;
     procedure btnCancelClick(Sender: TObject);
     procedure btnReInitClick(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure rbTriangleChange(Sender: TObject);
   private
     fChanging: Boolean; // drapeau de changement
   public
@@ -111,6 +115,12 @@ procedure TTurtleShowForm.FormActivate(Sender: TObject);
 // *** fenêtre visible ***
 begin
   GetTurtleState; // récupération et affichage des données
+end;
+
+procedure TTurtleShowForm.rbTriangleChange(Sender: TObject);
+// *** forme triangulaire de la tortue ***
+begin
+  gbSize.Enabled := rbTriangle.Checked; // activation de la tail
 end;
 
 procedure TTurtleShowForm.btnSaveClick(Sender: TObject);
@@ -153,6 +163,7 @@ begin
       ColorBoxPen.Selected := PenColor; // couleur du crayon
       ColorBoxBckGround.Selected := ScreenColor; // couleur de fond
       tbarSpeed.Position := Speed; // vitesse de la tortue
+      spedtSize.Value := Size; // taille de la tortue triangulaire
     end;
 end;
 
@@ -179,6 +190,7 @@ begin
     PenColor := ColorBoxPen.Selected; // couleur du crayon
     ScreenColor := ColorBoxBckGround.Selected; // couleur de fond
     Speed := tbarSpeed.Position; // vitesse de la tortue
+    Size := spedtSize.Value; // taille de la tortue triangulaire
   end;
   Changing := False; // on a fini
 end;

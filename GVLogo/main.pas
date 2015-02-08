@@ -48,9 +48,6 @@ uses
 
 type
   // *** TMainForm ***
-
-  { TMainForm }
-
   TMainForm = class(TForm)
     HelpOptions: TAction;
     MenuItemOptions: TMenuItem;
