@@ -92,6 +92,7 @@ begin
     Lst.LoadFromFile(CPrimDefs); // chargement du fichier de définitions
     for Li := 1 to (Lst.Count - 1) do // on balaie la liste
       cbPrims.Items.Add(Lst.Names[Li]); // on ajoute les noms à la combobox
+    cbPrims.ItemIndex := 0; // pointe sur la première primitive
   except
     FrmInfo.ShowInfoForm(CPrimDefs); // erreur affichée
     cbPrims.Enabled := False; // boîte inactive

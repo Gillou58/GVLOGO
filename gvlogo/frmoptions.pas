@@ -210,15 +210,11 @@ end;
 
 procedure TOptionsForm.InitAll;
 // *** initialisation ***
-var
-  Li: Integer;
 begin
   ConfigFile := EmptyStr; // fichier de configuration par défaut
   UserDir := EmptyStr; // idem pour l'emplacement des fichiers
   ClearHist; // nettoyage de l'historique
   cbHistFiles.Clear; // nettoyage de l'historique
-  for Li := 0 to CMaxHistoryEntries - 1 do // on balaie la liste
-    cbHistFiles.Items.Add(EmptyStr); // chaînes vides
 end;
 
 procedure TOptionsForm.ClearHist;
@@ -245,7 +241,7 @@ var
   LB: Boolean;
 begin
   LB := False; // drapeau baissé
-  for Li := 0 to CMaxHistoryEntries - 1 do // on balaie la liste
+  for Li := 0 to cbHistFiles.Items.Count - 1 do // on balaie la liste
     if CompareText(cbHistFiles.Items[Li], St) = 0 then // existe déjà ?
     begin
       cbHistFiles.Items.Exchange(0, Li); // replacé en premier
@@ -261,37 +257,37 @@ begin
   ClearHist; // menu nettoyé puis mis à jour
   with MainForm do
   begin
-    if cbHistFiles.Items[0] <> EmptyStr then
+    if (cbHistFiles.Items.Count > 0) then
     begin
       HF1.Caption := cbHistFiles.Items[0]; HF1.Enabled := True;
     end
     else
       HF1.Caption := ME_Nothing;
-    if cbHistFiles.Items[1] <> EmptyStr then
+    if (cbHistFiles.Items.Count > 1) then
     begin
       HF2.Caption := cbHistFiles.Items[1]; HF2.Visible := True;
     end;
-    if cbHistFiles.Items[2] <> EmptyStr then
+    if (cbHistFiles.Items.Count > 2) then
     begin
       HF3.Caption := cbHistFiles.Items[2]; HF3.Visible := True;
     end;
-    if cbHistFiles.Items[3] <> EmptyStr then
+    if (cbHistFiles.Items.Count > 3) then
     begin
       HF4.Caption := cbHistFiles.Items[3]; HF4.Visible := True;
     end;
-    if cbHistFiles.Items[4] <> EmptyStr then
+    if (cbHistFiles.Items.Count > 4) then
     begin
       HF5.Caption := cbHistFiles.Items[4]; HF5.Visible := True;
     end;
-    if cbHistFiles.Items[5] <> EmptyStr then
+    if (cbHistFiles.Items.Count > 5) then
     begin
       HF6.Caption := cbHistFiles.Items[5]; HF6.Visible := True;
     end;
-    if cbHistFiles.Items[6] <> EmptyStr then
+    if (cbHistFiles.Items.Count > 6) then
     begin
       HF7.Caption := cbHistFiles.Items[6]; HF7.Visible := True;
     end;
-    if cbHistFiles.Items[7] <> EmptyStr then
+    if (cbHistFiles.Items.Count > 7) then
     begin
       HF8.Caption := cbHistFiles.Items[7]; HF8.Visible := True;
     end;
