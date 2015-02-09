@@ -53,9 +53,6 @@ uses
 
 type
   // *** classe pour les variables locales ***
-
-  { TGVLocVars }
-
   TGVLocVars = class(TObject)
   strict private
     fCount: Integer; // compteur de variables attendues

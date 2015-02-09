@@ -48,9 +48,6 @@ uses
 
 type
   // *** TMainForm ***
-
-  { TMainForm }
-
   TMainForm = class(TForm)
     HelpOptions: TAction;
     MenuItem11: TMenuItem;
@@ -113,8 +110,6 @@ type
     EditTurtleState: TAction;
     EditWordSelect: TAction;
     EditLineSelect: TAction;
-    EditUnIndent: TAction;
-    EditIndent: TAction;
     EditRedo: TAction;
     FilePrint: TAction;
     FileSave: TAction;
@@ -129,7 +124,6 @@ type
     EditUndo: TEditUndo;
     FileOpen: TFileOpen;
     FileSaveAs: TFileSaveAs;
-    HelpOnHelp: THelpOnHelp;
     ImageListMenu: TImageList;
     MainMenu: TMainMenu;
     MenuFile: TMenuItem;
@@ -137,14 +131,11 @@ type
     MenuExec: TMenuItem;
     MenuHelp: TMenuItem;
     MenuItem1: TMenuItem;
-    MenuIndent: TMenuItem;
-    MenuIndentOff: TMenuItem;
     MenuInter: TMenuItem;
     MenuGO: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
-    MenuHelp2: TMenuItem;
     MenuItem15: TMenuItem;
     MenuAbout: TMenuItem;
     MenuOpen: TMenuItem;
@@ -163,7 +154,6 @@ type
     MenuShowDebugger: TMenuItem;
     MenuShowEditor: TMenuItem;
     MenuItem8: TMenuItem;
-    MenuItem9: TMenuItem;
     MenuWord: TMenuItem;
     MenuSelectLine: TMenuItem;
     MenuSelectAll: TMenuItem;

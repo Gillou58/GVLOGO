@@ -58,8 +58,9 @@ var
   Lang, DefLang: string;
 begin
   GetLanguageIDs({%H-}Lang, {%H-}DefLang);
+  // utilisation du fichier corrigé
   TranslateUnitResourceStrings('LCLStrConsts',
-      'lclstrconsts.fr.po', Lang, DefLang); // utilisation du fichier corrigé
+      '..\3rdparty\lclstrconsts.fr.po', Lang, DefLang);
 end;
 
 begin

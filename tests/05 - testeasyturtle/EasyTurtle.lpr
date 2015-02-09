@@ -21,12 +21,25 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, bgrabitmappack, Main, GVAbout, Help, GVTools, GVConsts, GVTurtles;
+  Forms, bgrabitmappack, Main, GVAbout, Help, GVTools, GVConsts, GVTurtles,
+  GetText, Translations; // traduction française de la LCL
 
 {$R *.res}
 
+procedure TranslateLCL;
+// *** traduction ***
+var
+  Lang, DefLang: string;
+begin
+  GetLanguageIDs({%H-}Lang, {%H-}DefLang);
+  // utilisation du fichier corrigé
+  TranslateUnitResourceStrings('LCLStrConsts',
+      '..\..\3rdparty\lclstrconsts.fr.po', Lang, DefLang);
+end;
+
 begin
   RequireDerivedFormResource := True;
+  TranslateLCL; // traduction
   Application.Initialize;
   Application.CreateForm(TMainForm, MainForm);
   Application.Run;

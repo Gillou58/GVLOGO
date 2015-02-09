@@ -57,9 +57,6 @@ uses
 
 type
   // *** message de l'automate ***
-
-  { TGVAutomatMessage }
-
   TGVAutomatMessage = class(TObject)
     strict private
       fCmd: TGVAutomatCmd; // commande en cours
