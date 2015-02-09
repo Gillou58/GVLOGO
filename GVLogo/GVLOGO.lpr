@@ -41,14 +41,13 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Interfaces,
-  Forms, bgrabitmappack, richmemopackage, main, FrmTurtle, GVAutomat, GVConsts,
-  GVErrConsts, GVErrors, GVEval, GVKernel, GVLists, GVLocVars, GVPrimConsts,
-  GVPropLists, GVStacks, GVTurtles, GVWords, GVHighlighter, FrmAbout, FrmError,
-  FrmText, FrmEdit, FrmInfo, FrmProcs, GVLogoConsts, FrmEditor, FrmFind,
-  FrmpHelpPrims, FrmFollow, FrmDump, FrmVars, FrmLocVars, FrmPcks, FrmNewProc,
-  FrmOptions, FrmTurtleShow,
-  GetText, Translations; // traduction française de la LCL
+  Interfaces, Forms, bgrabitmappack, richmemopackage, printer4lazarus, main,
+  FrmTurtle, GVAutomat, GVConsts, GVErrConsts, GVErrors, GVEval, GVKernel,
+  GVLists, GVLocVars, GVPrimConsts, GVPropLists, GVStacks, GVTurtles, GVWords,
+  GVHighlighter, FrmAbout, FrmError, FrmText, FrmEdit, FrmInfo, FrmProcs,
+  GVLogoConsts, FrmEditor, FrmFind, FrmpHelpPrims, FrmFollow, FrmDump, FrmVars,
+  FrmLocVars, FrmPcks, FrmNewProc, FrmOptions, FrmTurtleShow, GetText,
+  Translations; // traduction française de la LCL
 
 {$R *.res}
 

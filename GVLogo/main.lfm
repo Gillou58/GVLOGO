@@ -1940,9 +1940,9 @@ object MainForm: TMainForm
     object FilePrint: TAction
       Category = 'File'
       Caption = 'Imprimer...'
-      Enabled = False
       Hint = 'Imprimer l''éditeur en cours'
       ImageIndex = 30
+      OnExecute = FilePrintExecute
       ShortCut = 16464
     end
     object EditRedo: TAction

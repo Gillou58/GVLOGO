@@ -40,14 +40,17 @@ unit main;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, Menus,
-  ActnList, StdActns, ComCtrls,
+  Classes, SysUtils, FileUtil, PrintersDlgs, Forms, Controls, Graphics, Dialogs,
+  Menus, ActnList, StdActns, ComCtrls, Printers,
   GVConsts, // constantes générales
   GVErrConsts, // constantes des erreurs
   GVAutomat; // interpréteur
 
 type
   // *** TMainForm ***
+
+  { TMainForm }
+
   TMainForm = class(TForm)
     HelpOptions: TAction;
     MenuItem11: TMenuItem;
@@ -218,6 +221,7 @@ type
     procedure FileNewExecute(Sender: TObject);
     procedure FileNewProcExecute(Sender: TObject);
     procedure FileOpenBeforeExecute(Sender: TObject);
+    procedure FilePrintExecute(Sender: TObject);
     procedure FileSaveExecute(Sender: TObject);
     procedure FileSaveUpdate(Sender: TObject);
     procedure HelpOptionsExecute(Sender: TObject);
@@ -507,6 +511,38 @@ procedure TMainForm.FileOpenBeforeExecute(Sender: TObject);
 // *** avant le chargement d'un fichier ***
 begin
   FileOpen.Dialog.InitialDir := OptionsForm.UserDir;
+end;
+
+procedure TMainForm.FilePrintExecute(Sender: TObject);
+// *** impression ***
+var
+  LPrinter: TPrinter;
+  Li, Lline: Integer;
+  LV: Integer;
+begin
+  LPrinter := Printer;
+  LPrinter.Title := EditorForm.Caption;
+  try
+    LPrinter.BeginDoc;
+    LPrinter.Canvas.Font.Name := 'Arial';
+    LPrinter.Canvas.Font.Size := 12;
+    LPrinter.Canvas.Font.Color := clBlack;
+    LV := 4 * Round(1.2 * Abs(LPrinter.Canvas.TextHeight('I')));
+    LLine := 0;
+    for Li := 1 to EditorForm.SynEditEditor.Lines.Count do
+    begin
+      Inc(LLine);
+      LPrinter.Canvas.TextOut(100 , LV + 120 * (LLine - 1),
+        EditorForm.SynEditEditor.Lines[Li]);
+      if (Li mod 50) = 0 then
+      begin
+        LPrinter.NewPage;
+        LLine := 0;
+      end;
+    end;
+  finally
+    LPrinter.EndDoc;
+  end;
 end;
 
 procedure TMainForm.FileSaveExecute(Sender: TObject);
@@ -974,7 +1010,7 @@ begin
   EditSelectAll.Enabled := not fRunning; // tout sélectionner
   SearchNext.Enabled := not fRunning; // recherche suivante
   SearchFind.Enabled := not fRunning; // recherche
-  SearchReplace.Enabled := not fRunning; // rempalcement
+  SearchReplace.Enabled := not fRunning; // remplacement
   EditForm.cbEditCmdLine.Enabled := not fRunning; // ligne de commande
   HelpAbout.Enabled := not fRunning; // aide sur l'aide
   HelpPrims.Enabled := not fRunning; // aide sur les primitives
