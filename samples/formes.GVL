@@ -1,0 +1,22 @@
+pour losange :n
+  repete 2 [av :n td 30 av :n td 150]
+fin
+
+pour decor :n :cote
+  repete :n [losange :cote td div 360 :n]
+fin
+
+pour fleur12
+  decor 12 60
+fin
+
+pour decor_couleur :n :cote
+  fcc hasard 19 decor :n ::cote
+fin
+
+pour fleur12_c
+  decor_couleur 12 80
+fin
+
+fleur12
+fleur12_c

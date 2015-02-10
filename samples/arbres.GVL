@@ -1,0 +1,15 @@
+pour arbre :long
+  fcc hasard 19
+  si (:long < 5) [stop]
+  td 45
+  av :long
+  arbre (:long * 0,75)
+  re :long
+  tg 90 av :long
+  arbre (:long * 0,75)
+  re :long
+  td 45
+fin
+
+ve ct
+arbre 80

@@ -1,0 +1,20 @@
+pour partie :k :l
+ si ou (:k < 1) (:l < 1) [av :l stop]
+ partie (:k - 1) (:l / 3)
+ gauche 60
+ partie (:k - 1) (:l / 3)
+ droite 120
+ partie (:k - 1) (:l / 3)
+ gauche 60
+ partie (:k - 1) (:l / 3)
+fin
+
+pour neige :k :l
+  repete 3 [droite 120 partie :k :l]
+fin
+
+vt ftf 24
+ecris [Exemple de courbe complexe]
+
+ve ct
+neige 5 200

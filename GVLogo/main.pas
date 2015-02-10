@@ -529,7 +529,7 @@ begin
     LPrinter.Canvas.Font.Color := clBlack;
     LV := 4 * Round(1.2 * Abs(LPrinter.Canvas.TextHeight('I')));
     LLine := 0;
-    for Li := 1 to EditorForm.SynEditEditor.Lines.Count do
+    for Li := 0 to (EditorForm.SynEditEditor.Lines.Count - 1) do
     begin
       Inc(LLine);
       LPrinter.Canvas.TextOut(100 , LV + 120 * (LLine - 1),
@@ -1048,6 +1048,7 @@ begin
       // sauvegarde effectuée
       EditorForm.SynEditEditor.Lines.SaveToFile(LSt);
       OptionsForm.AddHistFile(LSt);
+      EditorForm.Caption := LSt; // mise à jour de la barre de titre
       Modified := False; // drapeau de modification à jour
       Result := mrOk;
     except
