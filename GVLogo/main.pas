@@ -214,7 +214,6 @@ type
     tbReplace: TToolButton;
     tbSelectAll: TToolButton;
     tbShowFollow: TToolButton;
-    procedure ActionOpenExecute(Sender: TObject);
     procedure EditRedoUpdate(Sender: TObject);
     procedure EditTurtleStateExecute(Sender: TObject);
     procedure EditUndoUpdate(Sender: TObject);
@@ -224,6 +223,7 @@ type
     procedure FilePrintExecute(Sender: TObject);
     procedure FileSaveExecute(Sender: TObject);
     procedure FileSaveUpdate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var {%H-}Key: char);
     procedure HelpOptionsExecute(Sender: TObject);
     procedure HelpPrimsExecute(Sender: TObject);
     procedure HF1Click(Sender: TObject);
@@ -278,6 +278,7 @@ type
     procedure ShowVarsExecute(Sender: TObject);
   private
     fDeepFollow: Boolean; // drapeau de trace approfondie
+    fWaitForKey: Boolean; // drapeau d'attente
     fGVAutomat: TGVAutomat; // interpréteur
     fRunning: Boolean; // drapeau d'exécution en cours
     fModified: Boolean; // éditeur modifié
@@ -571,6 +572,16 @@ begin
   FileSave.Enabled := (not Running) and Modified;
 end;
 
+procedure TMainForm.FormKeyPress(Sender: TObject; var Key: char);
+// *** touche appuyée ***
+begin
+  if fWaitForKey then
+  begin
+    Automat.Message.Message := Key;
+    fWaitForKey := False;
+  end;
+end;
+
 procedure TMainForm.HelpOptionsExecute(Sender: TObject);
 // *** options du logiciel ***
 begin
@@ -653,11 +664,6 @@ begin
     ShowTurtleExecute(Sender) // on montre la fenêtre
   else
     TurtleForm.Close; // on la ferme
-end;
-
-procedure TMainForm.ActionOpenExecute(Sender: TObject);
-begin
-
 end;
 
 procedure TMainForm.EditRedoUpdate(Sender: TObject);
@@ -883,7 +889,12 @@ begin
           Message := CStFalse; // faux en retour
       // écriture sans retour chariot
       acType: TextForm.WriteText(Message);
-      acReadChar: ; // ### TODO ###
+      acReadChar: begin
+         fWaitForKey := True; // frappe d'une touche prévue
+         Self.SetFocus; // fenêtre principale active
+         while fWaitForKey do // on attend la frappe d'une touche
+           Application.ProcessMessages;
+      end;
       // styles de caractères
       acBold: TextForm.Bold := True;
       acUnderline: TextForm.Underline := True;

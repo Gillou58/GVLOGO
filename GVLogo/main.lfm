@@ -9,11 +9,13 @@ object MainForm: TMainForm
   ClientHeight = 100
   ClientWidth = 500
   FormStyle = fsStayOnTop
+  KeyPreview = True
   Menu = MainMenu
   OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
   LCLVersion = '1.2.6.0'
   object CoolBarMain: TCoolBar
     Left = 0
