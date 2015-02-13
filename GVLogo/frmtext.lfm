@@ -55,7 +55,14 @@ object TextForm: TTextForm
     Top = 677
     Width = 700
     AutoHint = True
-    Panels = <>
+    Panels = <    
+      item
+        Width = 300
+      end    
+      item
+        Width = 50
+      end>
+    SimplePanel = False
   end
   object rmmoText: TRichMemo
     Cursor = crNo

@@ -62,7 +62,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
   private
-    fCharsSum: Integer;
     fBackColor: TColor;
     fFParams: TFontParams;
     fBold: Boolean;
@@ -74,13 +73,10 @@ type
     procedure SetBackColor(AValue: TColor);
     procedure AddStyle(const AStart: Integer; ALen: Integer;
       AStyle: TFontParams);
-    procedure SetCharsSum(AValue: Integer);
   public
     procedure Clear; // nettoyage
     procedure WriteText(const St: string); // écriture du texte formaté
     procedure WriteTextLN(const St: string); // écriture avec retour chariot
-    // caractère à l'écran
-    property CharsSum: Integer read fCharsSum write SetCharsSum;
     // styles
     property Bold: Boolean read fBold write fBold default False;
     property Italic: Boolean read fItalic write fItalic default False;
@@ -97,7 +93,8 @@ var
 implementation
 
 uses
-  GVLOGOCOnsts, // constantes du projet
+  Math,
+  GVLOGOConsts, // constantes du projet
   GVConsts; // constantes
 
 {$R *.lfm}
@@ -129,14 +126,6 @@ begin
   fStylesArray[Length(fStylesArray) - 1].Style := AStyle;
 end;
 
-procedure TTextForm.SetCharsSum(AValue: Integer);
-// *** nombre de caractères actuellment affichés ***
-begin
-  if fCharsSum = AValue then // pas de changement ?
-    Exit; // on sort
-  fCharsSum := AValue; // nouvelle valeur
-end;
-
 procedure TTextForm.Clear;
 // *** nettoyage ***
 begin
@@ -147,7 +136,6 @@ begin
   FontColor := clBlack;
   BackColor := clWhite;
   rmmoText.Lines.Clear;
-  CharsSum := 0;
 end;
 
 procedure TTextForm.FormCreate(Sender: TObject);
@@ -159,12 +147,10 @@ end;
 procedure TTextForm.WriteText(const St: string);
 // *** écriture d'un texte ***
 var
-  LStart: Integer;
   Li: Integer;
 begin
-  LStart := CharsSum; // cherche le début
   // récupère les attributs en cours
-  rmmoText.GetTextAttributes(LStart, fFParams);
+  rmmoText.GetTextAttributes(rmmoText.SelStart, fFParams);
   // calcul des nouveaux attributs
   if Bold then  // gras ?
     fFParams.Style:= fFParams.Style + [fsBold]
@@ -181,11 +167,10 @@ begin
   fFParams.Color := FontColor; // couleur de fonte
   fFParams.Size := FontSize; // taille de fonte
   // conserve ces attributs
-  AddStyle(LStart, Length(St) + 1, fFParams);
+  AddStyle(Max(rmmoText.SelStart - 1, 0), Length(St), fFParams);
   // ajout de la ligne
   with rmmoText do
     Lines[Lines.Count - 1] := Lines[Lines.Count - 1] + St;
-  CharsSum := CharsSum + Length(St);
   // ajout des styles
   for Li := 0 to (Length(fStylesArray) - 1) do
     rmmoText.SetTextAttributes(fStylesArray[Li].Start, fStylesArray[Li].Len,
@@ -197,7 +182,6 @@ procedure TTextForm.WriteTextLN(const St: string);
 begin
   WriteText(St); // on écrit à la suite
   rmmoText.Lines.Add(EmptyStr); // passage à la ligne
-  CharsSum := CharsSum + 1;
   if Length(fStylesArray) <> 0 then // des styles enregistrés ?
     SetLength(fStylesArray, 0); // on les supprime
 end;
