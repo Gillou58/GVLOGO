@@ -1,0 +1,315 @@
+{\rtf1\ansi\deff0\deftab720{\fonttbl{\f0\fswiss MS Sans Serif;}{\f1\froman\fcharset2 Symbol;}{\f2\fswiss\fcharset1 Arial;}{\f3\fswiss\fcharset1 Arial;}{\f4\fswiss\fcharset1 MS Sans Serif;}{\f5\fswiss\fcharset1 MS Sans Serif;}{\f6\fswiss MS Sans Serif;}}
+{\colortbl\red0\green0\blue0;\red128\green128\blue128;}
+\deflang1036\pard\plain\f6\fs16\cf0 // GVLOGO 2.00 (c) G. VASSEUR
+\par // programme de phrases al\'e9atoires
+\par 
+\par remplace_prims
+\par 
+\par // travail sur les listes d'\'e9l\'e9ments
+\par 
+\par pour detruis_tout
+\par // d\'e9truis les phrases apprises
+\par donne "sujets []
+\par donne "verbes []
+\par donne "objets []
+\par donne "circons []
+\par fin
+\par 
+\par pour tire_au_hasard :groupe
+\par // tire au hasard un \'e9l\'e9ment
+\par si vide? :groupe [rends []]
+\par rends item somme 1 hasard compte :groupe :groupe
+\par fin
+\par 
+\par pour un_circons
+\par // renvoie un compl\'e9ment circonstanciel
+\par rends tire_au_hasard :circons
+\par fin
+\par 
+\par pour un_objet
+\par // renvoie un compl\'e9ment d'objet
+\par rends tire_au_hasard :objets
+\par fin
+\par 
+\par pour un_verbe
+\par rends tire_au_hasard :verbes
+\par fin
+\par 
+\par pour un_sujet
+\par // renvoie un sujet
+\par rends tire_au_hasard :sujets
+\par fin
+\par 
+\par // manipulation des groupes
+\par 
+\par pour corrige :groupe
+\par // corrige le groupe
+\par si vide? :groupe [ecris [Liste vide !] rends []]
+\par ecris sd :groupe
+\par rends sd :groupe
+\par fin
+\par 
+\par pour montre :groupe
+\par // montre le groupe
+\par si vide? :groupe [ecris [Liste vide !] ] [ecris :groupe]
+\par fin
+\par 
+\par pour nouveau :groupe
+\par // ajoute \'e0 une liste
+\par rends mp ll :groupe
+\par fin
+\par 
+\par pour efface :groupe
+\par // mise \'e0 z\'e9ro d'un groupe
+\par locale "choix
+\par ecris [Etes-vous s\'fbr ? O/N]
+\par donne "choix liscar
+\par si ou egal? :choix "O egal? :choix "o [ecris [destruction effectu\'e9e...] rends []][ecris [Abandon] rends :groupe]
+\par fin
+\par 
+\par // applications particuli\'e8res des manipulations
+\par 
+\par pour montre_tout
+\par // montre les listes actuelles
+\par locale "choix
+\par vt
+\par gras ecris [Sujets :] non_gras
+\par sujets
+\par ecris []
+\par gras ecris [Verbes :] non_gras
+\par verbes
+\par ecris []
+\par gras ecris [Compl\'e9ments d'objet :] non_gras
+\par objets
+\par ecris []
+\par gras ecris [Compl\'e9ments circonstanciels :] non_gras
+\par circons
+\par ecris []
+\par donne "choix liscar
+\par fin
+\par 
+\par pour sujets
+\par // renvoie les sujets
+\par montre :sujets
+\par fin
+\par 
+\par pour verbes
+\par // renvoie les verbes
+\par montre :verbes
+\par fin
+\par 
+\par pour objets
+\par // renvoie les compl\'e9ments d'objet
+\par montre :objets
+\par fin
+\par 
+\par pour circons
+\par // renvoie les compl\'e9ments circonstanciels
+\par montre :circons
+\par fin
+\par 
+\par pour corrige_sujets
+\par // corrige les sujets
+\par donne "sujets corrige :sujets
+\par fin
+\par 
+\par pour corrige_verbes
+\par // corrige les verbes
+\par donne "verbes corrige :verbes
+\par fin
+\par 
+\par pour corrige_objets
+\par // corrige les compl\'e9ments d'objet
+\par donne "objets corrige :objets
+\par fin
+\par 
+\par pour corrige_circons
+\par // corrige les compl\'e9ments circonstanciels
+\par donne "circons corrige :circons
+\par fin
+\par 
+\par pour une_phrase
+\par // construit une phrase
+\par rends phrase phrase phrase un_sujet un_verbe un_objet un_circons
+\par fin
+\par 
+\par pour nouveau_sujet
+\par // ajoute un sujet
+\par donne "sujets nouveau :sujets
+\par fin
+\par 
+\par pour nouveau_verbe
+\par // ajoute un verbe
+\par donne "verbes nouveau :verbes
+\par fin
+\par 
+\par pour nouveau_objet
+\par // ajoute un compl\'e9ment d'objet
+\par donne "objets nouveau :objets
+\par fin
+\par 
+\par pour nouveau_circons
+\par // ajoute un compl\'e9ment circonstanciel
+\par donne "circons nouveau :circons
+\par fin
+\par 
+\par pour efface_sujets
+\par // efface les sujets
+\par donne "sujets efface :sujets
+\par fin
+\par 
+\par pour efface_verbes
+\par // efface les verbes
+\par donne "verbes efface verbes
+\par fin
+\par 
+\par pour efface_objets
+\par // efface les objets
+\par donne "objets efface :objets
+\par fin
+\par 
+\par pour efface_circons
+\par // efface les compl\'e9ments circonstanciels
+\par donne "circons efface :circons
+\par fin
+\par 
+\par // programme principal
+\par 
+\par pour aide
+\par // aide en ligne
+\par locale "choix
+\par vt
+\par gras italique ecris [AIDE POUR ECRILOGO] non_gras non_italique
+\par ecris []
+\par gras ecris [Nouveaux Groupes] non_gras
+\par ecris [permet de constituer des stocks de sujets, verbes, compl\'e9ments d'objet et compl\'e9ments circonstanciels.]
+\par gras ecris [Ecriture de phrases] non_gras
+\par ecris [g\'e9n\'e8re automatiquement des phrases \'e0 partir des groupes.]
+\par gras ecris [Destruction] non_gras
+\par ecris [permet de d\'e9truire des groupes.]
+\par gras ecris [Correction] non_gras
+\par ecris [permet de corriger des groupes.]
+\par gras ecris [Voir les groupes] non_gras
+\par ecris [permet de visualiser les groupes constitu\'e9s.]
+\par donne "choix liscar
+\par fin
+\par 
+\par pour ecrire
+\par // programme principal
+\par debuter
+\par travailler
+\par au_revoir
+\par fin
+\par 
+\par pour debuter
+\par // commencer le programme
+\par prepare_ecran
+\par detruis_tout
+\par bienvenue
+\par fin
+\par 
+\par pour prepare_ecran
+\par // pr\'e9pare l'\'e9cran de travail
+\par ftexte
+\par ft 4
+\par fct 7
+\par vt
+\par fin
+\par 
+\par pour bienvenue
+\par // message de bienvenue
+\par ecris []\
+\
+
+\par 
+\par gras ecris [Bienvenue dans ECRILOGO !] non_gras
+\par ecris []
+\par fin
+\par 
+\par pour travailler
+\par // boucle principale
+\par locale "choix
+\par gras ecris [TRAVAILLER AVEC ECRILOGO] non_gras
+\par ecris [1 Nouveaux groupes]
+\par ecris [2 Ecriture de phrases]
+\par ecris [3 Remise \'e0 z\'e9ro]
+\par ecris [4 Correction]
+\par ecris [5 Voir les groupes]
+\par ecris [6 Aide]
+\par ecris [7 Fin]
+\par donne "choix liscar
+\par si  membre? :choix [1 2 3 4 5 6 7]  [execute item :choix [[Nouveau_Quoi][ vt Des_Phrases] [Efface_Quoi][Corrige_Quoi][Montre_Tout][Aide][Stop]]]
+\par vt Travailler
+\par fin
+\par 
+\par pour nouveau_quoi
+\par // ajoute une partie
+\par vt
+\par gras ecris "AJOUT non_gras
+\par ecris []
+\par tape [1 SUJET (] tape compte :sujets tape [)] ecris []
+\par tape [2  VERBE (] tape compte :verbes tape [)] ecris []
+\par tape [3 COMPLEMENT D'OBJET (] tape compte :objets tape [)] ecris []
+\par tape [4 COMPLEMENT CIRCONSTANCIEL (] tape compte :circons tape [)] ecris []
+\par ecris [5 Fin]
+\par donne "choix liscar
+\par ecris []
+\par ecris [Tapez votre texte puis ENTREE]
+\par si membre? :choix [1 2 3 4 5] [execute item  :choix [[nouveau_sujet][nouveau_verbe][nouveau_objet][nouveau_circons][stop]]]
+\par nouveau_quoi
+\par fin
+\par 
+\par pour corrige_quoi
+\par // corrige une partie
+\par vt
+\par gras ecris "CORRECTION non_gras
+\par ecris []
+\par tape [1 SUJET (] tape compte :sujets tape [)] ecris []
+\par tape [2  VERBE (] tape compte :verbes tape [)] ecris []
+\par tape [3 COMPLEMENT D'OBJET (] tape compte :objets tape [)] ecris []
+\par tape [4 COMPLEMENT CIRCONSTANCIEL (] tape compte :circons tape [)] ecris []
+\par ecris [5 Fin]
+\par donne "choix liscar
+\par ecris []
+\par si membre? :choix [1 2 3 4 5] [execute item  :choix [[corrige_sujets][corrige_verbes][corrige_objets][corrige_circons][stop]]]
+\par corrige_quoi
+\par fin
+\par 
+\par pour efface_quoi
+\par // efface une liste
+\par vt
+\par gras ecris "EFFACEMENT non_gras
+\par ecris[]
+\par tape [1 SUJET (] tape compte :sujets tape [)] ecris []
+\par tape [2  VERBE (] tape compte :verbes tape [)] ecris []
+\par tape [3 COMPLEMENT D'OBJET (] tape compte :objets tape [)] ecris []
+\par tape [4 COMPLEMENT CIRCONSTANCIEL (] tape compte :circons tape [)] ecris []
+\par ecris [5 Fin]
+\par donne "choix liscar
+\par ecris []
+\par si membre? :choix [1 2 3 4 5] [execute item  :choix [[efface_sujets][efface_verbes][efface_objets][efface_circons][stop]]]
+\par efface_quoi
+\par fin
+\par 
+\par pour des_phrases
+\par // invente des phrases
+\par locale "choix
+\par donne "choix une_phrase
+\par si vide? :choix [ecris [Pas de groupes disponibles !] donne "choix liscar stop]
+\par ecris :choix
+\par ecris []
+\par ecris [Tapez F pour FIN]
+\par donne "choix liscar
+\par si ou egal? :choix "f egal? :choix "F [stop]
+\par des_phrases
+\par fin
+\par 
+\par pour au_revoir
+\par // fin de l'application
+\par vt
+\par ecris [A bient\'f4t, peut-\'eatre !]
+\par fin
+\par 
+\par ecrire
+\par }
+ 

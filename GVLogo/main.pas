@@ -892,7 +892,8 @@ begin
       acReadChar: begin
          fWaitForKey := True; // frappe d'une touche prévue
          Self.SetFocus; // fenêtre principale active
-         while fWaitForKey do // on attend la frappe d'une touche
+         // on attend la frappe d'une touche ou un arrêt
+         while fWaitForKey and not Automat.Stop do
            Application.ProcessMessages;
       end;
       // styles de caractères

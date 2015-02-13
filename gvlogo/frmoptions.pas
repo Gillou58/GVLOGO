@@ -112,7 +112,7 @@ begin
     begin
       // fichiers utilisateur
       UserDir := ReadString('directories', 'userdir', UserDir);
-      for Li := 0 to (CMaxHistoryEntries - 1) do // fichiers de l'historique
+      for Li := (CMaxHistoryEntries - 1) downto 0 do // fichiers de l'historique
         // on ajoute à la liste
         AddHistFile(ReadString('history', 'H' + IntToStr(Li), EmptyStr));
     end;
@@ -275,37 +275,45 @@ begin
   begin
     if (cbHistFiles.Items.Count > 0) then
     begin
-      HF1.Caption := cbHistFiles.Items[0]; HF1.Enabled := True;
+      HF1.Caption := cbHistFiles.Items[0];
+      HF1.Enabled := True;
     end
     else
       HF1.Caption := ME_Nothing;
     if (cbHistFiles.Items.Count > 1) then
     begin
-      HF2.Caption := cbHistFiles.Items[1]; HF2.Visible := True;
+      HF2.Caption := cbHistFiles.Items[1];
+      HF2.Visible := True;
     end;
     if (cbHistFiles.Items.Count > 2) then
     begin
-      HF3.Caption := cbHistFiles.Items[2]; HF3.Visible := True;
+      HF3.Caption := cbHistFiles.Items[2];
+      HF3.Visible := True;
     end;
     if (cbHistFiles.Items.Count > 3) then
     begin
-      HF4.Caption := cbHistFiles.Items[3]; HF4.Visible := True;
+      HF4.Caption := cbHistFiles.Items[3];
+      HF4.Visible := True;
     end;
     if (cbHistFiles.Items.Count > 4) then
     begin
-      HF5.Caption := cbHistFiles.Items[4]; HF5.Visible := True;
+      HF5.Caption := cbHistFiles.Items[4];
+      HF5.Visible := True;
     end;
     if (cbHistFiles.Items.Count > 5) then
     begin
-      HF6.Caption := cbHistFiles.Items[5]; HF6.Visible := True;
+      HF6.Caption := cbHistFiles.Items[5];
+      HF6.Visible := True;
     end;
     if (cbHistFiles.Items.Count > 6) then
     begin
-      HF7.Caption := cbHistFiles.Items[6]; HF7.Visible := True;
+      HF7.Caption := cbHistFiles.Items[6];
+      HF7.Visible := True;
     end;
     if (cbHistFiles.Items.Count > 7) then
     begin
-      HF8.Caption := cbHistFiles.Items[7]; HF8.Visible := True;
+      HF8.Caption := cbHistFiles.Items[7];
+      HF8.Visible := True;
     end;
   end;
 end;
