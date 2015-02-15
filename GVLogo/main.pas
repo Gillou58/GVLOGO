@@ -575,10 +575,10 @@ end;
 procedure TMainForm.FormKeyPress(Sender: TObject; var Key: char);
 // *** touche appuyée ***
 begin
-  if fWaitForKey then
+  if fWaitForKey and (Ord(Key) > 31) then // attente et caractère lisible ?
   begin
-    Automat.Message.Message := Key;
-    fWaitForKey := False;
+    Automat.Message.Message := Key; // message envoyé
+    fWaitForKey := False; // attente annulée
   end;
 end;
 
@@ -789,6 +789,7 @@ procedure TMainForm.ShowAllExecute(Sender: TObject);
 begin
   DumpForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   DumpForm.ShowOnTop; // on la voit
+  MainForm.SetFocus; // fenêtre principale active
 end;
 
 procedure TMainForm.ShowCmdLineExecute(Sender: TObject);
@@ -810,6 +811,7 @@ procedure TMainForm.ShowFollowExecute(Sender: TObject);
 begin
   FollowForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   FollowForm.ShowOnTop; // on la voit
+  MainForm.SetFocus; // fenêtre principale active
 end;
 
 procedure TMainForm.ShowLocVarsExecute(Sender: TObject);
@@ -817,6 +819,7 @@ procedure TMainForm.ShowLocVarsExecute(Sender: TObject);
 begin
   LocVarsForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   LocVarsForm.ShowOnTop; // on la voit
+  MainForm.SetFocus; // fenêtre principale active
 end;
 
 procedure TMainForm.ShowPcksExecute(Sender: TObject);
@@ -824,12 +827,14 @@ procedure TMainForm.ShowPcksExecute(Sender: TObject);
 begin
   PcksForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   PcksForm.ShowOnTop; // on la voit
+  MainForm.SetFocus; // fenêtre principale active
 end;
 
 procedure TMainForm.ShowProcsExecute(Sender: TObject);
 // *** affichage des procédures disponibles ***
 begin
   ShowProcsForm; // on montre la fiche
+  MainForm.SetFocus; // fenêtre principale active
 end;
 
 procedure TMainForm.ShowProcsUpdate(Sender: TObject);
@@ -844,6 +849,7 @@ procedure TMainForm.ShowTextExecute(Sender: TObject);
 begin
   TextForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   TextForm.ShowOnTop; // on la voit
+  MainForm.SetFocus; // fenêtre principale active
 end;
 
 procedure TMainForm.ShowTurtleExecute(Sender: TObject);
@@ -851,6 +857,7 @@ procedure TMainForm.ShowTurtleExecute(Sender: TObject);
 begin
   TurtleForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   TurtleForm.ShowOnTop; // on la voit
+  MainForm.SetFocus; // fenêtre principale active
 end;
 
 procedure TMainForm.ShowVarsExecute(Sender: TObject);
@@ -858,6 +865,7 @@ procedure TMainForm.ShowVarsExecute(Sender: TObject);
 begin
   VarsForm.WindowState := wsNormal; // la fenêtre est redimensionnée
   VarsForm.ShowOnTop; // on la voit
+  MainForm.SetFocus; // fenêtre principale active
 end;
 
 procedure TMainForm.GetError(Sender: TObject; ErrorRec: TGVErrorRec);

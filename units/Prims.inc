@@ -92,30 +92,24 @@ procedure DoPrimWrite;
 // *** ECRIS ***
 begin
   if IsListPop then // liste ?
-    fWkRec.fItem := LU.ListToStr(fWkRec.fItem) // on enlève les crochets
-  else
-  begin
-    LW.Text := fWkRec.fItem; // mot normalisé
-    fWkRec.fItem := LW.Text; // sans les caractères d'échappement
-  end;
-  if fTurtleOutput then
+    fWkRec.fItem := LU.ListToStr(fWkRec.fItem); // on enlève les crochets
+  LW.Text := fWkRec.fItem; // mot normalisé
+  fWkRec.fItem := LW.Text; // sans les caractères d'échappement
+  if fTurtleOutput then  // écran de la tortue ?
     fTurtle.Text(fWkRec.fItem)
   else
-   Message.SetMessageAll(acWrite, fWkRec.fItem);
+    Message.SetMessageAll(acWrite, fWkRec.fItem);
 end;
 
 procedure DoPrimType;
 // *** TAPE ***
 begin
   if IsListPop then // liste ?
-    fWkRec.fItem := LU.ListToStr(fWkRec.fItem) // on enlève les crochets
-  else
-  begin
-    LW.Text := fWkRec.fItem; // mot normalisé
-    fWkRec.fItem := LW.Text; // sans les caractères d'échappement
-  end;
+    fWkRec.fItem := LU.ListToStr(fWkRec.fItem); // on enlève les crochets
+  LW.Text := fWkRec.fItem; // mot normalisé
+  fWkRec.fItem := LW.Text; // sans les caractères d'échappement
   if fTurtleOutput then
-    fTurtle.Text(fWkRec.fItem)
+    fTurtle.Text(fWkRec.fItem) // écran de la tortue ?
   else
    Message.SetMessageAll(acType, fWkRec.fItem);
 end;

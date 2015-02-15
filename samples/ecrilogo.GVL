@@ -4,7 +4,7 @@
 // travail sur les listes d'éléments
 
 pour detruis_tout
-// déruit les phrases apprises
+// détruit les phrases apprises
   donne "sujets []
   donne "verbes []
   donne "objets []
@@ -52,7 +52,7 @@ pour montre :groupe
 fin
 
 pour nouveau :groupe
-// ajoute � une liste
+// ajoute à une liste
   rends mp ll :groupe
 fin
 
@@ -141,7 +141,7 @@ pour nouveau_verbe
 fin
 
 pour nouveau_objet
-// ajoute un compl�ment d'objet
+// ajoute un complément d'objet
   donne "objets nouveau :objets
 fin
 
@@ -208,7 +208,6 @@ fin
 pour prepare_ecran
 // prépare l'écran de travail
   vt
-  fcft 4
   fct 7
 fin
 
@@ -232,7 +231,7 @@ pour travailler
   ecris [7 Fin]
   donne "choix lis.car
   si  membre? :choix [1 2 3 4 5 6 7]  [execute item :choix [[Nouveau_Quoi][ vt Des_Phrases] [Efface_Quoi][Corrige_Quoi][Montre_Tout][Aide][Stop]]]
-  vt Travailler
+  vt travailler
 fin
 
 pour nouveau_quoi
@@ -248,7 +247,7 @@ pour nouveau_quoi
   ecris [5 Fin]
   donne "choix lis.car
   ecris []
- ecris [Tapez votre texte puis ENTREE]
+  ecris [Tapez votre texte puis ENTREE]
   si membre? :choix [1 2 3 4 5] [execute item  :choix [[nouveau_sujet][nouveau_verbe][nouveau_objet][nouveau_circons][stop]]]
   nouveau_quoi
 fin
@@ -266,7 +265,7 @@ pour corrige_quoi
   ecris [5 Fin]
   donne "choix lis.car
   ecris []
-  si membre? :choix [1 2 3 4 5] [execute item  :choix [[corrige_sujets][corrige_verbes][corrige_objets][corrige_circons][stop]]]
+  si membre? :choix [1 2 3 4 5] [execute item :choix [[corrige_sujets][corrige_verbes][corrige_objets][corrige_circons][stop]]]
   corrige_quoi
 fin
 
@@ -283,7 +282,7 @@ pour efface_quoi
   ecris [5 Fin]
   donne "choix lis.car
   ecris []
-  si membre? :choix [1 2 3 4 5] [execute item  :choix [[efface_sujets][efface_verbes][efface_objets][efface_circons][stop]]]
+  si membre? :choix [1 2 3 4 5] [execute item :choix [[efface_sujets][efface_verbes][efface_objets][efface_circons][stop]]]
   efface_quoi
 fin
 
