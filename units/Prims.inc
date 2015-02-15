@@ -2364,7 +2364,8 @@ procedure DoPrimReadList;
 begin
   Message.Cmd := acReadList; // demande de lecture
   fWkRec.fItem := Message.Message; // on récupère le message de retour
-  LL.Text := CBeginList + fWkRec.fItem + CEndList; // contrôle de la liste
+  LW.Text := fWkRec.fItem; // on normalise l'entrée
+  LL.Text := CBeginList + LW.FmtText + CEndList; // contrôle de la liste
   if LL.IsValid then // liste correcte ?
     PushConst(LL.ToStr) // résultat empilé
   else

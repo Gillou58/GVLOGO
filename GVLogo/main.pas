@@ -496,7 +496,7 @@ begin
       SynEditEditor.Lines.Clear; // on vide l'éditeur
       Caption := CrsUnknownFile; // fichier par défaut
       WindowState := wsNormal; // apparence normale
-      FileSaveAS.Enabled := True; // sauvegarde sous possible
+      FileSaveAs.Enabled := True; // sauvegarde sous possible
       ShowOnTop; // on montre la fenêtre
     end;
   end;
@@ -732,8 +732,8 @@ procedure TMainForm.SearchFindUpdate(Sender: TObject);
 // *** activation / désactivation de la recherche ***
 begin
   // actif si l'éditeur est non vide et pas de programme en cours
-  (Sender as TAction).Enabled := not (((EditorForm.SynEditEditor.Lines.Count = 1)
-    and (EditorForm.SynEditEditor.Lines[1] = EmptyStr)) or Running);
+  (Sender as TAction).Enabled := not (((EditorForm.SynEditEditor.Lines.Count
+    <= 1) and (EditorForm.SynEditEditor.Lines[0] = EmptyStr)) or Running);
 end;
 
 procedure TMainForm.SearchNextEndExecute(Sender: TObject);
