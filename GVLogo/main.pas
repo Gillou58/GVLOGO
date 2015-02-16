@@ -222,6 +222,7 @@ type
     procedure EditRedoUpdate(Sender: TObject);
     procedure EditTurtleStateExecute(Sender: TObject);
     procedure EditUndoUpdate(Sender: TObject);
+    procedure ExecWaitExecute(Sender: TObject);
     procedure FileNewExecute(Sender: TObject);
     procedure FileNewProcExecute(Sender: TObject);
     procedure FileOpenBeforeExecute(Sender: TObject);
@@ -284,6 +285,7 @@ type
   private
     fDeepFollow: Boolean; // drapeau de trace approfondie
     fWaitForKey: Boolean; // drapeau d'attente
+    fWait: Boolean; // drapeau de pause
     fGVAutomat: TGVAutomat; // interpréteur
     fRunning: Boolean; // drapeau d'exécution en cours
     fModified: Boolean; // éditeur modifié
@@ -490,6 +492,12 @@ procedure TMainForm.EditUndoUpdate(Sender: TObject);
 begin
   EditUndo.Enabled := EditorForm.SynEditEditor.CanUndo // possible ?
     and not Running; // et pas de programme en cours
+end;
+
+procedure TMainForm.ExecWaitExecute(Sender: TObject);
+// *** pause ***
+begin
+  fWait := not fWait;
 end;
 
 procedure TMainForm.FileNewExecute(Sender: TObject);
@@ -972,6 +980,8 @@ begin
             FollowForm.Write(Format(CrsFollowLine,
               [fLevel, fItem, fNum, fPrim, fProc]), 1);
           end;
+   while fWait do // pause ?
+     Application.ProcessMessages; // on attend
 end;
 
 function TMainForm.GetAColor(const AValue: TColor): string;
