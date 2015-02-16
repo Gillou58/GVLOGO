@@ -122,6 +122,8 @@ object EditForm: TEditForm
       4CFFAB7143FFAC7244FF996E4CFF000000000000000000000000
     }
     ShowCaption = False
+    ShowHint = True
+    ParentShowHint = False
   end
   object sbExec: TSpeedButton
     Cursor = crHandPoint
@@ -168,5 +170,7 @@ object EditForm: TEditForm
       0000000000000000000000000000000000000000000000000000
     }
     ShowCaption = False
+    ShowHint = True
+    ParentShowHint = False
   end
 end
