@@ -1,5 +1,5 @@
 object TextForm: TTextForm
-  Left = 100
+  Left = 94
   Height = 700
   Top = 190
   Width = 700
@@ -71,7 +71,10 @@ object TextForm: TTextForm
     Top = 0
     Width = 700
     Align = alClient
+    Font.Height = -13
+    Font.Quality = fqCleartype
     HideSelection = False
+    ParentFont = False
     ReadOnly = True
     ScrollBars = ssAutoBoth
     TabOrder = 1

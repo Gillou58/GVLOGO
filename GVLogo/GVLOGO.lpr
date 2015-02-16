@@ -46,8 +46,8 @@ uses
   GVLists, GVLocVars, GVPrimConsts, GVPropLists, GVStacks, GVTurtles, GVWords,
   GVHighlighter, FrmAbout, FrmError, FrmText, FrmEdit, FrmInfo, FrmProcs,
   GVLogoConsts, FrmEditor, FrmFind, FrmpHelpPrims, FrmFollow, FrmDump, FrmVars,
-  FrmLocVars, FrmPcks, FrmNewProc, FrmOptions, FrmTurtleShow, GetText,
-  Translations; // traduction française de la LCL
+  FrmLocVars, FrmPcks, FrmNewProc, FrmOptions, FrmTurtleShow, FrmTextShow,
+  GetText, Translations; // traduction française de la LCL
 
 {$R *.res}
 
@@ -80,6 +80,7 @@ begin
   Application.CreateForm(TPcksForm, PcksForm);
   Application.CreateForm(TOptionsForm, OptionsForm);
   Application.CreateForm(TTurtleShowForm, TurtleShowForm);
+  Application.CreateForm(TTextShowForm, TextShowForm);
   Application.Run;
 end.
 

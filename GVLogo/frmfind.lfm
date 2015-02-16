@@ -174,7 +174,7 @@ object FindForm: TFindForm
     object cboxCase: TCheckBox
       Cursor = crHandPoint
       Left = 6
-      Height = 35
+      Height = 52
       Hint = 'Cocher pour distinguer minuscules et majuscules'
       Top = 6
       Width = 153
@@ -187,31 +187,15 @@ object FindForm: TFindForm
     object cboxWholeWord: TCheckBox
       Cursor = crHandPoint
       Left = 6
-      Height = 35
+      Height = 52
       Hint = 'Cocher pour ne traiter que les mots entiers'
-      Top = 41
+      Top = 58
       Width = 153
       Caption = 'Mots entiers seulement'
       OnChange = cboxWholeWordChange
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
-    end
-    object cboxPrompt: TCheckBox
-      Cursor = crHandPoint
-      Left = 6
-      Height = 34
-      Hint = 'Confirmer chaque remplacement'
-      Top = 76
-      Width = 153
-      Caption = 'Arrêt sur remplacement'
-      Checked = True
-      Enabled = False
-      OnChange = cboxPromptChange
-      ParentShowHint = False
-      ShowHint = True
-      State = cbChecked
-      TabOrder = 2
     end
   end
   object cbFind: TComboBox

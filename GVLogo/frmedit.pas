@@ -75,7 +75,7 @@ begin
   begin
     // mémorisation de l'entrée
     cbEditCmdLine.AddHistoryItem(cbEditCmdLine.Text, CMaxHistoryEntries, True,
-      True);
+      False);
     MainForm.ExecExecuteExecute(nil); // exécution des commandes
   end;
 end;

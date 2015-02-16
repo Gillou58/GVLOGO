@@ -82,7 +82,7 @@ uses
   Main, // fiche principale
   FrmEdit, // ligne de commande
   FrmInfo, // fenêtre d'information
-  Math,
+  {%H-}Math,
   StrUtils;
 
 {$R *.lfm}

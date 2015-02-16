@@ -2064,6 +2064,7 @@ object MainForm: TMainForm
       Category = 'Edit'
       Caption = 'Etat du texte'
       Hint = 'Etat du texte'
+      OnExecute = EditTextStateExecute
     end
     object SearchNextTo: TAction
       Category = 'Search'

@@ -3,7 +3,7 @@
   |                  G V S O F T                                           |
   |                  Projet : GVLogo                                       |
   |                  Description : Fiche de recherche/remplacement         |
-  |                  Unité : main.pas                                      |
+  |                  Unité : FrmFind.pas                                   |
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR 2014-2015                    |
@@ -53,7 +53,6 @@ type
     btnFind: TBitBtn;
     cboxCase: TCheckBox;
     cboxReplace: TCheckBox;
-    cboxPrompt: TCheckBox;
     cboxWholeWord: TCheckBox;
     cbFind: TComboBox;
     cbReplace: TComboBox;
@@ -73,7 +72,6 @@ type
     procedure cbFindChange(Sender: TObject);
     procedure cboxCaseChange(Sender: TObject);
     procedure cboxReplaceChange(Sender: TObject);
-    procedure cboxPromptChange(Sender: TObject);
     procedure cbReplaceChange(Sender: TObject);
     procedure cboxWholeWordChange(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -172,31 +170,19 @@ begin
   // contrôles activés/désactivés
   lblReplace.Enabled := cboxReplace.Checked;
   cbReplace.Enabled := cboxReplace.Checked;
-  cboxPrompt.Enabled := cboxReplace.Checked;
   btnFind.Visible := not cboxReplace.Checked;
   btnReplace.Visible := cboxReplace.Checked;
   btnReplaceAll.Visible := cboxReplace.Checked;;
   if cboxReplace.Checked then
   begin
     cbReplace.Cursor := crNo; // curseur adapté
-    cboxPrompt.Cursor := crNo;
     fSynSearch := fSynSearch + [ssoReplace]; // recherche
   end
   else
   begin
     cbReplace.Cursor := crHandPoint; // curseur adapté
-    cboxPrompt.Cursor := crHandPoint;
     fSynSearch := fSynSearch - [ssoReplace, ssoReplaceAll]; // remplacement
   end;
-end;
-
-procedure TFindForm.cboxPromptChange(Sender: TObject);
-// *** demande sur remplacement ***
-begin
-  if cboxPrompt.Checked then
-    fSynSearch := fSynSearch + [ssoPrompt]
-  else
-    fSynSearch := fSynSearch - [ssoPrompt];
 end;
 
 procedure TFindForm.cbReplaceChange(Sender: TObject);
@@ -221,7 +207,6 @@ begin
   cbFind.Text := fFind;
   cboxCase.Checked := (ssoMatchCase in fSynSearch);
   cboxWholeWord.Checked := (ssoWholeWord in fSynSearch);
-  cboxPrompt.Checked := (ssoPrompt in fSynSearch);
   rbSelected.Checked := (ssoSelectedOnly in fSynSearch);
   rbBackward.Checked := (ssoBackwards in fSynSearch);
   fSynSearch := fSynSearch - [ssoFindContinue];
