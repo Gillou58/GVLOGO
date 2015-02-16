@@ -82,6 +82,7 @@ uses
   Main, // fiche principale
   FrmEdit, // ligne de commande
   FrmInfo, // fenêtre d'information
+  Math,
   StrUtils;
 
 {$R *.lfm}
@@ -143,22 +144,17 @@ procedure TEditorForm.Process;
 var
   Li, LBg: Integer;
   LL: TGVList;
+  LB, LInProc: Boolean;
 
   function ValidLine: Boolean;
   // traitement d'une ligne
   begin
-    Result := True; // suppose que tout va bien
     Inc(Li); // ligne suivante
     // ligne transformée en liste
     LL.Text := CBeginList + Trim(SynEditEditor.Lines[Li]) +
       CEndList;
-    if not LL.IsValid then // une erreur ?
-    begin
-      // on positionne le curseur sur l'erreur
-      SynEditEditor.CaretX := LL.Error.Error.ErrPos;
-      SynEditEditor.CaretY := Li + 1;
-      Result := False; // erreur signalée
-    end;
+    LB := LL.IsValid; //une erreur ?
+    Result := LB;
   end;
 
 begin
@@ -168,8 +164,11 @@ begin
     LL.Error.OnError := @MainForm.GetError;
     Li := -1; // avant la première ligne
     // on balaie les lignes de l'éditeur tant qu'il n'y a pas d'erreur
-    while (Li <= SynEditEditor.Lines.Count) and (MainForm.Automat.Error.Ok) do
+    while LB and (Li <= SynEditEditor.Lines.Count) and
+      (MainForm.Automat.Error.Ok) do
     begin
+      LB := True; // drapeau OK
+      LInProc := False; // pas dans une procédure
       if (not ValidLine) then // test de la validité de la ligne
         Break; // on arrête en cas d'erreur
       // *** ligne vide ou premier élément commentaire ? ***
@@ -179,21 +178,18 @@ begin
       // *** le premier élément est-il POUR ? ***
       if AnsiSameText(LL.First, P_To) then
       begin
+        LInProc := True; // dans une procédure
         LBg := Li + 1; // marque le début de la procédure
         // on boucle pour trouver le mot FIN
         while (Li <= SynEditEditor.Lines.Count) do
         begin
-          if not ValidLine then // ligne incorrecte ?
-            Exit // on sort
-          else
-          begin
-            // FIN ? => on sort de la boucle
-            if (not LL.IsEmptyList) and AnsiSameText(LL.First, P_End) then
+          if (not ValidLine) or // ligne incorrecte ?
+             // FIN rencontré ?
+            ((not LL.IsEmptyList) and AnsiSameText(LL.First, P_End)) then
               Break; // on sort de la boucle
-          end;
         end;
         // on enregistre la procédure (erreur si FIN non trouvé)
-        MainForm.Automat.Kernel.EditToProc(SynEditEditor.Lines, LBg,
+        LB := MainForm.Automat.Kernel.EditToProc(SynEditEditor.Lines, LBg,
           Li + 1);
       end
       else
@@ -204,11 +200,17 @@ begin
         MainForm.ExecExecuteExecute(nil); // exécution
       end;
     end;
-    if (MainForm.Automat.Error.Ok and LL.Error.Ok) then // pas d'erreur ?
+    // pas d'erreur ?
+    if (LB and MainForm.Automat.Error.Ok and LL.Error.Ok) then
       ShowInfoForm(CrsInterpreter) // message de réussite
     else
+    begin
       ShowOnTop; // si erreur, on montre l'éditeur
+      // on va sur la ligne fautive
+      SynEditEditor.CaretY := IfThen(LInProc, LBg, Li + 1);
+      SynEditEditor.SelectLine(); // ligne sélectionnée
       MainForm.Automat.Clear; // on nettoie l'erreur
+    end;
   finally
     LL.Free; // libération de la liste de travail
   end;

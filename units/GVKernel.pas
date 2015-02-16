@@ -1330,6 +1330,7 @@ var
   L1, L2: TGVList;
   LSt, LName, LDef: string;
   LDone: Boolean;
+  LTo, LErr: Integer;
 begin
   Error.OK := True; // pas d'erreur
   ErrPos := 0; // ligne en cours pour erreur
@@ -1349,26 +1350,30 @@ begin
         // récupère la ligne en cours
         L1.Text := CBeginList + Trim(Editor[ErrPos - 1]) + CEndList;
         if not L1.IsValid then // liste non valide ?
+        begin
           // [### Erreur: liste invalide ###]
-          Error.SetError(CE_BadList, Editor[ErrPos - 1], ErrPos)
+          Error.SetError(CE_BadList, Editor[ErrPos - 1], ErrPos);
+          Exit; // on sort
+        end
         else
         // *** c'est une ligne vide ou un commentaire ?
         if L1.IsEmptyList or (L1.First = CComment) then
           ErrPos := ErrPos + 1 // ligne suivante
         else
         begin
-          // *** est-ce Pour ?
+          // *** est-ce POUR ?
           if AnsiSameText(L1.First, P_To) then
           begin
             try // si erreur : mauvaise définition
-              // on extrait le nom de la procédure (après Pour !)
+              LTo := ErrPos; // mémorisation de son emplacement
+              // on extrait le nom de la procédure (après POUR !)
               if L1.Count > 1 then // un mot au moins suit ?
               begin
                 LName := L1[1];
                 LSt := CBeginList; // LSt est le caractère [
                 // *** construit la liste des paramètres si nécessaire
                 if L1.Count > 2 then
-                  // on ajoute les paramètres (ni le Pour ni le nom)
+                  // on ajoute les paramètres (ni le POUR ni le nom)
                   for Li := 3 to L1.Count do
                     if LSt = CBeginList then
                       LSt := LSt + L1[Li - 1]
@@ -1391,18 +1396,26 @@ begin
                       // *** c'est encore le mot POUR ? ***
                       if AnsiSameText(L2.First, P_To) then
                         // [### Erreur: mot POUR mal placé ###]
-                        Error.SetError(CE_BadTo, LName, ErrPos)
+                      begin
+                        Error.SetError(CE_BadTo, LName, ErrPos);
+                        Exit; // on sort
+                      end
                       else
                       // *** c'est le mot FIN ? ***
                       if AnsiSameText(L2.First, P_End) then
                       begin
                         // on clôt la liste de définition
                         LDef := LDef + Trim(LSt) + CEndList + CEndList;
+                        LErr := ErrPos; // mémorisation de la ligne
+                        ErrPos := LTo; // revient sur POUR
                         if AddProc(LName, LDef) then // enregistre la définition
                         begin // l'enregistrement s'est bien déroulé
                           LDone := True; // procédure enregistrée
+                          ErrPos := LErr; // retrouve la ligne en cours
                           Change; // on signale le changement
-                        end;
+                        end
+                        else
+                          Exit; // on sort
                       end
                       else
                         LSt := LSt + CBeginList + Trim(Editor[ErrPos - 1]) +

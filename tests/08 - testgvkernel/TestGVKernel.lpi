@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="44"/>
+      <BuildNr Value="45"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Test de l'unité GVKernel" LegalCopyright="Gilles Vasseur 2014" LegalTrademarks="GNU GPL" OriginalFilename="TESTGVKERNEL" ProductName="GVLOGO" ProductVersion="1"/>
     </VersionInfo>
@@ -85,8 +85,8 @@
       <Filename Value="TestGVKernel"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir);M:\GIT\GVLOGO\GVLOGO - Copie\units;..\..\units"/>
-      <OtherUnitFiles Value=".;M:\GIT\GVLOGO\GVLOGO - Copie\units;..\..\units"/>
+      <IncludeFiles Value="$(ProjOutDir);M:\GIT\GVLOGO\GVLOGO - Copie\units\;..\..\units"/>
+      <OtherUnitFiles Value=".;M:\GIT\GVLOGO\GVLOGO - Copie\units\;..\..\units"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>

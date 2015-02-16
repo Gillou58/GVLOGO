@@ -13,7 +13,7 @@ object MainForm: TMainForm
   LCLVersion = '1.2.6.0'
   inline SynEditMain: TSynEdit
     Left = 0
-    Height = 537
+    Height = 535
     Top = 0
     Width = 872
     Align = alClient
@@ -821,15 +821,15 @@ object MainForm: TMainForm
   end
   object sbMain: TStatusBar
     Left = 0
-    Height = 21
-    Top = 587
+    Height = 23
+    Top = 585
     Width = 872
     Panels = <>
   end
   object pnlMain: TPanel
     Left = 0
     Height = 50
-    Top = 537
+    Top = 535
     Width = 872
     Align = alBottom
     Anchors = []

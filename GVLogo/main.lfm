@@ -859,6 +859,15 @@ object MainForm: TMainForm
       object MenuWord: TMenuItem
         Action = EditWordSelect
       end
+      object MenuItem2: TMenuItem
+        Caption = '-'
+      end
+      object MenuItemIndent: TMenuItem
+        Action = EditIndent
+      end
+      object MenuItemUnindent: TMenuItem
+        Action = EditUnindent
+      end
     end
     object MenuSearch: TMenuItem
       Caption = 'Chercher'
@@ -2213,6 +2222,22 @@ object MainForm: TMainForm
       Hint = 'OPtions du logiciel'
       ImageIndex = 73
       OnExecute = HelpOptionsExecute
+    end
+    object EditIndent: TAction
+      Category = 'Edit'
+      Caption = 'Indenter la sélection'
+      Hint = 'Indenter la sélection'
+      ImageIndex = 8
+      OnExecute = EditIndentExecute
+      ShortCut = 16457
+    end
+    object EditUnindent: TAction
+      Category = 'Edit'
+      Caption = 'Désindenter la sélection'
+      Hint = 'Désindenter la sélection'
+      ImageIndex = 34
+      OnExecute = EditUnIndentExecute
+      ShortCut = 16469
     end
   end
   object ImageListMenu: TImageList

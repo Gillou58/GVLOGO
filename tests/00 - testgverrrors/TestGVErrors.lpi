@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="19"/>
+      <BuildNr Value="20"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Test de GVErrors" LegalCopyright="Gilles Vasseur 2014" LegalTrademarks="GNU GPL" OriginalFilename="TESTGVERRORS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
     <BuildModes Count="1">

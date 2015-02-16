@@ -62,8 +62,8 @@ uses
   GVErrors; // traitement des erreurs
 
 type
-  // *** classe des chaînes ***
-  TGVString = class(TObject)
+  // *** objet chaîne ***
+  TGVString = object
   strict private
     fRawStr: string; // chaîne brute entrée
     fIsValid: Boolean; // validité de la chaîne d'entrée
@@ -75,8 +75,6 @@ type
     function WithEsc(const St: string): string; // avec échappement
     function WithoutEsc(const St: string): string; // sans échappement
   public
-    constructor Create; // constructeur
-    destructor Destroy; override; // destructeur
     procedure Clear; // remise à zéro
     property IsValid: Boolean read fIsValid; // validité de la chaîne d'entrée
     property Str: string read GetStr write SetStr; // chaîne brute d'entrée
@@ -115,7 +113,6 @@ type
   strict private
     fError: TGVErrors; // traitement des erreurs
     fText: TGVString; // mot à traiter
-    fWord, fWord2: TGVString; // mots de travail
     fNum, fNum2: TGVNumber; // nombres de travail
     function GetFmtText: string; // texte formaté
     function GetText: string; // texte brut
@@ -188,7 +185,7 @@ type
 implementation
 
 uses {%H-}StrUtils,
-  // *** BUG Lazarus : un conseil ("hint") indique que cette unité n'est pas
+  // *** Bogue Lazarus : un conseil ("hint") indique que cette unité n'est pas
   // utilisée alors que la compilation échouera si elle est omise.
   // En effet, elle est indispensable pour le traitement de IFTHEN
   // avec des chaînes.
@@ -253,9 +250,6 @@ constructor TGVWord.Create;
 // *** création ***
 begin
   inherited Create; // on hérite
-  fText := TGVString.Create; // création des outils
-  fWord := TGVString.Create;
-  fWord2 := TGVString.Create;
   fNum := TGVNumber.Create;
   fNum2 := TGVNumber.Create;
   Error := TGVErrors.Create; // on crée le gestionnaire d'erreurs
@@ -265,9 +259,6 @@ destructor TGVWord.Destroy;
 // *** destruction ***
 begin
   Error.Free; // libération du gestionnaire d'erreurs
-  fText.Free; // libération des outils
-  fWord.Free;
-  fWord2.Free;
   fNum.Free;
   fNum2.Free;
   inherited Destroy; // on hérite
@@ -828,19 +819,6 @@ begin
     end
     else
       LFlag := True; // échappement initial qu'on ignore
-end;
-
-constructor TGVString.Create;
-// *** création ***
-begin
-  inherited Create; // on hérite
-  Clear; // remise à zéro
-end;
-
-destructor TGVString.Destroy;
-// *** destruction ***
-begin
-  inherited Destroy; // on hérite
 end;
 
 procedure TGVString.Clear;

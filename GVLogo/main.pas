@@ -52,6 +52,8 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    EditUnindent: TAction;
+    EditIndent: TAction;
     HelpOptions: TAction;
     MenuItem11: TMenuItem;
     HF8: TMenuItem;
@@ -61,6 +63,9 @@ type
     HF4: TMenuItem;
     HF3: TMenuItem;
     HF2: TMenuItem;
+    MenuItemUnindent: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItemIndent: TMenuItem;
     MenuItemTurtle: TMenuItem;
     MenuItemText: TMenuItem;
     MenuItem4: TMenuItem;
@@ -314,6 +319,7 @@ implementation
 {$R *.lfm}
 uses
   {%H-}StrUtils, // chaînes
+  SynEditKeyCmds, // commandes de l'éditeur
   GVPrimConsts, // primitives
   GVErrors, // constantes des erreurs
   GVLogoConsts, // constantes du projet
@@ -416,7 +422,7 @@ end;
 procedure TMainForm.EditUnIndentExecute(Sender: TObject);
 // *** retirer l'indentation (éditeur) ***
 begin
-  // ### TODO ###
+  EditorForm.SynEditEditor.CommandProcessor(ecBlockUnIndent, '', nil);
 end;
 
 procedure TMainForm.EditWordSelectExecute(Sender: TObject);
@@ -442,7 +448,7 @@ end;
 procedure TMainForm.EditIndentExecute(Sender: TObject);
 // *** indentation (éditeur) ***
 begin
-  // ### TODO ###
+  EditorForm.SynEditEditor.CommandProcessor(ecBlockIndent, '', nil);
 end;
 
 procedure TMainForm.EditLineSelectExecute(Sender: TObject);

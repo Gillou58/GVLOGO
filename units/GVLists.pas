@@ -1097,7 +1097,6 @@ constructor TGVListUtils.Create;
 begin
   inherited Create; // on hérite
   fWord := TGVWord.Create;  // mot de travail
-  fSt := TGVString.Create; // chaîne de travail
   fError := TGVErrors.Create; // gestionnaire d'erreurs créé
 end;
 
@@ -1106,7 +1105,6 @@ destructor TGVListUtils.Destroy;
 begin
   Error.Free; // on détruit le gestionnaire d'erreurs
   fWord.Free; // on libère le mot de travail
-  fSt.Free; // idem pour la chaîne de travail
   inherited Destroy; // on hérite
 end;
 

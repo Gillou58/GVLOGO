@@ -41,7 +41,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, SynEdit, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Buttons, ExtCtrls, StdCtrls,
+  ComCtrls, Buttons, ExtCtrls,
   GVHighlighter; // unité de coloration
 
 type
