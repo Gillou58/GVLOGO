@@ -2378,7 +2378,7 @@ procedure DoPrimReadChar;
 // *** LIS.CAR ***
 begin
   Message.Cmd := acReadChar; // demande de lecture
-  fWkRec.fItem := Message.Message; // on récupère le message de retour
+   fWkRec.fItem := Message.Message; // on récupère le message de retour
   PushConst(fWkRec.fItem); // résultat empilé
 end;
 

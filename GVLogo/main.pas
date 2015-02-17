@@ -48,9 +48,6 @@ uses
 
 type
   // *** TMainForm ***
-
-  { TMainForm }
-
   TMainForm = class(TForm)
     EditUnindent: TAction;
     EditIndent: TAction;
@@ -590,10 +587,15 @@ end;
 
 procedure TMainForm.FormKeyPress(Sender: TObject; var Key: char);
 // *** touche appuyée ***
+var
+  LS: string;
 begin
   if fWaitForKey and (Ord(Key) > 31) then // attente et caractère lisible ?
   begin
-    Automat.Message.Message := Key; // message envoyé
+    LS := Key; // touche mémorisée
+    if Key in (CSeparators + [CLink]) then // séparateur ?
+      LS := CLink + Key; // normaliser
+    Automat.Message.Message := LS; // message envoyé
     fWaitForKey := False; // attente annulée
   end;
 end;
