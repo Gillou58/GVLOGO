@@ -86,7 +86,6 @@ object PrimsHelpForm: TPrimsHelpForm
     Hint = 'Définition de la primitive ne cours'
     Top = 8
     Width = 304
-    Enabled = False
     ParentShowHint = False
     ReadOnly = True
     ScrollBars = ssAutoVertical

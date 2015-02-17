@@ -1484,7 +1484,7 @@ end;
 procedure DoPrimFor;
 // *** BOUCLE ***
 var
-  LS, LLst: string;
+  LS, LSt: string;
   Li, Lj: Integer;
 begin
   AData; // premier paramètre récupéré
@@ -1501,17 +1501,18 @@ begin
         Lj := LW.AsInt; // le conserver
         if IsListPop then // une liste ?
         begin
-          LLst := FWkRec.fItem; // liste conservée
-          // le premier paramètre est-il le nom d'une variable locale ?
-          if fLocVars.IsLocVar(LS) then
-            fLocVars.DirectUpdateLocVar(IntToStr(Li)) // mise à jour
-          else
-          // une variable globale ou une nouvelle variable ?
-          if not fKernel.AddVar(LS,IntToStr(Li)) then // une erreur ?
-            Exit; // on sort
+          LSt := FWkRec.fItem; // conserve la liste
           for Li := Li to Lj do // on boucle comme demandé
-            if Stop or (not Error.Ok) then
-              Process(LLst); // exécution de la liste
+          begin
+            // le premier paramètre est-il le nom d'une variable locale ?
+            if fLocVars.IsLocVar(LS) then
+              fLocVars.DirectUpdateLocVar(IntToStr(Li)) // mise à jour
+            else
+            // une variable globale ?
+            fKernel.AddVar(LS, IntToStr(Li)); // une erreur ?
+            if (not Stop) and Error.Ok then
+              Process(LSt); // exécution de la liste
+          end;
         end
         else
         // [### Erreur: mauvaise liste ###]
