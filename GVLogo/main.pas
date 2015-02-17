@@ -955,8 +955,6 @@ begin
     DumpForm.Dump; // on la met à jour
   if VarsForm.IsVisible then // fenêtre des variables globales visible ?
     VarsForm.Vars; // idem
-  if LocVarsForm.IsVisible then // fenêtre de variables locales visible ?
-    LocVarsForm.LocVars; // idem
   if PcksForm.IsVisible then // fenêtre de paquets visible ?
     PcksForm.Pcks; // idem
 end;
@@ -988,6 +986,8 @@ begin
             FollowForm.Write(Format(CrsFollowLine,
               [fLevel, fItem, fNum, fPrim, fProc]), 1);
           end;
+   if LocVarsForm.IsVisible then // fenêtre de variables locales visible ?
+    LocVarsForm.LocVars; // idem
    while fWait do // pause ?
      Application.ProcessMessages; // on attend
 end;
