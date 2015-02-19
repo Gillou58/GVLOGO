@@ -158,7 +158,7 @@ const
   CProc = CDot + 'PRC'; // une procédure
   CExtLP = CDot + 'GVE'; // extension d'un espace de travail
 
-  // *** interprète ***
+  // *** interpréteur ***
   CDisabledState = 1; // désactivé
   CTrueState = -1; // vrai
   CFalseState = 0; // faux
