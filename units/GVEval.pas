@@ -58,7 +58,7 @@ type
   // tableau des éléments
   TGVItems = array of TGVBaseItem;
 
-  // *** TGVEvalEnumerator
+  // *** TGVEvalEnumerator ***
   TGVEvalEnumerator = class(TObject) // énumération
   private
     fLst: TGVItems;
@@ -72,9 +72,6 @@ type
   end;
 
   // *** TGVEval ***
-
-  { TGVEval }
-
   TGVEval = class(TObject)
   private
     fEvalState: TGVEvalState; // état de l'évaluation

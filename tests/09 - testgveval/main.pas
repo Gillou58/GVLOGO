@@ -15,7 +15,7 @@
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
 
-// GVLISTS - part of GVLOGO
+// GVEVAL - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
 //
 // This program is free software: you can redistribute it and/or modify it

@@ -1,4 +1,4 @@
-GVLOGO
+﻿GVLOGO
 ======
 
 French LOGO language with LAZARUS (Free Pascal)
@@ -59,7 +59,7 @@ Copyright (C) 2014 Gilles VASSEUR — Tous droits réservés.
 
 3- Contenu des répertoires
 
-a. Le répertoire "3rdparty" contient les bibliothèques nécessaires au fonctionnement de GVLOGO.
+a. Le répertoire "3rdparty" contient les bibliothèques nécessaires au fonctionnement de GVLOGO (*** travail en cours ***).
 
 b. Répertoire "docs" : contient la documentation de GVLOGO (programmation et mode d'emploi).
 
@@ -93,7 +93,7 @@ e. Répertoire "tests" : contient tous les logiciels de tests des unités de GVL
 
 f. Répertoire "units" : contient toutes les unités nécessaires à GVLOGO.
 
-g. Répertoire "GVLogo" : contient le programme GVLOGO sous sa forme la plus évoluée (*** travail en cours ***).
+g. Répertoire "GVLogo" : contient le programme GVLOGO sous sa forme la plus évoluée.
 
 4- Contact
 
@@ -103,6 +103,6 @@ Vous pouvez aussi vous rendre sur mon site pour les éventuelles mises à jour :
 
 Les suggestions, modifications, propositions et questions sont les bienvenues.
 
-Gilles VASSEUR, le 26 janvier 2015
+Gilles VASSEUR, le 20 février 2015
 
  
