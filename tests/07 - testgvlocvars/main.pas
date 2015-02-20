@@ -54,9 +54,8 @@ const
 
 type
 
-  { TMainForm }
-
-  TMainForm = class(TForm)
+    // *** TMainForm ***
+    TMainForm = class(TForm)
     btnClear: TBitBtn;
     btnClose: TBitBtn;
     btnAddLocNumber: TButton;

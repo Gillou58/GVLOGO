@@ -61,7 +61,7 @@ object MainForm: TMainForm
   object edtName: TLabeledEdit
     Cursor = crHandPoint
     Left = 456
-    Height = 27
+    Height = 23
     Hint = 'Nom de la variable'
     Top = 32
     Width = 328
@@ -70,8 +70,8 @@ object MainForm: TMainForm
     EditLabel.AnchorSideRight.Side = asrBottom
     EditLabel.AnchorSideBottom.Control = edtName
     EditLabel.Left = 456
-    EditLabel.Height = 17
-    EditLabel.Top = 12
+    EditLabel.Height = 15
+    EditLabel.Top = 14
     EditLabel.Width = 328
     EditLabel.Caption = 'Nom de la variable :'
     EditLabel.ParentColor = False
@@ -83,7 +83,7 @@ object MainForm: TMainForm
   object edtValue: TLabeledEdit
     Cursor = crHandPoint
     Left = 456
-    Height = 27
+    Height = 23
     Hint = 'Valeur de la variable'
     Top = 80
     Width = 331
@@ -92,8 +92,8 @@ object MainForm: TMainForm
     EditLabel.AnchorSideRight.Side = asrBottom
     EditLabel.AnchorSideBottom.Control = edtValue
     EditLabel.Left = 456
-    EditLabel.Height = 17
-    EditLabel.Top = 60
+    EditLabel.Height = 15
+    EditLabel.Top = 62
     EditLabel.Width = 331
     EditLabel.Caption = 'Valeur de la variable :'
     EditLabel.ParentColor = False
@@ -105,7 +105,7 @@ object MainForm: TMainForm
   object seNumber: TSpinEdit
     Cursor = crHandPoint
     Left = 456
-    Height = 27
+    Height = 23
     Hint = 'Nombre de variables dans le bloc'
     Top = 136
     Width = 50
@@ -116,9 +116,9 @@ object MainForm: TMainForm
   end
   object lblNumber: TLabel
     Left = 456
-    Height = 17
+    Height = 15
     Top = 112
-    Width = 229
+    Width = 181
     Caption = 'Nombre de variables dans le bloc :'
     ParentColor = False
   end
@@ -128,7 +128,7 @@ object MainForm: TMainForm
     Top = 168
     Width = 352
     Caption = 'Méthodes '
-    ClientHeight = 141
+    ClientHeight = 142
     ClientWidth = 348
     TabOrder = 3
     object btnAddLocNumber: TButton
@@ -251,8 +251,8 @@ object MainForm: TMainForm
   end
   object sbMain: TStatusBar
     Left = 0
-    Height = 21
-    Top = 383
+    Height = 23
+    Top = 381
     Width = 817
     AutoHint = True
     Panels = <>

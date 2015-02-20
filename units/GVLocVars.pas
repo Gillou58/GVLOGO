@@ -125,6 +125,7 @@ begin
   try
     LW.Text := Name; // mot normalisé
     LW.Text := LW.WithoutColon; // sans les deux points
+    LW.Text := LW.WithoutQuote; // sans les guillemets
     // on balaie les variables locales s'il y en a
     if  (not fStack.IsEmpty) and (fStack.Peek <> 0) then
     begin
@@ -236,6 +237,7 @@ begin
   try
     LW.Text := Name; // mot normalisé
     LW.Text := LW.WithoutColon; // on supprime les deux points
+    LW.Text := LW.WithoutQuote; // et les éventuels guillemets
     if LW.IsValidIdent then // le nom est-il correct ?
     begin
       // on crée la variable locale
