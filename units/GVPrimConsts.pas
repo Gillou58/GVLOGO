@@ -413,7 +413,7 @@ const
     (Name: P_PkgCreate; NbParams: 1),
     (Name: P_PkgItemsCount; NbParams: 1),
     (Name: P_PckBurry; NbParams: 1),
-    (Name: P_BelongsTo; NbParams: 2),
+    (Name: P_BelongsTo; NbParams: 1),
     (Name: P_Give; NbParams: 2), // 40
     (Name: P_Thing; NbParams: 1),
     (Name: P_SetHeading; NbParams: 1),

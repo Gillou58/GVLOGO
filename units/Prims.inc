@@ -1435,9 +1435,12 @@ end;
 
 procedure DoPrimBelongsTo;
 // *** APPARTIENT.A ***
+var
+  LS: string;
 begin
   AData; // mot récupéré
-  PushConst(fKernel.BelongsTo(fWkRec.fItem)); // résultat empilé
+  fKernel.BelongsTo(fWkRec.fItem, LS); // recherche de l'appartenance
+  PushConst(LS); // résultat empilé
 end;
 
 procedure DoPrimTowards;

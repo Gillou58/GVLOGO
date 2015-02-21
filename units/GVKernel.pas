@@ -1594,16 +1594,8 @@ end;
 
 function TGVLogoKernel.PrimsToList: string;
 // *** liste des primitives ***
-var
-  LRec: TGVPrimRec;
 begin
-  Result := CBeginList; // début de liste
-  try
-    for LRec in GVPrimName do // on balaie le tableau
-      Result := Result + LRec.Name + ' '; // on ajoute le nom trouvé
-  finally
-    Result := TrimRight(Result) + CEndList; // fin de liste
-  end;
+  Result := CBeginList + CPrimsAll + CEndList;
 end;
 
 function TGVLogoKernel.PrimByNum(const N: Integer): string;
