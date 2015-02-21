@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="15"/>
+      <BuildNr Value="16"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Test de TGVLOCVARS" LegalCopyright="Gilles Vasseur 2014" LegalTrademarks="GNU GPL" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>

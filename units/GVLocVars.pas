@@ -315,7 +315,7 @@ procedure TGVLocVars.DelLastGroup;
 var
   Li: Integer;
 begin
-  if (fStack.Count = 0) or (fNames.Count < fStack.Peek) then
+  if fStack.IsEmpty or (fNames.Count < fStack.Peek) then
     // [### Erreur: pas assez de variables internes ###]
     Error.SetError(CIE_LowStack, ToString)
   else
