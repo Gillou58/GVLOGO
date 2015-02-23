@@ -301,7 +301,7 @@ resourcestring
   MasEndFollowing = 'Fin de suivi %s';
 	
 const
-  // ** messages pour l'état de l'automate ***
+  // *** messages pour l'état de l'automate ***
   CStatesArray: array[TGVAutomatState] of string = 
    (MasWaiting, MasEnding, MasWorking, MasError, MasWord, MasList,
 	MasVar,	MasNumber, MasEval, MasProc, MasPrim, MasPushing,
