@@ -109,7 +109,6 @@ type
       procedure SetStop(AValue: Boolean); // stop ?
       procedure PushConst(const St: string); // empilement d'une constante
       function DoBegin(const St: string): Boolean; // préparation
-      // préparation de l'interpréteur
       procedure DoEnd; // postparation de l'interpréteur
       procedure DoWord; // traitement d'un mot
       procedure DoList; // traitement d'une liste
@@ -373,10 +372,12 @@ begin
     LL := TGVList.Create;
     try
       LS := EmptyStr; // définition vide
+      // balayage des lignes de la procédure
       for Li := 1 to fKernel.ProcLinesCount(fWkRec.fProc) do
       begin
         if not Stop then
         begin
+          // texte de a ligne en cours
           LL.Text := fKernel.ProcLine(fWkRec.fProc, Li);
           for Lj := 1 to LL.Count do // on balaie la ligne
             if Trim(LL[Lj - 1]) <> CComment then // commentaire ?
