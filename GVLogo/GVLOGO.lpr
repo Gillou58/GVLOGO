@@ -47,7 +47,7 @@ uses
   GVHighlighter, FrmAbout, FrmError, FrmText, FrmEdit, FrmInfo, FrmProcs,
   GVLogoConsts, FrmEditor, FrmFind, FrmpHelpPrims, FrmFollow, FrmDump, FrmVars,
   FrmLocVars, FrmPcks, FrmNewProc, FrmOptions, FrmTurtleShow, FrmTextShow,
-  GetText, Translations; // traduction française de la LCL
+  SysUtils, GetText, Translations; // traduction française de la LCL
 
 {$R *.res}
 
@@ -56,6 +56,8 @@ procedure TranslateLCL;
 var
   Lang, DefLang: string;
 begin
+  Lang := EmptyStr;
+  DefLang := EmptyStr;
   GetLanguageIDs({%H-}Lang, {%H-}DefLang);
   // utilisation du fichier corrigé
   TranslateUnitResourceStrings('LCLStrConsts',

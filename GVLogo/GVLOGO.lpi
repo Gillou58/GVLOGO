@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="180"/>
+      <BuildNr Value="182"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="langage GVLOGO" InternalName="GVLOGO" LegalCopyright="Gilles Vasseur 2014-2015" LegalTrademarks="GNU GPL" OriginalFilename="GVLOGO.PAS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -60,7 +60,6 @@
       <Unit0>
         <Filename Value="GVLOGO.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVLOGO"/>
       </Unit0>
       <Unit1>
         <Filename Value="main.pas"/>
@@ -76,17 +75,14 @@
         <ComponentName Value="TurtleForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmTurtle"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\units\GVAutomat.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVAutomat"/>
       </Unit3>
       <Unit4>
         <Filename Value="..\units\GVConsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVConsts"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\units\GVDefines.inc"/>
@@ -95,57 +91,46 @@
       <Unit6>
         <Filename Value="..\units\GVErrConsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVErrConsts"/>
       </Unit6>
       <Unit7>
         <Filename Value="..\units\GVErrors.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVErrors"/>
       </Unit7>
       <Unit8>
         <Filename Value="..\units\GVEval.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVEval"/>
       </Unit8>
       <Unit9>
         <Filename Value="..\units\GVKernel.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVKernel"/>
       </Unit9>
       <Unit10>
         <Filename Value="..\units\GVLists.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVLists"/>
       </Unit10>
       <Unit11>
         <Filename Value="..\units\GVLocVars.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVLocVars"/>
       </Unit11>
       <Unit12>
         <Filename Value="..\units\GVPrimConsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVPrimConsts"/>
       </Unit12>
       <Unit13>
         <Filename Value="..\units\GVPropLists.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVPropLists"/>
       </Unit13>
       <Unit14>
         <Filename Value="..\units\GVStacks.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVStacks"/>
       </Unit14>
       <Unit15>
         <Filename Value="..\units\GVTurtles.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVTurtles"/>
       </Unit15>
       <Unit16>
         <Filename Value="..\units\GVWords.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVWords"/>
       </Unit16>
       <Unit17>
         <Filename Value="..\units\Prims.inc"/>
@@ -157,7 +142,6 @@
         <ComponentName Value="AboutForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmAbout"/>
       </Unit18>
       <Unit19>
         <Filename Value="frmerror.pas"/>
@@ -165,7 +149,6 @@
         <ComponentName Value="ErrorForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmError"/>
       </Unit19>
       <Unit20>
         <Filename Value="frmtext.pas"/>
@@ -173,7 +156,6 @@
         <ComponentName Value="TextForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmText"/>
       </Unit20>
       <Unit21>
         <Filename Value="frmedit.pas"/>
@@ -181,7 +163,6 @@
         <ComponentName Value="EditForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmEdit"/>
       </Unit21>
       <Unit22>
         <Filename Value="frminfo.pas"/>
@@ -189,7 +170,6 @@
         <ComponentName Value="InfoForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmInfo"/>
       </Unit22>
       <Unit23>
         <Filename Value="frmprocs.pas"/>
@@ -197,17 +177,14 @@
         <ComponentName Value="ProcsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmProcs"/>
       </Unit23>
       <Unit24>
         <Filename Value="..\units\GVHighlighter.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVHighlighter"/>
       </Unit24>
       <Unit25>
         <Filename Value="..\units\GVLogoConsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVLogoConsts"/>
       </Unit25>
       <Unit26>
         <Filename Value="frmeditor.pas"/>
@@ -215,7 +192,6 @@
         <ComponentName Value="EditorForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmEditor"/>
       </Unit26>
       <Unit27>
         <Filename Value="frmfind.pas"/>
@@ -223,7 +199,6 @@
         <ComponentName Value="FindForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmFind"/>
       </Unit27>
       <Unit28>
         <Filename Value="frmphelpprims.pas"/>
@@ -231,7 +206,6 @@
         <ComponentName Value="PrimsHelpForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmpHelpPrims"/>
       </Unit28>
       <Unit29>
         <Filename Value="frmfollow.pas"/>
@@ -239,7 +213,6 @@
         <ComponentName Value="FollowForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmFollow"/>
       </Unit29>
       <Unit30>
         <Filename Value="frmdump.pas"/>
@@ -247,7 +220,6 @@
         <ComponentName Value="DumpForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmDump"/>
       </Unit30>
       <Unit31>
         <Filename Value="frmvars.pas"/>
@@ -255,7 +227,6 @@
         <ComponentName Value="VarsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmVars"/>
       </Unit31>
       <Unit32>
         <Filename Value="frmlocvars.pas"/>
@@ -263,14 +234,12 @@
         <ComponentName Value="LocVarsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmLocVars"/>
       </Unit32>
       <Unit33>
         <Filename Value="frmpcks.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="PcksForm"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmPcks"/>
       </Unit33>
       <Unit34>
         <Filename Value="frmnewproc.pas"/>
@@ -278,7 +247,6 @@
         <ComponentName Value="NewProcForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmNewProc"/>
       </Unit34>
       <Unit35>
         <Filename Value="frmoptions.pas"/>
@@ -286,7 +254,6 @@
         <ComponentName Value="OptionsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmOptions"/>
       </Unit35>
       <Unit36>
         <Filename Value="frmturtleshow.pas"/>
@@ -294,7 +261,6 @@
         <ComponentName Value="TurtleShowForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmTurtleShow"/>
       </Unit36>
       <Unit37>
         <Filename Value="frmtextshow.pas"/>
@@ -302,7 +268,6 @@
         <ComponentName Value="TextShowForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmTextShow"/>
       </Unit37>
     </Units>
   </ProjectOptions>
@@ -334,12 +299,6 @@
         </Win32>
       </Options>
     </Linking>
-    <Other>
-      <CompilerMessages>
-        <MsgFileName Value=""/>
-      </CompilerMessages>
-      <CompilerPath Value="$(CompPath)"/>
-    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">

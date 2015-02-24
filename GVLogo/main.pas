@@ -40,7 +40,7 @@ unit main;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, PrintersDlgs, Forms, Controls, Graphics, Dialogs,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   Menus, ActnList, StdActns, ComCtrls, Printers,
   GVConsts, // constantes générales
   GVErrConsts, // constantes des erreurs

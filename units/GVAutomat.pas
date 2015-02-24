@@ -377,7 +377,7 @@ begin
       begin
         if not Stop then
         begin
-          // texte de a ligne en cours
+          // texte de la ligne en cours
           LL.Text := fKernel.ProcLine(fWkRec.fProc, Li);
           for Lj := 1 to LL.Count do // on balaie la ligne
             if Trim(LL[Lj - 1]) <> CComment then // commentaire ?
