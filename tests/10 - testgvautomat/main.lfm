@@ -14,7 +14,7 @@ object MainForm: TMainForm
   OnDestroy = FormDestroy
   OnKeyPress = FormKeyPress
   Position = poScreenCenter
-  LCLVersion = '1.2.6.0'
+  LCLVersion = '1.4.0.1'
   object mmoMain: TMemo
     Left = 8
     Height = 594
@@ -130,8 +130,8 @@ object MainForm: TMainForm
   end
   object sbMain: TStatusBar
     Left = 0
-    Height = 21
-    Top = 657
+    Height = 23
+    Top = 655
     Width = 981
     AutoHint = True
     Panels = <    
@@ -174,7 +174,7 @@ object MainForm: TMainForm
   end
   object lbledtMain: TLabeledEdit
     Left = 480
-    Height = 27
+    Height = 23
     Hint = 'Texte à interpréter'
     Top = 32
     Width = 492
@@ -183,8 +183,8 @@ object MainForm: TMainForm
     EditLabel.AnchorSideRight.Side = asrBottom
     EditLabel.AnchorSideBottom.Control = lbledtMain
     EditLabel.Left = 480
-    EditLabel.Height = 17
-    EditLabel.Top = 12
+    EditLabel.Height = 15
+    EditLabel.Top = 14
     EditLabel.Width = 492
     EditLabel.Caption = ' Ligne à interpréter : '
     EditLabel.ParentColor = False

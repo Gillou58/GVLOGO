@@ -49,9 +49,7 @@ uses
   GVAutomat; // automate
 
 type
-
-  { TMainForm }
-
+  // *** TMainForm ***
   TMainForm = class(TForm)
     btnStop: TBitBtn;
     btnToProc: TBitBtn;
