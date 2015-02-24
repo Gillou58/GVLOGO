@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="25"/>
+      <BuildNr Value="26"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="test de GVSTacks" InternalName="TESTGVSTACKS" LegalCopyright="Gilles Vasseur 2014" LegalTrademarks="Licence GNU" OriginalFilename="TestGVStacks" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -44,7 +44,6 @@
       <Unit0>
         <Filename Value="TestGVStacks.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="TestGVStacks"/>
       </Unit0>
       <Unit1>
         <Filename Value="main.pas"/>
@@ -57,7 +56,6 @@
       <Unit2>
         <Filename Value="..\..\units\GVConsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVConsts"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\..\units\GVDefines.inc"/>
@@ -66,12 +64,10 @@
       <Unit4>
         <Filename Value="..\..\units\GVStacks.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVStacks"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\..\units\GVErrors.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVErrors"/>
       </Unit5>
     </Units>
   </ProjectOptions>
@@ -101,12 +97,6 @@
         </Win32>
       </Options>
     </Linking>
-    <Other>
-      <CompilerMessages>
-        <MsgFileName Value=""/>
-      </CompilerMessages>
-      <CompilerPath Value="$(CompPath)"/>
-    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">

@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="19"/>
+      <BuildNr Value="20"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="test de GVPropLists" LegalCopyright="Gilles Vasseur 2014" LegalTrademarks="GNU GPL" OriginalFilename="TESTGVPROPLISTS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -45,7 +45,6 @@
       <Unit0>
         <Filename Value="TestGVPropLists.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="TestGVPropLists"/>
       </Unit0>
       <Unit1>
         <Filename Value="mainform.pas"/>
@@ -58,7 +57,6 @@
       <Unit2>
         <Filename Value="..\..\units\GVConsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVConsts"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\..\units\GVDefines.inc"/>
@@ -67,22 +65,18 @@
       <Unit4>
         <Filename Value="..\..\units\GVLists.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVLists"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\..\units\GVPropLists.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVPropLists"/>
       </Unit5>
       <Unit6>
         <Filename Value="..\..\units\GVWords.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVWords"/>
       </Unit6>
       <Unit7>
         <Filename Value="..\..\units\GVErrors.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVErrors"/>
       </Unit7>
     </Units>
   </ProjectOptions>
@@ -112,12 +106,6 @@
         </Win32>
       </Options>
     </Linking>
-    <Other>
-      <CompilerMessages>
-        <MsgFileName Value=""/>
-      </CompilerMessages>
-      <CompilerPath Value="$(CompPath)"/>
-    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">

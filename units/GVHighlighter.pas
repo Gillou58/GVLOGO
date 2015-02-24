@@ -270,7 +270,7 @@ begin
     StartCodeFoldBlock(nil)
   else
   if SameText(TrimLeft(Copy(fLineText, 1, fTokenEnd - 1)), P_End) then
-    EndCodeFoldBlock
+    EndCodeFoldBlock;
 end;
 
 function TGVHighlighter.GetEol: Boolean;

@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="39"/>
+      <BuildNr Value="40"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Test de l'unité GVTurtles2" LegalCopyright="Gilles VASSEUR 2014" LegalTrademarks="GNU GPL" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -48,7 +48,6 @@
       <Unit0>
         <Filename Value="TestTGVTurtles.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="TestTGVTurtles"/>
       </Unit0>
       <Unit1>
         <Filename Value="mainformturtle.pas"/>
@@ -61,7 +60,6 @@
       <Unit2>
         <Filename Value="..\..\units\GVConsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVConsts"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\..\units\GVDefines.inc"/>
@@ -70,17 +68,14 @@
       <Unit4>
         <Filename Value="..\..\units\GVTurtles.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVTurtles"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\..\units\GVErrConsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVErrConsts"/>
       </Unit5>
       <Unit6>
         <Filename Value="..\..\units\GVLists.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVLists"/>
       </Unit6>
     </Units>
   </ProjectOptions>
@@ -110,12 +105,6 @@
         </Win32>
       </Options>
     </Linking>
-    <Other>
-      <CompilerMessages>
-        <MsgFileName Value=""/>
-      </CompilerMessages>
-      <CompilerPath Value="$(CompPath)"/>
-    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">

@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="10"/>
+      <BuildNr Value="11"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Test de GVHighlighter" LegalCopyright="GIlles Vasseur 2014" LegalTrademarks="GNU GPL" OriginalFilename="TestGVHighlighter" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -44,7 +44,6 @@
       <Unit0>
         <Filename Value="TestGVHighlighter.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="TestGVHighlighter"/>
       </Unit0>
       <Unit1>
         <Filename Value="main.pas"/>
@@ -57,12 +56,10 @@
       <Unit2>
         <Filename Value="..\..\units\GVConsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVConsts"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\..\units\GVPrimConsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GVPrimConsts"/>
       </Unit3>
       <Unit4>
         <Filename Value="..\..\units\GVHighlighter.pas"/>
@@ -99,12 +96,6 @@
         </Win32>
       </Options>
     </Linking>
-    <Other>
-      <CompilerMessages>
-        <MsgFileName Value=""/>
-      </CompilerMessages>
-      <CompilerPath Value="$(CompPath)"/>
-    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">

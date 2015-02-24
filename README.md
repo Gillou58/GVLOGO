@@ -59,9 +59,9 @@ Copyright (C) 2014 Gilles VASSEUR — Tous droits réservés.
 
 3- Contenu des répertoires
 
-a. Le répertoire "3rdparty" contient les bibliothèques nécessaires au fonctionnement de GVLOGO (*** travail en cours ***).
+a. Le répertoire "3rdparty" contient les bibliothèques nécessaires au fonctionnement de GVLOGO.
 
-b. Répertoire "docs" : contient la documentation de GVLOGO (programmation et mode d'emploi).
+b. Répertoire "docs" : contient la documentation de GVLOGO (programmation et mode d'emploi - *** travail en cours ***).
 
 c. Répertoire "GNU GPL" : contient la licence GNU GPL sous plusieurs formats, en anglais et en français.
 
@@ -103,6 +103,6 @@ Vous pouvez aussi vous rendre sur mon site pour les éventuelles mises à jour :
 
 Les suggestions, modifications, propositions et questions sont les bienvenues.
 
-Gilles VASSEUR, le 20 février 2015
+Gilles VASSEUR, le 24 février 2015
 
  

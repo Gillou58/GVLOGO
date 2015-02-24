@@ -22,7 +22,7 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, bgrabitmappack, Main, GVAbout, Help, GVTools, GVConsts, GVTurtles,
-  GetText, Translations; // traduction française de la LCL
+  SysUtils, GetText, Translations; // traduction française de la LCL
 
 {$R *.res}
 
@@ -31,6 +31,8 @@ procedure TranslateLCL;
 var
   Lang, DefLang: string;
 begin
+  Lang := EmptyStr;
+  Deflang := EmptyStr;
   GetLanguageIDs({%H-}Lang, {%H-}DefLang);
   // utilisation du fichier corrigé
   TranslateUnitResourceStrings('LCLStrConsts',
