@@ -105,6 +105,9 @@ resourcestring
   CrsErrNum = 'Numéro';
   CrsErrLevel = 'Niveau';
   CrsErrPos = 'Position';
+  // *** aide des primitives ***
+  CrsParamsCount = 'Nombre de paramètres : ';
+  CrsDefPrim = 'Action : ';
 
 implementation
 

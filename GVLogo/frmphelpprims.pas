@@ -63,6 +63,7 @@ implementation
 
 uses
   FrmInfo, // fenêtre d'information
+  GVLists, // listes
   GVLogoConsts; // constantes du projet
 
 procedure ShowPrimsHelp;
@@ -102,10 +103,26 @@ end;
 
 procedure TPrimsHelpForm.cbPrimsSelect(Sender: TObject);
 // *** sélection d'un nom de primitive ***
+var
+  LL: TGVList;
+  LU: TGVListUtils;
 begin
   mmoDefs.Lines.Clear; // zone effacée
-  // on écrit la définition qui correspond à la primitive choisie
-  mmoDefs.Lines.Add(Lst.Values[cbPrims.Items[cbPrims.ItemIndex]]);
+  LL := TGVList.Create; // liste de travail créée
+  try
+    // on écrit la définition qui correspond à la primitive choisie
+    LL.Text := Lst.Values[cbPrims.Items[cbPrims.ItemIndex]];
+    mmoDefs.Lines.Add(CrsParamsCount + LL.First); // les paramètres
+    LU := TGVListUtils.Create; // utilitaire créé
+    try
+      // aide sans les crochets
+      mmoDefs.Lines.Add(CrsDefPrim + LU.ListToStr(LL.Last));
+    finally
+      LU.Free; // utilitaire libéré
+    end;
+  finally
+    LL.Free; // libération de la liste de travail
+  end;
 end;
 
 procedure TPrimsHelpForm.FormDestroy(Sender: TObject);
