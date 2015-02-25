@@ -1,0 +1,182 @@
+object FormTools: TFormTools
+  Left = 470
+  Height = 273
+  Top = 225
+  Width = 463
+  ActiveControl = btnClose
+  BorderIcons = []
+  BorderStyle = bsSingle
+  Caption = 'Préférences'
+  ClientHeight = 273
+  ClientWidth = 463
+  OnActivate = FormActivate
+  Position = poMainFormCenter
+  LCLVersion = '1.2.6.0'
+  object btnClose: TBitBtn
+    Cursor = crHandPoint
+    Left = 344
+    Height = 30
+    Hint = 'Ferme la fenêtre.'
+    Top = 232
+    Width = 112
+    Caption = 'Fermer'
+    Kind = bkClose
+    ModalResult = 11
+    OnClick = btnCloseClick
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 0
+  end
+  object btnCancel: TBitBtn
+    Cursor = crHandPoint
+    Left = 224
+    Height = 30
+    Hint = 'Annule les changements'
+    Top = 232
+    Width = 112
+    Cancel = True
+    Caption = 'Annuler'
+    Kind = bkCancel
+    ModalResult = 2
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 1
+  end
+  object btnReInit: TBitBtn
+    Cursor = crHandPoint
+    Left = 104
+    Height = 30
+    Hint = 'Réinitialise les paramètres.'
+    Top = 232
+    Width = 112
+    Caption = 'Réinitialiser'
+    Kind = bkRetry
+    OnClick = btnReInitClick
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 2
+  end
+  object gbTurtle: TGroupBox
+    Left = 27
+    Height = 195
+    Top = 21
+    Width = 317
+    Caption = 'Déplacements de la tortue '
+    ClientHeight = 176
+    ClientWidth = 313
+    TabOrder = 3
+    object lblForward: TLabel
+      Left = 19
+      Height = 17
+      Top = 17
+      Width = 84
+      Caption = '&Avancer de : '
+      FocusControl = seForward
+      ParentColor = False
+    end
+    object lblBackward: TLabel
+      Left = 19
+      Height = 17
+      Top = 48
+      Width = 80
+      Caption = '&Reculer de : '
+      FocusControl = seBackward
+      ParentColor = False
+    end
+    object lblLeft: TLabel
+      Left = 19
+      Height = 17
+      Top = 80
+      Width = 143
+      Caption = 'Tourner à &gauche de : '
+      FocusControl = seLeft
+      ParentColor = False
+    end
+    object lblRight: TLabel
+      Left = 19
+      Height = 17
+      Top = 112
+      Width = 138
+      Caption = 'Tourner à &droite de : '
+      FocusControl = seRight
+      ParentColor = False
+    end
+    object lblLength: TLabel
+      Left = 19
+      Height = 17
+      Top = 144
+      Width = 147
+      Caption = '&Longueur par défaut : '
+      FocusControl = seLength
+      ParentColor = False
+    end
+    object seForward: TSpinEdit
+      Cursor = crHandPoint
+      Left = 112
+      Height = 27
+      Hint = 'Longueur pour une avancée.'
+      Top = 7
+      Width = 50
+      MinValue = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      Value = 1
+    end
+    object seBackward: TSpinEdit
+      Cursor = crHandPoint
+      Left = 112
+      Height = 27
+      Hint = 'Longueur pour un recul.'
+      Top = 38
+      Width = 50
+      MaxValue = 0
+      MinValue = -100
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object seLeft: TSpinEdit
+      Cursor = crHandPoint
+      Left = 168
+      Height = 27
+      Hint = 'Angle pour tourner à gauche.'
+      Top = 70
+      Width = 50
+      MaxValue = 90
+      MinValue = -90
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      Value = 1
+    end
+    object seRight: TSpinEdit
+      Cursor = crHandPoint
+      Left = 168
+      Height = 27
+      Hint = 'Angle pour tourner à droite.'
+      Top = 102
+      Width = 50
+      MaxValue = 90
+      MinValue = -90
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      Value = 1
+    end
+    object seLength: TSpinEdit
+      Cursor = crHandPoint
+      Left = 168
+      Height = 27
+      Hint = 'Longueur ou diamètre par défaut.'
+      Top = 134
+      Width = 50
+      MaxValue = 90
+      MinValue = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+      Value = 1
+    end
+  end
+end
