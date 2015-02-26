@@ -14,6 +14,7 @@
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// 26/02/2015 - Ajout des méthodes acceptant des listes pour les formes
 
 // GVAUTOMAT - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR

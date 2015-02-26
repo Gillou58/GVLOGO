@@ -68,6 +68,7 @@
       <Unit4>
         <Filename Value="..\..\units\GVTurtles.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GVTurtles"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\..\units\GVErrConsts.pas"/>

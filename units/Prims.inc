@@ -2569,6 +2569,52 @@ begin
   Message.Cmd := acSetFont; // fixe la fonte du texte
 end;
 
+procedure DoPrimFSquare;
+// *** F.CARRE ***
+begin
+  AData; // donnée attendue
+  fTurtle.Square(fWkRec.fItem);
+end;
+
+procedure DoPrimFCircle;
+// *** F.CERCLE ***
+begin
+  AData; // donnée attendue
+  fTurtle.Circle(fWkRec.fItem);
+end;
+
+procedure DoPrimFEllipse;
+// *** F.ELLIPSE ***
+begin
+  AData; // donnée attendue
+  fTurtle.Ellipse(fWkRec.fItem);
+end;
+
+procedure DoPrimFRect;
+// *** F.RECTANGLE ***
+begin
+  AData; // donnée attendue
+  fTurtle.Rectangle(fWkRec.fItem);
+end;
+
+procedure DoPrimFRoundRect;
+// *** F.RECTANGLE.ARRONDI ***
+begin
+  AData; // donnée attendue
+  fTurtle.RoundRect(fWkRec.fItem);
+end;
+
+procedure DoPrimFill;
+// *** REMPLIS ***
+begin
+  fTurtle.Filled := True;
+end;
+
+procedure DoPrimShow;
+// *** LAISSE.VOIR ***
+begin
+  fTurtle.Filled := False;
+end;
 
 // #################################################### //
 
@@ -2788,5 +2834,12 @@ begin
     258, 259: DoPrimFontSize; // TAILLE.FONTE
     260: DoPrimFont; // FONTE
     261: DoPrimSetFont; // FIXE.FONTE
+    262: DoPrimFSquare; // F.CARRE
+    263: DoPrimFCircle; // F.CERCLE
+    264: DoPrimFEllipse; // F.ELLIPSE
+    265: DoPrimFRect; // F.RECTANGLE
+    266: DoPrimFRoundRect; // F.RECTANGLE.ARRONDI
+    267: DoPrimFill; // REMPLIS
+    268: DoPrimShow; // LAISSE.VOIR
   end;
 end;

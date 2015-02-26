@@ -59,6 +59,9 @@ type
   TTurtleBeforeEvent = procedure(Sender: TObject; cHeading: Integer) of object;
 
   // *** classe de la tortue ***
+
+  { TGVTurtle }
+
   TGVTurtle = class(TObject)
     strict private
       fError: TGVErrors; // gestion des erreurs
@@ -178,22 +181,32 @@ type
       // *** figures prédéfinies ***
       // dessine un rectangle
       procedure Rectangle(X1, Y1, X2, Y2: Integer); overload;
+      // dessine un rectangle à partir d'une liste
+      procedure Rectangle(const St: string); overload;
       // dessine un rectangle à l'emplacement de la tortue
       procedure Rectangle(X2, Y2: Integer); overload;
       // dessine un carré
       procedure Square(X1, Y1, L: Integer); overload;
+      // dessine un carré à partir d'une liste
+      procedure Square(const St: string); overload;
       // dessine un carré à l'emplacement de la tortue
       procedure Square(L: Integer); overload;
       // dessine un rectangle arrondi
       procedure RoundRect(X1, Y1, X2, Y2: Integer); overload;
+      // dessine un rectangle arrondi à partir d'une liste
+      procedure RoundRect(St: string); overload;
       // dessine un rectangle arrondi à l'emplacement de la tortue
       procedure RoundRect(X2, Y2: Integer); overload;
       // dessine une ellipse
       procedure Ellipse(X1, Y1, X2, Y2: Integer); overload;
+      // dessine une ellipse à partir d'une liste
+      procedure Ellipse(const St: string); overload;
       // dessine une ellipse à l'emplacement de la tortue
       procedure Ellipse(X2, Y2: Integer); overload;
       // dessine un cercle
       procedure Circle(X1, Y1, R: Integer); overload;
+      // dessine un cercle à partir d'une liste
+      procedure Circle(const St: string);
       // dessine un cercle à l'emplacement de la tortue
       procedure Circle(R: Integer); overload;
       // dessine un arc d'ellipse
@@ -1025,6 +1038,75 @@ begin
   Change; // on notifie le changement
 end;
 
+procedure TGVTurtle.Rectangle(const St: string);
+// *** dessine un rectangle à partir d'une liste ***
+var
+  LL: TGVList;
+  Li1, Li2, Li3: Double;
+  LW: TGVWord;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+        if LL.Count = 4 then // liste attendue ?
+        begin
+          LW := TGVWord.Create; // mot de travail créé
+          try
+            LW.Text := LL.First; // premier élément
+            if LW.IsNumber then // un nombre ?
+            begin
+              Li1 := LW.AsNumber; // nombre conservé
+              LW.Text := LL[1]; // deuxième élément
+              if LW.IsNumber then // encore un nombre ?
+              begin
+                Li2 := LW.AsNumber; // nombre conservé
+                LW.Text := LL[2]; // troisième élément
+                if LW.IsNumber then // un nombre ?
+                begin
+                  Li3 := LW.AsNumber; // nombre conservé
+                  LW.Text := LL.Last; // dernier élément
+                  if LW.IsNumber then // un nombre ?
+                    Rectangle(Round(Li1), Round(Li2), Round(Li3),
+                      Round(LW.AsNumber))
+                  else
+                    // [### Erreur: mauvais nombre ###]
+                    Error.SetError(CE_BadNumber, LL.Last);
+                end
+                else
+                  // [### Erreur: mauvais nombre ###]
+                  Error.SetError(CE_BadNumber, LL[2]);
+              end
+              else
+                // [### Erreur: mauvais nombre ###]
+                Error.SetError(CE_BadNumber, LL[1]);
+            end
+            else
+              // [### Erreur: mauvais nombre ###]
+              Error.SetError(CE_BadNumber, LL.First);
+          finally
+            LW.Free; // mot de travail libéré
+          end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetPos);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // libération de la liste de travail
+  end;
+end;
+
 procedure TGVTurtle.Rectangle(X2, Y2: Integer);
 // *** rectangle à l'emplacement de la souris ***
 begin
@@ -1037,10 +1119,70 @@ begin
   Rectangle(X1, Y1, X1 + L, Y1 - L);
 end;
 
+procedure TGVTurtle.Square(const St: string);
+// *** carré à partir d'une liste ***
+var
+  LL: TGVList;
+  Li1, Li2: Double;
+  LW: TGVWord;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+        if LL.Count = 3 then // liste attendue ?
+        begin
+          LW := TGVWord.Create; // mot de travail créé
+          try
+            LW.Text := LL.First; // premier élément
+            if LW.IsNumber then // un nombre ?
+            begin
+              Li1 := LW.AsNumber; // nombre conservé
+              LW.Text := LL[1]; // deuxième élément
+              if LW.IsNumber then // encore un nombre ?
+              begin
+                Li2 := LW.AsNumber; // nombre conservé
+                LW.Text := LL.Last; // dernier élément
+                if LW.IsNumber then // un nombre ?
+                  Square(Round(Li1), Round(Li2), Round(LW.AsNumber))
+                else
+                  // [### Erreur: mauvais nombre ###]
+                  Error.SetError(CE_BadNumber, LL.Last);
+              end
+              else
+                // [### Erreur: mauvais nombre ###]
+                Error.SetError(CE_BadNumber, LL[1]);
+            end
+            else
+              // [### Erreur: mauvais nombre ###]
+              Error.SetError(CE_BadNumber, LL.First);
+          finally
+            LW.Free; // mot de travail libéré
+          end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetPos);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // libération de la liste de travail
+  end;
+end;
+
 procedure TGVTurtle.Square(L: Integer);
 // *** carré à l'emplacement de la tortue ***
 begin
-  Rectangle(Round(CoordX), Round(CoordY), Round(CoordX) + L, Round(CoordY) - L);
+  Square(Round(CoordX), Round(CoordY), L);
 end;
 
 procedure TGVTurtle.RoundRect(X1, Y1, X2, Y2: Integer);
@@ -1053,6 +1195,75 @@ begin
     fDrwImg.RoundRectAntialias(X1, cY(Y1), X2, cY(Y2), 15, 15,
       ColorToBGRA(ColorToRGB(PenColor)), PenWidth);
   Change; // on notifie le changement
+end;
+
+procedure TGVTurtle.RoundRect(St: string);
+// *** dessine un rectangle arrondi à partir d'une liste ***
+var
+  LL: TGVList;
+  Li1, Li2, Li3: Double;
+  LW: TGVWord;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+        if LL.Count = 4 then // liste attendue ?
+        begin
+          LW := TGVWord.Create; // mot de travail créé
+          try
+            LW.Text := LL.First; // premier élément
+            if LW.IsNumber then // un nombre ?
+            begin
+              Li1 := LW.AsNumber; // nombre conservé
+              LW.Text := LL[1]; // deuxième élément
+              if LW.IsNumber then // encore un nombre ?
+              begin
+                Li2 := LW.AsNumber; // nombre conservé
+                LW.Text := LL[2]; // troisième élément
+                if LW.IsNumber then // un nombre ?
+                begin
+                  Li3 := LW.AsNumber; // nombre conservé
+                  LW.Text := LL.Last; // dernier élément
+                  if LW.IsNumber then // un nombre ?
+                    RoundRect(Round(Li1), Round(Li2), Round(Li3),
+                      Round(LW.AsNumber))
+                  else
+                    // [### Erreur: mauvais nombre ###]
+                    Error.SetError(CE_BadNumber, LL.Last);
+                end
+                else
+                  // [### Erreur: mauvais nombre ###]
+                  Error.SetError(CE_BadNumber, LL[2]);
+              end
+              else
+                // [### Erreur: mauvais nombre ###]
+                Error.SetError(CE_BadNumber, LL[1]);
+            end
+            else
+              // [### Erreur: mauvais nombre ###]
+              Error.SetError(CE_BadNumber, LL.First);
+          finally
+            LW.Free; // mot de travail libéré
+          end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetPos);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // libération de la liste de travail
+  end;
 end;
 
 procedure TGVTurtle.RoundRect(X2, Y2: Integer);
@@ -1073,6 +1284,75 @@ begin
   Change; // on notifie le changement
 end;
 
+procedure TGVTurtle.Ellipse(const St: string);
+// *** dessine une ellipse à partir d'une liste ***
+var
+  LL: TGVList;
+  Li1, Li2, Li3: Double;
+  LW: TGVWord;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+        if LL.Count = 4 then // liste attendue ?
+        begin
+          LW := TGVWord.Create; // mot de travail créé
+          try
+            LW.Text := LL.First; // premier élément
+            if LW.IsNumber then // un nombre ?
+            begin
+              Li1 := LW.AsNumber; // nombre conservé
+              LW.Text := LL[1]; // deuxième élément
+              if LW.IsNumber then // encore un nombre ?
+              begin
+                Li2 := LW.AsNumber; // nombre conservé
+                LW.Text := LL[2]; // troisième élément
+                if LW.IsNumber then // un nombre ?
+                begin
+                  Li3 := LW.AsNumber; // nombre conservé
+                  LW.Text := LL.Last; // dernier élément
+                  if LW.IsNumber then // un nombre ?
+                    Ellipse(Round(Li1), Round(Li2), Round(Li3),
+                      Round(LW.AsNumber))
+                  else
+                    // [### Erreur: mauvais nombre ###]
+                    Error.SetError(CE_BadNumber, LL.Last);
+                end
+                else
+                  // [### Erreur: mauvais nombre ###]
+                  Error.SetError(CE_BadNumber, LL[2]);
+              end
+              else
+                // [### Erreur: mauvais nombre ###]
+                Error.SetError(CE_BadNumber, LL[1]);
+            end
+            else
+              // [### Erreur: mauvais nombre ###]
+              Error.SetError(CE_BadNumber, LL.First);
+          finally
+            LW.Free; // mot de travail libéré
+          end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetPos);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // libération de la liste de travail
+  end;
+end;
+
 procedure TGVTurtle.Ellipse(X2, Y2: Integer);
 // *** dessine une ellipse à l'emplacement de la tortue ***
 begin
@@ -1083,6 +1363,65 @@ procedure TGVTurtle.Circle(X1, Y1, R: Integer);
 // *** dessine un cercle ***
 begin
   Ellipse(X1, Y1, R, R);
+end;
+
+procedure TGVTurtle.Circle(const St: string);
+var
+  LL: TGVList;
+  Li1, Li2: Double;
+  LW: TGVWord;
+begin
+  LL := TGVList.Create; // création de la liste de travail
+  try
+    LL.Text := St; // chaîne analysée
+    if LL.IsValid then // est-ce une liste valide ?
+    begin
+      if not LL.IsEmptyList then // liste vide ?
+      begin
+        if LL.Count = 3 then // liste attendue ?
+        begin
+          LW := TGVWord.Create; // mot de travail créé
+          try
+            LW.Text := LL.First; // premier élément
+            if LW.IsNumber then // un nombre ?
+            begin
+              Li1 := LW.AsNumber; // nombre conservé
+              LW.Text := LL[1]; // deuxième élément
+              if LW.IsNumber then // encore un nombre ?
+              begin
+                Li2 := LW.AsNumber; // nombre conservé
+                LW.Text := LL.Last; // dernier élément
+                if LW.IsNumber then // un nombre ?
+                  Circle(Round(Li1), Round(Li2), Round(LW.AsNumber))
+                else
+                  // [### Erreur: mauvais nombre ###]
+                  Error.SetError(CE_BadNumber, LL.Last);
+              end
+              else
+                // [### Erreur: mauvais nombre ###]
+                Error.SetError(CE_BadNumber, LL[1]);
+            end
+            else
+              // [### Erreur: mauvais nombre ###]
+              Error.SetError(CE_BadNumber, LL.First);
+          finally
+            LW.Free; // mot de travail libéré
+          end;
+        end
+        else
+          // [### Erreur: liste inadaptée ###]
+          Error.SetError(CE_ListBadLength, St);
+      end
+      else
+        // [### Erreur: liste vide ###]
+        Error.SetError(CE_EmptyList, P_SetPos);
+    end
+    else
+      // [### Erreur: pas une liste ###]
+      Error.SetError(CE_UnknownList, St);
+  finally
+    LL.Free; // libération de la liste de travail
+  end;
 end;
 
 procedure TGVTurtle.Circle(R: Integer);

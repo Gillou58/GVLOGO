@@ -14,6 +14,7 @@
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// 26/02/2015 - 1.0.1 - ajout des primitives des formes de la tortue
 
 // GVPRIMCONSTS - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -50,7 +51,7 @@ const
   // *** longueur maximale du nom d'une primitive ***
   CMaxLengthPrim = 127;
   // *** nombre de primitives ***
-  CPrimCount = 261;
+  CPrimCount = 268;
 
  type
   // *** enregistrement d'une primitive ***
@@ -70,7 +71,9 @@ resourcestring
     'DER DERNIER DETERRE DIFF DIFFERENCE DISTANCE DIV DONNE DPROP DROITE ' +
     'EC ECHELLE ECRIS ECRIST EDITE.PAQUET EDITE.PROC EDITE.TOUT EGAL? ' +
     'ELEMENT ELEMENTS.PAQUET ENROULE ENT ENTERRE ENTERRE? ENTIER ET ' +
-    'ETAT.CRAYON ETAT.ECRAN ETAT.TORTUE EXEC EXECUTE EXP FAUX FCAP FCC FCF ' +
+    'ETAT.CRAYON ETAT.ECRAN ETAT.TORTUE EXEC EXECUTE EXP ' +
+    'F.CARRE F.CERCLE F.ELLIPSE F.RECTANGLE F.RECTANGLE.ARRONDI ' +
+    'FAUX FCAP FCC FCF ' +
     'FCFT FCT FEC FEN FENETRE FIN FIXE.CAP FIXE.COULEUR.CRAYON ' +
     'FIXE.COULEUR.FOND FIXE.COULEUR.FOND.TEXTE FIXE.COULEUR.TEXTE ' +
     'FIXE.CRAYON FIXE.ECHELLE FIXE.ECHELLEX FIXE.ECHELLEY FIXE.ECRAN ' +
@@ -78,7 +81,7 @@ resourcestring
     'FIXE.TAILLE.CRAYON FIXE.TAILLE.FONTE FIXE.TORTUE FIXE.VITESSE ' +
     'FIXE.XY FIXEX FIXEY FONTE FPOS FRAC FTF FX FXY FY GAUCHE GOMME GRAS ' +
     'GVLOGO HASARD HYPOTHENUSE IDENTIFICATEUR? INSERE INVERSE INVERSE.CRAYON ' +
-    'ITALIQUE ITEM LC LEVE.CRAYON LIS.CAR LIS.LISTE LISTE LISTE.PROP? ' +
+    'ITALIQUE ITEM LAISSE.VOIR LC LEVE.CRAYON LIS.CAR LIS.LISTE LISTE LISTE.PROP? ' +
     'LISTE.VERS.PAQUET LISTE? LL LN LOCALE LOCALES LOG LOG2 MAJUSCULES MAX ' +
     'MAXIMUM MD MELANGE MEMBRE? METS.DERNIER METS.PREMIER MIN MINIMUM ' +
     'MINUSCULES MOD MONTRE.TORTUE MOT MOT? MP MT MUL NB.PARAMS.PROC ' +
@@ -86,7 +89,7 @@ resourcestring
     'OU PAQUET PAQUET.VERS.LISTE PARAMS.PROC PH PHRASE PHRASE.FIN PI PLG? ' +
     'PLISTE PLP? POS POSITIF? POUR PRECEDENT PREM PREMIER PREMS PRIMITIVE? ' +
     'PRIMITIVES PROCEDURE? PROCEDURES PRODUIT PROP? PROPS PROTEGE? PUISSANCE ' +
-    'QUOTIENT RAC RACINE RE RECULE REMPLACE RENDS REPETE ROTATION RPROP ' +
+    'QUOTIENT RAC RACINE RE RECULE REMPLACE REMPLIS RENDS REPETE ROTATION RPROP ' +
     'SAUF.DERNIER SAUF.PREMIER SAUF.PREMS SAUVE SAUVE.PAQUET SAUVE.PROCS ' +
     'SAUVE.VARS SD SI SI.FAUX SI.VRAI SIGNE SIN SINON SINUS SOMME ' +
     'SORTIE.TORTUE SOULIGNE SP STOP SUIVANT SUPPRIME SUPPRIME.PAQUET TAILLE ' +
@@ -340,7 +343,7 @@ resourcestring
   P_SetScreen = 'FIXE.ECRAN';
   P_GetTurtle = 'VALEUR.TORTUE';
   P_GetScreen = 'VALEUR.ECRAN';
-  P_SetPen = 'FIXE.CRAYON';
+  P_SetPen = 'FIXE.CRAYON'; // 240
   P_GetPen = 'VALEUR.CRAYON';
   P_Confirm = 'CONFIRME';
   P_ProcToEdit2 = 'ED';
@@ -350,7 +353,7 @@ resourcestring
   P_Underline = 'SOULIGNE';
   P_Italic = 'ITALIQUE';
   P_TextColor = 'COULEUR.TEXTE';
-  P_SetTextColor = 'FIXE.COULEUR.TEXTE';
+  P_SetTextColor = 'FIXE.COULEUR.TEXTE'; // 250
   P_SetTextColor2 = 'FCT';
   P_BackTextColor = 'COULEUR.FOND.TEXTE';
   P_SetBackTextColor = 'FIXE.COULEUR.FOND.TEXTE';
@@ -360,8 +363,15 @@ resourcestring
   P_SetFontSize2 = 'FTF';
   P_FontSize = 'TAILLE.FONTE';
   P_FontSize2 = 'TF';
-  P_Font = 'FONTE';
+  P_Font = 'FONTE';  // 260
   P_SetFont = 'FIXE.FONTE';
+  P_FSquare = 'F.CARRE';
+  P_FCircle = 'F.CERCLE';
+  P_FEllipse = 'F.ELLIPSE';
+  P_FRect = 'F.RECTANGLE';
+  P_FRoundRect = 'F.RECTANGLE.ARRONDI';
+  P_Fill = 'REMPLIS';
+  P_Show = 'LAISSE.VOIR';
 
 const
   // tableau du nom des fonctions supportées par l'évaluation
@@ -637,7 +647,14 @@ const
     (Name: P_FontSize; NbParams: 0),
     (Name: P_FontSize2; NbParams: 0),
     (Name: P_Font; NbParams: 0),  // 260
-    (Name: P_SetFont; NbParams: 1))
+    (Name: P_SetFont; NbParams: 1),
+    (Name: P_FSquare; NbParams: 1),
+    (Name: P_FCircle; NbParams: 1),
+    (Name: P_FEllipse; NbParams: 1),
+    (Name: P_FRect; NbParams: 1),
+    (Name: P_FRoundRect; NbParams: 1),
+    (Name: P_Fill; NbParams: 0),
+    (Name: P_Show; NbParams: 0))
     ;
 
 implementation
