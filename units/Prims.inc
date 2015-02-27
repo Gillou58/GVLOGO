@@ -1884,6 +1884,18 @@ begin
   PushConst(IntToStr(fTurtle.LocalScreenColor));
 end;
 
+procedure DoPrimDate;
+// *** DATE ***
+begin
+  PushConst(CBeginList + FormatDateTime('DD MM YYYY', Now) + CEndList);
+end;
+
+procedure DoPrimTime;
+// *** HEURE ***
+begin
+  PushConst(CBeginList + FormatDateTime('hh:nn', Now) + CEndList);
+end;
+
 procedure DoPrimDistance;
 // *** DISTANCE ***
 var
@@ -2841,5 +2853,7 @@ begin
     266: DoPrimFRoundRect; // F.RECTANGLE.ARRONDI
     267: DoPrimFill; // REMPLIS
     268: DoPrimShow; // LAISSE.VOIR
+    269: DoPrimDate; // DATE
+    270: DoPrimTime; // HEURE
   end;
 end;
