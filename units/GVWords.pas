@@ -14,6 +14,8 @@
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// 27/02/2015 - 1.0.1 - refonte BOOLEENS -> tranfert dans TGVNumber
+//                    - acceptation de VRAI et FAUX comme valeurs booléennes
 
 // GVWORDS - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -89,6 +91,7 @@ type
     fNum: Double; // nombre de travail
     fSt: string; // chaîne brute d'entrée
     fValid: Boolean; // drapeau de validité
+    function GetBoolean: Boolean;
     function GetInt: Integer; // renvoie un entier
     function GetDouble: Double; // renvoie un réel
     function GetStr: string; // acquiert une chaîne à convertir en nombre
@@ -100,10 +103,12 @@ type
     function IsValid: Boolean; // est-ce un nombre ?
     function IsInt: Boolean; // est-ce un entier ?
     function IsZero: Boolean; // nombre 0 ?
+    function IsBoolean: Boolean; // booléen ?
     function IsNegate: Boolean; // nombre négatif ?
     property Text: string read GetStr write SetStr; // une chaîne de nombre
     property AsDouble: Double read GetDouble; // un réel
     property AsInt: Integer read GetInt; // un entier
+    property AsBoolean: Boolean read GetBoolean; // un booléen
     // notification d'une erreur
     property Error: TGVErrors read fError write fError;
   end;
@@ -436,8 +441,9 @@ end;
 function TGVWord.IsBoolean: Boolean;
 // *** est-ce un booléen ? ***
 begin
-  // entier = -1 ou 0 ?
-  Result := IsInt and ((StrToInt(Text) = CRTrue) or (StrToInt(Text) = CRFalse));
+  // entier = -1 ou 0, VRAI ou FAUX ?
+  fNum.Text := Text; // on tente de convertir
+  Result := fNum.IsValid and fNum.IsBoolean; // résultat de conversion
 end;
 
 function TGVWord.AsNumber: Double;
@@ -467,7 +473,7 @@ function TGVWord.AsBoolean: Boolean;
 begin
   Result := False;
   if IsBoolean then // un booléen
-    Result := (StrToInt(Text) = CRTrue)
+    Result := fNum.AsBoolean
   else
     // [### Erreur: pas un booléen ###]
     Error.SetError(CE_BadBool, Text);
@@ -669,9 +675,27 @@ end;
 function TGVNumber.GetInt: Integer;
 // *** renvoie un entier si possible ***
 begin
+  if IsBoolean then // un booléen ?
+  begin
+    if AsBoolean then
+      Result := CRTrue // on renvoie sa valeur sous forme d'entier
+    else
+      Result := CRFalse;
+  end
+  else
   if not TryStrToInt(fSt, Result) then // transformation en entier possible ?
     // [### Erreur: pas un entier ###]
     Error.SetError(CE_BadInt, fSt);
+end;
+
+function TGVNumber.GetBoolean: Boolean;
+// *** renvoie un booléen si possible ***
+begin
+  if IsBoolean then
+    Result := (fNum = CRTrue) // vrai si valeur VRAI
+  else
+    // [### Erreur: pas un booléen ###]
+    Error.SetError(CE_BadBool, fSt);
 end;
 
 function TGVNumber.GetDouble: Double;
@@ -698,7 +722,19 @@ procedure TGVNumber.SetStr(const St: string);
 // *** forme un nombre si possible ***
 begin
   fSt := St; // chaîne brute affectée
-  fValid := TryStrToFloat(St, fNum); // transformation possible ?
+  if AnsiSameText(Trim(St), MF_True) then // primitive VRAI ?
+  begin
+    fNum := CRTrue; // valeur interne de VRAI
+    fValid := True;
+  end
+  else
+  if AnsiSameText(Trim(St), MF_False) then // primitive FALSE ?
+  begin
+    fNum := CRFalse; // valeur interne de FAUX
+    fValid := True;
+  end
+  else
+    fValid := TryStrToFloat(St, fNum); // transformation possible ?
 end;
 
 constructor TGVNumber.Create;
@@ -736,7 +772,7 @@ var
   Li: Integer;
 begin
   if IsValid then // nombre valide ?
-    Result := TryStrToInt(fSt, Li) // essai de conversion
+    Result := TryStrToInt(fSt, Li) or IsBoolean // essai de conversion
   else
     // [### Erreur: pas un nombre ###]
     Error.SetError(CE_BadNumber, fSt);
@@ -747,6 +783,16 @@ function TGVNumber.IsZero: Boolean;
 begin
   if IsValid then // nombre valide ?
     Result := Math.IsZero(fNum) // vaut 0 ?
+  else
+    // [### Erreur: pas un nombre ###]
+    Error.SetError(CE_BadNumber, fSt); // erreur signalée
+end;
+
+function TGVNumber.IsBoolean: Boolean;
+// *** valeur booléenne ? ***
+begin
+  if IsValid then // nombre valide ?
+    Result := (fNum = CRTrue) or (fNum = CRFalse)
   else
     // [### Erreur: pas un nombre ###]
     Error.SetError(CE_BadNumber, fSt); // erreur signalée

@@ -51,8 +51,7 @@ const
   P_False = 'faux';
 
 type
-  { TGVMainForm }
-
+  // *** TGVMainForm ***
   TGVMainForm = class(TForm)
     btnClear: TBitBtn;
     btnExit: TBitBtn;
@@ -92,6 +91,7 @@ type
     btnDelItem: TButton;
     btnAsNumber: TButton;
     btnAsInt: TButton;
+    btnAsBoolean: TButton;
     GBEdit: TGroupBox;
     GBOneWord: TGroupBox;
     GBTwoWords: TGroupBox;
@@ -106,6 +106,7 @@ type
     sedtInsert: TSpinEdit;
     sbMain: TStatusBar;
     sedtDelItem: TSpinEdit;
+    procedure btnAsBooleanClick(Sender: TObject);
     procedure btnAsIntClick(Sender: TObject);
     procedure btnAsNumberClick(Sender: TObject);
     procedure btnClearClick(Sender: TObject);
@@ -318,6 +319,17 @@ begin
   Li := fWord.AsInt;
   if fWord.Error.Ok then
     lblResult.Caption := IntToStr(Li);
+end;
+
+procedure TGVMainForm.btnAsBooleanClick(Sender: TObject);
+// test de ASBOOLEAN
+var
+  LB: Boolean;
+begin
+  fWord.Text := LabEdtFirst.Text;
+  LB := fWord.AsBoolean;
+  if fWord.Error.Ok then
+    lblResult.Caption := IfThen(LB, P_True, P_False);
 end;
 
 procedure TGVMainForm.btnButLastClick(Sender: TObject);

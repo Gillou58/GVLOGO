@@ -14,6 +14,11 @@
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// 27/02/2015 - 1.0.1
+// * nouvelles primitives : F.CARRE F.RECTANGLE F.ELLIPSE F.CERCLE
+//   F.RECTANGLE.ARRONDI REMPLIS LAISSE.VOIR
+// * acceptation des mots VRAI et FAUX dans les listes attendant des
+//   valeurs booléennes : FIXE.ETAT.TORTUE [100 100 90 8 100 VRAI FAUX]
 
 // TESTGVHIGHLIGHTER - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR

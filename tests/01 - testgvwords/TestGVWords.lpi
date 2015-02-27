@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="40"/>
+      <BuildNr Value="41"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Test de l'unité GVWords" LegalCopyright="Gilles Vasseur 2014" LegalTrademarks="GNU GPL" OriginalFilename="TESTGVWORDS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -62,6 +62,7 @@
       <Unit4>
         <Filename Value="..\..\units\GVWords.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GVWords"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\..\units\GVErrors.pas"/>

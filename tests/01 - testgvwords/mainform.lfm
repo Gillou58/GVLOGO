@@ -12,14 +12,14 @@ object GVMainForm: TGVMainForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poScreenCenter
-  LCLVersion = '1.2.6.0'
+  LCLVersion = '1.4.0.1'
   object GBEdit: TGroupBox
     Left = 18
     Height = 105
     Top = 8
     Width = 535
     Caption = 'Saisie '
-    ClientHeight = 87
+    ClientHeight = 85
     ClientWidth = 531
     ParentFont = False
     TabOrder = 0
@@ -98,7 +98,7 @@ object GVMainForm: TGVMainForm
     Top = 128
     Width = 536
     Caption = 'Un mot '
-    ClientHeight = 238
+    ClientHeight = 236
     ClientWidth = 532
     TabOrder = 1
     object btnFirst: TButton
@@ -441,6 +441,19 @@ object GVMainForm: TGVMainForm
       ShowHint = True
       TabOrder = 25
     end
+    object btnAsBoolean: TButton
+      Cursor = crHandPoint
+      Left = 288
+      Height = 25
+      Hint = 'Renvoie un booléen'
+      Top = 200
+      Width = 104
+      Caption = 'AsBoolean'
+      OnClick = btnAsBooleanClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 26
+    end
   end
   object GBTwoWords: TGroupBox
     Left = 19
@@ -448,7 +461,7 @@ object GVMainForm: TGVMainForm
     Top = 408
     Width = 536
     Caption = 'Deux mots '
-    ClientHeight = 110
+    ClientHeight = 108
     ClientWidth = 532
     TabOrder = 2
     object btnEqualP: TButton
@@ -616,7 +629,7 @@ object GVMainForm: TGVMainForm
     Top = 544
     Width = 537
     Caption = 'Divers '
-    ClientHeight = 38
+    ClientHeight = 36
     ClientWidth = 533
     TabOrder = 3
     object btnIsValid: TButton
@@ -682,7 +695,7 @@ object GVMainForm: TGVMainForm
     Top = 8
     Width = 448
     Caption = 'Erreurs '
-    ClientHeight = 543
+    ClientHeight = 541
     ClientWidth = 444
     TabOrder = 4
     object mmoErrors: TMemo
