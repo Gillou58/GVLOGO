@@ -7,13 +7,14 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR 2014-2015                    |
-  |                  Date:    23-12-2014 18:00:00                          |
-  |                  Version : 1.0.0                                       |
+  |                  Date:    01-03-2015 18:00:00                          |
+  |                  Version : 1.0.1                                       |
   |                                                                        |
   |========================================================================| }
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// 01/03/2015 - 1.0.1 - correction interprétation (traitement des erreurs)
 
 // FRMEDITOR - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -163,13 +164,14 @@ begin
     // gestionnaire d'erreur en place
     LL.Error.OnError := @MainForm.GetError;
     Li := -1; // avant la première ligne
+    LB := True; // suppose aucune erreur  ### 1.0.1
+    MainForm.Automat.Error.Ok := True; // efface une erreur en suspens ### 1.0.1
     // on balaie les lignes de l'éditeur tant qu'il n'y a pas d'erreur
     while LB and (Li <= SynEditEditor.Lines.Count) and
-      (MainForm.Automat.Error.Ok) do
+      MainForm.Automat.Error.Ok do
     begin
-      LB := True; // drapeau OK
       LInProc := False; // pas dans une procédure
-      if (not ValidLine) then // test de la validité de la ligne
+      if not ValidLine then // test de la validité de la ligne
         Break; // on arrête en cas d'erreur
       // *** ligne vide ou premier élément commentaire ? ***
       if LL.IsEmptyList or (LL.First = CComment) then

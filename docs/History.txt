@@ -1,11 +1,15 @@
 GVLOGO Vasseur Gilles 2014-2015
 _______________________________
 
-27/02/2015 - 1.0.1 
-* nouvelles primitives (formes dessinÈes par la tortue) : F.CARRE F.RECTANGLE F.ELLIPSE F.CERCLE F.RECTANGLE.ARRONDI REMPLIS LAISSE.VOIR
-* TGVNUMBER et TGVWORD : traitement des boolÈens dans la classe TGVNumber (cohÈrence) et acceptation des primitives VRAI et FAUX comme paramËtres
-* acceptation des mots VRAI et FAUX dans les listes attendant des valeurs boolÈennes : FIXE.ETAT.TORTUE [100 100 90 8 100 VRAI FAUX]
-* nouvelles primitives pour les dates : DATE HEURE
-* menues corrections dans GVPrimDefs.txt
+01/03/2015 - 1.0.2
+* correction de l'interpr√©tation de l'√©diteur : les erreurs pendantes n'√©taient pas nettoy√©es
 ------------------------------------------
-23/12/2014 - 1.0.0 PremiËre version fonctionnelle
+27/02/2015 - 1.0.1 
+* nouvelles primitives (formes dessin√©es par la tortue) : F.CARRE F.RECTANGLE F.ELLIPSE F.CERCLE F.RECTANGLE.ARRONDI REMPLIS LAISSE.VOIR
+* TGVNUMBER et TGVWORD : traitement des bool√©ens dans la classe TGVNumber (coh√©rence) et acceptation des primitives VRAI et FAUX comme param√®tres
+* acceptation des mots VRAI et FAUX dans les listes attendant des valeurs bool√©ennes, par exemple :
+FIXE.ETAT.TORTUE [100 100 90 8 100 VRAI FAUX]
+* nouvelles primitives pour les dates : DATE HEURE
+* menues corrections dans GVPrimDefs.txt (aide pour les primitives)
+------------------------------------------
+23/12/2014 - 1.0.0 Premi√®re version fonctionnelle

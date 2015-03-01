@@ -7,13 +7,14 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR 2014-2015                    |
-  |                  Date:    23-12-2014 18:00:00                          |
-  |                  Version : 1.0.0                                       |
+  |                  Date:    01/03/2015 18:00:00                          |
+  |                  Version : 1.0.2                                       |
   |                                                                        |
   |========================================================================| }
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// voir le fichier HISTORY.TXT dans le dossier DOCS
 
 // MAIN - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
