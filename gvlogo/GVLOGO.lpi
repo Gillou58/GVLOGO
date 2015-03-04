@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="215"/>
+      <BuildNr Value="216"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="langage GVLOGO" InternalName="GVLOGO" LegalCopyright="Gilles Vasseur 2014-2015" LegalTrademarks="GNU GPL" OriginalFilename="GVLOGO.PAS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -82,6 +82,7 @@
       <Unit4>
         <Filename Value="..\units\GVConsts.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GVConsts"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\units\GVDefines.inc"/>
@@ -301,6 +302,7 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dPROFILE"/>
+      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>
