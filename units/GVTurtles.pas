@@ -7,13 +7,14 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR 2014-2015                    |
-  |                  Date:    23-12-2014 18:00:00                          |
-  |                  Version : 1.0.0                                       |
+  |                  Date:    04-03-2015 18:00:00                          |
+  |                  Version : 1.0.1                                       |
   |                                                                        |
   |========================================================================| }
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// 04/03/2015 - 1.0.1 - accélération du traitement de la tortue triangulaire
 
 // GVTurtles - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -514,23 +515,23 @@ end;
 procedure TGVTurtle.DoGo(X, Y: Double);
 // *** effectue un déplacement de la tortue ***
 begin
-    // si champ clos et hors limites => erreur
-    if (Screen <> teGate) or IsWithinLimits(X, Y) then
-    begin
-      fX := X; // nouvelle abscisse
-      fY := Y; // nouvelle ordonnée
-      // ralentit le dessin
-      Sleep(CMaxSpeed - Speed);
-      // dessine
-      if PenDown then  // crayon baissé ?
-        LineTo(X, Y) // en écrivant
-      else
-        MoveTo(X, Y); // sans écrire
-      Change; // changement notifié
-    end;
-    // on continue si l'écran s'enroule
-    if (Screen = teRoll) and not IsWithinLimits(X,Y) then
-    begin
+  // si champ clos et hors limites => erreur
+  if (Screen <> teGate) or IsWithinLimits(X, Y) then
+  begin
+    fX := X; // nouvelle abscisse
+    fY := Y; // nouvelle ordonnée
+    // ralentit le dessin
+    Sleep(CMaxSpeed - Speed);
+    // dessine
+    if PenDown then  // crayon baissé ?
+      LineTo(X, Y) // en écrivant
+    else
+      MoveTo(X, Y); // sans écrire
+    Change; // changement notifié
+  end;
+  // on continue si l'écran s'enroule
+  if (Screen = teRoll) and not IsWithinLimits(X,Y) then
+  begin
     // mise à jour des coordonnées après enroulement
     // débordement à droite ?
     if (X > fWidth) then
@@ -708,7 +709,7 @@ procedure TGVTurtle.BeforeChange;
 // *** gestion avant le changement ***
 // (permet de mettre à jour une image pour la tortue avant de la dessiner)
 begin
-  if (Kind <> tkTriangle) and Assigned(fOnBeforeChange) then  // si le gestionnaire existe
+  if (Kind <> tkTriangle) and Assigned(fOnBeforeChange) then  // si le gestionnaire existe # 1.0.1
     fOnBeforeChange(Self, Round(Heading)); // on l'exécute
 end;
 
