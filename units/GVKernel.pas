@@ -8,12 +8,13 @@
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
   |                  Date:    23-12-2014 18:00:00                          |
-  |                  Version : 1.0.0                                       |
+  |                  Version : 1.0.2                                       |
   |                                                                        |
   |========================================================================| }
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// 03/03/2015 - 1.0.2 - modifications concernant les primitives
 
 // GVKERNEL - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -62,6 +63,8 @@ type
   // *** TGVKernel ***
   TGVLogoKernel = class(TObject)
   strict private
+    fPrims: TStringList; // liste des primitives # 1.0.2
+    fPrimNum: Integer; // numéro de la dernière primitive testée # 1.0.2
     fError: TGVErrors; // enregistrement d'une erreur
     fErrPos: Integer; // position de l'erreur
     fProtected: Boolean; // drapeau de protection
@@ -207,10 +210,6 @@ type
     function NumParamsPrim(const Name: string): Integer;
     // liste des primitives
     function PrimsToList: string;
-    // primitive par numéro
-    function PrimByNum(const N: Integer): string; overload;
-    function PrimByNum(const N: Integer; out PrimBNum: string)
-      : Boolean; overload;
     // *** traitement des paquets ***
     // l'objet est-il un paquet ?
     function IsPck(const Name: string): Boolean;
@@ -723,11 +722,20 @@ end;
 
 constructor TGVLogoKernel.Create;
 // *** création ***
+var
+  Li: Integer; // # 1.0.2
 begin
   inherited Create; // on hérite
   fWorkZone := TGVPropList.Create; // on crée la liste de travail
   fTempList := TGVListUtils.Create; // liste temporaire de travail
   fError := TGVErrors.Create; // gestion des erreurs
+  fPrims := TStringList.Create; // création des primitives # 1.0.2
+  // construction de la liste des primitives # 1.0.2
+  for Li := 0 to CPrimCount - 1 do
+    with GVPrimName[Li] do
+      // nom, object = clé d'accès * 10 + nombre de paramètres # 1.0.2
+      fPrims.AddObject(Name, TObject(Key * 10 + NbParams));
+  fPrims.Sorted := True; // tri pour accès rapide # 1.0.2
   fProtected := False; // pas de protection par défaut
   OnChange := nil; // gestionnaire de changement inactif
   Clear; // on nettoie
@@ -740,6 +748,7 @@ begin
   fWorkZone.Free; // on libère la zone de travail
   fTempList.Free; // libération de la liste de travail
   Error.Free; // on libère le gestionnaire des erreurs
+  fPrims.Free; // libération des primitives # 1.0.2
   inherited Destroy; // on hérite
 end;
 
@@ -1557,9 +1566,10 @@ begin
 end;
 
 function TGVLogoKernel.IsPrim(const Name: string): Boolean;
-// *** primitive ? ***
+// *** primitive ? *** // # 1.0.2
 begin
-  Result := (NumPrim(Name) <> -1);
+  // le numéro trouvé est dans fPrimNum
+  Result := fPrims.Find(Name, fPrimNum) and (Name <> EmptyStr);
 end;
 
 function TGVLogoKernel.PrimsCount: Integer;
@@ -1569,58 +1579,39 @@ begin
 end;
 
 function TGVLogoKernel.NumPrim(const Name: string): Integer;
-// *** numéro de primitive ***
-var
-  Li: Integer;
+// *** numéro de primitive *** // # 1.0.2
 begin
-  Result := -1; // mauvais nombre
-  for Li := 1 to CPrimCount do // on balaie le tableau
-  begin
-    if AnsiSameText(GVPrimName[Li].Name, Name) then // trouvée ?
-    begin
-      Result := Li; // on stocke le résultat
-      Break; // on sort de la boucle
-    end;
-  end;
+  // on cherche la primitive
+  if IsPrim(Name) then
+    // on renvoie son numéro associé (dans Objects)
+    Result := (Integer(fPrims.Objects[fPrimNum]) div 10);
 end;
 
 function TGVLogoKernel.NumParamsPrim(const Name: string): Integer;
-// *** nombre de paramètres de la primitive ***
+// *** nombre de paramètres de la primitive *** // # 1.0.2
 begin
-  Result := NumPrim(Name); // on cherche la primitive
-  if (Result <> -1) then // trouvée ?
-    Result := GVPrimName[Result].NbParams; // on renvoie le nombre de paramètres
+  // on cherche la primitive
+  if IsPrim(Name) then
+    // on renvoie le nombre de paramètres
+    Result := (Integer(fPrims.Objects[fPrimNum]) mod 10)
+  else
+    // [### Erreur: primitive inconnue ###]
+    Error.SetError(CE_UnKnownPrim, Name);
 end;
 
 function TGVLogoKernel.PrimsToList: string;
-// *** liste des primitives ***
+// *** liste des primitives ***  // # 1.0.2
+var
+  Li: Integer;
 begin
-  Result := CBeginList + CPrimsAll + CEndList;
-end;
-
-function TGVLogoKernel.PrimByNum(const N: Integer): string;
-// *** primitive par son numéro ***
-begin
-  if (N > 0) and (N <= CPrimCount) then // dans les bornes ?
-    Result := GVPrimName[N].Name // recherche du nom de la primitive
-  else
-    // [### Erreur: primitive inconnue ###]
-    Error.SetError(CE_UnKnownPrim, IntToStr(N)); // non !
-end;
-
-function TGVLogoKernel.PrimByNum(const N: Integer; out PrimBNum: string
-  ): Boolean;
-// *** primitive par son numéro ***
-begin
-  Result := False; // suppose une erreur
-  if (N > 0) and (N <= CPrimCount) then // dans les bornes ?
-  begin
-    PrimBNum := GVPrimName[N].Name; // recherche du nom de la primitive
-    Result := True;
-  end
-  else
-    // [### Erreur: primitive inconnue ###]
-    Error.SetError(CE_UnKnownPrim, IntToStr(N)) // non !
+  Result := CBeginList; // début de liste
+  try
+    // on balaie la liste de chaînes pour bâtir la liste
+    for Li := 0 to CPrimCount - 1 do
+      Result := Result + fPrims[Li] + CBlank
+  finally
+    Result := TrimRight(Result) + CEndList; // on ferme la liste
+  end;
 end;
 
 function TGVLogoKernel.IsPck(const Name: string): Boolean;

@@ -59,9 +59,6 @@ type
   TTurtleBeforeEvent = procedure(Sender: TObject; cHeading: Integer) of object;
 
   // *** classe de la tortue ***
-
-  { TGVTurtle }
-
   TGVTurtle = class(TObject)
     strict private
       fError: TGVErrors; // gestion des erreurs
@@ -711,7 +708,7 @@ procedure TGVTurtle.BeforeChange;
 // *** gestion avant le changement ***
 // (permet de mettre à jour une image pour la tortue avant de la dessiner)
 begin
-  if Assigned(fOnBeforeChange) then  // si le gestionnaire existe
+  if (Kind <> tkTriangle) and Assigned(fOnBeforeChange) then  // si le gestionnaire existe
     fOnBeforeChange(Self, Round(Heading)); // on l'exécute
 end;
 

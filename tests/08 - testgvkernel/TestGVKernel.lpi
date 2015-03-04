@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="46"/>
+      <BuildNr Value="48"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="Test de l'unité GVKernel" LegalCopyright="Gilles Vasseur 2014" LegalTrademarks="GNU GPL" OriginalFilename="TESTGVKERNEL" ProductName="GVLOGO" ProductVersion="1"/>
     </VersionInfo>
@@ -62,6 +62,7 @@
       <Unit4>
         <Filename Value="..\..\units\GVKernel.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GVKernel"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\..\units\GVErrors.pas"/>

@@ -103,6 +103,8 @@ Vous pouvez aussi vous rendre sur mon site pour les éventuelles mises à jour :
 
 Les suggestions, modifications, propositions et questions sont les bienvenues.
 
-Gilles VASSEUR, le 01 mars 2015
+Gilles VASSEUR, le 04 mars 2015
+
+N.B. : Un fichier "history.txt" décrit les changements apportés au projet (dans le dossier "docs").
 
  

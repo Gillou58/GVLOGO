@@ -81,7 +81,6 @@ type
     btnPrimsCount: TButton;
     btnNumPrim: TButton;
     btnNumParamPrim: TButton;
-    btnPrimByNum: TButton;
     btnIsPackage: TButton;
     btnPackagesCount: TButton;
     btnIsBurriedPackage: TButton;
@@ -183,7 +182,6 @@ type
     procedure btnParamNumClick(Sender: TObject);
     procedure btnParamsCountClick(Sender: TObject);
     procedure btnPListeClick(Sender: TObject);
-    procedure btnPrimByNumClick(Sender: TObject);
     procedure btnPrimsCountClick(Sender: TObject);
     procedure btnPrimsToListClick(Sender: TObject);
     procedure btnProcLineClick(Sender: TObject);
@@ -719,17 +717,6 @@ begin
   LS := EmptyStr; // initialisation
   if GVKer.PList(LabEditKerName.Text,LS) then
     mmoGVKer.Lines.Add(fmtMess('PLISTE') + LS);
-end;
-
-procedure TMainForm.btnPrimByNumClick(Sender: TObject);
-// test de PrimByNum
-var
-  LS: string;
-begin
-  LS := EmptyStr;
-  if GVKer.PrimByNum(SpinEditKer.Value, LS) then
-    mmoGVKer.Lines.Add(fmtMess('PRIMBYNUM') +
-      Format('La primitive  %d est "%s".', [SpinEditKer.Value, LS]));
 end;
 
 procedure TMainForm.btnPrimsCountClick(Sender: TObject);

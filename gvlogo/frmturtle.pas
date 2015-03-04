@@ -7,13 +7,14 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR 2014-2015                    |
-  |                  Date:    23-12-2014 18:00:00                          |
-  |                  Version : 1.0.0                                       |
+  |                  Date:    04-03-2015 18:00:00                          |
+  |                  Version : 1.0.1                                       |
   |                                                                        |
   |========================================================================| }
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// 04/03/2015 - 1.0.1 - ajout de barres de défilement
 
 // FRMTURTLE - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -42,7 +43,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   ComCtrls,
-  GVTurtles; // unité de la tortue
+  GVTurtles, types; // unité de la tortue
 
 type
   // *** TTurtleForm ***
@@ -50,9 +51,12 @@ type
     ilTurtle: TImageList;
     imgTurtle: TImage;
     sbTurtle: TStatusBar;
+    ScrollBox: TScrollBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure imgTurtleMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; {%H-}MousePos: TPoint; var {%H-}Handled: Boolean);
   private
     // gestionnaire de tortue
     procedure TurtleState(Sender: TObject);
@@ -102,6 +106,29 @@ begin
   GVTurtle.Free; // tortue libérée
 end;
 
+procedure TTurtleForm.imgTurtleMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  if ssCtrl in Shift then  // touche Ctrl appuyée ?
+  begin
+     // déplacement horizontal
+     if WheelDelta < 0 then
+       Scrollbox.HorzScrollBar.Position :=
+         Scrollbox.HorzScrollBar.Position + Scrollbox.HorzScrollBar.Increment
+     else
+       Scrollbox.HorzScrollBar.Position :=
+         Scrollbox.HorzScrollBar.Position - Scrollbox.HorzScrollBar.Increment;
+  end
+  else
+  // déplacement vertical
+  if WheelDelta < 0 then
+   Scrollbox.VertScrollBar.Position :=
+     Scrollbox.VertScrollBar.Position + Scrollbox.VertScrollBar.Increment
+  else
+   Scrollbox.VertScrollBar.Position :=
+     Scrollbox.VertScrollBar.Position - Scrollbox.VertScrollBar.Increment;
+end;
+
 procedure TTurtleForm.TurtleState(Sender: TObject);
 // *** état de la tortue ***
 begin
@@ -115,7 +142,7 @@ begin
       ' Baissé: ' + IfThen(PenDown, MF_True, MF_False);
   // état de la tortue affiché ?
   if Assigned(TurtleShowForm) and not TurtleShowForm.Changing then
-    TurtleShowForm.GetTurtleState; // on le ractualise
+    TurtleShowForm.GetTurtleState; // on le réactualise
 end;
 
 procedure TTurtleForm.TurtleBeforePaint(Sender: TObject; cHeading: Integer);

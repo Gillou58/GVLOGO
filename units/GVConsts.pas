@@ -49,9 +49,9 @@ uses
 resourcestring
   // *** messages d'identification ***
   CE_GVTitle = 'GVLOGO';
-  CE_GVVersion = 'v1.0.0';
+  CE_GVVersion = 'v1.0.2';
   CE_GVAuthor = '© Gilles Vasseur';
-  CE_GVDate = '23/12/2014';
+  CE_GVDate = '03/03/2015';
 
 const
   // *** listes ***

@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="40"/>
+      <BuildNr Value="43"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="test de l'unité GVLists" LegalCopyright="Gilles VASSEUR 2014" LegalTrademarks="GNU GPL" OriginalFilename="TESTGVLISTS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -45,6 +45,7 @@
       <Unit0>
         <Filename Value="TestGVLists.lpr"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="TestGVLists"/>
       </Unit0>
       <Unit1>
         <Filename Value="mainform.pas"/>
@@ -104,6 +105,9 @@
         </Win32>
       </Options>
     </Linking>
+    <Other>
+      <CustomOptions Value="-dPROFILE"/>
+    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">

@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="191"/>
+      <BuildNr Value="215"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="langage GVLOGO" InternalName="GVLOGO" LegalCopyright="Gilles Vasseur 2014-2015" LegalTrademarks="GNU GPL" OriginalFilename="GVLOGO.PAS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -57,6 +57,7 @@
       <Unit0>
         <Filename Value="GVLOGO.lpr"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GVLOGO"/>
       </Unit0>
       <Unit1>
         <Filename Value="main.pas"/>
@@ -72,6 +73,7 @@
         <ComponentName Value="TurtleForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="FrmTurtle"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\units\GVAutomat.pas"/>
@@ -124,6 +126,7 @@
       <Unit15>
         <Filename Value="..\units\GVTurtles.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GVTurtles"/>
       </Unit15>
       <Unit16>
         <Filename Value="..\units\GVWords.pas"/>
@@ -189,7 +192,6 @@
         <ComponentName Value="EditorForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FrmEditor"/>
       </Unit26>
       <Unit27>
         <Filename Value="frmfind.pas"/>
@@ -297,6 +299,9 @@
         </Win32>
       </Options>
     </Linking>
+    <Other>
+      <CustomOptions Value="-dPROFILE"/>
+    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">
