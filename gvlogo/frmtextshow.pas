@@ -7,13 +7,14 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR 2014-2015                    |
-  |                  Date:    23-12-2014 18:00:00                          |
-  |                  Version : 1.0.0                                       |
+  |                  Date:    05-03-2015 18:00:00                          |
+  |                  Version : 1.0.1                                       |
   |                                                                        |
   |========================================================================| }
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// 05/03/2015 - 1.0.1 - simplifications du contrôle de FrmText
 
 // FRMTEXTSHOW - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -81,7 +82,7 @@ type
     fChanging: Boolean; // drapeau de changement en cours
   public
     procedure GetTextState; // récupération de l'état du texte
-    procedure SetTextState; // mise àjour des données
+    procedure SetTextState; // mise à jour des données
     property Changing: Boolean read fChanging write fChanging;
   end;
 
@@ -110,44 +111,35 @@ begin
 end;
 
 procedure TTextShowForm.GetTextState;
-// *** recherche de l'état du texte ***
+// *** recherche de l'état du texte *** # 1.0.1
 begin
   if not Changing then
-    with FrmText.TextForm.rmmoText do
+    with FrmText.TextForm do
     begin
-      CheckBoxBold.Checked := (fsBold in Font.Style);
-      CheckBoxItalic.Checked := (fsItalic in Font.Style);
-      CheckBoxUnderline.Checked := (fsUnderline in Font.Style);
-      ColorBoxBckGround.Selected := Color;
-      ColorBoxFont.Selected := Font.Color;
+      CheckBoxBold.Checked := Bold;
+      CheckBoxItalic.Checked := Italic;
+      CheckBoxUnderline.Checked := Underline;
+      ColorBoxBckGround.Selected := BackColor;
+      ColorBoxFont.Selected := FontColor;
       cbBoxFonts.Text := Font.Name;
-      spedtSize.Value := Font.Size;
+      spedtSize.Value := FontSize;
     end;
 end;
 
 procedure TTextShowForm.SetTextState;
-// *** enregistrement de l'état du texte désiré ***
+// *** enregistrement de l'état du texte désiré *** # 1.0.1
 begin
   Changing := True; // changement signalé
   try
-    with FrmText.TextForm.rmmoText do
+    with FrmText.TextForm do
     begin
-      if CheckBoxBold.Checked then
-        Font.Style := Font.Style + [fsBold]
-      else
-        Font.Style := Font.Style - [fsBold];
-      if CheckBoxItalic.Checked then
-        Font.Style := Font.Style + [fsItalic]
-      else
-        Font.Style := Font.Style - [fsItalic];
-      if CheckBoxUnderline.Checked then
-        Font.Style := Font.Style + [fsUnderline]
-      else
-        Font.Style := Font.Style - [fsUnderline];
-      Color := ColorBoxBckGround.Selected;
-      Font.Color := ColorBoxFont.Selected;
-      Font.Name := cbBoxFonts.Text;
-      Font.Size := spedtSize.Value;
+      Bold := CheckBoxBold.Checked;
+      Italic := CheckBoxItalic.Checked;
+      Underline := CheckBoxUnderline.Checked;
+      BackColor := ColorBoxBckGround.Selected;
+      FontColor := ColorBoxFont.Selected;
+      FontName := cbBoxFonts.Text;
+      FontSize := spedtSize.Value;
     end;
   finally
     Changing := False;
@@ -157,7 +149,7 @@ end;
 procedure TTextShowForm.cbBoxFontsChange(Sender: TObject);
 // *** changement de police ***
 begin
-  mmoSample.Font.Name := cbBoxFonts.Items[cbBoxFOnts.ItemIndex];
+  mmoSample.Font.Name := cbBoxFonts.Items[cbBoxFonts.ItemIndex];
 end;
 
 procedure TTextShowForm.btnSaveClick(Sender: TObject);

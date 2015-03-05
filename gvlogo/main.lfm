@@ -16,7 +16,7 @@ object MainForm: TMainForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnKeyPress = FormKeyPress
-  LCLVersion = '1.4.0.1'
+  LCLVersion = '1.2.6.0'
   object CoolBarMain: TCoolBar
     Left = 0
     Height = 100
@@ -41,13 +41,13 @@ object MainForm: TMainForm
     object tbFile: TToolBar
       AnchorSideLeft.Control = CoolBarMain
       AnchorSideTop.Control = CoolBarMain
-      Left = 24
+      Left = 21
       Height = 24
       Top = 5
       Width = 139
       Align = alNone
       AutoSize = True
-      BorderSpacing.Left = 22
+      BorderSpacing.Left = 19
       BorderSpacing.Top = 3
       Caption = 'tbFile'
       Images = ImageListMenu
@@ -94,13 +94,13 @@ object MainForm: TMainForm
     object tbExec: TToolBar
       AnchorSideLeft.Control = CoolBarMain
       AnchorSideTop.Control = CoolBarMain
-      Left = 24
+      Left = 21
       Height = 24
       Top = 37
       Width = 412
       Align = alNone
       AutoSize = True
-      BorderSpacing.Left = 22
+      BorderSpacing.Left = 19
       BorderSpacing.Top = 35
       Caption = 'tbExec'
       Images = ImageListMenu
@@ -137,7 +137,6 @@ object MainForm: TMainForm
       end
       object tbDiv2: TToolButton
         Left = 116
-        Height = 22
         Top = 2
         Width = 5
         Caption = 'tbDiv2'
@@ -181,7 +180,6 @@ object MainForm: TMainForm
       end
       object tbDiv4: TToolButton
         Left = 292
-        Height = 22
         Top = 2
         Width = 5
         Caption = 'tbDiv4'
@@ -189,7 +187,6 @@ object MainForm: TMainForm
       end
       object tbDiv3: TToolButton
         Left = 167
-        Height = 22
         Top = 2
         Width = 10
         Caption = 'tbDiv3'
@@ -235,12 +232,12 @@ object MainForm: TMainForm
     object tbEdit: TToolBar
       AnchorSideLeft.Control = CoolBarMain
       AnchorSideTop.Control = CoolBarMain
-      Left = 24
+      Left = 21
       Height = 26
       Top = 69
-      Width = 152
+      Width = 153
       Align = alNone
-      BorderSpacing.Left = 22
+      BorderSpacing.Left = 19
       BorderSpacing.Top = 67
       Caption = 'tbEdit'
       Images = ImageListMenu
@@ -265,7 +262,6 @@ object MainForm: TMainForm
       end
       object tbDiv5: TToolButton
         Left = 93
-        Height = 22
         Top = 2
         Width = 10
         Caption = 'tbDiv5'

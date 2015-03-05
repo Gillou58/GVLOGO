@@ -15,6 +15,7 @@
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
 // 05/03/2015 - 1.0.1 - ajout d'un menu surgissant
+// 05/03/2015 - 1.0.2 - mise à jour synchronisée de la fenêtre d'état
 
 // FRMTEXT - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -66,6 +67,7 @@ type
     procedure MenuItemClearClick(Sender: TObject);
   private
     fBackColor: TColor;
+    fFontName: string;
     fFParams: TFontParams;
     fBold: Boolean;
     fItalic: Boolean;
@@ -88,6 +90,7 @@ type
     property FontSize: Integer read fFontSize write fFontSize default 12;
     property BackColor: TColor read fBackColor write SetBackColor
       default clWhite;
+    property FontName: string read fFontName write fFontName;
   end;
 
 var
@@ -98,6 +101,7 @@ implementation
 uses
   Math,
   GVLOGOConsts, // constantes du projet
+  FrmTextShow, // état du texte # 1.0.2
   GVConsts; // constantes
 
 {$R *.lfm}
@@ -144,6 +148,9 @@ begin
   FontSize := 12;
   FontColor := clBlack;
   BackColor := clWhite;
+  FontName := 'default'; // # 1.0.2
+  // mise à jour effective
+  WriteTextLN(EmptyStr); // # 1.0.2
   rmmoText.Lines.Clear;
 end;
 
@@ -173,8 +180,9 @@ begin
     fFParams.Style:= fFParams.Style + [fsUnderline]
   else
     fFParams.Style:= fFParams.Style - [fsUnderline];
-  fFParams.Color := FontColor; // couleur de fonte
-  fFParams.Size := FontSize; // taille de fonte
+  fFParams.Color := FontColor; // couleur de la fonte
+  fFParams.Size := FontSize; // taille de la fonte
+  fFParams.Name := FontName; // nom de la fonte # 1.0.1
   // conserve ces attributs
   AddStyle(Max(rmmoText.SelStart - 1, 0), Length(St), fFParams);
   // ajout de la ligne
@@ -184,6 +192,9 @@ begin
   for Li := 0 to (Length(fStylesArray) - 1) do
     rmmoText.SetTextAttributes(fStylesArray[Li].Start, fStylesArray[Li].Len,
       fStylesArray[Li].Style);
+  // état du texte affiché ? # 1.0.2
+  if Assigned(TextShowForm) and not TextShowForm.Changing then
+    TextShowForm.GetTextState; // on le réactualise
 end;
 
 procedure TTextForm.WriteTextLN(const St: string);

@@ -114,6 +114,7 @@ end;
 
 procedure TTurtleForm.imgTurtleMouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+// *** barres de défilement avec la souris *** # 1.0.1
 begin
   if ssCtrl in Shift then  // touche Ctrl appuyée ?
   begin

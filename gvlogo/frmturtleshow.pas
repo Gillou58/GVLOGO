@@ -145,7 +145,7 @@ end;
 procedure TTurtleShowForm.GetTurtleState;
 // *** récupération de l'état de la tortue ***
 begin
-  if not Changing then // pas de mise àjour si changement en cours
+  if not Changing then // pas de mise à jour si changement en cours
     with TurtleForm.GVTurtle do // on sauvegarde la tortue en cours
     begin
       spedtX.Value := CoordX; // abscisse

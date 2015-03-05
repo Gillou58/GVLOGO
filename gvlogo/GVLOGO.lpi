@@ -264,6 +264,7 @@
         <ComponentName Value="TurtleShowForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="FrmTurtleShow"/>
       </Unit36>
       <Unit37>
         <Filename Value="frmtextshow.pas"/>
@@ -271,6 +272,7 @@
         <ComponentName Value="TextShowForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="FrmTextShow"/>
       </Unit37>
     </Units>
   </ProjectOptions>
