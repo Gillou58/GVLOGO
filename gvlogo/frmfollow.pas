@@ -7,13 +7,14 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR                              |
-  |                  Date:    23-12-2014 18:00:00                          |
-  |                  Version : 1.0.0                                       |
+  |                  Date:    05-03-2015 18:00:00                          |
+  |                  Version : 1.0.1                                       |
   |                                                                        |
   |========================================================================| }
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// 05/03/2015 - 1.0.1 - ajout d'un menu surgissant
 
 // FRMFOLLOW - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -41,20 +42,23 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, SynMemo, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ExtCtrls, Buttons, SynHighlighterPosition, SynEditHighlighter;
+  ComCtrls, ExtCtrls, Buttons, Menus, SynHighlighterPosition,
+  SynEditHighlighter;
 
 type
   // *** TFollowForm ***
   TFollowForm = class(TForm)
-    btnClose: TBitBtn;
-    btnClear: TBitBtn;
-    pnlFollow: TPanel;
+    MenuItem1: TMenuItem;
+    MenuItemDeepFollow: TMenuItem;
+    MenuItemFollow: TMenuItem;
+    MenuItemClear: TMenuItem;
+    PopupMenuFollow: TPopupMenu;
     sbFollow: TStatusBar;
     SynMemoFollow: TSynMemo;
-    procedure btnClearClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure MenuItemClearClick(Sender: TObject);
   private
     Hlighter: TSynPositionHighlighter;
     Attr, Attr2: TtkTokenKind;
@@ -72,12 +76,6 @@ implementation
 uses
   GVLOGOConsts; // constantes du projet
 { TFollowForm }
-
-procedure TFollowForm.btnClearClick(Sender: TObject);
-// *** nettoyage de la fenêtre ***
-begin
-  SynMemoFollow.Lines.Clear;
-end;
 
 procedure TFollowForm.FormCreate(Sender: TObject);
 // *** création de la fiche ***
@@ -98,6 +96,12 @@ procedure TFollowForm.FormDestroy(Sender: TObject);
 // *** destruction de la fiche ***
 begin
   HLighter.Free; // libération de la colorisation
+end;
+
+procedure TFollowForm.MenuItemClearClick(Sender: TObject);
+// *** effacement de l'éditeur *** # 1.0.1
+begin
+  SynMemoFollow.Lines.Clear;
 end;
 
 procedure TFollowForm.Write(const St: string; Kind: Integer);

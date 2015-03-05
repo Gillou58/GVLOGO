@@ -7,14 +7,15 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR 2014-2015                    |
-  |                  Date:    04-03-2015 18:00:00                          |
-  |                  Version : 1.0.1                                       |
+  |                  Date:    05-03-2015 18:00:00                          |
+  |                  Version : 1.0.2                                       |
   |                                                                        |
   |========================================================================| }
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
 // 04/03/2015 - 1.0.1 - ajout de barres de défilement
+// 05/03/2015 - 1.0.2 - ajout d'un menu surgissant
 
 // FRMTURTLE - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -42,7 +43,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls,
+  ComCtrls, Menus,
   GVTurtles, types; // unité de la tortue
 
 type
@@ -50,6 +51,10 @@ type
   TTurtleForm = class(TForm)
     ilTurtle: TImageList;
     imgTurtle: TImage;
+    MenuItemTurtleState: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItemClear: TMenuItem;
+    PopupMenuTurtle: TPopupMenu;
     sbTurtle: TStatusBar;
     ScrollBox: TScrollBox;
     procedure FormCreate(Sender: TObject);
@@ -57,6 +62,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure imgTurtleMouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; {%H-}MousePos: TPoint; var {%H-}Handled: Boolean);
+    procedure MenuItemClearClick(Sender: TObject); // # 1.0.2
   private
     // gestionnaire de tortue
     procedure TurtleState(Sender: TObject);
@@ -127,6 +133,12 @@ begin
   else
    Scrollbox.VertScrollBar.Position :=
      Scrollbox.VertScrollBar.Position - Scrollbox.VertScrollBar.Increment;
+end;
+
+procedure TTurtleForm.MenuItemClearClick(Sender: TObject);
+// *** tortue réinitialisée *** # 1.0.2
+begin
+  GVTurtle.ReInit;
 end;
 
 procedure TTurtleForm.TurtleState(Sender: TObject);

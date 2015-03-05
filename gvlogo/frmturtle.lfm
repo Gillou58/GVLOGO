@@ -160,7 +160,7 @@ object TurtleForm: TTurtleForm
   OnCreate = FormCreate
   OnDeactivate = FormDeactivate
   OnDestroy = FormDestroy
-  LCLVersion = '1.4.0.1'
+  LCLVersion = '1.2.6.0'
   object sbTurtle: TStatusBar
     Left = 0
     Height = 23
@@ -181,10 +181,12 @@ object TurtleForm: TTurtleForm
     Height = 677
     Top = 0
     Width = 700
+    HorzScrollBar.Increment = 9
     HorzScrollBar.Page = 90
     HorzScrollBar.Smooth = True
     HorzScrollBar.Position = 100
     HorzScrollBar.Range = 800
+    VertScrollBar.Increment = 9
     VertScrollBar.Page = 90
     VertScrollBar.Smooth = True
     VertScrollBar.Position = 100
@@ -204,6 +206,7 @@ object TurtleForm: TTurtleForm
       Align = alClient
       OnMouseWheel = imgTurtleMouseWheel
       ParentShowHint = False
+      PopupMenu = PopupMenuTurtle
       ShowHint = True
     end
   end
@@ -9559,5 +9562,21 @@ object TurtleForm: TTurtleForm
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000
     }
+  end
+  object PopupMenuTurtle: TPopupMenu
+    Images = MainForm.ImageListMenu
+    left = 403
+    top = 285
+    object MenuItemTurtleState: TMenuItem
+      Action = MainForm.EditTurtleState
+    end
+    object MenuItem2: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemClear: TMenuItem
+      Caption = 'Réinitialiser la tortue'
+      Hint = 'Effacer l''écran et réinitialiser la tortue'
+      OnClick = MenuItemClearClick
+    end
   end
 end

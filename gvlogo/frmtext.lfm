@@ -75,10 +75,26 @@ object TextForm: TTextForm
     Font.Quality = fqCleartype
     HideSelection = False
     ParentFont = False
+    PopupMenu = PopupMenuText
     ReadOnly = True
     ScrollBars = ssAutoBoth
     TabOrder = 1
     WordWrap = False
     ZoomFactor = 1
+  end
+  object PopupMenuText: TPopupMenu
+    left = 394
+    top = 147
+    object MenuItemTextState: TMenuItem
+      Action = MainForm.EditTextState
+    end
+    object MenuItem2: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemClear: TMenuItem
+      Caption = 'Réinitialiser'
+      Hint = 'Effacer l''écran de texte'
+      OnClick = MenuItemClearClick
+    end
   end
 end

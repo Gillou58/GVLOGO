@@ -225,7 +225,7 @@ var
     // vers le caractère suivant
     begin
       Inc(LW); // pointe sur le caractère suivant
-      LStCh := UTF8Copy(LSt2, LW, 1); // nouveau caractère ne cours
+      LStCh := UTF8Copy(LSt2, LW, 1); // nouveau caractère en cours
     end;
 
     procedure DoBlank;

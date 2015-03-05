@@ -7,13 +7,14 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR 2014-2015                    |
-  |                  Date:    23-12-2014 18:00:00                          |
-  |                  Version : 1.0.0                                       |
+  |                  Date:    05-03-2015 18:00:00                          |
+  |                  Version : 1.0.1                                       |
   |                                                                        |
   |========================================================================| }
 
 // HISTORIQUE
 // 23/12/2014 - 1.0.0 - première version opérationnelle
+// 05/03/2015 - 1.0.1 - ajout d'un menu surgissant
 
 // FRMTEXT - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -41,7 +42,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, RichMemo, Forms, Controls, Graphics, Dialogs,
-  ComCtrls;
+  ComCtrls, Menus;
 
 type
   // *** enregistrement d'un style ***
@@ -53,14 +54,16 @@ type
     end;
 
   // *** TTextForm ***
-
-  { TTextForm }
-
   TTextForm = class(TForm)
+    MenuItemTextState: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItemClear: TMenuItem;
+    PopupMenuText: TPopupMenu;
     rmmoText: TRichMemo;
     sbText: TStatusBar;
     procedure FormCreate(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
+    procedure MenuItemClearClick(Sender: TObject);
   private
     fBackColor: TColor;
     fFParams: TFontParams;
@@ -105,6 +108,12 @@ procedure TTextForm.FormDeactivate(Sender: TObject);
 // *** la fenêtre est désactivée ***
 begin
   sbText.SimpleText := CrsTextForm; // barre nettoyée
+end;
+
+procedure TTextForm.MenuItemClearClick(Sender: TObject);
+// *** effacement de l'éditeur *** " 1.0.1
+begin
+  rmmoText.Lines.Clear;
 end;
 
 procedure TTextForm.SetBackColor(AValue: TColor);

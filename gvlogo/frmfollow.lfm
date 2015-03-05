@@ -53,7 +53,7 @@ object FollowForm: TFollowForm
   inline SynMemoFollow: TSynMemo
     Cursor = crNo
     Left = 0
-    Height = 627
+    Height = 677
     Hint = 'Zone d''affichage du suivi'
     Top = 0
     Width = 700
@@ -65,6 +65,7 @@ object FollowForm: TFollowForm
     ParentColor = False
     ParentFont = False
     ParentShowHint = False
+    PopupMenu = PopupMenuFollow
     ShowHint = True
     TabOrder = 0
     Gutter.Width = 57
@@ -558,45 +559,23 @@ object FollowForm: TFollowForm
       end>
     SimplePanel = False
   end
-  object pnlFollow: TPanel
-    Left = 0
-    Height = 50
-    Top = 627
-    Width = 700
-    Align = alBottom
-    BevelOuter = bvNone
-    ClientHeight = 50
-    ClientWidth = 700
-    TabOrder = 2
-    object btnClear: TBitBtn
-      Cursor = crHandPoint
-      Left = 496
-      Height = 30
-      Hint = 'Nettoyer la fenêtre'
-      Top = 8
-      Width = 90
-      Cancel = True
-      Caption = 'Nettoyer'
-      Kind = bkCancel
-      ModalResult = 2
-      OnClick = btnClearClick
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 0
+  object PopupMenuFollow: TPopupMenu
+    Images = MainForm.ImageListMenu
+    left = 366
+    top = 196
+    object MenuItemClear: TMenuItem
+      Caption = '&Effacer'
+      Hint = 'Effacer la fenêtre de suivi'
+      OnClick = MenuItemClearClick
     end
-    object btnClose: TBitBtn
-      Cursor = crHandPoint
-      Left = 600
-      Height = 30
-      Hint = 'Fermer la fenêtre'
-      Top = 8
-      Width = 90
-      Caption = 'Fermer'
-      Kind = bkClose
-      ModalResult = 11
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 1
+    object MenuItem1: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemFollow: TMenuItem
+      Action = MainForm.ExecFollow
+    end
+    object MenuItemDeepFollow: TMenuItem
+      Action = MainForm.ExecDeepFollow
     end
   end
 end
