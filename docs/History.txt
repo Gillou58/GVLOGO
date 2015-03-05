@@ -4,6 +4,7 @@ _______________________________
 05/03/2015 - 1.0.4
 * ajout de menus surgissants (fenêtres tortue, texte et suivi)
 * ajout de la synchronisation de FrmText et FrmTextShow
+------------------------------------------
 04/03/2015 - 1.0.3
 * ajout de barres de défilement à la fenêtre de la tortue
 * nouvelle gestion des primitives (amélioration de la cohérence)
