@@ -16,6 +16,8 @@
 // 23/12/2014 - 1.0.0 - première version opérationnelle
 // 27/02/2015 - 1.0.1 - refonte BOOLEENS -> tranfert dans TGVNumber
 //                    - acceptation de VRAI et FAUX comme valeurs booléennes
+// 07/03/2015 - 1.0.2 - acceptation des caractères accentués pour les noms
+// d'objets
 
 // GVWORDS - part of GVLOGO
 // Copyright (C) 2014-2015 Gilles VASSEUR
@@ -342,7 +344,7 @@ begin
 end;
 
 function TGVWord.IsValidIdent: Boolean;
-// *** le mot est-il un identificateur correct ? ***
+// *** le mot est-il un identificateur correct ? *** # 1.0.1
 var
   Li: Integer;
   LPredDot: Boolean;
@@ -351,19 +353,20 @@ begin
   LPredDot := False; // pas de point rencontré juste avant
   for Li := 1 to Length(Text) do
   begin
-    // on accepte les minuscules et les majuscules non accentuées, le "_",
-    // les chiffres non placés en première position
-    // le "." pas en dernière position et doublé, et le "?" en dernière.
+    // on accepte les minuscules et les majuscules même accentuées (# 1.0.1),
+    // le "_", les chiffres non placés en première position,
+    // le "." mais pas en dernière position et doublé, et le "?" à la fin.
     if Li = 1 then // premier caractère
     begin
-      Result := Text[Li] in [CUnderline, CDot] + CAlpha;
+      Result := not (Text[Li] in [CAsk] + CSpecialChar + CNonPrintable + CDigit);
       LPredDot := (Text[Li] = CDot); // point enregistré
     end
-    else if Li = Length(Text) then // dernier caractère
-      Result := Text[Li] in [CAsk] + CAlphaNum
+    else
+    if Li = Length(Text) then // dernier caractère
+      Result := not (Text[Li] in CSpecialChar + CNonPrintable)
     else
     begin // les autres positions
-      Result := Text[Li] in [CUnderline, CDot] + CAlphaNum;
+      Result := not (Text[Li] in [CAsk] + CSpecialChar + CNonPrintable);
       if Text[Li] = CDot then // un point ?
       begin
         Result := not LPredDot; // pas deux fois d'affilée !

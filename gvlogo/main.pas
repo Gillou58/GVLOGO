@@ -7,8 +7,8 @@
   |                  Ecrit par  : VASSEUR Gilles                           |
   |                  e-mail : g.vasseur58@laposte.net                      |
   |                  Copyright : © G. VASSEUR 2014-2015                    |
-  |                  Date:    05/03/2015 18:00:00                          |
-  |                  Version : 1.0.4                                       |
+  |                  Date:    07/03/2015 18:00:00                          |
+  |                  Version : 1.0.5                                       |
   |                                                                        |
   |========================================================================| }
 

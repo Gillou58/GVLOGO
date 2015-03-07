@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="220"/>
+      <BuildNr Value="222"/>
       <Language Value="040C"/>
       <StringTable CompanyName="GVSOFT" FileDescription="langage GVLOGO" InternalName="GVLOGO" LegalCopyright="Gilles Vasseur 2014-2015" LegalTrademarks="GNU GPL" OriginalFilename="GVLOGO.PAS" ProductName="GVLOGO" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -132,6 +132,7 @@
       <Unit16>
         <Filename Value="..\units\GVWords.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GVWords"/>
       </Unit16>
       <Unit17>
         <Filename Value="..\units\Prims.inc"/>
