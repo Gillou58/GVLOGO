@@ -2,7 +2,7 @@ GVLOGO Vasseur Gilles 2014-2015
 _______________________________
 
 07/03/2015 - 1.0.5
-* acceptation des caratères accentués pour les objets (procédures, variables, paquets)
+* acceptation des caractères accentués pour les objets (procédures, variables, paquets)
 ------------------------------------------
 05/03/2015 - 1.0.4
 * ajout de menus surgissants (fenêtres tortue, texte et suivi)
